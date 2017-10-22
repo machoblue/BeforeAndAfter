@@ -94,6 +94,9 @@ public class RecordFragment extends Fragment {
 //            throw new RuntimeException("[RESULT_NG] requestCode:" + requestCode + ", resultCode:" + resultCode);
         }
         if (requestCode == EDIT_REQUEST_CODE) {
+            if (data == null) { // androidの戻るボタンを使った場合、何もしない。
+                return;
+            }
             switch (data.getIntExtra("TYPE", 0)) {
                 case 0:
                     break;
