@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginBottom="-1dp"
+    android:paddingRight="-1dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="org.macho.beforeandafter.MainActivity">
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_weight="0.9"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+    </FrameLayout>
+    <LinearLayout
+        android:layout_weight="0.1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <LinearLayout
+            android:id="@+id/bottomnavigation_item_0"
+            android:orientation="vertical"
+            android:background="@drawable/bottom_navigation_bg"
+            android:layout_weight="0.25"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <ImageButton
+                android:onClick="onItem0Click"
+                android:id="@+id/item_0_image"
+                android:background="@null"
+                android:src="@mipmap/ic_import_contacts_white_24dp"
+                android:layout_weight="0.6"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+            <TextView
+                android:onClick="onItem0Click"
+                android:paddingBottom="5dp"
+                android:id="@+id/item_0_text"
+                android:gravity="center"
+                android:text="@string/record"
+                android:textColor="#ffffff"
+                android:layout_weight="0.4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bottomnavigation_item_1"
+            android:orientation="vertical"
+            android:background="@drawable/bottom_navigation_bg"
+            android:layout_weight="0.25"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <ImageButton
+                android:onClick="onItem1Click"
+                android:id="@+id/item_1_image"
+                android:background="@null"
+                android:src="@mipmap/ic_image_white_24dp"
+                android:layout_weight="0.6"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+            <TextView
+                android:onClick="onItem1Click"
+                android:paddingBottom="5dp"
+                android:id="@+id/item_1_text"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                android:text="@string/garally"
+                android:layout_weight=".4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bottomnavigation_item_2"
+            android:orientation="vertical"
+            android:background="@drawable/bottom_navigation_bg"
+            android:layout_weight="0.25"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <ImageButton
+                android:onClick="onItem2Click"
+                android:id="@+id/item_2_image"
+                android:background="@null"
+                android:src="@mipmap/ic_timeline_white_24dp"
+                android:layout_weight="0.6"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+            <TextView
+                android:onClick="onItem2Click"
+                android:paddingBottom="5dp"
+                android:id="@+id/item_2_text"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                android:text="@string/graphe"
+                android:layout_weight="0.4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bottomnavigation_item_3"
+            android:orientation="vertical"
+            android:background="@drawable/bottom_navigation_bg"
+            android:layout_weight="0.25"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <ImageButton
+                android:onClick="onItem3Click"
+                android:id="@+id/item_3_image"
+                android:background="@null"
+                android:src="@mipmap/ic_settings_white_24dp"
+                android:layout_weight="0.6"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+            <TextView
+                android:onClick="onItem3Click"
+                android:paddingBottom="5dp"
+                android:id="@+id/item_3_text"
+                android:textColor="#ffffff"
+                android:gravity="center"
+                android:text="@string/setting"
+                android:layout_weight="0.4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

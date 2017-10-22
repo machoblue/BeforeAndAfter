@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#f44336</color>
+    <color name="colorPrimaryDark">#d32f2f</color>
+    <color name="colorAccent">#00c853</color>
+    <color name="colorGrayText">#ffb0b0b0</color>
+    <color name="colorPrimaryLight">#99f44336</color>
+    <color name="light_gray">#c8c8c8</color>
+    <color name="colorBottomNaviItemPressed">#601C1C</color>
+
+    <color name="colorWeight">#C62828</color>
+    <color name="colorWeightGoal">#EF5350</color>
+    <color name="colorRate">#00c853</color>
+    <color name="colorRateGoal">#69f0ae</color>
+    <color name="colorFrame">#757575</color>
+    <color name="colorText">#9e9e9e</color>
+
+    <color name="dark_gray">#5a5a5a</color>
+    <color name="white">#ffffff</color>
+</resources>

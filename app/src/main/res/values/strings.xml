@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">見た目ダイエット日記</string>
+    <!-- main activity -->
+    <string name="record">記録</string>
+    <string name="garally">ギャラリー</string>
+    <string name="graphe">グラフ</string>
+    <string name="setting">設定</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <!--
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    -->
+
+    <!-- Edit Fragment -->
+    <string name="weight_label">体重(kg)</string>
+    <string name="rate_label">体脂肪率(%)</string>
+    <string name="save">保存</string>
+    <string name="cancel">キャンセル</string>
+    <string name="delete">削除</string>
+    <string name="memo_label">メモ</string>
+
+    <!-- Gallery Fragment -->
+    <string name="front">正面</string>
+    <string name="side">横</string>
+
+    <!-- Graphe Fragment -->
+    <string name="one_week">1週間</string>
+    <string name="one_month">1ヶ月</string>
+    <string name="three_month">3ヶ月</string>
+    <string name="six_month">半年</string>
+    <string name="one_year">1年</string>
+    <string name="three_year">3年</string>
+
+    <!-- Preference Fragment -->
+    <string name="goal_title">目標</string>
+    <string name="goal_description">目標体重・目標体脂肪率を設定します。</string>
+    <string name="goal_weight_label">目標体重(kg)</string>
+    <string name="goal_rate_label">目標体脂肪率(%)</string>
+    <string name="delete_all_title">全データ削除</string>
+    <string name="delete_all_description">全データを削除します。</string>
+    <string name="delete_all_confirmation_message">全データを削除します。削除すると元に戻せませんがよろしいですか？</string>
+    <string name="ok">OK</string>
+
+</resources>
