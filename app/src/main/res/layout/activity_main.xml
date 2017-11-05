@@ -8,12 +8,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="org.macho.beforeandafter.MainActivity">
+    <LinearLayout
+        android:background="#B71C1C"
+        android:orientation="vertical"
+        android:id="@+id/ad_layout"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <net.nend.android.NendAdView
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/nend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            NendApiKey="2d427b53045c4227fab1f70c6fc3eaf873b48eb1"
+            NendSpotId="811665" />
+    </LinearLayout>
     <FrameLayout
         android:id="@+id/content"
         android:layout_weight="0.9"
         android:layout_width="match_parent"
         android:layout_height="0dp">
-
     </FrameLayout>
     <LinearLayout
         android:layout_weight="0.1"

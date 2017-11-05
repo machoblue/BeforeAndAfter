@@ -16,6 +16,11 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+
+        maven {
+            // nendSDK
+            url 'http://fan-adn.github.io/nendSDK-Android-lib/library'
+        }
     }
 }
 

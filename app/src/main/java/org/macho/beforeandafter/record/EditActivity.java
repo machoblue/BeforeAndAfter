@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.nend.android.NendAdInterstitial;
+
 import org.macho.beforeandafter.R;
 import org.macho.beforeandafter.RecordDao;
 import org.macho.beforeandafter.record.camera.CameraActivity;
@@ -92,6 +94,9 @@ public class EditActivity extends AppCompatActivity {
             Intent intent = new Intent();
             intent.putExtra("TYPE", 0);
             setResult(RESULT_OK, intent);
+
+            NendAdInterstitial.showAd(EditActivity.this);
+
             finish();
         }
     };
@@ -104,6 +109,9 @@ public class EditActivity extends AppCompatActivity {
             intent.putExtra("INDEX", index);
             intent.putExtra("TYPE", 1);
             setResult(RESULT_OK, intent);
+
+            NendAdInterstitial.showAd(EditActivity.this);
+
             finish();
         }
     };
@@ -129,6 +137,9 @@ public class EditActivity extends AppCompatActivity {
                 intent.putExtra("INDEX", index);
                 intent.putExtra("TYPE", 2);
                 setResult(RESULT_OK, intent);
+
+                NendAdInterstitial.showAd(EditActivity.this);
+
                 finish();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -199,6 +210,7 @@ public class EditActivity extends AppCompatActivity {
             record = new Record();
         }
 
+        NendAdInterstitial.loadAd(this, "3daf5b0053537a900e405a9cd1a0a2c57b2e3ba6", 811664);
     }
 
     @Override

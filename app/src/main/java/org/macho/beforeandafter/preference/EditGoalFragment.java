@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import net.nend.android.NendAdInterstitial;
+
 import org.macho.beforeandafter.R;
 
 /**
@@ -24,11 +26,16 @@ public class EditGoalFragment extends AppCompatActivity {
         public void onClick(View view) {
             preferences.edit().putFloat("GOAL_WEIGHT", Float.parseFloat(goalWeight.getText().toString())).commit();
             preferences.edit().putFloat("GOAL_RATE", Float.parseFloat(goalRate.getText().toString())).commit();
+
+            NendAdInterstitial.showAd(EditGoalFragment.this);
+
             finish();
         }
     };
     private View.OnClickListener onCancelButtonClickListener = new View.OnClickListener() {
         public void onClick(View view) {
+
+            NendAdInterstitial.showAd(EditGoalFragment.this);
 
             finish();
         }
@@ -51,6 +58,8 @@ public class EditGoalFragment extends AppCompatActivity {
         goalRate.setText(String.valueOf(preferences.getFloat("GOAL_RATE", 20)));
         save.setOnClickListener(onSaveButtonClickListener);
         cancel.setOnClickListener(onCancelButtonClickListener);
+
+        NendAdInterstitial.loadAd(this, "3daf5b0053537a900e405a9cd1a0a2c57b2e3ba6", 811664);
     }
     @Override
     public void onStart() {
