@@ -41,5 +41,8 @@
     <string name="delete_all_description">delete all data</string>
     <string name="delete_all_confirmation_message">You cannot recovery your data once you delete all data.Do you delete all data?</string>
     <string name="ok">OK</string>
-
+    <string name="use_old_graphe_ui">use old graphe view</string>
+    <string name="use_old_graphe_ui_description">use not new graphe view but old one</string>
+    <string name="use_old_graphe_ui_message">Do you use old graphe view?</string>
+    <string name="use_old_graphe_ui_yes">Yes.</string>
 </resources>

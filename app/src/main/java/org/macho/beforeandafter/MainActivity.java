@@ -1,7 +1,9 @@
 package org.macho.beforeandafter;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.macho.beforeandafter.gallery.GalleryFragment;
-import org.macho.beforeandafter.graphe.GrapheFragment;
 import org.macho.beforeandafter.preference.PreferenceFragment;
 import org.macho.beforeandafter.record.RecordFragment;
 
@@ -96,8 +97,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onItem2Click(View view) {
+        System.out.println("*** MainActivity.onItem2Click - start");
         uncheckCurrentButtonAndCheck(item2ImageButton, item2TextView);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, GrapheFragment.getInstance()).commit();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.content, GrapheFragment.getInstance()).commit();
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean useOldGrapheFragment = preferences.getBoolean("USE_OLD_GRAPHE_FRAGMENT", false);
+        if (!useOldGrapheFragment) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content, org.macho.beforeandafter.graphe2.GrapheFragment.getInstance()).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content, org.macho.beforeandafter.graphe.GrapheFragment.getInstance()).commit();
+        }
+        System.out.println("*** MainActivity.onItem2Click - end");
     }
 
     public void onItem3Click(View view) {

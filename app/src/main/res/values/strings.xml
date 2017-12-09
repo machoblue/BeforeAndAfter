@@ -40,5 +40,9 @@
     <string name="delete_all_description">全データを削除します。</string>
     <string name="delete_all_confirmation_message">全データを削除します。削除すると元に戻せませんがよろしいですか？</string>
     <string name="ok">OK</string>
+    <string name="use_old_graphe_ui">旧グラフ画面を使う</string>
+    <string name="use_old_graphe_ui_description">新グラフ画面ではなく、旧グラフ画面を表示します。</string>
+    <string name="use_old_graphe_ui_message">新グラフ画面ではなく、旧グラフ画面を使用しますか。</string>
+    <string name="use_old_graphe_ui_yes">はい、旧グラフ画面を使用します。</string>
 
 </resources>
