@@ -18,7 +18,6 @@ public class MyView extends View {
         super(context);
         this.dataList = dataList;
         setUpPaint();
-//        initData();
         calculateYMaxAndMin();
     }
     private static final float TEXT_SIZE = 50;
@@ -34,55 +33,6 @@ public class MyView extends View {
     private Paint rightYAxisScalePaint;
     private Paint rightYAxisTextPaint;
     private Paint centerLinePaint;
-
-    // TODO:DELETE
-    public void initData() {
-        dataList = new ArrayList<>();
-        Data data = new Data();
-        data.setColor(Color.rgb(255, 0, 0));
-        data.setLeftYAxis(true);
-        List<Poin2> poin2s = new ArrayList<>();
-        poin2s.add(new Poin2(1000 * 60 * 60 * 24 * 1, 50));
-        poin2s.add(new Poin2(1000 * 60 * 60 * 24 * 2, 51));
-        poin2s.add(new Poin2(1000 * 60 * 60 * 24 * 3, 53));
-        poin2s.add(new Poin2(1000 * 60 * 60 * 24 * 4, 52));
-        poin2s.add(new Poin2(1000 * 60 * 60 * 24 * 5, 51.5f));
-        data.setPoin2s(poin2s);
-        dataList.add(data);
-
-        Data data2 = new Data();
-        data2.setColor(Color.rgb(0, 255, 0));
-        data2.setLeftYAxis(false);
-        List<Poin2> poin2s2 = new ArrayList<>();
-        poin2s2.add(new Poin2(1000 * 60 * 60 * 24 * 1, 20));
-        poin2s2.add(new Poin2(1000 * 60 * 60 * 24 * 2, 22));
-        poin2s2.add(new Poin2(1000 * 60 * 60 * 24 * 3, 19));
-        poin2s2.add(new Poin2(1000 * 60 * 60 * 24 * 4, 21));
-        poin2s2.add(new Poin2(1000 * 60 * 60 * 24 * 5, 21.5f));
-        data2.setPoin2s(poin2s2);
-        dataList.add(data2);
-
-
-        Data data3 = new Data();
-        data3.setColor(Color.rgb(255, 100, 100));
-        data3.setLeftYAxis(true);
-        data3.setDottedLine(true);
-        List<Poin2> poin2s3 = new ArrayList<>();
-        poin2s3.add(new Poin2(0, 45));
-        poin2s3.add(new Poin2(0, 45));
-        data3.setPoin2s(poin2s3);
-        dataList.add(data3);
-
-        Data data4 = new Data();
-        data4.setColor(Color.rgb(100, 255, 100));
-        data4.setLeftYAxis(false);
-        data4.setDottedLine(true);
-        List<Poin2> poin2s4 = new ArrayList<>();
-        poin2s4.add(new Poin2(0, 15));
-        poin2s4.add(new Poin2(0, 15));
-        data4.setPoin2s(poin2s4);
-        dataList.add(data4);
-    }
 
     @Override
     public void onDraw(Canvas canvas) {

@@ -9,7 +9,6 @@ import android.graphics.Point;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +24,6 @@ public class LineGrapheView2 extends View {
     public LineGrapheView2(Context context, long fromX, long toX, long unitX, List<Data> dataList) {
         super(context);
 
-//        initData(); // TODO: delete
         viewToScreenRatio = 3;
         this.fromX = fromX;
         this.toX = toX;
@@ -51,8 +49,6 @@ public class LineGrapheView2 extends View {
     private Paint saturdayColumnPaint;
     private Paint sundayColumnPaint;
 
-
-
     private long fromX;
     private long toX;
     private long unitX;
@@ -67,62 +63,6 @@ public class LineGrapheView2 extends View {
     private int width;
     private int height;
 
-    // TODO:DELETE
-    public void initData() {
-        viewToScreenRatio = 3;
-        toX = System.currentTimeMillis();
-//        fromX = toX - ((long) 1000) * 60 * 60 * 24 * 1096;
-        fromX = toX - ((long) 1000) * 60 * 60 * 24 * 31 * 3;
-//        unitX = 1000 * 60 * 60 * 24 * 31;
-        unitX = 1000 * 60 * 60 * 24;
-        dataList = new ArrayList<>();
-        Data data = new Data();
-        data.setColor(Color.rgb(229, 57, 53));
-        data.setLeftYAxis(true);
-        List<Poin2> poin2s = new ArrayList<>();
-        poin2s.add(new Poin2(fromX + 1000 * 60 * 60 * 24 * 1, 50));
-        poin2s.add(new Poin2(fromX + 1000 * 60 * 60 * 24 * 2, 51));
-        poin2s.add(new Poin2(fromX + 1000 * 60 * 60 * 24 * 3, 53));
-        poin2s.add(new Poin2(fromX + 1000 * 60 * 60 * 24 * 4, 52));
-        poin2s.add(new Poin2(fromX + 1000 * 60 * 60 * 24 * 5, 51.5f));
-        data.setPoin2s(poin2s);
-        dataList.add(data);
-
-        Data data2 = new Data();
-        data2.setColor(Color.rgb(67, 160, 71));
-        data2.setLeftYAxis(false);
-        List<Poin2> poin2s2 = new ArrayList<>();
-        poin2s2.add(new Poin2(fromX + 1000 * 60 * 60 * 24 * 1, 20));
-        poin2s2.add(new Poin2(fromX + 1000 * 60 * 60 * 24 * 2, 22));
-        poin2s2.add(new Poin2(fromX + 1000 * 60 * 60 * 24 * 3, 19));
-        poin2s2.add(new Poin2(fromX + 1000 * 60 * 60 * 24 * 4, 21));
-        poin2s2.add(new Poin2(fromX + 1000 * 60 * 60 * 24 * 5, 21.5f));
-        data2.setPoin2s(poin2s2);
-        dataList.add(data2);
-
-
-        Data data3 = new Data();
-        data3.setColor(Color.rgb(229, 83, 80));
-        data3.setLeftYAxis(true);
-        data3.setDottedLine(true);
-        List<Poin2> poin2s3 = new ArrayList<>();
-        poin2s3.add(new Poin2(fromX, 45));
-        poin2s3.add(new Poin2(toX, 45));
-        data3.setPoin2s(poin2s3);
-        dataList.add(data3);
-
-        Data data4 = new Data();
-        data4.setColor(Color.rgb(129, 199, 132));
-        data4.setLeftYAxis(false);
-        data4.setDottedLine(true);
-        List<Poin2> poin2s4 = new ArrayList<>();
-        poin2s4.add(new Poin2(fromX, 15));
-        poin2s4.add(new Poin2(toX, 15));
-        data4.setPoin2s(poin2s4);
-        dataList.add(data4);
-    }
-
-
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -133,40 +73,14 @@ public class LineGrapheView2 extends View {
         width = getWidth();
         height = getHeight();
 
-//        float width = parentWidth * viewToScreenRatio; // 表示中の週＋前後１週間
-//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams((int) width, match_parent);
-
         if (unitX == 1000 * 60 * 60 * 24) {
-//            drawFrame(canvas);
-//            drawLabel(canvas);
             drawFrame2(canvas);
         } else if (unitX == 1000L * 60 * 60 * 24 * 31) {
-//            drawFrameMonth(canvas);
             drawLabelMonth(canvas);
-
         }
 
         drawLines(canvas);
     }
-
-//    private void drawFrameMonth(Canvas canvas) {
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(new Date(fromX));
-//        cal.add(Calendar.MONTH, 1);
-//        cal.set(Calendar.DAY_OF_MONTH, 0);
-//        cal.set(Calendar.HOUR_OF_DAY, 0);
-//        cal.set(Calendar.MINUTE, 0);
-//        cal.set(Calendar.SECOND, 0);
-//        cal.set(Calendar.MILLISECOND, 0);
-//        while (cal.getTime().getTime() <= toX) {
-//            float x = ((float) (cal.getTime().getTime() - fromX)) / (toX - fromX) * getWidth();
-//            canvas.drawLine(x, 0, x, parentHeight, framePaint);
-//            cal.add(Calendar.MONTH, 1);
-//        }
-//
-//        canvas.drawLine(0, 0, getWidth(), 0, framePaint);
-//        canvas.drawLine(0, (float) (parentHeight * 0.05), getWidth(), (float) (parentHeight * 0.05), framePaint);
-//    }
 
     private void drawLabelMonth(Canvas canvas) {
         Calendar cal = Calendar.getInstance();
@@ -181,10 +95,6 @@ public class LineGrapheView2 extends View {
 
         float textY = height * 0.05f + 0.05f * getHeight() - (0.05f * getHeight() - textSize) / 2 - 5; // -5 は誤差
         while (cal2.getTime().getTime() <= toX) {
-
-            // 縦線
-//            float x = ((float) (cal2.getTime().getTime() - fromX)) / (toX - fromX) * getWidth();
-//            canvas.drawLine(x, 0, x, parentHeight, framePaint);
 
             // 列に色をつける
             if (cal1.get(Calendar.MONTH) % 2 == 1) {
@@ -340,24 +250,6 @@ public class LineGrapheView2 extends View {
         }
     }
 
-//    private void drawFrame(Canvas canvas) {
-//        float colomnWidth = parentWidth / numDisplayAtOnce;
-//        int length = (int) ((toX - fromX) / unitX);
-//        float columnWidth = ((float) getWidth()) / length;
-//
-//        canvas.drawLine(0, 0, 0, parentHeight, framePaint);
-//
-//        for (int i = 0; i < length; i++) {
-//            float x = (i + 1) * columnWidth;
-//            canvas.drawLine(x, 0, x, parentHeight, framePaint);
-//        }
-//
-//        canvas.drawLine(0, 0, width , 0, framePaint);
-//        canvas.drawLine(0, (float) (parentHeight * 0.05), width, (float) (parentHeight * 0.05), framePaint);
-//        canvas.drawLine(0, (float) (parentHeight * 0.10), width, (float) (parentHeight * 0.10), framePaint);
-//        canvas.drawLine(0, (float) (parentHeight * 1.00), width, (float) (parentHeight * 1.00), framePaint);
-//    }
-
     private void drawFrame2(Canvas canvas) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date(fromX));
@@ -443,33 +335,6 @@ public class LineGrapheView2 extends View {
         return hourOfDay == 0 && minute == 0 && second == 0 && milliseconds == 0;
     }
 
-//    private void drawLabel(Canvas canvas) {
-//        int length = (int) ((toX - fromX) / unitX);
-//        float columnWidth = ((float) getWidth()) / length;
-//        drawDate(canvas);
-//        drawDay(canvas);
-//    }
-
-//    private void drawDate(Canvas canvas) {
-//        int length = (int) ((toX - fromX) / unitX);
-//        float columnWidth = ((float) getWidth()) / length;
-//
-//        // 初めだけtextSizeを計測
-//        float textSize = calculateValidTextSize(textPaint, "99", ((float) getWidth()) / ((toX - fromX) / unitX), ((float) getHeight()) * 0.05f);
-//        textPaint.setTextSize(textSize);
-//        float textWidth = textPaint.measureText("99");
-//
-//        float y = getHeight() * 0.05f * 0.5f + textSize * 0.5f - 3f; // -3fは誤差
-//        for (int i = 0; i < length; i++) {
-//            long date = fromX + unitX * i;
-//            String text = getFormat(unitX).format(new Date(date));
-//            float tempX = ((float) (date - fromX)) / (toX - fromX) * getWidth();
-//            float paddingLeft = text.length() == 2 ? (columnWidth - textWidth) / 2f : (columnWidth - textWidth * 0.5f) / 2f;
-//            float x  = tempX + paddingLeft;
-//            canvas.drawText(text, x, y, textPaint);
-//        }
-//    }
-
     private float calculateValidTextSize(Paint paint, String text, float width, float height) {
         String message = String.format("### %s, %f, %f", text, width, height);
         float textSize = 1.0f;
@@ -483,45 +348,6 @@ public class LineGrapheView2 extends View {
         }
         return --textSize;
     }
-
-    private SimpleDateFormat getFormat(long unitX) {
-        switch ((int) (unitX / (1000 * 60 * 60 * 24))) {
-            case 1 :
-                return new SimpleDateFormat("d");
-            case 31 :
-                return new SimpleDateFormat("M");
-            default:
-                return null;
-        }
-    }
-    private SimpleDateFormat getFormat2(long unitX) {
-        switch ((int) (unitX / (1000 * 60 * 60 * 24))) {
-            case 1 :
-                return new SimpleDateFormat("E");
-            case 31 :
-                return new SimpleDateFormat("E");
-            default:
-                return null;
-        }
-    }
-//    private void drawDay(Canvas canvas) {
-//        int length = (int) ((toX - fromX) / unitX);
-//        float columnWidth = ((float) getWidth()) / length;
-//
-//        // 初めだけtextSizeを計測
-//        String tempStr = getFormat2(unitX).format(new Date(fromX));
-//        float textSize = calculateValidTextSize(textPaint, tempStr, ((float) getWidth()) / ((toX - fromX) / unitX), ((float) getHeight()) * 0.05f);
-//        textPaint.setTextSize(textSize);
-//        float textWidth = textPaint.measureText(tempStr);
-//
-//        float y = getHeight() * 0.05f + getHeight() * 0.05f * 0.5f + textSize * 0.5f - 3f; // - 3fは調整用
-//        for (int i = 0; i < length; i++) {
-//            long date = fromX + unitX * i;
-//            String text = getFormat2(unitX).format(new Date(date));
-//            float x = ((float) (date - fromX)) / (toX - fromX) * getWidth() + (columnWidth - textWidth) / 2f;
-//            canvas.drawText(text, x, y, textPaint);
-//        }
-//    }
 
     public void drawDottedLine(Canvas canvas, float x1, float y1, float x2, float y2, Paint paint, float length) {
         float r = (float) (length / Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));

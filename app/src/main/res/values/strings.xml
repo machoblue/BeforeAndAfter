@@ -19,6 +19,9 @@
     <string name="delete">削除</string>
     <string name="memo_label">メモ</string>
 
+    <!-- Camera Activity -->
+    <string name="camera_in_preparation">カメラは準備中です。</string>
+
     <!-- Gallery Fragment -->
     <string name="front">正面</string>
     <string name="side">横</string>

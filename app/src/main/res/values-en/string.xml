@@ -20,6 +20,9 @@
     <string name="delete">delete</string>
     <string name="memo_label">memo</string>
 
+    <!-- Camera Activity -->
+    <string name="camera_in_preparation">The camera is in preparation.</string>
+
     <!-- Gallery Fragment -->
     <string name="front">front</string>
     <string name="side">side</string>

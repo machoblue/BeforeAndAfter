@@ -30,6 +30,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import org.macho.beforeandafter.R;
 
@@ -283,6 +284,10 @@ public class CameraActivity extends AppCompatActivity {
 
     private void takePicture() {
         try {
+            if (captureRequestBuilder == null) {
+                Toast.makeText(this, getString(R.string.camera_in_preparation), Toast.LENGTH_SHORT).show();
+                return;
+            }
             captureRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_START);
 
             cameraCaptureSession.capture(captureRequestBuilder.build(),

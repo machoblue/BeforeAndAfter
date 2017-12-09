@@ -39,8 +39,8 @@ public class UseOldGrapheFragmentDialog extends DialogFragment {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean useOldGrapheFragment = preferences.getBoolean("USE_OLD_GRAPHE_FRAGMENT", false);
         checkBox.setChecked(useOldGrapheFragment);
-        return new AlertDialog.Builder(getActivity()).setTitle(R.string.delete_all_title)
-                .setMessage(R.string.delete_all_confirmation_message)
+        return new AlertDialog.Builder(getActivity()).setTitle(R.string.use_old_graphe_ui)
+                .setMessage(R.string.use_old_graphe_ui_message)
                 .setView(layout)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
