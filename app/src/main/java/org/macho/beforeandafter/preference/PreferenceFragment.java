@@ -36,13 +36,13 @@ public class PreferenceFragment extends Fragment {
         items.add(new PreferenceItem(R.string.delete_all_title, R.string.delete_all_description, new PreferenceItem.PreferenceAction() {
             @Override
             public void doPreferenceAction() {
-                DeleteAllDialog.newInstance().show(fragment.getFragmentManager(), "");
+                DeleteAllDialog.newInstance(activity).show(fragment.getFragmentManager(), "");
             }
         }));
         items.add(new PreferenceItem(R.string.use_old_graphe_ui, R.string.use_old_graphe_ui_description, new PreferenceItem.PreferenceAction() {
             @Override
             public void doPreferenceAction() {
-                UseOldGrapheFragmentDialog.newInstance().show(fragment.getFragmentManager(), "");
+                UseOldGrapheFragmentDialog.newInstance(activity).show(fragment.getFragmentManager(), "");
             }
         }));
         fragment.setItems(items);

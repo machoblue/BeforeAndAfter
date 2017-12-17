@@ -10,6 +10,9 @@
     <!--
     <string name="hello_blank_fragment">Hello blank fragment</string>
     -->
+    <string name="review">評価にご協力お願いします</string>
+    <string name="review_message">差し支えなければ、当アプリの評価をしていただけないでしょうか。いただいた評価・ご意見を参考にアプリを改善してまいります。</string>
+    <string name="review_neutral">二度と表示しない</string>
 
     <!-- Edit Fragment -->
     <string name="weight_label">体重(kg)</string>

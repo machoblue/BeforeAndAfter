@@ -1,6 +1,5 @@
 package org.macho.beforeandafter.graphe;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,8 +17,6 @@ import org.macho.beforeandafter.record.Record;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by yuukimatsushima on 2017/08/13.
@@ -164,13 +161,6 @@ public class GrapheFragment extends Fragment {
                 now - 1000L * 60 * 60 * 24 * 7, now));
 
         return view;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK) {
-            throw new RuntimeException("[RESULT_NG] requestCode:" + requestCode + ", resultCode:" + resultCode);
-        }
     }
 
     public void find(long from, long to) {

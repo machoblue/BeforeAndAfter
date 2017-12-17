@@ -3,6 +3,22 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
+        android:background="#B71C1C"
+        android:orientation="vertical"
+        android:id="@+id/ad_layout"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <net.nend.android.NendAdView
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/nend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            NendApiKey="e579cd0e4127e9caba58b3531b95932972b139ef"
+            NendSpotId="824865" />
+    </LinearLayout>
+    <LinearLayout
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:gravity="center"

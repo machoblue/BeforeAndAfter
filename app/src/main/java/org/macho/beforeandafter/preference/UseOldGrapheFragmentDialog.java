@@ -1,5 +1,6 @@
 package org.macho.beforeandafter.preference;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -12,6 +13,8 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.nend.android.NendAdInterstitial;
+
 import org.macho.beforeandafter.R;
 
 /**
@@ -21,7 +24,8 @@ import org.macho.beforeandafter.R;
 public class UseOldGrapheFragmentDialog extends DialogFragment {
     private LinearLayout layout;
     private CheckBox checkBox;
-    public static DialogFragment newInstance() {
+    public static DialogFragment newInstance(Activity activity) {
+        NendAdInterstitial.loadAd(activity, "2e022cf05260b47b52bb803de578742b38422bf9", 824867);
         return new UseOldGrapheFragmentDialog();
     }
     @Override
@@ -51,11 +55,13 @@ public class UseOldGrapheFragmentDialog extends DialogFragment {
                        } else {
                            preferences.edit().putBoolean("USE_OLD_GRAPHE_FRAGMENT", false).commit();
                        }
+                        NendAdInterstitial.showAd(getActivity());
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        NendAdInterstitial.showAd(getActivity());
                     }
                 })
                 .create();

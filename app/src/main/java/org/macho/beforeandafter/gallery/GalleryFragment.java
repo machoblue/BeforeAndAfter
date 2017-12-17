@@ -1,7 +1,6 @@
 package org.macho.beforeandafter.gallery;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -21,8 +20,6 @@ import org.macho.beforeandafter.record.Record;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by yuukimatsushima on 2017/08/13.
@@ -115,12 +112,6 @@ public class GalleryFragment extends Fragment {
         sideGridView = (RecyclerView) view.findViewById(R.id.side_grid_view);
         sideGridView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         sideGridView.setHasFixedSize(true);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-        }
     }
 
     @Override

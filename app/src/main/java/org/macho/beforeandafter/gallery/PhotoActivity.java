@@ -112,13 +112,4 @@ public class PhotoActivity extends AppCompatActivity {
         gestureDetector = new GestureDetector(this, onGestureListener);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK) {
-//            throw new RuntimeException("[RESULT_NG] requestCode:" + requestCode + ", resultCode:" + resultCode);
-        }
-        switch (requestCode) {
-        }
-    }
-
 }

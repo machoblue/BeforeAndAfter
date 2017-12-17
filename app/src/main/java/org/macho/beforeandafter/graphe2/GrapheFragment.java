@@ -122,6 +122,7 @@ public class GrapheFragment extends Fragment {
         } else {
             format = new SimpleDateFormat("MM/dd/yyyy");
         }
+//        insertData();
         loadData();
 
         toX = System.currentTimeMillis() + mode.getSpan() / 2;
@@ -129,6 +130,43 @@ public class GrapheFragment extends Fragment {
 
         return view;
     }
+
+    /*
+    public void insertData() {
+        long current = new Date().getTime() + 1000L * 60 *60 * 24 * 15;
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*31, 60.0f, 25f  , null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*30, 59.7f, 25.2f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*29, 59.3f, 25.0f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*28, 59.5f, 24.8f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*27, 59.2f, 24.6f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*26, 59.0f, 24.8f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*25, 58.7f, 24.4f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*24, 58.8f, 24.0f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*23, 58.4f, 24.2f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*22, 58.5f, 24.2f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*21, 58.2f, 24.0f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*20, 57.6f, 23.8f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*19, 57.2f, 23.6f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*18, 57.5f, 23.5f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*17, 57.1f, 23.3f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*16, 56.9f, 23.1f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*15, 56.7f, 23.5f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*14, 56.3f, 23.0f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*13, 56.1f, 22.8f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*12, 56.5f, 22.8f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*11, 56.2f, 22.5f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24*10, 56.1f, 22.4f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24* 9, 56.0f, 22.3f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24* 8, 55.8f, 22.5f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24* 7, 55.6f, 22.6f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24* 6, 55.6f, 22.2f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24* 5, 55.9f, 22.0f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24* 4, 55.2f, 21.9f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24* 3, 54.8f, 21.6f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24* 2, 54.4f, 21.7f, null, null, null));
+        RecordDao.getInstance().register(new Record(current - 1000L*60*60*24* 1, 54.0f, 21.5f, null, null, null));
+    }
+    */
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {

@@ -2,10 +2,12 @@ package org.macho.beforeandafter.record;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -112,6 +114,18 @@ public class RecordFragment extends Fragment {
                         Record record = RecordDao.getInstance().find(date);
                         items.add(record);
                         recordAdapter.notifyItemInserted(items.size() - 1);
+
+                        // レビューの誘導
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        boolean reviewed = preferences.getBoolean("REVIEWED", false);
+
+                        Record firstRecord = RecordDao.getInstance().findAll().get(0);
+                        float diff = firstRecord.getWeight() - record.getWeight();
+
+                        if (!reviewed && diff > 1f) {
+                            ReviewDialog.newInstance().show(getFragmentManager(), "");
+                        }
+
                     } else {
                         int index = data.getIntExtra("INDEX", 0);
                         System.out.println("onActivityResult:" + index);

@@ -12,6 +12,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     -->
 
+    <string name="review">Please review this app.</string>
+    <string name="review_message">Please review this app.</string>
+    <string name="review_neutral">never display</string>
+
     <!-- Edit Fragment -->
     <string name="weight_label">weight(kg)</string>
     <string name="rate_label">rate(%)</string>

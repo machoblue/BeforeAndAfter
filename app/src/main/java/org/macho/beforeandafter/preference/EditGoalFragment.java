@@ -61,8 +61,4 @@ public class EditGoalFragment extends AppCompatActivity {
 
         NendAdInterstitial.loadAd(this, "3daf5b0053537a900e405a9cd1a0a2c57b2e3ba6", 811664);
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 }
