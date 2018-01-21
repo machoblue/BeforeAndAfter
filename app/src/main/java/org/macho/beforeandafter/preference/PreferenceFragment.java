@@ -45,6 +45,13 @@ public class PreferenceFragment extends Fragment {
                 UseOldGrapheFragmentDialog.newInstance(activity).show(fragment.getFragmentManager(), "");
             }
         }));
+        items.add(new PreferenceItem(R.string.use_standard_camera, R.string.use_standard_camera_description, new PreferenceItem.PreferenceAction() {
+            @Override
+            public void doPreferenceAction() {
+                UseStandardCameraDialog.newInstance(activity).show(fragment.getFragmentManager(), "");
+            }
+        }));
+
         fragment.setItems(items);
         return fragment;
     }

@@ -3,6 +3,7 @@
     package="org.macho.beforeandafter">
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -12,7 +13,7 @@
         android:theme="@style/AppThemeNoTitle">
         <activity android:name=".MainActivity">
             <!--android:theme="@style/Theme.AppCompat.NoActionBar">-->
-            <intent-filter>
+           <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />

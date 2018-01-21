@@ -50,5 +50,12 @@
     <string name="use_old_graphe_ui_description">新グラフ画面ではなく、旧グラフ画面を表示します。</string>
     <string name="use_old_graphe_ui_message">新グラフ画面ではなく、旧グラフ画面を使用しますか。</string>
     <string name="use_old_graphe_ui_yes">はい、旧グラフ画面を使用します。</string>
+    <string name="use_standard_camera">Android標準のカメラを使う</string>
+    <string name="use_standard_camera_description">Android標準のカメラを利用します。ズームやフロントカメラを利用する場合、この設定を有効にする必要があります。</string>
+    <string name="use_standard_camera_message">Android標準のカメラを利用しますか。</string>
+    <string name="use_standard_camera_yes">はい、Android標準のカメラを利用します。</string>
 
+    <string name="dialog_select_prompt">画像を選択してください</string>
+    <string name="dialog_select_camera">カメラ</string>
+    <string name="dialog_select_gallery">ギャラリー</string>
 </resources>

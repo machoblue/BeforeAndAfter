@@ -52,4 +52,12 @@
     <string name="use_old_graphe_ui_description">use not new graphe view but old one</string>
     <string name="use_old_graphe_ui_message">Do you use old graphe view?</string>
     <string name="use_old_graphe_ui_yes">Yes.</string>
+    <string name="use_standard_camera">use the Android standard camera</string>
+    <string name="use_standard_camera_description">use the Android standard camera</string>
+    <string name="use_standard_camera_message">Do you use the Android standard camera?</string>
+    <string name="use_standard_camera_yes">Yes.</string>
+
+    <string name="dialog_select_prompt">Choose Image</string>
+    <string name="dialog_select_camera">Camera</string>
+    <string name="dialog_select_gallery">Gallery</string>
 </resources>
