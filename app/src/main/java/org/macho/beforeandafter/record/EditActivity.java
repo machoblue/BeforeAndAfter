@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -74,29 +76,9 @@ public class EditActivity extends AppCompatActivity {
 
     private int index;
 
-//    private Uri frontImageUri;
-
     private View.OnClickListener onFrontImageViewClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            String fileName = String.format(FRONT_IMAGE_FILE_NAME_TEMPLATE, Calendar.getInstance());
-//            ContentValues values = new ContentValues();
-//            try {
-//                values.put(MediaStore.Images.Media.TITLE, fileName);
-//                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            frontImageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-//            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//            intent.putExtra(MediaStore.EXTRA_OUTPUT, frontImageUri);
-//            startActivityForResult(intent, FRONT_IMAGE);
-//            if (ContextCompat.checkSelfPermission(getApplication(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(thisActivity, new String[] {Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-//                return;
-//            }
-//            startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), FRONT_IMAGE);
-//            startCamera();
             AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);
             builder
                     .setMessage(R.string.dialog_select_prompt)
@@ -149,11 +131,6 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
-//    private File getCameraFile() {
-//        String fileName = String.format(FILE_NAME_TEMPLATE, Calendar.getInstance());
-//        File outputDir = getApplicationContext().getFilesDir();
-//        return new File(outputDir, fileName);
-//    }
     public File getCameraFile() {
         File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         return new File(dir, "temp.jpg");
@@ -162,13 +139,6 @@ public class EditActivity extends AppCompatActivity {
     private View.OnClickListener onSideImageViewClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            if (ContextCompat.checkSelfPermission(getApplication(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(thisActivity, new String[] {Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-//                return;
-//            }
-//            startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), SIDE_IMAGE);
-//            Intent intent = new Intent(EditActivity.this, CameraActivity.class);
-//            startActivityForResult(intent, SIDE_IMAGE);
             AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);
             builder
                     .setMessage(R.string.dialog_select_prompt)
@@ -268,13 +238,11 @@ public class EditActivity extends AppCompatActivity {
         cancelButton = (Button) findViewById(R.id.cancel);
         saveButton = (Button) findViewById(R.id.save);
         buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
-//        deleteButton = (Button) findViewById(R.id.delete);
 
         frontImage.setOnClickListener(onFrontImageViewClickListener);
         sideImage.setOnClickListener(onSideImageViewClickListener);
         cancelButton.setOnClickListener(onCancelButtonClickListener);
         saveButton.setOnClickListener(onSaveButtonClickListener);
-//        deleteButton.sic_launcher.pngetOnClickListener(onDeleteButtonClickListener);
 
         Intent intent = getIntent();
         date = intent.getLongExtra("DATE", 0);
@@ -317,57 +285,41 @@ public class EditActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
             if (resultCode != RESULT_OK) {
-//            throw new RuntimeException("[RESULT_NG] requestCode:" + requestCode + ", resultCode:" + resultCode);
                 return;
             }
             switch (requestCode) {
                 case FRONT_IMAGE:
-//                Bitmap frontImageBitmap = (Bitmap) data.getExtras().get("data");
-//                String frontImageFilePath = String.format(FRONT_IMAGE_FILE_NAME_TEMPLATE, Calendar.getInstance());
-//                try (FileOutputStream fos = openFileOutput(frontImageFilePath, Context.MODE_PRIVATE)) {
-//                    frontImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
                     String frontImageFilePath = data.getStringExtra("PATH");
                     System.out.println("path:" + frontImageFilePath);
-                    frontImage.setImageBitmap(BitmapFactory.decodeFile(frontImageFilePath));
+                    setOrientationModifiedImageFile(frontImage, new File(frontImageFilePath));
                     // TODO: "/" は記録フラグメントで context.openFileInputで開く時のため。
                     String frontImageFileName = frontImageFilePath.replaceAll(this.getApplicationContext().getFilesDir().toString() + "/", "");
                     System.out.println("name:" + frontImageFileName);
                     record.setFrontImagePath(frontImageFileName);
                     break;
-//                frontImage.setImageURI(frontImageUri);
                 case SIDE_IMAGE:
-//                Bitmap sideImageBitmap = (Bitmap) data.getExtras().get("data");
-//                String sideImageFilePath = String.format(SIDE_IMAGE_FILE_NAME_TEMPLATE, Calendar.getInstance());
-//                try (FileOutputStream fos = openFileOutput(sideImageFilePath, Context.MODE_PRIVATE)) {
-//                    sideImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                sideImage.setImageBitmap((Bitmap) data.getExtras().get("data"));
-//                record.setSideImagePath(sideImageFilePath);
                     String sideImageFilePath = data.getStringExtra("PATH");
                     System.out.println("path:" + sideImageFilePath);
-                    sideImage.setImageBitmap(BitmapFactory.decodeFile(sideImageFilePath));
+                    setOrientationModifiedImageFile(sideImage, new File(sideImageFilePath));
                     String sideImageFileName = sideImageFilePath.replaceAll(this.getApplicationContext().getFilesDir().toString() + "/", "");
                     System.out.println("name:" + sideImageFileName);
                     record.setSideImagePath(sideImageFileName);
                     break;
                 case FRONT_IMAGE_STANDARD_CAMERA:
-                    Bitmap bitmap = BitmapFactory.decodeFile(getCameraFile().getPath());
+                    File tempFile = getCameraFile();
+                    setOrientationModifiedImageFile(frontImage, tempFile);
 
-                    frontImage.setImageBitmap(bitmap); // 画面に表示
-
-                    // Realmに入れるため、DTOに設定
+                    // temp -> appディレクトリに
                     File outputDir = this.getApplicationContext().getFilesDir();
                     String fileName = String.format(FILE_NAME_TEMPLATE, Calendar.getInstance());
                     try (FileOutputStream fos = new FileOutputStream(new File(outputDir, fileName))) {
+                        Bitmap bitmap = BitmapFactory.decodeFile(tempFile.getPath());
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
+                    // Realmに入れるため、DTOに設定
                     record.setFrontImagePath(fileName);
                     break;
                 case FRONT_GALLERY_IMAGE_REQUEST:
@@ -376,31 +328,36 @@ public class EditActivity extends AppCompatActivity {
                     }
                     Bitmap bitmap2 = BitmapFactory.decodeStream(new BufferedInputStream(this.getContentResolver().openInputStream(data.getData())));
 
-                    frontImage.setImageBitmap(bitmap2); // 画面に表示
-
                     // Realmに入れるため、DTOに設定
                     File outputDir2 = this.getApplicationContext().getFilesDir();
                     String fileName2 = String.format(FILE_NAME_TEMPLATE, Calendar.getInstance());
-                    try (FileOutputStream fos = new FileOutputStream(new File(outputDir2, fileName2))) {
+                    File file2 = new File(outputDir2, fileName2);
+                    try (FileOutputStream fos = new FileOutputStream(file2)) {
                         bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
+                    setOrientationModifiedImageFile(frontImage, file2);
+
                     record.setFrontImagePath(fileName2);
+
                     break;
                 case SIDE_IMAGE_STANDARD_CAMERA:
-                    Bitmap bitmap3 = BitmapFactory.decodeFile(getCameraFile().getPath());
+                    File tempFile2 = getCameraFile();
+                    setOrientationModifiedImageFile(sideImage, tempFile2);
 
-                    sideImage.setImageBitmap(bitmap3); // 画面に表示
-
-                    // Realmに入れるため、DTOに設定
+                    // temp -> app ディレクトリ
                     File outputDir3 = this.getApplicationContext().getFilesDir();
                     String fileName3 = String.format(FILE_NAME_TEMPLATE, Calendar.getInstance());
                     try (FileOutputStream fos = new FileOutputStream(new File(outputDir3, fileName3))) {
+                        Bitmap bitmap3 = BitmapFactory.decodeFile(tempFile2.getPath());
                         bitmap3.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
+                    // Realmに入れるため、DTOに設定
                     record.setSideImagePath(fileName3);
                     break;
                 case SIDE_GALLERY_IMAGE_REQUEST:
@@ -409,16 +366,16 @@ public class EditActivity extends AppCompatActivity {
                     }
                     Bitmap bitmap4 = BitmapFactory.decodeStream(new BufferedInputStream(this.getContentResolver().openInputStream(data.getData())));
 
-                    sideImage.setImageBitmap(bitmap4); // 画面に表示
-
                     // Realmに入れるため、DTOに設定
                     File outputDir4 = this.getApplicationContext().getFilesDir();
                     String fileName4 = String.format(FILE_NAME_TEMPLATE, Calendar.getInstance());
-                    try (FileOutputStream fos = new FileOutputStream(new File(outputDir4, fileName4))) {
+                    File file4 = new File(outputDir4, fileName4);
+                    try (FileOutputStream fos = new FileOutputStream(file4)) {
                         bitmap4.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    setOrientationModifiedImageFile(sideImage, file4);
                     record.setSideImagePath(fileName4);
                     break;
             }
@@ -454,6 +411,78 @@ public class EditActivity extends AppCompatActivity {
                 }
                 break;
 
+        }
+    }
+
+    public void setOrientationModifiedImageFile(ImageView imageView, File file) {
+        try {
+            int imageViewWidth = imageView.getWidth();
+            int imageViewHeight = imageView.getHeight();
+
+            imageView.setScaleType(ImageView.ScaleType.MATRIX);
+
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+            imageView.setImageBitmap(bitmap);
+
+            int bitmapWidth = bitmap.getWidth();
+            int bitmapHeight = bitmap.getHeight();
+
+            ExifInterface exifInterface = new ExifInterface(file.getPath());
+            int orientation = Integer.parseInt(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
+
+            float ratio = 1f;
+            Matrix matrix = new Matrix();
+            System.out.println("orientation:" + orientation);
+
+            switch (orientation) {
+                // Undefined, Flip, TransXXXは対応しない。
+                case ExifInterface.ORIENTATION_UNDEFINED: // 0
+                case ExifInterface.ORIENTATION_FLIP_HORIZONTAL: //2
+                case ExifInterface.ORIENTATION_FLIP_VERTICAL: // 4
+                case ExifInterface.ORIENTATION_TRANSPOSE: // 5 // TRANSPOST:転置 行と列の入れ替え
+                case ExifInterface.ORIENTATION_TRANSVERSE: // 7
+                case ExifInterface.ORIENTATION_NORMAL: // 1
+                    // cropCenterを自作する。-> 縦横それぞれの　表示サイズ/画像サイズ　の大きい方を採用。
+                    ratio = Math.max((float) imageViewWidth / (float) bitmapWidth, (float) imageViewHeight / (float) bitmapHeight);
+                    matrix.postScale(ratio, ratio); // TODO:preとpostの違いがわからない。postで試してみる。
+                    float scaledBitmapWidth = bitmapWidth * ratio;
+                    float scaledBitmapHeight = bitmapHeight * ratio;
+                    matrix.postTranslate((imageViewWidth - (scaledBitmapWidth + imageViewWidth) / 2),
+                             (imageViewHeight - (scaledBitmapHeight + imageViewHeight) / 2)); // 自作cropCenter
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180: // 3
+                    matrix.postRotate(180, bitmapWidth / 2, bitmapHeight / 2);
+                    ratio = Math.min((float) imageViewWidth / (float) bitmapWidth, (float) imageViewHeight / (float) bitmapHeight);
+                    matrix.postScale(ratio, ratio);
+                    float scaledBitmapWidth2 = bitmapWidth * ratio;
+                    float scaledBitmapHeight2 = bitmapHeight * ratio;
+                    matrix.postTranslate((imageViewWidth - (scaledBitmapWidth2 + imageViewWidth) / 2),
+                            (imageViewHeight - (scaledBitmapHeight2 + imageViewHeight) / 2)); // 自作cropCenter
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90: // 6
+                    matrix.postRotate(-90, bitmapWidth / 2, bitmapHeight / 2);
+                    ratio = Math.min((float) imageViewWidth / (float) bitmapHeight, (float) imageViewHeight / (float) bitmapWidth);
+                    matrix.postScale(ratio, ratio);
+                    float scaledBitmapWidth3 = bitmapWidth * ratio;
+                    float scaledBitmapHeight3 = bitmapHeight * ratio;
+                    matrix.postTranslate((imageViewWidth - (scaledBitmapHeight3 + imageViewWidth) / 2),
+                            (imageViewHeight - (scaledBitmapWidth3 + imageViewHeight) / 2)); // 自作cropCenter
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270: // 8
+                    matrix.postRotate(90, bitmapWidth / 2, bitmapHeight / 2);
+                    ratio = Math.min((float) imageViewWidth / (float) bitmapHeight, (float) imageViewHeight / (float) bitmapWidth);
+                    matrix.postScale(ratio, ratio);
+                    float scaledBitmapWidth4 = bitmapWidth * ratio;
+                    float scaledBitmapHeight4 = bitmapHeight * ratio;
+                    matrix.postTranslate((imageViewWidth - (scaledBitmapHeight4 + imageViewWidth) / 2),
+                            (imageViewHeight - (scaledBitmapWidth4 + imageViewHeight) / 2)); // 自作cropCenter
+                    break;
+            }
+            imageView.setImageMatrix(matrix);
+            imageView.invalidate();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
