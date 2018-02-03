@@ -8,8 +8,8 @@ android {
         applicationId "org.macho.beforeandafter"
         minSdkVersion 21
         targetSdkVersion 24 //nendSDKを入れるため、24->25
-        versionCode 11
-        versionName "1.10"
+        versionCode 12
+        versionName "1.11"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled=true
     }

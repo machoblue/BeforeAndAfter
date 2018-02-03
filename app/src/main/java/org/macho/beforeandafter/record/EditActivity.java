@@ -452,7 +452,7 @@ public class EditActivity extends AppCompatActivity {
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_180: // 3
                     matrix.postRotate(180, bitmapWidth / 2, bitmapHeight / 2);
-                    ratio = Math.min((float) imageViewWidth / (float) bitmapWidth, (float) imageViewHeight / (float) bitmapHeight);
+                    ratio = Math.max((float) imageViewWidth / (float) bitmapWidth, (float) imageViewHeight / (float) bitmapHeight);
                     matrix.postScale(ratio, ratio);
                     float scaledBitmapWidth2 = bitmapWidth * ratio;
                     float scaledBitmapHeight2 = bitmapHeight * ratio;
@@ -460,8 +460,8 @@ public class EditActivity extends AppCompatActivity {
                             (imageViewHeight - (scaledBitmapHeight2 + imageViewHeight) / 2)); // 自作cropCenter
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_90: // 6
-                    matrix.postRotate(-90, bitmapWidth / 2, bitmapHeight / 2);
-                    ratio = Math.min((float) imageViewWidth / (float) bitmapHeight, (float) imageViewHeight / (float) bitmapWidth);
+                    matrix.postRotate(90, bitmapWidth / 2, bitmapHeight / 2);
+                    ratio = Math.max((float) imageViewWidth / (float) bitmapHeight, (float) imageViewHeight / (float) bitmapWidth);
                     matrix.postScale(ratio, ratio);
                     float scaledBitmapWidth3 = bitmapWidth * ratio;
                     float scaledBitmapHeight3 = bitmapHeight * ratio;
@@ -469,8 +469,8 @@ public class EditActivity extends AppCompatActivity {
                             (imageViewHeight - (scaledBitmapWidth3 + imageViewHeight) / 2)); // 自作cropCenter
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_270: // 8
-                    matrix.postRotate(90, bitmapWidth / 2, bitmapHeight / 2);
-                    ratio = Math.min((float) imageViewWidth / (float) bitmapHeight, (float) imageViewHeight / (float) bitmapWidth);
+                    matrix.postRotate(270, bitmapWidth / 2, bitmapHeight / 2);
+                    ratio = Math.max((float) imageViewWidth / (float) bitmapHeight, (float) imageViewHeight / (float) bitmapWidth);
                     matrix.postScale(ratio, ratio);
                     float scaledBitmapWidth4 = bitmapWidth * ratio;
                     float scaledBitmapHeight4 = bitmapHeight * ratio;
