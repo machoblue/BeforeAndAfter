@@ -8,8 +8,8 @@ android {
         applicationId "org.macho.beforeandafter"
         minSdkVersion 21
         targetSdkVersion 24 //nendSDKを入れるため、24->25
-        versionCode 12
-        versionName "1.11"
+        versionCode 14
+        versionName "1.13"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled=true
     }
@@ -40,6 +40,9 @@ dependencies {
     // nendSDK
     compile 'net.nend.android:nend-sdk:4.0.1'
     compile 'com.google.android.gms:play-services:+' // interstitialのため
+
+    //noinspection AndroidLintGradleCompatible
+    compile 'com.android.support:exifinterface:25.1.1' // 本当は24.2.1にすべきだけど
 
     testCompile 'junit:junit:4.12'
 }

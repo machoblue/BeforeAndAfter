@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.media.ExifInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -325,19 +326,33 @@ public class EditActivity extends AppCompatActivity {
                     if (data == null) {
                         break;
                     }
-                    Bitmap bitmap2 = BitmapFactory.decodeStream(new BufferedInputStream(this.getContentResolver().openInputStream(data.getData())));
+                    BufferedInputStream bis = new BufferedInputStream(this.getContentResolver().openInputStream(data.getData()));
+                    Bitmap bitmap2 = BitmapFactory.decodeStream(bis);
+
+                    // Bitmapの向きを調整
+                    int orientation = 0;
+                    try {
+                        ExifInterface exifInterface = new ExifInterface(bis);
+                        orientation = Integer.parseInt(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
+                        System.out.println("ORIENTATION:" + orientation);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Bitmap orientationModifiedBitmap = ImageUtil.getOrientationModifiedBitmap(bitmap2, orientation);
 
                     // Realmに入れるため、DTOに設定
                     File outputDir2 = this.getApplicationContext().getFilesDir();
                     String fileName2 = String.format(FILE_NAME_TEMPLATE, Calendar.getInstance());
                     File file2 = new File(outputDir2, fileName2);
                     try (FileOutputStream fos = new FileOutputStream(file2)) {
-                        bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                        orientationModifiedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    ImageUtil.setOrientationModifiedImageFile(frontImage, file2);
+//                    ImageUtil.setOrientationModifiedImageFile(frontImage, file2);
+                    frontImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    frontImage.setImageBitmap(orientationModifiedBitmap);
 
                     record.setFrontImagePath(fileName2);
 
@@ -363,18 +378,30 @@ public class EditActivity extends AppCompatActivity {
                     if (data == null) {
                         break;
                     }
-                    Bitmap bitmap4 = BitmapFactory.decodeStream(new BufferedInputStream(this.getContentResolver().openInputStream(data.getData())));
+                    BufferedInputStream bis2 = new BufferedInputStream(this.getContentResolver().openInputStream(data.getData()));
+                    Bitmap bitmap4 = BitmapFactory.decodeStream(bis2);
+
+                    int orientation2 = 0;
+                    try {
+                        ExifInterface exifInterface2 = new ExifInterface(bis2);
+                        orientation2 = Integer.parseInt(exifInterface2.getAttribute(ExifInterface.TAG_ORIENTATION));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Bitmap orientationModifiedBitmap2 = ImageUtil.getOrientationModifiedBitmap(bitmap4, orientation2);
 
                     // Realmに入れるため、DTOに設定
                     File outputDir4 = this.getApplicationContext().getFilesDir();
                     String fileName4 = String.format(FILE_NAME_TEMPLATE, Calendar.getInstance());
                     File file4 = new File(outputDir4, fileName4);
                     try (FileOutputStream fos = new FileOutputStream(file4)) {
-                        bitmap4.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                        orientationModifiedBitmap2.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    ImageUtil.setOrientationModifiedImageFile(sideImage, file4);
+//                    ImageUtil.setOrientationModifiedImageFile(sideImage, file4);
+                    sideImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    sideImage.setImageBitmap(orientationModifiedBitmap2);
                     record.setSideImagePath(fileName4);
                     break;
             }

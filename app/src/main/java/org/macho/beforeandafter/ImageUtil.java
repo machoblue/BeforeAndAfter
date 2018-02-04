@@ -3,7 +3,7 @@ package org.macho.beforeandafter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
+import android.support.media.ExifInterface;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -14,6 +14,7 @@ import java.io.IOException;
  */
 
 public class ImageUtil {
+
     public static void setOrientationModifiedImageFile(ImageView imageView, File file) {
         try {
             int imageViewWidth = imageView.getWidth();
@@ -96,7 +97,10 @@ public class ImageUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return getOrientationModifiedBitmap(bitmap, orientation);
+    }
 
+    public static Bitmap getOrientationModifiedBitmap(Bitmap bitmap, int orientation) {
         if (orientation != 3 && orientation != 6 && orientation != 8) {
             // 何もしない
             return bitmap;
@@ -119,6 +123,53 @@ public class ImageUtil {
                 break;
         }
         return Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, true);
+
     }
+
+    /*
+    public static String uriToPath(Uri uri, Context context) {
+        if (uri == null || context == null) {
+            return null;
+        }
+
+        String path = null;
+
+        String documentId = DocumentsContract.getDocumentId(uri);
+        System.out.println("DOCUMENTID:" + documentId);
+        String[] splitDocumentId = documentId.split(":");
+        String id = splitDocumentId[splitDocumentId.length - 1];
+        System.out.println("ID:" + id);
+
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[] {MediaStore.MediaColumns.DATA},
+                "_id=?",
+                new String[] {id},
+                null);
+
+        if (cursor.moveToFirst()) {
+            path = cursor.getString(0);
+        }
+        cursor.close();
+
+        System.out.println("PATH:" + path);
+
+        return path;
+    }
+
+    public static int getOrientation(String path) {
+        if (path == null || "".equals(path) || !new File(path).exists()) {
+            System.out.println("path:" + path + " not exists");
+            return 0;
+        }
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            return Integer.parseInt(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    */
 
 }
