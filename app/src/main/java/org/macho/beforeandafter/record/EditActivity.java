@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,6 +24,7 @@ import android.widget.TextView;
 
 import net.nend.android.NendAdInterstitial;
 
+import org.macho.beforeandafter.ImageUtil;
 import org.macho.beforeandafter.R;
 import org.macho.beforeandafter.RecordDao;
 import org.macho.beforeandafter.record.camera.CameraActivity;
@@ -291,7 +290,7 @@ public class EditActivity extends AppCompatActivity {
                 case FRONT_IMAGE:
                     String frontImageFilePath = data.getStringExtra("PATH");
                     System.out.println("path:" + frontImageFilePath);
-                    setOrientationModifiedImageFile(frontImage, new File(frontImageFilePath));
+                    ImageUtil.setOrientationModifiedImageFile(frontImage, new File(frontImageFilePath));
                     // TODO: "/" は記録フラグメントで context.openFileInputで開く時のため。
                     String frontImageFileName = frontImageFilePath.replaceAll(this.getApplicationContext().getFilesDir().toString() + "/", "");
                     System.out.println("name:" + frontImageFileName);
@@ -300,14 +299,14 @@ public class EditActivity extends AppCompatActivity {
                 case SIDE_IMAGE:
                     String sideImageFilePath = data.getStringExtra("PATH");
                     System.out.println("path:" + sideImageFilePath);
-                    setOrientationModifiedImageFile(sideImage, new File(sideImageFilePath));
+                    ImageUtil.setOrientationModifiedImageFile(sideImage, new File(sideImageFilePath));
                     String sideImageFileName = sideImageFilePath.replaceAll(this.getApplicationContext().getFilesDir().toString() + "/", "");
                     System.out.println("name:" + sideImageFileName);
                     record.setSideImagePath(sideImageFileName);
                     break;
                 case FRONT_IMAGE_STANDARD_CAMERA:
                     File tempFile = getCameraFile();
-                    setOrientationModifiedImageFile(frontImage, tempFile);
+                    ImageUtil.setOrientationModifiedImageFile(frontImage, tempFile);
 
                     // temp -> appディレクトリに
                     File outputDir = this.getApplicationContext().getFilesDir();
@@ -338,14 +337,14 @@ public class EditActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    setOrientationModifiedImageFile(frontImage, file2);
+                    ImageUtil.setOrientationModifiedImageFile(frontImage, file2);
 
                     record.setFrontImagePath(fileName2);
 
                     break;
                 case SIDE_IMAGE_STANDARD_CAMERA:
                     File tempFile2 = getCameraFile();
-                    setOrientationModifiedImageFile(sideImage, tempFile2);
+                    ImageUtil.setOrientationModifiedImageFile(sideImage, tempFile2);
 
                     // temp -> app ディレクトリ
                     File outputDir3 = this.getApplicationContext().getFilesDir();
@@ -375,7 +374,7 @@ public class EditActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    setOrientationModifiedImageFile(sideImage, file4);
+                    ImageUtil.setOrientationModifiedImageFile(sideImage, file4);
                     record.setSideImagePath(fileName4);
                     break;
             }
@@ -413,77 +412,4 @@ public class EditActivity extends AppCompatActivity {
 
         }
     }
-
-    public void setOrientationModifiedImageFile(ImageView imageView, File file) {
-        try {
-            int imageViewWidth = imageView.getWidth();
-            int imageViewHeight = imageView.getHeight();
-
-            imageView.setScaleType(ImageView.ScaleType.MATRIX);
-
-            Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-            imageView.setImageBitmap(bitmap);
-
-            int bitmapWidth = bitmap.getWidth();
-            int bitmapHeight = bitmap.getHeight();
-
-            ExifInterface exifInterface = new ExifInterface(file.getPath());
-            int orientation = Integer.parseInt(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
-
-            float ratio = 1f;
-            Matrix matrix = new Matrix();
-            System.out.println("orientation:" + orientation);
-
-            switch (orientation) {
-                // Undefined, Flip, TransXXXは対応しない。
-                case ExifInterface.ORIENTATION_UNDEFINED: // 0
-                case ExifInterface.ORIENTATION_FLIP_HORIZONTAL: //2
-                case ExifInterface.ORIENTATION_FLIP_VERTICAL: // 4
-                case ExifInterface.ORIENTATION_TRANSPOSE: // 5 // TRANSPOST:転置 行と列の入れ替え
-                case ExifInterface.ORIENTATION_TRANSVERSE: // 7
-                case ExifInterface.ORIENTATION_NORMAL: // 1
-                    // cropCenterを自作する。-> 縦横それぞれの　表示サイズ/画像サイズ　の大きい方を採用。
-                    ratio = Math.max((float) imageViewWidth / (float) bitmapWidth, (float) imageViewHeight / (float) bitmapHeight);
-                    matrix.postScale(ratio, ratio); // TODO:preとpostの違いがわからない。postで試してみる。
-                    float scaledBitmapWidth = bitmapWidth * ratio;
-                    float scaledBitmapHeight = bitmapHeight * ratio;
-                    matrix.postTranslate((imageViewWidth - (scaledBitmapWidth + imageViewWidth) / 2),
-                             (imageViewHeight - (scaledBitmapHeight + imageViewHeight) / 2)); // 自作cropCenter
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180: // 3
-                    matrix.postRotate(180, bitmapWidth / 2, bitmapHeight / 2);
-                    ratio = Math.max((float) imageViewWidth / (float) bitmapWidth, (float) imageViewHeight / (float) bitmapHeight);
-                    matrix.postScale(ratio, ratio);
-                    float scaledBitmapWidth2 = bitmapWidth * ratio;
-                    float scaledBitmapHeight2 = bitmapHeight * ratio;
-                    matrix.postTranslate((imageViewWidth - (scaledBitmapWidth2 + imageViewWidth) / 2),
-                            (imageViewHeight - (scaledBitmapHeight2 + imageViewHeight) / 2)); // 自作cropCenter
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_90: // 6
-                    matrix.postRotate(90, bitmapWidth / 2, bitmapHeight / 2);
-                    ratio = Math.max((float) imageViewWidth / (float) bitmapHeight, (float) imageViewHeight / (float) bitmapWidth);
-                    matrix.postScale(ratio, ratio);
-                    float scaledBitmapWidth3 = bitmapWidth * ratio;
-                    float scaledBitmapHeight3 = bitmapHeight * ratio;
-                    matrix.postTranslate((imageViewWidth - (scaledBitmapHeight3 + imageViewWidth) / 2),
-                            (imageViewHeight - (scaledBitmapWidth3 + imageViewHeight) / 2)); // 自作cropCenter
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270: // 8
-                    matrix.postRotate(270, bitmapWidth / 2, bitmapHeight / 2);
-                    ratio = Math.max((float) imageViewWidth / (float) bitmapHeight, (float) imageViewHeight / (float) bitmapWidth);
-                    matrix.postScale(ratio, ratio);
-                    float scaledBitmapWidth4 = bitmapWidth * ratio;
-                    float scaledBitmapHeight4 = bitmapHeight * ratio;
-                    matrix.postTranslate((imageViewWidth - (scaledBitmapHeight4 + imageViewWidth) / 2),
-                            (imageViewHeight - (scaledBitmapWidth4 + imageViewHeight) / 2)); // 自作cropCenter
-                    break;
-            }
-            imageView.setImageMatrix(matrix);
-            imageView.invalidate();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

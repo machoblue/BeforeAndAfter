@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import org.macho.beforeandafter.ImageUtil;
 import org.macho.beforeandafter.R;
 import org.macho.beforeandafter.record.ImageCache;
 
@@ -159,8 +160,9 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
             options.inSampleSize = inSampleSize;
 
             Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
+            Bitmap orientationModifiedBitmap = ImageUtil.getOrientationModifiedBitmap(bitmap, file);
 
-            imageCache.put(filePath, bitmap);
+            imageCache.put(filePath, orientationModifiedBitmap);
             return true;
         }
 

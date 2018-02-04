@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.macho.beforeandafter.ImageUtil;
 import org.macho.beforeandafter.R;
 import org.macho.beforeandafter.RecordDao;
 
@@ -437,9 +438,10 @@ public class RecordFragment extends Fragment {
                 options.inJustDecodeBounds = false;
                 options.inSampleSize = inSampleSize;
 
-                Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
+                Bitmap tempBitmap = BitmapFactory.decodeFile(filePath, options);
+                Bitmap orientationModifiedBitmap = ImageUtil.getOrientationModifiedBitmap(tempBitmap, file); // 向き対応
 
-                imageCache.put(filePath, bitmap);
+                imageCache.put(filePath, orientationModifiedBitmap);
                 return true;
             }
 
