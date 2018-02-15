@@ -9,10 +9,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.media.ExifInterface;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import net.nend.android.NendAdInterstitial;
 
+import org.macho.beforeandafter.BuildConfig;
 import org.macho.beforeandafter.ImageUtil;
 import org.macho.beforeandafter.R;
 import org.macho.beforeandafter.RecordDao;
@@ -71,6 +72,9 @@ public class EditActivity extends AppCompatActivity {
     private Button deleteButton;
     private LinearLayout buttonLayout;
     long date;
+
+    private String tempFrontImageFileName = null;
+    private String tempSideImageFileName = null;
 
     private Record record;
 
@@ -125,14 +129,19 @@ public class EditActivity extends AppCompatActivity {
                 startActivityForResult(intent, front ? FRONT_IMAGE : SIDE_IMAGE);
             } else {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getCameraFile()));
+                Uri uri  = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".fileprovider", getCameraFile());
+                System.out.println("URI:" + uri + ", cameraFile:" + getCameraFile());
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intent, front ? FRONT_IMAGE_STANDARD_CAMERA : SIDE_IMAGE_STANDARD_CAMERA);
             }
         }
     }
 
     public File getCameraFile() {
-        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File dir = new File(getApplicationContext().getFilesDir(), "/temp");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
         return new File(dir, "temp.jpg");
     }
 
@@ -194,6 +203,19 @@ public class EditActivity extends AppCompatActivity {
                 record.setWeight(returnZeroIfNeed(weight));
                 record.setRate(returnZeroIfNeed(rate));
                 record.setMemo(memo.getText().toString());
+
+                if (tempFrontImageFileName != null) {
+                    String oldName = record.getFrontImagePath();
+                    deleteIfNeed(oldName);
+                    record.setFrontImagePath(tempFrontImageFileName);
+                }
+
+                if (tempSideImageFileName != null) {
+                    String oldName = record.getSideImagePath();
+                    deleteIfNeed(oldName);
+                    record.setSideImagePath(tempSideImageFileName);
+                }
+
                 if (date != 0L) {
                     RecordDao.getInstance().update(record);
                     intent.putExtra("ISNEW", false);
@@ -278,6 +300,9 @@ public class EditActivity extends AppCompatActivity {
             record = new Record();
         }
 
+        tempFrontImageFileName = null;
+        tempSideImageFileName = null;
+
         NendAdInterstitial.loadAd(this, "3daf5b0053537a900e405a9cd1a0a2c57b2e3ba6", 811664);
     }
 
@@ -295,7 +320,7 @@ public class EditActivity extends AppCompatActivity {
                     // TODO: "/" は記録フラグメントで context.openFileInputで開く時のため。
                     String frontImageFileName = frontImageFilePath.replaceAll(this.getApplicationContext().getFilesDir().toString() + "/", "");
                     System.out.println("name:" + frontImageFileName);
-                    record.setFrontImagePath(frontImageFileName);
+                    tempFrontImageFileName = frontImageFileName;
                     break;
                 case SIDE_IMAGE:
                     String sideImageFilePath = data.getStringExtra("PATH");
@@ -303,7 +328,7 @@ public class EditActivity extends AppCompatActivity {
                     ImageUtil.setOrientationModifiedImageFile(sideImage, new File(sideImageFilePath));
                     String sideImageFileName = sideImageFilePath.replaceAll(this.getApplicationContext().getFilesDir().toString() + "/", "");
                     System.out.println("name:" + sideImageFileName);
-                    record.setSideImagePath(sideImageFileName);
+                    tempSideImageFileName = sideImageFileName;
                     break;
                 case FRONT_IMAGE_STANDARD_CAMERA:
                     File tempFile = getCameraFile();
@@ -319,8 +344,7 @@ public class EditActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    // Realmに入れるため、DTOに設定
-                    record.setFrontImagePath(fileName);
+                    tempFrontImageFileName = fileName;
                     break;
                 case FRONT_GALLERY_IMAGE_REQUEST:
                     if (data == null) {
@@ -354,7 +378,7 @@ public class EditActivity extends AppCompatActivity {
                     frontImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     frontImage.setImageBitmap(orientationModifiedBitmap);
 
-                    record.setFrontImagePath(fileName2);
+                    tempFrontImageFileName = fileName2;
 
                     break;
                 case SIDE_IMAGE_STANDARD_CAMERA:
@@ -371,8 +395,7 @@ public class EditActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    // Realmに入れるため、DTOに設定
-                    record.setSideImagePath(fileName3);
+                    tempSideImageFileName = fileName3;
                     break;
                 case SIDE_GALLERY_IMAGE_REQUEST:
                     if (data == null) {
@@ -402,12 +425,26 @@ public class EditActivity extends AppCompatActivity {
 //                    ImageUtil.setOrientationModifiedImageFile(sideImage, file4);
                     sideImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     sideImage.setImageBitmap(orientationModifiedBitmap2);
-                    record.setSideImagePath(fileName4);
+                    tempSideImageFileName = fileName4;
                     break;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean deleteIfNeed(String fileName) {
+        if (fileName == null || "".equals(fileName)) {
+            return false;
+        }
+        File target = new File(getApplicationContext().getFilesDir(), fileName);
+        if (!target.exists()) {
+            System.out.println("target not exists");
+            return false;
+        }
+        boolean deleted = target.delete();
+        System.out.println("EditActivity.deleteIfNeed:" + target + ", " + deleted);
+        return deleted;
     }
 
     // 画像アクセスのための権限設定
