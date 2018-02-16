@@ -8,8 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import net.nend.android.NendAdInterstitial;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
+import org.macho.beforeandafter.AdUtil;
 import org.macho.beforeandafter.R;
 
 /**
@@ -22,12 +26,15 @@ public class EditGoalFragment extends AppCompatActivity {
     private Button save;
     private Button cancel;
     private SharedPreferences preferences;
+
+    private InterstitialAd interstitialAd;
+
     private View.OnClickListener onSaveButtonClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             preferences.edit().putFloat("GOAL_WEIGHT", Float.parseFloat(goalWeight.getText().toString())).commit();
             preferences.edit().putFloat("GOAL_RATE", Float.parseFloat(goalRate.getText().toString())).commit();
 
-            NendAdInterstitial.showAd(EditGoalFragment.this);
+            AdUtil.show(interstitialAd);
 
             finish();
         }
@@ -35,7 +42,7 @@ public class EditGoalFragment extends AppCompatActivity {
     private View.OnClickListener onCancelButtonClickListener = new View.OnClickListener() {
         public void onClick(View view) {
 
-            NendAdInterstitial.showAd(EditGoalFragment.this);
+            AdUtil.show(interstitialAd);
 
             finish();
         }
@@ -59,6 +66,14 @@ public class EditGoalFragment extends AppCompatActivity {
         save.setOnClickListener(onSaveButtonClickListener);
         cancel.setOnClickListener(onCancelButtonClickListener);
 
-        NendAdInterstitial.loadAd(this, "3daf5b0053537a900e405a9cd1a0a2c57b2e3ba6", 811664);
+        MobileAds.initialize(this, getString(R.string.admob_app_id));
+
+        AdView adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(getString(R.string.admob_unit_id_interstitial));
+        interstitialAd.loadAd(new AdRequest.Builder().build());
     }
 }

@@ -23,8 +23,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import net.nend.android.NendAdInterstitial;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
+import org.macho.beforeandafter.AdUtil;
 import org.macho.beforeandafter.BuildConfig;
 import org.macho.beforeandafter.ImageUtil;
 import org.macho.beforeandafter.R;
@@ -79,6 +83,8 @@ public class EditActivity extends AppCompatActivity {
     private Record record;
 
     private int index;
+
+    private InterstitialAd interstitialAd;
 
     private View.OnClickListener onFrontImageViewClickListener = new View.OnClickListener() {
         @Override
@@ -174,7 +180,7 @@ public class EditActivity extends AppCompatActivity {
             intent.putExtra("TYPE", 0);
             setResult(RESULT_OK, intent);
 
-            NendAdInterstitial.showAd(EditActivity.this);
+            AdUtil.show(interstitialAd);
 
             finish();
         }
@@ -189,7 +195,7 @@ public class EditActivity extends AppCompatActivity {
             intent.putExtra("TYPE", 1);
             setResult(RESULT_OK, intent);
 
-            NendAdInterstitial.showAd(EditActivity.this);
+            AdUtil.show(interstitialAd);
 
             finish();
         }
@@ -230,7 +236,7 @@ public class EditActivity extends AppCompatActivity {
                 intent.putExtra("TYPE", 2);
                 setResult(RESULT_OK, intent);
 
-                NendAdInterstitial.showAd(EditActivity.this);
+                AdUtil.show(interstitialAd);
 
                 finish();
             } catch (Exception e) {
@@ -303,7 +309,15 @@ public class EditActivity extends AppCompatActivity {
         tempFrontImageFileName = null;
         tempSideImageFileName = null;
 
-        NendAdInterstitial.loadAd(this, "3daf5b0053537a900e405a9cd1a0a2c57b2e3ba6", 811664);
+        MobileAds.initialize(this, getString(R.string.admob_app_id));
+
+        AdView adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(getString(R.string.admob_unit_id_interstitial));
+        interstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
     @Override

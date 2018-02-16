@@ -13,8 +13,13 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+
 import net.nend.android.NendAdInterstitial;
 
+import org.macho.beforeandafter.AdUtil;
 import org.macho.beforeandafter.R;
 
 /**
@@ -24,12 +29,19 @@ import org.macho.beforeandafter.R;
 public class UseOldGrapheFragmentDialog extends DialogFragment {
     private LinearLayout layout;
     private CheckBox checkBox;
+    private InterstitialAd interstitialAd;
     public static DialogFragment newInstance(Activity activity) {
         NendAdInterstitial.loadAd(activity, "2e022cf05260b47b52bb803de578742b38422bf9", 824867);
         return new UseOldGrapheFragmentDialog();
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
+
+        interstitialAd = new InterstitialAd(getActivity());
+        interstitialAd.setAdUnitId(getString(R.string.admob_unit_id_interstitial));
+        interstitialAd.loadAd(new AdRequest.Builder().build());
+
         layout = new LinearLayout(getContext());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layout.setOrientation(LinearLayout.HORIZONTAL);
@@ -55,13 +67,13 @@ public class UseOldGrapheFragmentDialog extends DialogFragment {
                        } else {
                            preferences.edit().putBoolean("USE_OLD_GRAPHE_FRAGMENT", false).commit();
                        }
-                        NendAdInterstitial.showAd(getActivity());
+                        AdUtil.show(interstitialAd);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        NendAdInterstitial.showAd(getActivity());
+                        AdUtil.show(interstitialAd);
                     }
                 })
                 .create();

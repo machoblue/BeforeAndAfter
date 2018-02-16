@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import org.macho.beforeandafter.gallery.GalleryFragment;
 import org.macho.beforeandafter.preference.PreferenceFragment;
 import org.macho.beforeandafter.record.RecordFragment;
@@ -67,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
 
         uncheckCurrentButtonAndCheck(item0ImageButton, item0TextView);
         getSupportFragmentManager().beginTransaction().add(R.id.content, RecordFragment.getInstance()).commit();
+
+        MobileAds.initialize(this, getString(R.string.admob_app_id));
+
+        AdView adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
     }
 
     private void uncheckCurrentButtonAndCheck(ImageButton image, TextView text) {

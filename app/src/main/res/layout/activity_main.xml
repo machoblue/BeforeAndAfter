@@ -15,14 +15,14 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <net.nend.android.NendAdView
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:id="@+id/nend"
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            NendApiKey="2d427b53045c4227fab1f70c6fc3eaf873b48eb1"
-            NendSpotId="811665" />
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="@string/admob_unit_id">
+        </com.google.android.gms.ads.AdView>
     </LinearLayout>
     <FrameLayout
         android:id="@+id/content"
