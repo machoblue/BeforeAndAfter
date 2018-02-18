@@ -1,8 +1,13 @@
 package org.macho.beforeandafter;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.net.Uri;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.media.ExifInterface;
 import android.widget.ImageView;
 
@@ -171,5 +176,38 @@ public class ImageUtil {
         return 0;
     }
     */
+
+    public static int extractOrientationFromGalleryImage(Context context, Uri galleryUri) {
+        int orientation = 0;
+        String docId = DocumentsContract.getDocumentId(galleryUri);
+        System.out.println("docId:" + docId);
+        String[] split = docId.split(":");
+        Uri contentUri = MediaStore.Files.getContentUri("external");
+        System.out.println("contentUri:" + contentUri);
+        String selection = "_id=?";
+        String[] selectionArgs = {split[1]};
+
+        final String column = "_data";
+        final String[] projection = {column};
+        try (Cursor cursor = context.getContentResolver().query(contentUri, projection, selection, selectionArgs, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                System.out.println("CURSOR:" + cursor);
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                String path = cursor.getString(column_index);
+                System.out.println("path:" + path);
+                try {
+                    ExifInterface exifInterface = new ExifInterface(path);
+                    orientation = Integer.parseInt(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("ORIENTATION:" + orientation);
+            } else {
+                System.out.println("FAIL");
+            }
+        }
+
+        return orientation;
+    }
 
 }

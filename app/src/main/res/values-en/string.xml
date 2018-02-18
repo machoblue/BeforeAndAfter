@@ -61,6 +61,7 @@
     <string name="dialog_select_camera">Camera</string>
     <string name="dialog_select_gallery">Gallery</string>
 
+    <string name="admob_app_id">ca-app-pub-2062076007725970~3676986758</string>
     <!-- 本物 -->
     <string name="admob_unit_id">ca-app-pub-2062076007725970/4292543358</string>
     <!-- テスト用 -->

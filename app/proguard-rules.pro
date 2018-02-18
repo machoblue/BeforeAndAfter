@@ -23,3 +23,18 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.google.android.gms.** { *; }
+-keep class android.app.NotificationChannel
+-keep class android.app.NotificationManager
+-keep class android.app.Notification
+-keep class android.app.Notification$Builder
+-keep class android.content.pm.PackageManager
+-dontwarn com.google.android.gms.**
+-dontwarn android.app.NotificationChannel
+-dontwarn android.app.NotificationManager
+-dontwarn android.app.Notification
+-dontwarn android.app.Notification$Builder
+-dontwarn android.content.pm.PackageManager
+
+

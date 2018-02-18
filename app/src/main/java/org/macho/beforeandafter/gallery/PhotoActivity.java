@@ -9,7 +9,10 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
+import org.macho.beforeandafter.ImageUtil;
 import org.macho.beforeandafter.R;
+
+import java.io.File;
 
 /**
  * Created by yuukimatsushima on 2017/08/13.
@@ -48,7 +51,8 @@ public class PhotoActivity extends AppCompatActivity {
                     }
                     index++;
                     seekBar.setProgress(index);
-                    imageView.setImageBitmap(BitmapFactory.decodeFile("/data/data/org.macho.beforeandafter/files/" + imagePaths[index]));
+//                    imageView.setImageBitmap(BitmapFactory.decodeFile("/data/data/org.macho.beforeandafter/files/" + imagePaths[index]));
+                    ImageUtil.setOrientationModifiedImageFile(imageView, new File("/data/data/org.macho.beforeandafter/files/", imagePaths[index]));
 
                 }
                 // 終了位置から開始位置の移動距離が指定値より大きい
@@ -59,7 +63,8 @@ public class PhotoActivity extends AppCompatActivity {
                     }
                     index--;
                     seekBar.setProgress(index);
-                    imageView.setImageBitmap(BitmapFactory.decodeFile("/data/data/org.macho.beforeandafter/files/" + imagePaths[index]));
+//                    imageView.setImageBitmap(BitmapFactory.decodeFile("/data/data/org.macho.beforeandafter/files/" + imagePaths[index]));
+                    ImageUtil.setOrientationModifiedImageFile(imageView, new File("/data/data/org.macho.beforeandafter/files/", imagePaths[index]));
                 }
 
             } catch (Exception e) {

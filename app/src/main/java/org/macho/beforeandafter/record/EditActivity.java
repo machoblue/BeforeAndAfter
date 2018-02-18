@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.media.ExifInterface;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -214,12 +213,14 @@ public class EditActivity extends AppCompatActivity {
                     String oldName = record.getFrontImagePath();
                     deleteIfNeed(oldName);
                     record.setFrontImagePath(tempFrontImageFileName);
+                    tempFrontImageFileName = null;
                 }
 
                 if (tempSideImageFileName != null) {
                     String oldName = record.getSideImagePath();
                     deleteIfNeed(oldName);
                     record.setSideImagePath(tempSideImageFileName);
+                    tempSideImageFileName = null;
                 }
 
                 if (date != 0L) {
@@ -368,14 +369,9 @@ public class EditActivity extends AppCompatActivity {
                     Bitmap bitmap2 = BitmapFactory.decodeStream(bis);
 
                     // Bitmapの向きを調整
-                    int orientation = 0;
-                    try {
-                        ExifInterface exifInterface = new ExifInterface(bis);
-                        orientation = Integer.parseInt(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
-                        System.out.println("ORIENTATION:" + orientation);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    Uri uri = data.getData();
+                    System.out.println("URI:" + uri);
+                    int orientation = ImageUtil.extractOrientationFromGalleryImage(getApplicationContext(), uri);
                     Bitmap orientationModifiedBitmap = ImageUtil.getOrientationModifiedBitmap(bitmap2, orientation);
 
                     // Realmに入れるため、DTOに設定
@@ -418,13 +414,8 @@ public class EditActivity extends AppCompatActivity {
                     BufferedInputStream bis2 = new BufferedInputStream(this.getContentResolver().openInputStream(data.getData()));
                     Bitmap bitmap4 = BitmapFactory.decodeStream(bis2);
 
-                    int orientation2 = 0;
-                    try {
-                        ExifInterface exifInterface2 = new ExifInterface(bis2);
-                        orientation2 = Integer.parseInt(exifInterface2.getAttribute(ExifInterface.TAG_ORIENTATION));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    Uri uri2 = data.getData();
+                    int orientation2 = ImageUtil.extractOrientationFromGalleryImage(getApplicationContext(), uri2);
                     Bitmap orientationModifiedBitmap2 = ImageUtil.getOrientationModifiedBitmap(bitmap4, orientation2);
 
                     // Realmに入れるため、DTOに設定
@@ -489,5 +480,13 @@ public class EditActivity extends AppCompatActivity {
                 break;
 
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        System.out.println("--- EditActivity.onDestroy ---");
+        deleteIfNeed(tempFrontImageFileName);
+        deleteIfNeed(tempSideImageFileName);
     }
 }
