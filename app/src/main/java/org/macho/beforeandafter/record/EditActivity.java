@@ -355,6 +355,7 @@ public class EditActivity extends AppCompatActivity {
                     try (FileOutputStream fos = new FileOutputStream(new File(outputDir, fileName))) {
                         Bitmap bitmap = BitmapFactory.decodeFile(tempFile.getPath());
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                        ImageUtil.releaseBitmap(bitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -401,6 +402,7 @@ public class EditActivity extends AppCompatActivity {
                     try (FileOutputStream fos = new FileOutputStream(new File(outputDir3, fileName3))) {
                         Bitmap bitmap3 = BitmapFactory.decodeFile(tempFile2.getPath());
                         bitmap3.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                        ImageUtil.releaseBitmap(bitmap3);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -486,7 +488,13 @@ public class EditActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         System.out.println("--- EditActivity.onDestroy ---");
+
         deleteIfNeed(tempFrontImageFileName);
         deleteIfNeed(tempSideImageFileName);
+
+        // OutOfMemory対策
+        ImageUtil.releaseImageView(frontImage);
+        ImageUtil.releaseImageView(sideImage);
     }
+
 }

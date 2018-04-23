@@ -1,5 +1,6 @@
 package org.macho.beforeandafter;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -124,6 +125,11 @@ public class MainActivity extends AppCompatActivity {
     public void onItem3Click(View view) {
         uncheckCurrentButtonAndCheck(item3ImageButton, item3TextView);
         getSupportFragmentManager().beginTransaction().replace(R.id.content, PreferenceFragment.newFragment(this)).commit();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 }

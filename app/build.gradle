@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 24 //nendSDKを入れるため、24->25
+    compileSdkVersion  26 //nendSDKを入れるため、24->25
     buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "org.macho.beforeandafter"
         minSdkVersion 21
         targetSdkVersion 24 //nendSDKを入れるため、24->25
-        versionCode 15
-        versionName "1.14"
+        versionCode 16
+        versionName "1.15"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled=true
     }
@@ -22,6 +22,9 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+    configurations.all { // conflict error対策
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
 }
 
 dependencies {
@@ -31,10 +34,10 @@ dependencies {
     })
     //noinspection AndroidLintGradleCompatible
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.android.support:appcompat-v7:24.2.1' //nendSDKを入れるため、24.2.1->25.3.1
+    compile 'com.android.support:appcompat-v7:26+' //nendSDKを入れるため、24.2.1->25.3.1
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:support-v4:24.2.1' //nendSDKを入れるため、24->25
-    compile 'com.android.support:design:24.2.1' //nendSDKを入れるため、24->25
+    compile 'com.android.support:support-v4:26+' //nendSDKを入れるため、24->25
+    compile 'com.android.support:design:26+' //nendSDKを入れるため、24->25
     compile 'io.realm:android-adapters:1.2.1'
 
     // nendSDK

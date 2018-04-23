@@ -1,7 +1,6 @@
 package org.macho.beforeandafter.gallery;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
@@ -52,7 +51,7 @@ public class PhotoActivity extends AppCompatActivity {
                     index++;
                     seekBar.setProgress(index);
 //                    imageView.setImageBitmap(BitmapFactory.decodeFile("/data/data/org.macho.beforeandafter/files/" + imagePaths[index]));
-                    ImageUtil.setOrientationModifiedImageFile(imageView, new File("/data/data/org.macho.beforeandafter/files/", imagePaths[index]));
+                    ImageUtil.setOrientationModifiedImageFile(imageView, new File("/data/data/org.macho.beforeandafter/files/" + imagePaths[index]));
 
                 }
                 // 終了位置から開始位置の移動距離が指定値より大きい
@@ -64,7 +63,7 @@ public class PhotoActivity extends AppCompatActivity {
                     index--;
                     seekBar.setProgress(index);
 //                    imageView.setImageBitmap(BitmapFactory.decodeFile("/data/data/org.macho.beforeandafter/files/" + imagePaths[index]));
-                    ImageUtil.setOrientationModifiedImageFile(imageView, new File("/data/data/org.macho.beforeandafter/files/", imagePaths[index]));
+                    ImageUtil.setOrientationModifiedImageFile(imageView, new File("/data/data/org.macho.beforeandafter/files/" + imagePaths[index]));
                 }
 
             } catch (Exception e) {
@@ -78,7 +77,8 @@ public class PhotoActivity extends AppCompatActivity {
     private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-            imageView.setImageBitmap(BitmapFactory.decodeFile("/data/data/org.macho.beforeandafter/files/" + imagePaths[i]));
+//            imageView.setImageBitmap(BitmapFactory.decodeFile("/data/data/org.macho.beforeandafter/files/" + imagePaths[i]));
+            ImageUtil.setOrientationModifiedImageFile(imageView, new File("/data/data/org.macho.beforeandafter/files/" + imagePaths[i]));
             index = i;
         }
         @Override
@@ -104,7 +104,7 @@ public class PhotoActivity extends AppCompatActivity {
             index = intent.getIntExtra("INDEX", 0);
             imagePaths = intent.getStringArrayExtra("PATHS");
             imageView = (ImageView) findViewById(R.id.imageView2);
-            imageView.setImageBitmap(BitmapFactory.decodeFile("/data/data/org.macho.beforeandafter/files/" + imagePaths[index]));
+            ImageUtil.setOrientationModifiedImageFile(imageView, new File("/data/data/org.macho.beforeandafter/files/" + imagePaths[index]));
             seekBar = (SeekBar) findViewById(R.id.seekBar);
             seekBar.setProgress(index);
             seekBar.setMax(imagePaths.length - 1);

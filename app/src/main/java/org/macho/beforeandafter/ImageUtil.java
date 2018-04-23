@@ -21,6 +21,10 @@ import java.io.IOException;
 public class ImageUtil {
 
     public static void setOrientationModifiedImageFile(ImageView imageView, File file) {
+        if (file == null || !file.exists()) {
+            imageView.setImageBitmap(BitmapFactory.decodeFile(file.getPath())); // 今までと同じ仕様（PhotoActivityでファイルが存在しなければ、真っ黒）を維持するため。
+            return;
+        }
         try {
             int imageViewWidth = imageView.getWidth();
             int imageViewHeight = imageView.getHeight();
@@ -127,8 +131,10 @@ public class ImageUtil {
                 matrix.postTranslate(0f, bitmapWidth);
                 break;
         }
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, true);
 
+        Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, true);
+        releaseBitmap(bitmap);
+        return newBitmap;
     }
 
     /*
@@ -179,35 +185,71 @@ public class ImageUtil {
 
     public static int extractOrientationFromGalleryImage(Context context, Uri galleryUri) {
         int orientation = 0;
-        String docId = DocumentsContract.getDocumentId(galleryUri);
-        System.out.println("docId:" + docId);
-        String[] split = docId.split(":");
-        Uri contentUri = MediaStore.Files.getContentUri("external");
-        System.out.println("contentUri:" + contentUri);
-        String selection = "_id=?";
-        String[] selectionArgs = {split[1]};
-
-        final String column = "_data";
-        final String[] projection = {column};
-        try (Cursor cursor = context.getContentResolver().query(contentUri, projection, selection, selectionArgs, null)) {
-            if (cursor != null && cursor.moveToFirst()) {
-                System.out.println("CURSOR:" + cursor);
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                String path = cursor.getString(column_index);
-                System.out.println("path:" + path);
+        if ("media".equals(galleryUri.getAuthority())) {
+            String[] projection = {MediaStore.MediaColumns.DATA};
+            Cursor cursor = context.getContentResolver().query(galleryUri, projection, null, null, null);
+            if (cursor != null) {
+                String path = null;
+                if (cursor.moveToFirst()) {
+                    path = cursor.getString(0);
+                }
+                cursor.close();
                 try {
                     ExifInterface exifInterface = new ExifInterface(path);
                     orientation = Integer.parseInt(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                System.out.println("ORIENTATION:" + orientation);
-            } else {
-                System.out.println("FAIL");
+                return orientation;
             }
-        }
+        } else {
+            String docId = DocumentsContract.getDocumentId(galleryUri);
+            System.out.println("docId:" + docId);
+            String[] split = docId.split(":");
+            Uri contentUri = MediaStore.Files.getContentUri("external");
+            System.out.println("contentUri:" + contentUri);
+            String selection = "_id=?";
+            String[] selectionArgs = {split[1]};
 
-        return orientation;
+            final String column = "_data";
+            final String[] projection = {column};
+            try (Cursor cursor = context.getContentResolver().query(contentUri, projection, selection, selectionArgs, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    System.out.println("CURSOR:" + cursor);
+                    final int column_index = cursor.getColumnIndexOrThrow(column);
+                    String path = cursor.getString(column_index);
+                    System.out.println("path:" + path);
+                    try {
+                        ExifInterface exifInterface = new ExifInterface(path);
+                        orientation = Integer.parseInt(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("ORIENTATION:" + orientation);
+                } else {
+                    System.out.println("FAIL");
+                }
+            }
+
+            return orientation;
+        }
+        return 0; // undefined
+    }
+
+    public static void releaseImageView(ImageView imageView) {
+        if (imageView == null) {
+            return;
+        }
+        imageView.setImageDrawable(null);
+        imageView.setBackgroundDrawable(null);
+    }
+
+    public static void releaseBitmap(Bitmap bitmap) {
+        if (bitmap != null) {
+            return;
+        }
+        bitmap.recycle();
+        bitmap = null;
     }
 
 }
