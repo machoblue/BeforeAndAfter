@@ -11,11 +11,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
-import org.macho.beforeandafter.gallery.GalleryFragment;
+import org.macho.beforeandafter.gallery.GalleryFragment2;
 import org.macho.beforeandafter.preference.PreferenceFragment;
 import org.macho.beforeandafter.record.RecordFragment;
 
@@ -66,18 +65,21 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        RealmConfiguration config = new RealmConfiguration.Builder(getApplication())
+        Realm.init(getApplicationContext());
+        RealmConfiguration config = new RealmConfiguration.Builder()
                 .schemaVersion(1).migration(migration).build();
         Realm.setDefaultConfiguration(config);
 
         uncheckCurrentButtonAndCheck(item0ImageButton, item0TextView);
         getSupportFragmentManager().beginTransaction().add(R.id.content, RecordFragment.getInstance()).commit();
 
+        AdUtil adUtil = AdUtil.getInstance();
+        adUtil.requestConsentInfoUpdateIfNeed(getApplicationContext());
+
         MobileAds.initialize(this, getString(R.string.admob_app_id));
 
         AdView adView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+        adUtil.loadBannerAd(adView, getApplicationContext());
     }
 
     private void uncheckCurrentButtonAndCheck(ImageButton image, TextView text) {
@@ -99,26 +101,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onItem1Click(View view) {
-        try {
-            uncheckCurrentButtonAndCheck(item1ImageButton, item1TextView);
-            getSupportFragmentManager().beginTransaction().replace(R.id.content, GalleryFragment.getInstance()).commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println("*** MainActivity.onItem1Click ***");
+        uncheckCurrentButtonAndCheck(item1ImageButton, item1TextView);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, GalleryFragment2.getInstance()).commit();
     }
 
     public void onItem2Click(View view) {
         System.out.println("*** MainActivity.onItem2Click - start");
         uncheckCurrentButtonAndCheck(item2ImageButton, item2TextView);
-//        getSupportFragmentManager().beginTransaction().replace(R.id.content, GrapheFragment.getInstance()).commit();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean useOldGrapheFragment = preferences.getBoolean("USE_OLD_GRAPHE_FRAGMENT", false);
-        if (!useOldGrapheFragment) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.content, org.macho.beforeandafter.graphe2.GrapheFragment.getInstance()).commit();
-        } else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.content, org.macho.beforeandafter.graphe.GrapheFragment.getInstance()).commit();
-        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.content, org.macho.beforeandafter.graphe2.GrapheFragment.getInstance()).commit();
         System.out.println("*** MainActivity.onItem2Click - end");
     }
 

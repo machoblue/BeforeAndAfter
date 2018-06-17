@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.macho.beforeandafter.AdUtil;
 import org.macho.beforeandafter.R;
 
 import java.util.ArrayList;
@@ -39,18 +40,21 @@ public class PreferenceFragment extends Fragment {
                 DeleteAllDialog.newInstance(activity).show(fragment.getFragmentManager(), "");
             }
         }));
-        items.add(new PreferenceItem(R.string.use_old_graphe_ui, R.string.use_old_graphe_ui_description, new PreferenceItem.PreferenceAction() {
-            @Override
-            public void doPreferenceAction() {
-                UseOldGrapheFragmentDialog.newInstance(activity).show(fragment.getFragmentManager(), "");
-            }
-        }));
         items.add(new PreferenceItem(R.string.use_standard_camera, R.string.use_standard_camera_description, new PreferenceItem.PreferenceAction() {
             @Override
             public void doPreferenceAction() {
                 UseStandardCameraDialog.newInstance(activity).show(fragment.getFragmentManager(), "");
             }
         }));
+        if (AdUtil.isInEEA(activity.getApplicationContext())) {
+            items.add(new PreferenceItem(R.string.preference_item_change_or_revoke_consent_title, R.string.preference_item_change_or_revoke_consent_description, new PreferenceItem.PreferenceAction() {
+                @Override
+                public void doPreferenceAction() {
+                    AdUtil.getInstance().showConsentForm(activity.getApplicationContext());
+                }
+            }));
+        }
+
 
         fragment.setItems(items);
         return fragment;

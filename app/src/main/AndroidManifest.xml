@@ -23,8 +23,8 @@
             <!--android:theme="@style/Theme.AppCompat.NoActionBar"/>-->
         <activity android:name=".record.camera.CameraActivity"/>
             <!--android:theme="@style/Theme.AppCompat.NoActionBar"/>-->
-        <activity android:name=".gallery.PhotoActivity"/>
-            <!--android:theme="@style/Theme.AppCompat.NoActionBar"/>-->
+        <activity android:name=".gallery.PhotoActivity2"/>
+        <!--android:theme="@style/Theme.AppCompat.NoActionBar"/>-->
         <activity android:name=".preference.EditGoalFragment"/>
             <!--android:theme="@style/Theme.AppCompat.NoActionBar"/>-->
 

@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
@@ -32,8 +31,7 @@ public class DeleteAllDialog extends DialogFragment {
         MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
 
         interstitialAd = new InterstitialAd(getActivity());
-        interstitialAd.setAdUnitId(getString(R.string.admob_unit_id_interstitial));
-        interstitialAd.loadAd(new AdRequest.Builder().build());
+        AdUtil.getInstance().loadInterstitialAd(interstitialAd, getContext());
 
         return new AlertDialog.Builder(getActivity()).setTitle(R.string.delete_all_title)
                 .setMessage(R.string.delete_all_confirmation_message)

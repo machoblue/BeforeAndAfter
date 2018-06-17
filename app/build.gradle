@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion  26 //nendSDKを入れるため、24->25
-    buildToolsVersion "26.0.1"
+    compileSdkVersion  27 //nendSDKを入れるため、24->25
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "org.macho.beforeandafter"
         minSdkVersion 21
-        targetSdkVersion 24 //nendSDKを入れるため、24->25
-        versionCode 16
-        versionName "1.15"
+        targetSdkVersion 27 //nendSDKを入れるため、24->25
+        versionCode 17
+        versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled=true
     }
@@ -28,26 +28,28 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    //noinspection AndroidLintGradleCompatible
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'com.android.support:appcompat-v7:26+' //nendSDKを入れるため、24.2.1->25.3.1
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:support-v4:26+' //nendSDKを入れるため、24->25
-    compile 'com.android.support:design:26+' //nendSDKを入れるため、24->25
-    compile 'io.realm:android-adapters:1.2.1'
+    implementation 'com.android.support:multidex:1.0.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:27.1.1' // TODO: 何か別の依存関係が26.1.0に依存しているとエラーが出るが、何が26.1.0に依存しているか不明
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:design:27+' // TODO:なぜか27.1.1にするとunresolveとエラーが出る。
 
-    // nendSDK
-    compile 'net.nend.android:nend-sdk:4.0.1'
-    compile 'com.google.android.gms:play-services:+' // interstitialのため
+    implementation 'io.realm:android-adapters:1.2.1'
 
-    //noinspection AndroidLintGradleCompatible
-    compile 'com.android.support:exifinterface:25.1.1' // 本当は24.2.1にすべきだけど
+    implementation 'com.google.android.gms:play-services:12.0.1' // interstitialのため
 
-    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:exifinterface:27.1.1'
 
-    compile 'com.google.android.gms:play-services-ads:11.8.0'
+    testImplementation 'junit:junit:4.12'
+
+    implementation 'com.google.android.gms:play-services-ads:12.0.1'
+    implementation 'com.google.android.ads.consent:consent-library:1.0.4' // Google のサイトによると1.0.4
+
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 }

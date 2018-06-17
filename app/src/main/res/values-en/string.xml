@@ -56,6 +56,8 @@
     <string name="use_standard_camera_description">use the Android standard camera</string>
     <string name="use_standard_camera_message">Do you use the Android standard camera?</string>
     <string name="use_standard_camera_yes">Yes.</string>
+    <string name="preference_item_change_or_revoke_consent_title">Change or revoke consent</string>
+    <string name="preference_item_change_or_revoke_consent_description">Change or revoke consent you have made.</string>
 
     <string name="dialog_select_prompt">Choose Image</string>
     <string name="dialog_select_camera">Camera</string>
@@ -63,12 +65,14 @@
 
     <string name="admob_app_id">ca-app-pub-2062076007725970~3676986758</string>
     <!-- 本物 -->
-    <string name="admob_unit_id">ca-app-pub-2062076007725970/4292543358</string>
+    <string name="admob_unit_id_">ca-app-pub-2062076007725970/4292543358</string>
     <!-- テスト用 -->
-    <string name="admob_unit_id_">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <!-- 本物 -->
-    <string name="admob_unit_id_interstitial">ca-app-pub-2062076007725970/5738923755</string>
+    <string name="admob_unit_id_interstitial_">ca-app-pub-2062076007725970/5738923755</string>
     <!-- テスト用 -->
-    <string name="admob_unit_id_interstitial_">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="admob_unit_id_interstitial">ca-app-pub-3940256099942544/1033173712</string>
+
+    <string name="publisher_id">pub-2062076007725970</string>
 </resources>

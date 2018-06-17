@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
@@ -68,12 +67,12 @@ public class EditGoalFragment extends AppCompatActivity {
 
         MobileAds.initialize(this, getString(R.string.admob_app_id));
 
+        AdUtil adUtil = AdUtil.getInstance();
+
         AdView adView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+        adUtil.loadBannerAd(adView, getApplicationContext());
 
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(getString(R.string.admob_unit_id_interstitial));
-        interstitialAd.loadAd(new AdRequest.Builder().build());
+        adUtil.loadInterstitialAd(interstitialAd, getApplicationContext());
     }
 }
