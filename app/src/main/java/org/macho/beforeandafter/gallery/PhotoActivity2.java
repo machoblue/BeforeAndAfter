@@ -112,7 +112,7 @@ public class PhotoActivity2 extends AppCompatActivity {
     void showImage() {
         String path = items.get(index);
         GlideApp.with(this)
-                .load(Uri.fromFile(new File(PATH, path)))
+                .load(Uri.fromFile(new File(PATH, path == null ? "" : path)))
                 .thumbnail(.1f)
                 .error(new ColorDrawable(Color.GRAY))
                 .into(imageView);

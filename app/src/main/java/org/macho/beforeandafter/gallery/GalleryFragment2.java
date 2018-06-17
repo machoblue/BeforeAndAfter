@@ -72,4 +72,12 @@ public class GalleryFragment2 extends Fragment {
         sideGridAdapter = new GridAdapter2(this, sideImagePaths);
         sideGridView.setAdapter(sideGridAdapter);
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        System.out.println("*** GalleryFragment.onStop ***");
+        frontImagePaths.clear();
+        sideImagePaths.clear();
+    }
 }
