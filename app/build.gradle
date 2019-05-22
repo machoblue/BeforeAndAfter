@@ -1,13 +1,17 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 
+
 android {
-    compileSdkVersion  27 //nendSDKを入れるため、24->25
-    buildToolsVersion "27.0.3"
+    compileSdkVersion  27
+//    buildToolsVersion "27.0.3" // below the minimum supported version (28.0.3) for Android Gradle Plugin 3.3.0.
     defaultConfig {
         applicationId "org.macho.beforeandafter"
         minSdkVersion 21
-        targetSdkVersion 27 //nendSDKを入れるため、24->25
+        targetSdkVersion 27
         versionCode 17
         versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -51,5 +55,10 @@ dependencies {
     implementation 'com.google.android.ads.consent:consent-library:1.0.4' // Google のサイトによると1.0.4
 
     implementation 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    kapt 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+repositories {
+    mavenCentral()
 }
