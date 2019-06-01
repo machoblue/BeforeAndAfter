@@ -11,8 +11,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
-import android.widget.LinearLayout
-import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_graphe.*
 import org.macho.beforeandafter.BeforeAndAfterConst
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.RecordDao
@@ -20,15 +19,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class GrapheFragment: Fragment() {
-    private lateinit var linearLayout: LinearLayout
     private lateinit var frameLayout: FrameLayout
     private lateinit var scrollView: HorizontalScrollView
     private lateinit var grapheView: LineGrapheView
 
-    private lateinit var currentDate: TextView
     private lateinit var format: SimpleDateFormat
-    private lateinit var currentWeight: TextView
-    private lateinit var currentRate: TextView
 
     private var fromTime = 0L
     private var toTime = 0L
@@ -46,7 +41,7 @@ class GrapheFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = layoutInflater.inflate(R.layout.fragment_graphe2, container, false)
+        val view = layoutInflater.inflate(R.layout.fragment_graphe, container, false)
         val lang = Locale.getDefault().language
         if ("ja".equals(lang)) {
             format = SimpleDateFormat("yyyy年MM月dd日")
@@ -63,17 +58,13 @@ class GrapheFragment: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        linearLayout = view.findViewById(R.id.linear_layout)
         frameLayout = FrameLayout(context)
 
         refresh()
 
         linearLayout.addView(frameLayout)
 
-        currentDate = view.findViewById(R.id.current_date)
         currentDate.text = format.format(Date())
-        currentWeight = view.findViewById(R.id.current_weight)
-        currentRate = view.findViewById(R.id.current_rate)
     }
 
     private fun refresh() {

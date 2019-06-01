@@ -17,6 +17,7 @@ import android.widget.*
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
+import kotlinx.android.synthetic.main.activity_edit.*
 import org.macho.beforeandafter.*
 import org.macho.beforeandafter.record.camera.CameraActivity
 import org.macho.beforeandafter.record.camera.PermissionUtils
@@ -40,15 +41,7 @@ class EditActivity: AppCompatActivity() {
         const val FILE_NAME_TEMPLATE = "image-%1\$tF-%1\$tH-%1\$tM-%1\$tS-%1\$tL.jpg"
     }
 
-    private lateinit var frontImage: ImageView
-    private lateinit var sideImage: ImageView
-    private lateinit var weight: EditText
-    private lateinit var rate: EditText
-    private lateinit var memo: EditText
-    private lateinit var cancelButton: Button
-    private lateinit var saveButton: Button
     private lateinit var deleteButton: Button
-    private lateinit var buttonLayout: LinearLayout
 
     private var date = 0L
 
@@ -65,15 +58,6 @@ class EditActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
 
-        frontImage = findViewById(R.id.frontImage)
-        sideImage = findViewById(R.id.sideImage)
-        weight = findViewById(R.id.weight)
-        rate = findViewById(R.id.rate)
-        memo = findViewById(R.id.memo)
-        cancelButton = findViewById(R.id.cancel)
-        saveButton = findViewById(R.id.save)
-        buttonLayout = findViewById(R.id.button_layout)
-
         frontImage.setOnClickListener(onFrontImageViewClickListener)
         sideImage.setOnClickListener(onSideImageViewClickListener)
         cancelButton.setOnClickListener(onCancelButtonClickListener)
@@ -84,8 +68,7 @@ class EditActivity: AppCompatActivity() {
         index = intent.getIntExtra("INDEX", 0)
         if (date != 0L) {
             record = RecordDao.find(date)!!
-            if (record.frontImagePath != null && File(BeforeAndAfterConst.PATH, record.frontImagePath).exists()) {
-                openFileInput(record.frontImagePath).use {
+            if (record.frontImagePath != null && File(BeforeAndAfterConst.PATH, record.frontImagePath).exists()) { openFileInput(record.frontImagePath).use {
                     val frontBitmap = BitmapFactory.decodeStream(it)
                     frontImage.setImageBitmap(frontBitmap)
                 }
@@ -117,7 +100,6 @@ class EditActivity: AppCompatActivity() {
 
         MobileAds.initialize(this, getString(R.string.admob_app_id))
 
-        val adView: AdView = findViewById(R.id.adView)
         AdUtil.loadBannerAd(adView, applicationContext)
 
         interstitialAd = InterstitialAd(this)

@@ -19,9 +19,8 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Size
 import android.view.Surface
 import android.view.TextureView
-import android.view.View
-import android.widget.FrameLayout
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_camera.*
 import org.macho.beforeandafter.R
 
 class CameraActivity: AppCompatActivity() {
@@ -30,8 +29,6 @@ class CameraActivity: AppCompatActivity() {
         private const val REQUEST_CAMERA_PERMISSION = 1
     }
 
-    private lateinit var frame: FrameLayout
-    private lateinit var textureView: TextureView
     private lateinit var backgroundThread: HandlerThread
     private lateinit var backgroundHandler: Handler
     private lateinit var imageReader: ImageReader
@@ -47,9 +44,7 @@ class CameraActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-        findViewById<View>(R.id.shutter_button).setOnClickListener { _ -> takePicture() }
-        textureView = findViewById(R.id.preview_texture)
-        frame = findViewById(R.id.frame)
+        shutterButton.setOnClickListener { _ -> takePicture() }
         frame.addView(SquaresView(this))
 
         mediaActionSound = MediaActionSound()

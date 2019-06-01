@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
+import kotlinx.android.synthetic.main.fragment_preference.*
 import org.macho.beforeandafter.AdUtil
 import org.macho.beforeandafter.R
 
@@ -36,16 +36,17 @@ class PreferenceFragment: Fragment() {
         }
     }
 
-    private lateinit var listView: ListView
     private var items: MutableList<PreferenceItem> = mutableListOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = layoutInflater.inflate(R.layout.fragment_preference, container, false)
-        listView = view.findViewById(R.id.preference_list_view)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         listView.setOnItemClickListener { adapterView, view, i, l ->
             items.get(i).action.invoke()
         }
-        return view
     }
 
     override fun onStart() {

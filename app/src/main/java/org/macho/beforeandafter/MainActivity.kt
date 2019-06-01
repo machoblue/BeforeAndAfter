@@ -12,20 +12,13 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.android.synthetic.main.activity_main.*
 import org.macho.beforeandafter.gallery.GalleryFragment
 import org.macho.beforeandafter.graphe2.GrapheFragment
 import org.macho.beforeandafter.preference.PreferenceFragment
 import org.macho.beforeandafter.record.RecordFragment
 
 class MainActivity: AppCompatActivity() {
-    private lateinit var item0ImageButton: ImageButton
-    private lateinit var item1ImageButton: ImageButton
-    private lateinit var item2ImageButton: ImageButton
-    private lateinit var item3ImageButton: ImageButton
-    private lateinit var item0TextView: TextView
-    private lateinit var item1TextView: TextView
-    private lateinit var item2TextView: TextView
-    private lateinit var item3TextView: TextView
 
     private var selectedImageButton: ImageButton? = null
     private var selectedTextView: TextView? = null
@@ -36,8 +29,6 @@ class MainActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewsFromLayout()
-
         colorSelected = ContextCompat.getColor(this, R.color.colorBottomNaviItemPressed)
 
         configureRealm()
@@ -47,17 +38,6 @@ class MainActivity: AppCompatActivity() {
         supportFragmentManager.beginTransaction().add(R.id.content, RecordFragment.getInstance()).commit()
 
         configureAd()
-    }
-
-    private fun findViewsFromLayout() {
-        item0ImageButton = findViewById(R.id.item_0_image)
-        item1ImageButton = findViewById(R.id.item_1_image)
-        item2ImageButton = findViewById(R.id.item_2_image)
-        item3ImageButton = findViewById(R.id.item_3_image)
-        item0TextView = findViewById(R.id.item_0_text)
-        item1TextView = findViewById(R.id.item_1_text)
-        item2TextView = findViewById(R.id.item_2_text)
-        item3TextView = findViewById(R.id.item_3_text)
     }
 
     private fun configureRealm() {
@@ -90,7 +70,6 @@ class MainActivity: AppCompatActivity() {
 
         MobileAds.initialize(this, getString(R.string.admob_app_id))
 
-        val adView: AdView = findViewById(R.id.adView)
         AdUtil.loadBannerAd(adView, applicationContext)
     }
 

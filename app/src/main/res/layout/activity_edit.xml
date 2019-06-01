@@ -108,7 +108,7 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/button_layout"
+        android:id="@+id/buttonLayout"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:gravity="center"
@@ -118,7 +118,7 @@
         android:layout_height="0dp">
         <Button
             android:text="@string/cancel"
-            android:id="@+id/cancel"
+            android:id="@+id/cancelButton"
             android:layout_weight=".5"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
@@ -132,7 +132,7 @@
             -->
         <Button
             android:text="@string/save"
-            android:id="@+id/save"
+            android:id="@+id/saveButton"
             android:layout_weight=".5"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />

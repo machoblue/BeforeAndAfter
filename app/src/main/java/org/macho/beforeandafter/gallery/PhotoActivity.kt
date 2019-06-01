@@ -4,12 +4,12 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.ImageView
 import android.widget.SeekBar
+import kotlinx.android.synthetic.main.activity_photo.*
 import org.macho.beforeandafter.BeforeAndAfterConst
 import org.macho.beforeandafter.GlideApp
 import org.macho.beforeandafter.R
@@ -24,10 +24,6 @@ class PhotoActivity: AppCompatActivity() {
 
     private var items: MutableList<String> = mutableListOf()
     private var index = 0
-
-    private lateinit var imageView: ImageView
-    private lateinit var seekBar: SeekBar
-
 
     private lateinit var gestureDetector: GestureDetector
     private val onGestureListener = object: GestureDetector.SimpleOnGestureListener() {
@@ -84,9 +80,6 @@ class PhotoActivity: AppCompatActivity() {
         index = intent.getIntExtra("INDEX", 0)
         items = mutableListOf(*intent.getStringArrayExtra("PATHS"))
 
-        imageView = findViewById(R.id.imageView2)
-
-        seekBar = findViewById(R.id.seekBar)
         seekBar.progress = index
         seekBar.max = items.lastIndex
         seekBar.setOnSeekBarChangeListener(onSeekBarChangeListener)

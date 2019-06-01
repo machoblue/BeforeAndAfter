@@ -3,11 +3,10 @@ package org.macho.beforeandafter.gallery
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TabHost
+import kotlinx.android.synthetic.main.fragment_gallery.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.RecordDao
 
@@ -19,9 +18,6 @@ class GalleryFragment: Fragment() {
         }
     }
 
-    private lateinit var tabHost: TabHost
-    private lateinit var frontGridView: RecyclerView
-    private lateinit var sideGridView: RecyclerView
     private var frontImagePaths: MutableList<String> = mutableListOf()
     private var sideImagePaths: MutableList<String> = mutableListOf()
 
@@ -30,7 +26,6 @@ class GalleryFragment: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        tabHost = view.findViewById(android.R.id.tabhost)
         tabHost.setup()
 
         var tab1 = tabHost.newTabSpec("tab1")
@@ -43,11 +38,9 @@ class GalleryFragment: Fragment() {
         tab2.setContent(R.id.tab2)
         tabHost.addTab(tab2)
 
-        frontGridView = view.findViewById(R.id.front_grid_view)
         frontGridView.layoutManager = GridLayoutManager(context, 3)
         frontGridView.setHasFixedSize(true)
 
-        sideGridView = view.findViewById(R.id.side_grid_view)
         sideGridView.layoutManager = GridLayoutManager(context, 3)
         sideGridView.setHasFixedSize(true)
     }

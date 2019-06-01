@@ -8,12 +8,9 @@
         android:elevation="2dp"
         android:layout_margin="10dp"
         android:layout_weight="0.9"
-        android:id="@android:id/tabhost"
+        android:id="@+id/tabHost"
         android:layout_width="match_parent"
         android:layout_height="0dp">
-        <!--
-        android:background="@drawable/calendar_bg"
-        -->
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -31,18 +28,8 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-                    <!--
-                    <GridView
-                        android:numColumns="auto_fit"
-                        android:horizontalSpacing="2.5dp"
-                        android:verticalSpacing="2.5dp"
-                        android:columnWidth="100dp"
-                        android:id="@+id/front_grid_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"></GridView>
-                        -->
                     <android.support.v7.widget.RecyclerView
-                        android:id="@+id/front_grid_view"
+                        android:id="@+id/frontGridView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
                     </android.support.v7.widget.RecyclerView>
@@ -52,18 +39,8 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-                    <!--
-                    <GridView
-                        android:numColumns="auto_fit"
-                        android:horizontalSpacing="2.5dp"
-                        android:verticalSpacing="2.5dp"
-                        android:columnWidth="100dp"
-                        android:id="@+id/side_grid_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"></GridView>
-                        -->
                     <android.support.v7.widget.RecyclerView
-                        android:id="@+id/side_grid_view"
+                        android:id="@+id/sideGridView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
                 </LinearLayout>

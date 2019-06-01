@@ -19,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_record.*
 import org.macho.beforeandafter.BeforeAndAfterConst
 import org.macho.beforeandafter.ImageUtil
 import org.macho.beforeandafter.R
@@ -35,8 +36,6 @@ class RecordFragment: Fragment() {
         }
     }
 
-    private lateinit var listView: RecyclerView
-    private lateinit var fab: FloatingActionButton
     private var items: MutableList<Record> = mutableListOf()
     private lateinit var recordAdapter: RecordAdapter
     private val imageCache = ImageCache()
@@ -48,9 +47,7 @@ class RecordFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         println("*** RecordFragment.onViewCreated ***")
-        listView = view.findViewById(R.id.record_list_view)
         listView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        fab = view.findViewById(R.id.fab)
         fab.setOnClickListener { _ ->
             val intent = Intent(context, EditActivity::class.java)
             startActivityForResult(intent, EDIT_REQUEST_CODE)

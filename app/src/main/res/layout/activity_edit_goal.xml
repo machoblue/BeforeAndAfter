@@ -32,7 +32,7 @@
             <EditText
                 android:inputType="numberDecimal"
                 android:hint="@string/goal_weight_label"
-                android:id="@+id/goal_weight"
+                android:id="@+id/goalWeight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </android.support.design.widget.TextInputLayout>
@@ -51,7 +51,7 @@
             <EditText
                 android:inputType="numberDecimal"
                 android:hint="@string/goal_rate_label"
-                android:id="@+id/goal_rate"
+                android:id="@+id/goalRate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </android.support.design.widget.TextInputLayout>

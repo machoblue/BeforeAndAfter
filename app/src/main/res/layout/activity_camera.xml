@@ -7,11 +7,11 @@
     android:layout_height="match_parent"
     >
     <TextureView
-        android:id="@+id/preview_texture"
+        android:id="@+id/textureView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <Button
-        android:id="@+id/shutter_button"
+        android:id="@+id/shutterButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal|bottom"
