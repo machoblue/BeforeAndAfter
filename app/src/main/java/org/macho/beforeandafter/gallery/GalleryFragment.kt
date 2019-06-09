@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_gallery.*
+import org.macho.beforeandafter.BeforeAndAfterApp
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.RecordDao
+import org.macho.beforeandafter.shared.data.RecordDao
+import javax.inject.Inject
 
 
 class GalleryFragment: Fragment() {
@@ -21,11 +23,19 @@ class GalleryFragment: Fragment() {
     private var frontImagePaths: MutableList<String> = mutableListOf()
     private var sideImagePaths: MutableList<String> = mutableListOf()
 
+    @Inject
+    lateinit var recordDao: RecordDao
+
+    private fun inject() {
+        (context?.applicationContext as BeforeAndAfterApp).component.inject(this)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return layoutInflater.inflate(R.layout.fragment_gallery, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        inject()
         tabHost.setup()
 
         var tab1 = tabHost.newTabSpec("tab1")
@@ -47,7 +57,7 @@ class GalleryFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
-        for (record in RecordDao.findAll()) {
+        for (record in recordDao.findAll()) {
             frontImagePaths.add(record.frontImagePath ?: "")
             sideImagePaths.add(record.sideImagePath ?: "")
         }

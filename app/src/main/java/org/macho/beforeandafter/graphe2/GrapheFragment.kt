@@ -12,11 +12,13 @@ import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import kotlinx.android.synthetic.main.fragment_graphe.*
+import org.macho.beforeandafter.BeforeAndAfterApp
 import org.macho.beforeandafter.BeforeAndAfterConst
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.RecordDao
+import org.macho.beforeandafter.shared.data.RecordDao
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 class GrapheFragment: Fragment() {
     private lateinit var frameLayout: FrameLayout
@@ -40,7 +42,15 @@ class GrapheFragment: Fragment() {
         }
     }
 
+    @Inject
+    lateinit var recordDao: RecordDao
+
+    private fun inject() {
+        (context?.applicationContext as BeforeAndAfterApp).component.inject(this)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        inject()
         val view = layoutInflater.inflate(R.layout.fragment_graphe, container, false)
         val lang = Locale.getDefault().language
         if ("ja".equals(lang)) {
@@ -104,7 +114,7 @@ class GrapheFragment: Fragment() {
 
         var ratePoints: MutableList<Poin2> = mutableListOf()
 
-        for (record in RecordDao.findAll()) {
+        for (record in recordDao.findAll()) {
             if (record.weight > 0) {
                 weightPoints.add(Poin2(record.date, record.weight))
             }

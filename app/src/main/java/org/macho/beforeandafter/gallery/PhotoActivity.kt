@@ -7,12 +7,11 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.widget.ImageView
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_photo.*
 import org.macho.beforeandafter.BeforeAndAfterConst
-import org.macho.beforeandafter.GlideApp
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.GlideApp
 import java.io.File
 
 class PhotoActivity: AppCompatActivity() {

@@ -1,4 +1,4 @@
-package org.macho.beforeandafter
+package org.macho.beforeandafter.shared
 
 import android.content.Context
 import android.os.Bundle
@@ -9,6 +9,7 @@ import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
+import org.macho.beforeandafter.R
 import java.net.URL
 
 object AdUtil {

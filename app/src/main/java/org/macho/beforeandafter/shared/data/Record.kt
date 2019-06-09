@@ -1,4 +1,4 @@
-package org.macho.beforeandafter.record
+package org.macho.beforeandafter.shared.data
 
 import java.util.*
 

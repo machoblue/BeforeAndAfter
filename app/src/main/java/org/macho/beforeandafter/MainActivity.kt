@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -17,6 +16,7 @@ import org.macho.beforeandafter.gallery.GalleryFragment
 import org.macho.beforeandafter.graphe2.GrapheFragment
 import org.macho.beforeandafter.preference.PreferenceFragment
 import org.macho.beforeandafter.record.RecordFragment
+import org.macho.beforeandafter.shared.AdUtil
 
 class MainActivity: AppCompatActivity() {
 

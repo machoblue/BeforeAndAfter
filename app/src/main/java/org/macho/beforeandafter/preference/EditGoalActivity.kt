@@ -3,13 +3,10 @@ package org.macho.beforeandafter.preference
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
-import android.widget.Button
-import android.widget.EditText
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_edit_goal.*
-import org.macho.beforeandafter.AdUtil
+import org.macho.beforeandafter.shared.AdUtil
 import org.macho.beforeandafter.R
 
 /**

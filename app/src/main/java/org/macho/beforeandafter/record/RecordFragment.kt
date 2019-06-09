@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.AsyncTaskLoader
@@ -20,12 +19,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_record.*
-import org.macho.beforeandafter.BeforeAndAfterConst
-import org.macho.beforeandafter.ImageUtil
-import org.macho.beforeandafter.R
-import org.macho.beforeandafter.RecordDao
+import org.macho.beforeandafter.*
+import org.macho.beforeandafter.shared.ImageUtil
+import org.macho.beforeandafter.shared.data.Record
+import org.macho.beforeandafter.shared.data.RecordDao
 import java.io.File
 import java.util.*
+import javax.inject.Inject
 
 class RecordFragment: Fragment() {
 
@@ -40,13 +40,19 @@ class RecordFragment: Fragment() {
     private lateinit var recordAdapter: RecordAdapter
     private val imageCache = ImageCache()
 
+    @Inject
+    lateinit var recordDao: RecordDao
+
+    private fun inject() {
+        (context?.applicationContext as BeforeAndAfterApp).component.inject(this)
+    }
 
     override fun onCreateView(layoutInflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return layoutInflater.inflate(R.layout.fragment_record, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        println("*** RecordFragment.onViewCreated ***")
+        inject()
         listView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         fab.setOnClickListener { _ ->
             val intent = Intent(context, EditActivity::class.java)
@@ -82,14 +88,14 @@ class RecordFragment: Fragment() {
             2 -> {
                 if (data.getBooleanExtra("ISNEW", false)) {
                     val date = data.getLongExtra("DATE", 0)
-                    val record = RecordDao.find(date)!!
+                    val record = recordDao.find(date)!!
                     items.add(record)
                     recordAdapter.notifyItemInserted(items.size - 1)
 
                     val preferences = PreferenceManager.getDefaultSharedPreferences(activity)
                     val reviewed = preferences.getBoolean("REVIEWED", false)
                     if (!reviewed) {
-                        val firstRecord = RecordDao.findAll().get(0)
+                        val firstRecord = recordDao.findAll().get(0)
                         val diff = firstRecord.weight - record.weight
                         if (diff > 1f) {
                             ReviewDialog.newInstance().show(fragmentManager, "REVIEW_DIALOG")
@@ -99,7 +105,7 @@ class RecordFragment: Fragment() {
                 } else {
                     val index = data.getIntExtra("INDEX", 0)
                     val record = items.get(index)
-                    val after = RecordDao.find(record.date)!!
+                    val after = recordDao.find(record.date)!!
 
                     record.weight = after.weight
                     record.rate = after.rate
@@ -118,7 +124,7 @@ class RecordFragment: Fragment() {
 
         loaderManager.restartLoader(1, null, object: LoaderManager.LoaderCallbacks<MutableList<Record>> {
             override fun onCreateLoader(id: Int, args: Bundle?): Loader<MutableList<Record>> {
-                val loader = RecordLoader(this@RecordFragment.context!!)
+                val loader = RecordLoader(this@RecordFragment.context!!, this@RecordFragment.recordDao)
                 loader.forceLoad()
                 return loader
             }
@@ -136,9 +142,9 @@ class RecordFragment: Fragment() {
         })
     }
 
-    class RecordLoader(context: Context): AsyncTaskLoader<MutableList<Record>>(context) {
+    class RecordLoader(context: Context, var recordDao: RecordDao): AsyncTaskLoader<MutableList<Record>>(context) {
         override fun loadInBackground(): MutableList<Record>? {
-            return mutableListOf(*(RecordDao.findAll().toTypedArray()))
+            return mutableListOf(*(this.recordDao.findAll().toTypedArray()))
         }
     }
 

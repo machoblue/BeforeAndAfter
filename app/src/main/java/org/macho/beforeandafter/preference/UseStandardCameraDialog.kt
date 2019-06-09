@@ -12,7 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
-import org.macho.beforeandafter.AdUtil
+import org.macho.beforeandafter.shared.AdUtil
 import org.macho.beforeandafter.R
 
 

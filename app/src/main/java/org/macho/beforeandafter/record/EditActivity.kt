@@ -14,17 +14,21 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_edit.*
 import org.macho.beforeandafter.*
 import org.macho.beforeandafter.record.camera.CameraActivity
 import org.macho.beforeandafter.record.camera.PermissionUtils
+import org.macho.beforeandafter.shared.AdUtil
+import org.macho.beforeandafter.shared.ImageUtil
+import org.macho.beforeandafter.shared.data.Record
+import org.macho.beforeandafter.shared.data.RecordDao
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
+import javax.inject.Inject
 
 class EditActivity: AppCompatActivity() {
     companion object {
@@ -54,8 +58,18 @@ class EditActivity: AppCompatActivity() {
 
     private lateinit var interstitialAd: InterstitialAd
 
+    @Inject
+    lateinit var recordDao: RecordDao
+
+    private fun inject() {
+        (applicationContext as BeforeAndAfterApp).component.inject(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        inject()
+
         setContentView(R.layout.activity_edit)
 
         frontImage.setOnClickListener(onFrontImageViewClickListener)
@@ -67,7 +81,7 @@ class EditActivity: AppCompatActivity() {
         date = intent.getLongExtra("DATE", 0)
         index = intent.getIntExtra("INDEX", 0)
         if (date != 0L) {
-            record = RecordDao.find(date)!!
+            record = recordDao.find(date)!!
             if (record.frontImagePath != null && File(BeforeAndAfterConst.PATH, record.frontImagePath).exists()) { openFileInput(record.frontImagePath).use {
                     val frontBitmap = BitmapFactory.decodeStream(it)
                     frontImage.setImageBitmap(frontBitmap)
@@ -205,11 +219,11 @@ class EditActivity: AppCompatActivity() {
             }
 
             if (date != 0L) {
-                RecordDao.update(record);
+                recordDao.update(record);
                 intent.putExtra("ISNEW", false);
             } else {
                 record.date = Date().time;
-                RecordDao.register(record);
+                recordDao.register(record);
                 intent.putExtra("ISNEW", true);
                 intent.putExtra("DATE", record.date);
             }
@@ -234,7 +248,7 @@ class EditActivity: AppCompatActivity() {
 
     private val onDeleteButtonClickListener = object: View.OnClickListener {
         override fun onClick(view: View?) {
-            RecordDao.delete(record.date)
+            recordDao.delete(record.date)
             val intent = Intent()
             intent.putExtra("INDEX", index)
             intent.putExtra("TYPE", 1)
