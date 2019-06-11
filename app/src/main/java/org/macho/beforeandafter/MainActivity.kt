@@ -26,6 +26,7 @@ class MainActivity: AppCompatActivity() {
     private var colorSelected = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // test
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
