@@ -30,6 +30,8 @@ class MainActivity: AppCompatActivity() {
         // test work
         setContentView(R.layout.activity_main)
 
+        System.out.println("AAA")
+
         colorSelected = ContextCompat.getColor(this, R.color.colorBottomNaviItemPressed)
 
         configureRealm()
