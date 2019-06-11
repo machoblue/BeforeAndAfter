@@ -27,34 +27,15 @@ class MainActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // test work
         setContentView(R.layout.activity_main)
 
-        System.out.println("AAA")
-
         colorSelected = ContextCompat.getColor(this, R.color.colorBottomNaviItemPressed)
-
-        configureRealm()
 
         uncheckCurrentButtonAndCheck(item0ImageButton, item0TextView)
 
         supportFragmentManager.beginTransaction().add(R.id.content, RecordFragment.getInstance()).commit()
 
         configureAd()
-    }
-
-    private fun configureRealm() {
-        Realm.init(applicationContext)
-        val config = RealmConfiguration.Builder()
-                .schemaVersion(1)
-                .migration { realm, oldVersion, newVersion ->
-                    val schema = realm.schema
-                    if (oldVersion == 0L) {
-                        schema.get("RecordDto").addField("memo", String::class.java)
-                    }
-                }
-                .build()
-        Realm.setDefaultConfiguration(config)
     }
 
     private fun uncheckCurrentButtonAndCheck(imageButton: ImageButton, textView: TextView) {
