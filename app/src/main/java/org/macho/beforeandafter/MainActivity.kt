@@ -30,6 +30,8 @@ class MainActivity: AppCompatActivity() {
         // test gittest
         setContentView(R.layout.activity_main)
 
+        System.out.println("BBB")
+
         colorSelected = ContextCompat.getColor(this, R.color.colorBottomNaviItemPressed)
 
         uncheckCurrentButtonAndCheck(item0ImageButton, item0TextView)
