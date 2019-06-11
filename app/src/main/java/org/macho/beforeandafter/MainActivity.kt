@@ -27,6 +27,7 @@ class MainActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // test work
         setContentView(R.layout.activity_main)
 
         colorSelected = ContextCompat.getColor(this, R.color.colorBottomNaviItemPressed)
