@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_preference.*
 import org.macho.beforeandafter.AdUtil
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.preference.editgoal.EditGoalActivity
 
 class PreferenceFragment: Fragment() {
     companion object {

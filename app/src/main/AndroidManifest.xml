@@ -25,7 +25,7 @@
         <activity android:name=".record.EditActivity"/>
         <activity android:name=".record.camera.CameraActivity"/>
         <activity android:name=".gallery.PhotoActivity"/>
-        <activity android:name=".preference.EditGoalActivity"/>
+        <activity android:name=".preference.editgoal.EditGoalActivity"/>
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
