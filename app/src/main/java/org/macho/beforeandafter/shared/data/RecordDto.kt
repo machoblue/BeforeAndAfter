@@ -1,4 +1,4 @@
-package org.macho.beforeandafter
+package org.macho.beforeandafter.shared.data
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

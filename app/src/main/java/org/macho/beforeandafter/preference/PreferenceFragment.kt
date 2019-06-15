@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_preference.*
-import org.macho.beforeandafter.AdUtil
+import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.editgoal.EditGoalActivity
 

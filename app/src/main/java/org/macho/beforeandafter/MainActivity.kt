@@ -10,13 +10,15 @@ import android.widget.ImageButton
 import android.widget.TextView
 import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_main.*
-import org.macho.beforeandafter.data.RecordRepositoryImpl
+import org.macho.beforeandafter.shared.data.RecordRepositoryImpl
 import org.macho.beforeandafter.gallery.GalleryFragment
 import org.macho.beforeandafter.graphe2.GrapheFragment
 import org.macho.beforeandafter.preference.PreferenceFragment
 import org.macho.beforeandafter.record.RecordFragment
 import org.macho.beforeandafter.record.RecordPresenter
-import org.macho.beforeandafter.util.AppExecutors
+import org.macho.beforeandafter.shared.data.RecordDao
+import org.macho.beforeandafter.shared.util.AdUtil
+import org.macho.beforeandafter.shared.util.AppExecutors
 
 class MainActivity: AppCompatActivity() {
 

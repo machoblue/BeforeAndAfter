@@ -12,9 +12,9 @@ import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import kotlinx.android.synthetic.main.fragment_graphe.*
-import org.macho.beforeandafter.BeforeAndAfterConst
+import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.RecordDao
+import org.macho.beforeandafter.shared.data.RecordDao
 import java.text.SimpleDateFormat
 import java.util.*
 

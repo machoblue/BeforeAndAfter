@@ -1,4 +1,4 @@
-package org.macho.beforeandafter
+package org.macho.beforeandafter.shared.util
 
 import android.content.Context
 import android.graphics.Bitmap

@@ -1,6 +1,6 @@
 package org.macho.beforeandafter.record
 
-import org.macho.beforeandafter.data.RecordRepository
+import org.macho.beforeandafter.shared.data.RecordRepository
 import org.macho.beforeandafter.record.RecordContract.Presenter
 
 class RecordPresenter(val view: RecordContract.View, private val recordRepository: RecordRepository): Presenter {

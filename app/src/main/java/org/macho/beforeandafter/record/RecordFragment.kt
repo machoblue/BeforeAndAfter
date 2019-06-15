@@ -14,8 +14,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_record.*
-import org.macho.beforeandafter.BeforeAndAfterConst
-import org.macho.beforeandafter.ImageUtil
+import org.macho.beforeandafter.shared.BeforeAndAfterConst
+import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.R
 import java.io.File
 import java.util.*

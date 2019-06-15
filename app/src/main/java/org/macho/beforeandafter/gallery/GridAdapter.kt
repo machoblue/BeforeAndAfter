@@ -11,9 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import org.macho.beforeandafter.BeforeAndAfterConst
-import org.macho.beforeandafter.GlideApp
+import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.GlideApp
 import java.io.File
 
 class GridAdapter(val fragment: Fragment, val items: List<String>): RecyclerView.Adapter<GridAdapter.ViewHolder>() {

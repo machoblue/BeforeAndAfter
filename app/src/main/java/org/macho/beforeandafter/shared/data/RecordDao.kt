@@ -1,4 +1,4 @@
-package org.macho.beforeandafter
+package org.macho.beforeandafter.shared.data
 
 import io.realm.Realm
 import org.macho.beforeandafter.record.Record
@@ -38,27 +38,6 @@ object RecordDao {
                     result.sideImagePath,
                     result.memo)
         }
-    }
-
-    fun find(from: Long, to: Long): List<Record> {
-        var records: MutableList<Record>  = mutableListOf()
-        Realm.getDefaultInstance().use {
-            val results = it.where(RecordDto::class.java)
-                    .between("date", from, to)
-                    .findAll()
-                    .sort("date")
-
-            for (result in results) {
-                records.add(Record(
-                        result.date,
-                        result.weight,
-                        result.rate,
-                        result.frontImagePath,
-                        result.sideImagePath,
-                        result.memo))
-            }
-        }
-        return records
     }
 
     fun register(record: Record) {

@@ -1,4 +1,4 @@
-package org.macho.beforeandafter.util
+package org.macho.beforeandafter.shared.util
 
 import android.os.Handler
 import android.os.Looper

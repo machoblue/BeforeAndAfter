@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.RecordDao
+import org.macho.beforeandafter.shared.data.RecordDao
 
 
 class GalleryFragment: Fragment() {

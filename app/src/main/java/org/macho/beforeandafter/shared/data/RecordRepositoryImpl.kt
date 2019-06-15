@@ -1,8 +1,7 @@
-package org.macho.beforeandafter.data
+package org.macho.beforeandafter.shared.data
 
-import org.macho.beforeandafter.RecordDao
 import org.macho.beforeandafter.record.Record
-import org.macho.beforeandafter.util.AppExecutors
+import org.macho.beforeandafter.shared.util.AppExecutors
 
 class RecordRepositoryImpl(val recordDao: RecordDao, val appExecutors: AppExecutors): RecordRepository {
     override fun getRecords(onComplete: (List<Record>) -> Unit) {

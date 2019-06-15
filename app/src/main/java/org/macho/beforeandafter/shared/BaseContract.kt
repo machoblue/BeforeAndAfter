@@ -1,4 +1,4 @@
-package org.macho.beforeandafter
+package org.macho.beforeandafter.shared
 
 interface BaseContract {
     interface View<T> {

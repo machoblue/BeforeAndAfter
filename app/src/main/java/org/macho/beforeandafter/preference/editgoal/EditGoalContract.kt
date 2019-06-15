@@ -1,6 +1,6 @@
 package org.macho.beforeandafter.preference.editgoal
 
-import org.macho.beforeandafter.BaseContract
+import org.macho.beforeandafter.shared.BaseContract
 
 interface EditGoalContract {
     interface View: BaseContract.View<Presenter> {

@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
-import org.macho.beforeandafter.AdUtil
-import org.macho.beforeandafter.BeforeAndAfterConst
+import org.macho.beforeandafter.shared.util.AdUtil
+import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.RecordDao
+import org.macho.beforeandafter.shared.data.RecordDao
 import java.io.File
 
 class DeleteAllDialog: DialogFragment() {

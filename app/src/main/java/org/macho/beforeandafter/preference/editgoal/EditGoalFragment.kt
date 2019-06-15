@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.edit_goal_fragment.*
-import org.macho.beforeandafter.AdUtil
+import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 
 class EditGoalFragment: Fragment(), EditGoalContract.View {

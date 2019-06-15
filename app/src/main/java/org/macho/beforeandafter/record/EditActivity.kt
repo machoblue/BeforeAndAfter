@@ -14,13 +14,16 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_edit.*
 import org.macho.beforeandafter.*
 import org.macho.beforeandafter.record.camera.CameraActivity
 import org.macho.beforeandafter.record.camera.PermissionUtils
+import org.macho.beforeandafter.shared.BeforeAndAfterConst
+import org.macho.beforeandafter.shared.data.RecordDao
+import org.macho.beforeandafter.shared.util.AdUtil
+import org.macho.beforeandafter.shared.util.ImageUtil
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
