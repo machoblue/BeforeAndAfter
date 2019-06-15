@@ -50,7 +50,6 @@ class EditActivity: AppCompatActivity() {
 
     private lateinit var record: Record
 
-    private var index = -1
 
     private lateinit var interstitialAd: InterstitialAd
 
@@ -65,7 +64,6 @@ class EditActivity: AppCompatActivity() {
 
         val intent = getIntent()
         date = intent.getLongExtra("DATE", 0)
-        index = intent.getIntExtra("INDEX", 0)
         if (date != 0L) {
             record = RecordDao.find(date)!!
             if (record.frontImagePath != null && File(BeforeAndAfterConst.PATH, record.frontImagePath).exists()) { openFileInput(record.frontImagePath).use {
@@ -214,7 +212,6 @@ class EditActivity: AppCompatActivity() {
                 intent.putExtra("DATE", record.date);
             }
 
-            intent.putExtra("INDEX", index);
             intent.putExtra("TYPE", 2);
             setResult(RESULT_OK, intent);
 
@@ -236,7 +233,6 @@ class EditActivity: AppCompatActivity() {
         override fun onClick(view: View?) {
             RecordDao.delete(record.date)
             val intent = Intent()
-            intent.putExtra("INDEX", index)
             intent.putExtra("TYPE", 1)
             setResult(Activity.RESULT_OK, intent)
 

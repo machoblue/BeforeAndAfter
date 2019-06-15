@@ -8,15 +8,15 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
+import org.macho.beforeandafter.data.RecordRepositoryImpl
 import org.macho.beforeandafter.gallery.GalleryFragment
 import org.macho.beforeandafter.graphe2.GrapheFragment
 import org.macho.beforeandafter.preference.PreferenceFragment
 import org.macho.beforeandafter.record.RecordFragment
+import org.macho.beforeandafter.record.RecordPresenter
+import org.macho.beforeandafter.util.AppExecutors
 
 class MainActivity: AppCompatActivity() {
 
@@ -24,6 +24,8 @@ class MainActivity: AppCompatActivity() {
     private var selectedTextView: TextView? = null
 
     private var colorSelected = 0
+
+    private lateinit var recordPresenter: RecordPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +35,9 @@ class MainActivity: AppCompatActivity() {
 
         uncheckCurrentButtonAndCheck(item0ImageButton, item0TextView)
 
-        supportFragmentManager.beginTransaction().add(R.id.content, RecordFragment.getInstance()).commit()
+        val fragment = RecordFragment()
+        supportFragmentManager.beginTransaction().replace(R.id.content, fragment).commit()
+        recordPresenter = RecordPresenter(fragment, RecordRepositoryImpl(RecordDao, AppExecutors))
 
         configureAd()
     }
@@ -59,7 +63,10 @@ class MainActivity: AppCompatActivity() {
 
     fun onItem0Click(view: View) {
         uncheckCurrentButtonAndCheck(item0ImageButton, item0TextView)
-        supportFragmentManager.beginTransaction().replace(R.id.content, RecordFragment.getInstance()).commit()
+
+        val fragment = RecordFragment()
+        supportFragmentManager.beginTransaction().replace(R.id.content, fragment).commit()
+        recordPresenter = RecordPresenter(fragment, RecordRepositoryImpl(RecordDao, AppExecutors))
     }
 
     fun onItem1Click(view: View) {

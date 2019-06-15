@@ -13,9 +13,7 @@ class EditGoalActivity: AppCompatActivity() {
         setContentView(R.layout.edit_goal_activity)
 
         val fragment = EditGoalFragment()
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.container, fragment)
-        transaction.commit()
+        supportFragmentManager.beginTransaction().add(R.id.container, fragment).commit()
 
         presenter = EditGoalPresenter(fragment, PreferenceManager.getDefaultSharedPreferences(applicationContext))
     }
