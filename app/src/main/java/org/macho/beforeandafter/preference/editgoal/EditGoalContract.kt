@@ -9,7 +9,7 @@ interface EditGoalContract {
         fun finish()
     }
 
-    interface Presenter: BaseContract.Presenter {
+    interface Presenter: BaseContract.Presenter<View> {
         fun saveGoal(weightGoalText: String, rateGoalText: String)
         fun back()
     }

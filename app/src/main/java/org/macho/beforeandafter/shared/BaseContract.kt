@@ -5,7 +5,9 @@ interface BaseContract {
 //        fun setPresenter(presenter: T)
         var presenter: T
     }
-    interface Presenter {
-        fun start()
+    interface Presenter<T> {
+//        fun start()
+        fun takeView(view: T)
+        fun dropView()
     }
 }

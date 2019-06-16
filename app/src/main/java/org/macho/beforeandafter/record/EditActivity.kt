@@ -22,6 +22,7 @@ import org.macho.beforeandafter.record.camera.CameraActivity
 import org.macho.beforeandafter.record.camera.PermissionUtils
 import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.shared.data.RecordDao
+import org.macho.beforeandafter.shared.data.RecordDaoImpl
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.ImageUtil
 import java.io.BufferedInputStream
@@ -56,6 +57,8 @@ class EditActivity: AppCompatActivity() {
 
     private lateinit var interstitialAd: InterstitialAd
 
+    private var recordDao: RecordDao = RecordDaoImpl() // TODO: take from Dagger
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
@@ -68,7 +71,7 @@ class EditActivity: AppCompatActivity() {
         val intent = getIntent()
         date = intent.getLongExtra("DATE", 0)
         if (date != 0L) {
-            record = RecordDao.find(date)!!
+            record = recordDao.find(date)!!
             if (record.frontImagePath != null && File(BeforeAndAfterConst.PATH, record.frontImagePath).exists()) { openFileInput(record.frontImagePath).use {
                     val frontBitmap = BitmapFactory.decodeStream(it)
                     frontImage.setImageBitmap(frontBitmap)
@@ -206,11 +209,11 @@ class EditActivity: AppCompatActivity() {
             }
 
             if (date != 0L) {
-                RecordDao.update(record);
+                recordDao.update(record);
                 intent.putExtra("ISNEW", false);
             } else {
                 record.date = Date().time;
-                RecordDao.register(record);
+                recordDao.register(record);
                 intent.putExtra("ISNEW", true);
                 intent.putExtra("DATE", record.date);
             }
@@ -234,7 +237,7 @@ class EditActivity: AppCompatActivity() {
 
     private val onDeleteButtonClickListener = object: View.OnClickListener {
         override fun onClick(view: View?) {
-            RecordDao.delete(record.date)
+            recordDao.delete(record.date)
             val intent = Intent()
             intent.putExtra("TYPE", 1)
             setResult(Activity.RESULT_OK, intent)

@@ -48,7 +48,7 @@ class EditGoalFragment: Fragment(), EditGoalContract.View {
 
     override fun onResume() {
         super.onResume()
-        presenter.start()
+        presenter.takeView(this)
     }
 
     override fun setWeightGoalText(weightGoalText: String) {

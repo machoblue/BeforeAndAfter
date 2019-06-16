@@ -9,7 +9,7 @@ interface RecordContract {
         fun showEditRecordUI(date: Long)
     }
 
-    interface Presenter: BaseContract.Presenter {
+    interface Presenter: BaseContract.Presenter<View> {
         fun loadRecords()
         fun openAddRecord()
         fun openEditRecord(date: Long)

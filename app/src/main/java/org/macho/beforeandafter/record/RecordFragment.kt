@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -13,24 +12,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_record.*
 import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.di.ActivityScoped
 import java.io.File
 import java.util.*
+import javax.inject.Inject
 
-class RecordFragment: Fragment(), RecordContract.View {
+@ActivityScoped
+class RecordFragment @Inject constructor(): DaggerFragment(), RecordContract.View {
 
     companion object {
         const val EDIT_REQUEST_CODE = 98
     }
 
+    @Inject
     override lateinit var presenter: RecordContract.Presenter
 
     private lateinit var recordAdapter: RecordAdapter
     private val imageCache = ImageCache()
-
 
     override fun onCreateView(layoutInflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return layoutInflater.inflate(R.layout.fragment_record, container, false)
@@ -45,12 +48,13 @@ class RecordFragment: Fragment(), RecordContract.View {
 
     override fun onResume() {
         super.onResume()
-        presenter.start()
+        presenter.takeView(this)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         imageCache.clear()
+        presenter.dropView()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

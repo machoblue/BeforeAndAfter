@@ -1,30 +1,36 @@
 package org.macho.beforeandafter.record
 
 import org.macho.beforeandafter.shared.data.RecordRepository
-import org.macho.beforeandafter.record.RecordContract.Presenter
+import org.macho.beforeandafter.shared.di.ActivityScoped
+import javax.inject.Inject
 
-class RecordPresenter(val view: RecordContract.View, private val recordRepository: RecordRepository): Presenter {
+@ActivityScoped
+class RecordPresenter @Inject constructor(val recordRepository: RecordRepository): RecordContract.Presenter {
 
-    init {
-        view.presenter = this
-    }
+    var view: RecordContract.View? = null
 
-    override fun start() {
+    override fun takeView(view: RecordContract.View) {
+        this.view = view
         loadRecords()
     }
 
+    override fun dropView() {
+        view = null
+    }
+
+
     override fun loadRecords() {
         recordRepository.getRecords {records ->
-            view.showItems(records)
+            view?.showItems(records)
         }
     }
 
     override fun openAddRecord() {
-        view.showAddRecordUI()
+        view?.showAddRecordUI()
     }
 
     override fun openEditRecord(date: Long) {
-        view.showEditRecordUI(date)
+        view?.showEditRecordUI(date)
     }
 
 }
