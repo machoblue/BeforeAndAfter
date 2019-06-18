@@ -18,7 +18,7 @@ import dagger.Module;
 @Module
 public abstract class ApplicationModule {
     //expose Application as an injectable context
-    @Binds
-    abstract Context bindContext(Application application);
+//    @Binds
+//    abstract Context bindContext(Application application);
 }
 

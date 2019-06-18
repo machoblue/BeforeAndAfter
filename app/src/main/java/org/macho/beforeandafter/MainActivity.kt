@@ -4,24 +4,17 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import com.google.android.gms.ads.MobileAds
-import dagger.Lazy
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import org.macho.beforeandafter.shared.data.RecordRepositoryImpl
 import org.macho.beforeandafter.gallery.GalleryFragment
 import org.macho.beforeandafter.graphe2.GrapheFragment
 import org.macho.beforeandafter.preference.PreferenceFragment
-import org.macho.beforeandafter.record.RecordContract
 import org.macho.beforeandafter.record.RecordFragment
-import org.macho.beforeandafter.record.RecordPresenter
-import org.macho.beforeandafter.shared.data.RecordDao
 import org.macho.beforeandafter.shared.util.AdUtil
-import org.macho.beforeandafter.shared.util.AppExecutors
 import javax.inject.Inject
 
 class MainActivity: DaggerAppCompatActivity() {
@@ -31,13 +24,10 @@ class MainActivity: DaggerAppCompatActivity() {
 
     private var colorSelected = 0
 
-//    private lateinit var recordPresenter: RecordPresenter
-
+//    @Inject
+//    lateinit var recordFragmentProvider: Lazy<RecordFragment>
     @Inject
-    lateinit var recordPresenter: RecordContract.Presenter
-
-    @Inject
-    lateinit var recordFragmentProvider: Lazy<RecordFragment>
+    lateinit var recordFragment: RecordFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +37,8 @@ class MainActivity: DaggerAppCompatActivity() {
 
         uncheckCurrentButtonAndCheck(item0ImageButton, item0TextView)
 
-        supportFragmentManager.beginTransaction().replace(R.id.content, recordFragmentProvider.get()).commit()
+//        supportFragmentManager.beginTransaction().replace(R.id.content, recordFragmentProvider.get()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.content, recordFragment).commit()
 
         configureAd()
     }
@@ -74,7 +65,8 @@ class MainActivity: DaggerAppCompatActivity() {
     fun onItem0Click(view: View) {
         uncheckCurrentButtonAndCheck(item0ImageButton, item0TextView)
 
-        supportFragmentManager.beginTransaction().replace(R.id.content, recordFragmentProvider.get()).commit()
+//        supportFragmentManager.beginTransaction().replace(R.id.content, recordFragmentProvider.get()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.content, recordFragment).commit()
     }
 
     fun onItem1Click(view: View) {
