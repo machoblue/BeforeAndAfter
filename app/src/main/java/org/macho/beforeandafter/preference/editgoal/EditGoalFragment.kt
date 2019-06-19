@@ -7,12 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.edit_goal_fragment.*
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.di.ActivityScoped
+import javax.inject.Inject
 
-class EditGoalFragment: Fragment(), EditGoalContract.View {
+@ActivityScoped
+class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract.View {
 
+    @Inject
     override lateinit var presenter: EditGoalContract.Presenter
 
     private lateinit var interstitialAd: InterstitialAd

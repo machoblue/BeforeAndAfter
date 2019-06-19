@@ -1,21 +1,20 @@
 package org.macho.beforeandafter.preference.editgoal
 
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.support.v7.app.AppCompatActivity
+import dagger.android.support.DaggerAppCompatActivity
 import org.macho.beforeandafter.R
+import javax.inject.Inject
 
-class EditGoalActivity: AppCompatActivity() {
-    private lateinit var presenter: EditGoalContract.Presenter
+class EditGoalActivity: DaggerAppCompatActivity() {
+
+    @Inject
+    lateinit var fragment: EditGoalFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.edit_goal_activity)
 
-        val fragment = EditGoalFragment()
         supportFragmentManager.beginTransaction().add(R.id.container, fragment).commit()
-
-        presenter = EditGoalPresenter(fragment, PreferenceManager.getDefaultSharedPreferences(applicationContext))
     }
 
 }
