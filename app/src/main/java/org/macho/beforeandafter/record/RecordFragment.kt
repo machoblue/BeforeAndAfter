@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_record.*
 import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.record.editaddrecord.EditAddRecordActivity
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import java.io.File
 import java.util.*
@@ -67,12 +68,12 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     }
 
     override fun showAddRecordUI() {
-        val intent = Intent(context, EditActivity::class.java)
+        val intent = Intent(context, EditAddRecordActivity::class.java)
         startActivityForResult(intent, EDIT_REQUEST_CODE)
     }
 
     override fun showEditRecordUI(date: Long) {
-        val intent = Intent(context, EditActivity::class.java)
+        val intent = Intent(context, EditAddRecordActivity::class.java)
         intent.putExtra("DATE", date)
         this@RecordFragment.startActivityForResult(intent, EDIT_REQUEST_CODE)
     }

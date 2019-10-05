@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".record.EditActivity"/>
+        <activity android:name=".record.editaddrecord.EditAddRecordActivity"/>
         <activity android:name=".record.camera.CameraActivity"/>
         <activity android:name=".gallery.PhotoActivity"/>
         <activity android:name=".preference.editgoal.EditGoalActivity"/>
