@@ -127,6 +127,8 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
             fileMetadata.setParents(Collections.singletonList("appDataFolder"))
             val filePath = java.io.File(imageFilePath)
             val mediaContent = FileContent("image/jpg", filePath)
+            val file = driveService?.files()?.create(fileMetadata, mediaContent)?.setFields("id")?.execute()
+            Log.i(TAG, "File ID: " + file?.id)
         }
     }
 
