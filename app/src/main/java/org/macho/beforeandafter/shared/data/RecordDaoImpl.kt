@@ -1,10 +1,10 @@
-package org.macho.beforeandafter
+package org.macho.beforeandafter.shared.data
 
 import io.realm.Realm
 import org.macho.beforeandafter.record.Record
 
-object RecordDao {
-    fun findAll(): List<Record> {
+class RecordDaoImpl: RecordDao {
+    override fun findAll(): List<Record> {
         var records: MutableList<Record>  = mutableListOf()
         Realm.getDefaultInstance().use {
             val results = it.where(RecordDto::class.java)
@@ -24,7 +24,7 @@ object RecordDao {
         return records
     }
 
-    fun find(date: Long): Record? {
+    override fun find(date: Long): Record? {
         Realm.getDefaultInstance().use {
             val result = it.where(RecordDto::class.java)
                     .equalTo("date", date)
@@ -40,28 +40,7 @@ object RecordDao {
         }
     }
 
-    fun find(from: Long, to: Long): List<Record> {
-        var records: MutableList<Record>  = mutableListOf()
-        Realm.getDefaultInstance().use {
-            val results = it.where(RecordDto::class.java)
-                    .between("date", from, to)
-                    .findAll()
-                    .sort("date")
-
-            for (result in results) {
-                records.add(Record(
-                        result.date,
-                        result.weight,
-                        result.rate,
-                        result.frontImagePath,
-                        result.sideImagePath,
-                        result.memo))
-            }
-        }
-        return records
-    }
-
-    fun register(record: Record) {
+    override fun register(record: Record) {
         Realm.getDefaultInstance().use {
             it.executeTransaction { realm ->
                 var registered = realm.createObject(RecordDto::class.java, record.date)
@@ -74,7 +53,7 @@ object RecordDao {
         }
     }
 
-    fun update(record: Record) {
+    override fun update(record: Record) {
         Realm.getDefaultInstance().use {
             it.executeTransaction { realm ->
                 realm.copyToRealmOrUpdate(RecordDto(
@@ -88,7 +67,7 @@ object RecordDao {
         }
     }
 
-    fun delete(date: Long) {
+    override fun delete(date: Long) {
         Realm.getDefaultInstance().use {
             it.executeTransaction { realm ->
                 val recordDto = realm.where(RecordDto::class.java).equalTo("date", date).findAll().firstOrNull()
@@ -97,7 +76,7 @@ object RecordDao {
         }
     }
 
-    fun deleteAll() {
+    override fun deleteAll() {
         Realm.getDefaultInstance().use {
             it.executeTransaction { realm ->
                 val results = realm.where(RecordDto::class.java).findAll()

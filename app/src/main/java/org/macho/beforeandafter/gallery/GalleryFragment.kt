@@ -8,7 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.RecordDao
+import org.macho.beforeandafter.shared.data.RecordDao
+import org.macho.beforeandafter.shared.data.RecordDaoImpl
 
 
 class GalleryFragment: Fragment() {
@@ -20,6 +21,8 @@ class GalleryFragment: Fragment() {
 
     private var frontImagePaths: MutableList<String> = mutableListOf()
     private var sideImagePaths: MutableList<String> = mutableListOf()
+
+    private var recordDao: RecordDao = RecordDaoImpl() // TODO: take from Dagger
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return layoutInflater.inflate(R.layout.fragment_gallery, container, false)
@@ -47,7 +50,7 @@ class GalleryFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
-        for (record in RecordDao.findAll()) {
+        for (record in recordDao.findAll()) {
             frontImagePaths.add(record.frontImagePath ?: "")
             sideImagePaths.add(record.sideImagePath ?: "")
         }

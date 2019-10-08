@@ -12,9 +12,10 @@ import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import kotlinx.android.synthetic.main.fragment_graphe.*
-import org.macho.beforeandafter.BeforeAndAfterConst
+import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.RecordDao
+import org.macho.beforeandafter.shared.data.RecordDao
+import org.macho.beforeandafter.shared.data.RecordDaoImpl
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,6 +34,8 @@ class GrapheFragment: Fragment() {
     private var mode = GrapheFragment.GrapheMode.MONTH
 
     private var postLazyScroll = false
+
+    private var recordDao: RecordDao = RecordDaoImpl() // TODO: take from Dagger
 
     companion object {
         fun getInstance(): Fragment {
@@ -104,7 +107,7 @@ class GrapheFragment: Fragment() {
 
         var ratePoints: MutableList<Poin2> = mutableListOf()
 
-        for (record in RecordDao.findAll()) {
+        for (record in recordDao.findAll()) {
             if (record.weight > 0) {
                 weightPoints.add(Poin2(record.date, record.weight))
             }

@@ -58,6 +58,19 @@
     <string name="use_standard_camera_yes">Yes.</string>
     <string name="preference_item_change_or_revoke_consent_title">Change or revoke consent</string>
     <string name="preference_item_change_or_revoke_consent_description">Change or revoke consent you have made.</string>
+    <string name="preference_item_backup_title">Backup</string>
+    <string name="preference_item_backup_description">backup data you have recorded.</string>
+    <string name="backup_status_message_complete">Backup has completed.</string>
+
+    <string name="backup_dialog_title">Backup</string>
+    <string name="backup_dialog_message">Do you backup all photos and records?<small>\n* NOTE *\n- Please use Wi-Fi.\n- You need Google account.</small></string>
+    <string name="finish">Finish</string>
+    <string name="backup_message">Backup</string>
+    <string name="backup_message_detail">Please wait a minute.</string>
+    <string name="backup_status_message_title_format">%s(step %d of %d)</string>
+    <string name="backup_status_message_title_saving_records">Saving records.</string>
+    <string name="backup_status_message_title_saving_images">Saving images.データを保存中</string>
+    <string name="backup_status_message_description_format">Saving files(%d/%d)</string>
 
     <string name="dialog_select_prompt">Choose Image</string>
     <string name="dialog_select_camera">Camera</string>

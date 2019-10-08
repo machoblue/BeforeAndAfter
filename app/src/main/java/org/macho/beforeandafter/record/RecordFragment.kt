@@ -1,17 +1,10 @@
 package org.macho.beforeandafter.record
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.Fragment
-import android.support.v4.app.LoaderManager
-import android.support.v4.content.AsyncTaskLoader
-import android.support.v4.content.Loader
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -19,130 +12,73 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_record.*
-import org.macho.beforeandafter.BeforeAndAfterConst
-import org.macho.beforeandafter.ImageUtil
+import org.macho.beforeandafter.shared.BeforeAndAfterConst
+import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.RecordDao
+import org.macho.beforeandafter.record.editaddrecord.EditAddRecordActivity
+import org.macho.beforeandafter.shared.di.ActivityScoped
 import java.io.File
 import java.util.*
+import javax.inject.Inject
 
-class RecordFragment: Fragment() {
+@ActivityScoped
+class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.View {
 
     companion object {
         const val EDIT_REQUEST_CODE = 98
-        fun getInstance(): Fragment {
-            return RecordFragment()
-        }
     }
 
-    private var items: MutableList<Record> = mutableListOf()
+    @Inject
+    override lateinit var presenter: RecordContract.Presenter
+
     private lateinit var recordAdapter: RecordAdapter
     private val imageCache = ImageCache()
-
 
     override fun onCreateView(layoutInflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return layoutInflater.inflate(R.layout.fragment_record, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        println("*** RecordFragment.onViewCreated ***")
         listView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         fab.setOnClickListener { _ ->
-            val intent = Intent(context, EditActivity::class.java)
-            startActivityForResult(intent, EDIT_REQUEST_CODE)
+            presenter.openAddRecord()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.takeView(this)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         imageCache.clear()
-        loaderManager.destroyLoader(1)
+        presenter.dropView()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
-
-        if (requestCode != EDIT_REQUEST_CODE) {
-            return
-        }
-
-        if (data == null) {
-            return
-        }
-
-        when (data.getIntExtra("TYPE", 0)) {
-            1 -> {
-                val index = data.getIntExtra("INDEX", 0)
-                items.removeAt(index)
-                recordAdapter.notifyItemRemoved(index)
-            }
-            2 -> {
-                if (data.getBooleanExtra("ISNEW", false)) {
-                    val date = data.getLongExtra("DATE", 0)
-                    val record = RecordDao.find(date)!!
-                    items.add(record)
-                    recordAdapter.notifyItemInserted(items.size - 1)
-
-                    val preferences = PreferenceManager.getDefaultSharedPreferences(activity)
-                    val reviewed = preferences.getBoolean("REVIEWED", false)
-                    if (!reviewed) {
-                        val firstRecord = RecordDao.findAll().get(0)
-                        val diff = firstRecord.weight - record.weight
-                        if (diff > 1f) {
-                            ReviewDialog.newInstance().show(fragmentManager, "REVIEW_DIALOG")
-                        }
-                    }
-
-                } else {
-                    val index = data.getIntExtra("INDEX", 0)
-                    val record = items.get(index)
-                    val after = RecordDao.find(record.date)!!
-
-                    record.weight = after.weight
-                    record.rate = after.rate
-                    record.memo = after.memo
-                    record.frontImagePath = after.frontImagePath
-                    record.sideImagePath = after.sideImagePath
-                    recordAdapter.notifyItemChanged(index)
-                }
-
-            }
-        }
+        // do nothing
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        loaderManager.restartLoader(1, null, object: LoaderManager.LoaderCallbacks<MutableList<Record>> {
-            override fun onCreateLoader(id: Int, args: Bundle?): Loader<MutableList<Record>> {
-                val loader = RecordLoader(this@RecordFragment.context!!)
-                loader.forceLoad()
-                return loader
-            }
-
-            override fun onLoadFinished(loader: Loader<MutableList<Record>>, data: MutableList<Record>?) {
-                println("*** RecordFragment.onActivityCreated.LoaderCAllback.onLoadFinish ***")
-                items = data ?: mutableListOf()
-                recordAdapter = RecordAdapter(this@RecordFragment.context!!, items, 100, imageCache)
-                listView.adapter = recordAdapter
-            }
-
-            override fun onLoaderReset(loader: Loader<MutableList<Record>>) {
-                recordAdapter.clear()
-            }
-        })
+    override fun showItems(items: List<Record>) {
+        recordAdapter = RecordAdapter(this.context!!, items, 100, imageCache)
+        listView.adapter = recordAdapter
     }
 
-    class RecordLoader(context: Context): AsyncTaskLoader<MutableList<Record>>(context) {
-        override fun loadInBackground(): MutableList<Record>? {
-            return mutableListOf(*(RecordDao.findAll().toTypedArray()))
-        }
+    override fun showAddRecordUI() {
+        val intent = Intent(context, EditAddRecordActivity::class.java)
+        startActivityForResult(intent, EDIT_REQUEST_CODE)
     }
 
-    inner class RecordAdapter(val context: Context, val records: MutableList<Record>, val viewHeight: Int, val imageCache: ImageCache)
+    override fun showEditRecordUI(date: Long) {
+        val intent = Intent(context, EditAddRecordActivity::class.java)
+        intent.putExtra("DATE", date)
+        this@RecordFragment.startActivityForResult(intent, EDIT_REQUEST_CODE)
+    }
+
+    inner class RecordAdapter(val context: Context, val records: List<Record>, val viewHeight: Int, val imageCache: ImageCache)
         : RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
         val layoutInflater = LayoutInflater.from(context)
 
@@ -183,11 +119,6 @@ class RecordFragment: Fragment() {
             holder.memo.text = currentRecord.memo
         }
 
-        fun clear() {
-            records.clear()
-            notifyDataSetChanged()
-        }
-
         inner class RecordItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
             val parent: View = view
             val frontImage: ImageView
@@ -204,10 +135,7 @@ class RecordFragment: Fragment() {
                 rate = view.findViewById(R.id.rate)
                 memo = view.findViewById(R.id.memo)
                 parent.setOnClickListener {_ ->
-                    val intent = Intent(this@RecordAdapter.context, EditActivity::class.java)
-                    intent.putExtra("INDEX", adapterPosition)
-                    intent.putExtra("DATE", this@RecordAdapter.records.get(adapterPosition).date)
-                    this@RecordFragment.startActivityForResult(intent, EDIT_REQUEST_CODE)
+                    presenter.openEditRecord(this@RecordAdapter.records.get(adapterPosition).date)
                 }
             }
         }

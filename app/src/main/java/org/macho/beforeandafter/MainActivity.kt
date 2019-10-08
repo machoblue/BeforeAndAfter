@@ -4,26 +4,30 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import io.realm.Realm
-import io.realm.RealmConfiguration
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.macho.beforeandafter.gallery.GalleryFragment
 import org.macho.beforeandafter.graphe2.GrapheFragment
 import org.macho.beforeandafter.preference.PreferenceFragment
 import org.macho.beforeandafter.record.RecordFragment
+import org.macho.beforeandafter.shared.util.AdUtil
+import javax.inject.Inject
 
-class MainActivity: AppCompatActivity() {
+class MainActivity: DaggerAppCompatActivity() {
 
     private var selectedImageButton: ImageButton? = null
     private var selectedTextView: TextView? = null
 
     private var colorSelected = 0
+
+//    @Inject
+//    lateinit var recordFragmentProvider: Lazy<RecordFragment>
+    @Inject
+    lateinit var recordFragment: RecordFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +37,8 @@ class MainActivity: AppCompatActivity() {
 
         uncheckCurrentButtonAndCheck(item0ImageButton, item0TextView)
 
-        supportFragmentManager.beginTransaction().add(R.id.content, RecordFragment.getInstance()).commit()
+//        supportFragmentManager.beginTransaction().replace(R.id.content, recordFragmentProvider.get()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.content, recordFragment).commit()
 
         configureAd()
     }
@@ -59,7 +64,9 @@ class MainActivity: AppCompatActivity() {
 
     fun onItem0Click(view: View) {
         uncheckCurrentButtonAndCheck(item0ImageButton, item0TextView)
-        supportFragmentManager.beginTransaction().replace(R.id.content, RecordFragment.getInstance()).commit()
+
+//        supportFragmentManager.beginTransaction().replace(R.id.content, recordFragmentProvider.get()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.content, recordFragment).commit()
     }
 
     fun onItem1Click(view: View) {

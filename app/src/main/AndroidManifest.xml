@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
+        android:name=".BeforeAndAfterApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,10 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".record.EditActivity"/>
+        <activity android:name=".record.editaddrecord.EditAddRecordActivity"/>
         <activity android:name=".record.camera.CameraActivity"/>
         <activity android:name=".gallery.PhotoActivity"/>
-        <activity android:name=".preference.EditGoalActivity"/>
+        <activity android:name=".preference.editgoal.EditGoalActivity"/>
+        <activity android:name=".preference.backup.BackupActivity"/>
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
