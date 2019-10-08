@@ -56,6 +56,19 @@
     <string name="use_standard_camera_yes">はい、Android標準のカメラを利用します。</string>
     <string name="preference_item_change_or_revoke_consent_title">Change or revoke consent</string>
     <string name="preference_item_change_or_revoke_consent_description">Change or revoke consent you have made.</string>
+    <string name="preference_item_backup_title">バックアップ</string>
+    <string name="preference_item_backup_description">記録をバックアップします。</string>
+
+    <string name="backup_dialog_title">データのバックアップ</string>
+    <string name="backup_dialog_message">記録データや写真を全てバックアップします。よろしいですか？\n<small>※注意点※\n・通信量が多くなるためWi-Fi環境で行うことを推奨します。\n・GoogleDriveに保存するためGoogleアカウントが必要です。</small></string>
+    <string name="finish">終了</string>
+    <string name="backup_message">バックアップ中です。</string>
+    <string name="backup_message_detail">バックアップには時間がかかります。しばらくお待ちください。</string>
+    <string name="backup_status_message_title_format">%s(ステップ %d / %d)</string>
+    <string name="backup_status_message_title_saving_records">記録データを保存中</string>
+    <string name="backup_status_message_title_saving_images">画像データを保存中</string>
+    <string name="backup_status_message_description_format">写真ファイルを保存中(%d/%d)</string>
+    <string name="backup_status_message_complete">バックアップが完了しました。</string>
 
     <string name="dialog_select_prompt">画像を選択してください</string>
     <string name="dialog_select_camera">カメラ</string>

@@ -3,6 +3,8 @@ package org.macho.beforeandafter.shared.di
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import org.macho.beforeandafter.MainActivity
+import org.macho.beforeandafter.preference.backup.BackupActivity
+import org.macho.beforeandafter.preference.backup.BackupModule
 import org.macho.beforeandafter.preference.editgoal.EditGoalActivity
 import org.macho.beforeandafter.preference.editgoal.EditGoalModule
 import org.macho.beforeandafter.record.RecordModule
@@ -22,5 +24,9 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = [EditAddRecordModule::class])
     abstract fun editAddRecordActivity(): EditAddRecordActivity
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = [BackupModule::class])
+    abstract fun backupActivity(): BackupActivity
 
 }

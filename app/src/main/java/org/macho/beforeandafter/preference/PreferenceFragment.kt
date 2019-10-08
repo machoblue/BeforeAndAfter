@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_preference.*
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.preference.backup.BackupDialog
 import org.macho.beforeandafter.preference.editgoal.EditGoalActivity
 
 class PreferenceFragment: Fragment() {
@@ -32,6 +33,10 @@ class PreferenceFragment: Fragment() {
                     AdUtil.showConsentForm(activity.applicationContext)
                 })
             }
+
+            fragment.items.add(PreferenceItem(R.string.preference_item_backup_title, R.string.preference_item_backup_description) {
+                BackupDialog.newInstance(activity).show(fragment.fragmentManager, "")
+            })
 
             return fragment
         }
