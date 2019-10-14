@@ -7,6 +7,8 @@ import org.macho.beforeandafter.preference.backup.BackupActivity
 import org.macho.beforeandafter.preference.backup.BackupModule
 import org.macho.beforeandafter.preference.editgoal.EditGoalActivity
 import org.macho.beforeandafter.preference.editgoal.EditGoalModule
+import org.macho.beforeandafter.preference.restore.RestoreActivity
+import org.macho.beforeandafter.preference.restore.RestoreModule
 import org.macho.beforeandafter.record.RecordModule
 import org.macho.beforeandafter.record.editaddrecord.EditAddRecordActivity
 import org.macho.beforeandafter.record.editaddrecord.EditAddRecordModule
@@ -28,5 +30,9 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = [BackupModule::class])
     abstract fun backupActivity(): BackupActivity
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = [RestoreModule::class])
+    abstract fun restoreActivity(): RestoreActivity
 
 }

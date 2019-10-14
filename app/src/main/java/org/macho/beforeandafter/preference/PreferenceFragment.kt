@@ -12,6 +12,7 @@ import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.backup.BackupDialog
 import org.macho.beforeandafter.preference.editgoal.EditGoalActivity
+import org.macho.beforeandafter.preference.restore.RestoreDialog
 
 class PreferenceFragment: Fragment() {
     companion object {
@@ -36,6 +37,10 @@ class PreferenceFragment: Fragment() {
 
             fragment.items.add(PreferenceItem(R.string.preference_item_backup_title, R.string.preference_item_backup_description) {
                 BackupDialog.newInstance(activity).show(fragment.fragmentManager, "")
+            })
+
+            fragment.items.add(PreferenceItem(R.string.preference_item_restore_title, R.string.preference_item_restore_description) {
+                RestoreDialog.newInstance(activity).show(fragment.fragmentManager, "")
             })
 
             return fragment
