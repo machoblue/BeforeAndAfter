@@ -12,6 +12,7 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.gson.Gson
+import org.macho.beforeandafter.R
 import org.macho.beforeandafter.record.Record
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
@@ -22,6 +23,8 @@ import java.util.*
 class BackupTask(context: Context, val account: Account, listener: BackupTaskListener): AsyncTask<List<Record>, BackupTask.BackupStatus, Unit>() {
     companion object {
         const val TAG = "BackupTask"
+        const val DRIVE_SPACE = "appDataFolder"
+        const val FILE_NAME = "backup.json"
     }
 
     private val contextRef: WeakReference<Context>
@@ -37,6 +40,13 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
     }
 
     override fun doInBackground(vararg recordLists: List<Record>): Unit {
+        val records = recordLists[0]
+        if (records.isEmpty()) {
+            val message = contextRef.get()?.getString(R.string.backup_error_description_no_records)!!
+            listenerRef.get()?.onFail(message)
+        }
+
+
         if (contextRef.get() == null) {
             return
         }
@@ -48,12 +58,19 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
             return
         }
 
-        val records = recordLists[0]
 
-        saveData(records)
+        // save images
+        val imageFileNames = extractImageFileNames(records)
+        val imageFileNameToDriveFileId = saveImages(imageFileNames)
 
-        val imageFilePaths = extractImageFilePaths(records)
-        saveImages(imageFilePaths)
+        // save records
+        val backupData = BackupData(records, imageFileNameToDriveFileId)
+        val fileId = saveData(backupData)
+        if (fileId == null) {
+            val message = contextRef.get()?.getString(R.string.backup_error_description)!!
+            listenerRef.get()?.onFail(message)
+            return
+        }
     }
 
     override fun onProgressUpdate(vararg statusArray: BackupStatus?) {
@@ -80,66 +97,70 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
                 .build()
     }
 
-    private fun saveData(records: List<Record>) {
+    private fun saveData(data: BackupData): String? {
         publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_SAVING_RECORDS))
         if (contextRef.get() == null) {
-            return
+            return null
         }
 
-        val recordsJson = Gson().toJson(records)
+        val recordsJson = Gson().toJson(data)
         Log.d(TAG, "recordsJson: ${recordsJson.toString()}")
-        val fileName = "records.json"
-        PrintWriter(OutputStreamWriter(contextRef.get()?.openFileOutput(fileName, Context.MODE_PRIVATE), "UTF-8")).use {
+        PrintWriter(OutputStreamWriter(contextRef.get()?.openFileOutput(FILE_NAME, Context.MODE_PRIVATE), "UTF-8")).use {
             it.append(recordsJson)
             it.close()
         }
 
         var fileMetadata = File()
-        fileMetadata.setName("records.json")
-        fileMetadata.setParents(Collections.singletonList("appDataFolder"))
-        val filePath = java.io.File(fileNameToFilePath(fileName))
+        fileMetadata.setName(FILE_NAME)
+        fileMetadata.setParents(Collections.singletonList(DRIVE_SPACE))
+        val filePath = java.io.File(fileNameToFilePath(FILE_NAME))
         val mediaContent = FileContent("application/json", filePath)
         val file = driveService?.files()?.create(fileMetadata, mediaContent)?.setFields("id")?.execute()
         Log.i(TAG, "File ID: " + file?.id)
+        return file?.id
     }
 
-    private fun extractImageFilePaths(records: List<Record>): List<String> {
-        var imageFilePaths = mutableListOf<String>()
+    private fun extractImageFileNames(records: List<Record>): List<String> {
+        var imageFileNames = mutableListOf<String>()
         for (record in records) {
             val frontImageFileName = record.frontImagePath
             if (frontImageFileName != null && java.io.File(fileNameToFilePath(frontImageFileName)).exists()) {
-                imageFilePaths.add(fileNameToFilePath(frontImageFileName))
+                imageFileNames.add(frontImageFileName)
             }
             val sideImageFileName = record.sideImagePath
             if (sideImageFileName != null && java.io.File(fileNameToFilePath(sideImageFileName)).exists()) {
-                imageFilePaths.add(fileNameToFilePath(sideImageFileName))
+                imageFileNames.add(sideImageFileName)
             }
         }
-        return imageFilePaths
+        return imageFileNames
     }
 
-    private fun saveImages(imageFilePaths: List<String>) {
-        for ((index, imageFilePath) in imageFilePaths.withIndex()) {
-            publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_SAVING_IMAGES, index + 1, imageFilePaths.size))
+    private fun saveImages(imageFileNames: List<String>): Map<String, String> {
+        val imageFileIds = hashMapOf<String, String>()
+        val size = imageFileNames.size
+        for ((index, imageFileName) in imageFileNames.withIndex()) {
+            publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_SAVING_IMAGES, index + 1, size))
             var fileMetadata = File()
-            val fileName = filePathToFileName(imageFilePath)
-            fileMetadata.setName(fileName)
+//            val fileName = filePathToFileName(imageFilePath)
+            fileMetadata.setName(imageFileName)
             fileMetadata.setParents(Collections.singletonList("appDataFolder"))
-            val filePath = java.io.File(imageFilePath)
+            val filePath = java.io.File(fileNameToFilePath(imageFileName))
             val mediaContent = FileContent("image/jpg", filePath)
             val file = driveService?.files()?.create(fileMetadata, mediaContent)?.setFields("id")?.execute()
-            Log.i(TAG, "File ID: " + file?.id)
+            Log.i(TAG, "Image File ID: " + file?.id)
+            if (file == null) {
+                continue
+            }
+            imageFileIds[imageFileName] = file.id
         }
+        return imageFileIds
     }
 
     private fun fileNameToFilePath(fileName: String): String {
         return "%s/%s".format(appFilesDir, fileName)
     }
 
-    private fun filePathToFileName(filePath: String): String {
-        return filePath.replace(appFilesDir + "/", "")
-    }
-
+    // SAVING_IMAGESには、全何ファイル中何ファイルを処理中かを表す値をもたせたいので、enumではなくクラスで実装する。
     class BackupStatus(val statusCode: Int, val finishFilesCount: Int = 0, val allFilesCount: Int = 0) {
         companion object {
             const val BACKUP_STATUS_CODE_SAVING_RECORDS = 0
@@ -150,6 +171,7 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
 
     interface BackupTaskListener {
         fun onProgress(status: BackupStatus)
+        fun onFail(message: String)
     }
 
 }

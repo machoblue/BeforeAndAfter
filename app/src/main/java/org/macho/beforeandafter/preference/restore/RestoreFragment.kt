@@ -1,4 +1,4 @@
-package org.macho.beforeandafter.preference.backup
+package org.macho.beforeandafter.preference.restore
 
 import android.content.Intent
 import android.os.Bundle
@@ -18,9 +18,9 @@ import org.macho.beforeandafter.shared.view.AlertDialog
 import javax.inject.Inject
 
 @ActivityScoped
-class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.View {
+class RestoreFragment @Inject constructor(): DaggerFragment(), RestoreContract.View {
     @Inject
-    override lateinit var presenter: BackupContract.Presenter
+    override lateinit var presenter: RestoreContract.Presenter
 
     @Inject
     lateinit var recordRepository: RecordRepository
@@ -28,12 +28,12 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
     private lateinit var interstitialAd: InterstitialAd
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.backup_frag, container, false)
+        return inflater.inflate(R.layout.restore_frag, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         cancelButton.setOnClickListener { view ->
-            presenter.cancelBackup()
+            presenter.cancelRestore()
             finish()
         }
 
@@ -42,7 +42,7 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
         }
 
         presenter.takeView(this)
-        presenter.backup()
+        presenter.restore()
 
         progressBar.max = 100
 
@@ -84,7 +84,7 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
     }
 
     override fun setProgress(value: Int) {
-        Log.i("BackupFragment", "*** setProgress ***")
+        Log.i("RestoreFragment", "*** setProgress ***")
         activity?.runOnUiThread {
             progressBar.setProgress(value)
         }
@@ -96,9 +96,9 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
         }
     }
 
-    override fun showAlert(title: String, message: String) {
+    override fun showAlert(title: String, description: String) {
         activity?.runOnUiThread {
-            AlertDialog.newInstance(activity!!, title, message) {
+            AlertDialog.newInstance(activity!!, title, description) {
                 finish()
             }
         }

@@ -60,6 +60,8 @@
     <string name="preference_item_change_or_revoke_consent_description">Change or revoke consent you have made.</string>
     <string name="preference_item_backup_title">Backup</string>
     <string name="preference_item_backup_description">backup data you have recorded.</string>
+    <string name="preference_item_restore_title">Restore</string>
+    <string name="preference_item_restore_description">Restore backup data.</string>
     <string name="backup_status_message_complete">Backup has completed.</string>
 
     <string name="backup_dialog_title">Backup</string>
@@ -69,27 +71,46 @@
     <string name="backup_message_detail">Please wait a minute.</string>
     <string name="backup_status_message_title_format">%s(step %d of %d)</string>
     <string name="backup_status_message_title_saving_records">Saving records.</string>
-    <string name="backup_status_message_title_saving_images">Saving images.データを保存中</string>
+    <string name="backup_status_message_title_saving_images">Saving images.</string>
     <string name="backup_status_message_description_format">Saving files(%d/%d)</string>
+    <string name="backup_error_title">Error</string>
+    <string name="backup_error_description">An error has occured. try again later.</string>
+    <string name="backup_error_description_no_records">There is no records to backup.</string>
+
+    <string name="restore_dialog_title">Restore</string>
+    <string name="restore_dialog_message">Do you restore data you backup in advance?\n<small>※注意点※\n・通信量が多くなるためWi-Fi環境で行うことを推奨します。\n・GoogleDriveに保存するためGoogleアカウントが必要です。</small></string>
+    <string name="restore_message">Restoreing...</string>
+    <string name="restore_message_detail">Please wait a minutes.</string>
+    <string name="restore_status_message_title_format">%s(step %d of %d)</string>
+    <string name="restore_status_message_title_fetching_records">Restoring records.</string>
+    <string name="restore_status_message_title_fetching_images">Restoring images</string>
+    <string name="restore_status_message_description_format">Restoreing files(%d/%d)</string>
+    <string name="restore_status_message_complete">Finished restoring.</string>
+    <string name="restore_error_title">Error</string>
+    <string name="restore_error_cannot_fetch_metadata_description">There is no data in Google Drive.</string>
+    <string name="restore_error_cannot_download_content_description">We cannot download content of your backup.</string>
+    <string name="restore_error_no_data_title">No data to restore</string>
+    <string name="restore_error_no_data_description">No data to restore.</string>
 
     <string name="dialog_select_prompt">Choose Image</string>
     <string name="dialog_select_camera">Camera</string>
     <string name="dialog_select_gallery">Gallery</string>
 
     <string name="admob_app_id">ca-app-pub-2062076007725970~3676986758</string>
-    <!-- 本物 -->
-    <!--
-    <string name="admob_unit_id">ca-app-pub-2062076007725970/4292543358</string>
-    -->
-    <!-- テスト用 -->
-    <string name="admob_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <!-- 本物 -->
-    <!--
-    <string name="admob_unit_id_interstitial">ca-app-pub-2062076007725970/5738923755</string>
-    -->
+    <string name="admob_unit_id">ca-app-pub-2062076007725970/4292543358</string>
     <!-- テスト用 -->
+    <!--
+    <string name="admob_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    -->
+
+    <!-- 本物 -->
+    <string name="admob_unit_id_interstitial">ca-app-pub-2062076007725970/5738923755</string>
+    <!-- テスト用 -->
+    <!--
     <string name="admob_unit_id_interstitial">ca-app-pub-3940256099942544/1033173712</string>
+    -->
 
     <string name="publisher_id">pub-2062076007725970</string>
 </resources>
