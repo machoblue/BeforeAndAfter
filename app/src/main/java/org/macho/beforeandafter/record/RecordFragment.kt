@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_record.*
+import kotlinx.android.synthetic.main.record_frag.*
 import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.R
@@ -37,7 +37,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     private val imageCache = ImageCache()
 
     override fun onCreateView(layoutInflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return layoutInflater.inflate(R.layout.fragment_record, container, false)
+        return layoutInflater.inflate(R.layout.record_frag, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
