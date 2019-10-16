@@ -38,28 +38,33 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTask.
     }
 
     override fun doInBackground(vararg p0: Void?): List<Record> {
-        if (contextRef.get() == null) {
-            return mutableListOf()
+        try {
+            if (contextRef.get() == null) {
+                return mutableListOf()
+            }
+            appFilesDir = contextRef.get()?.filesDir.toString()
+
+            this.driveService = buildDriveService(account)
+
+            if (driveService == null) {
+                return mutableListOf()
+            }
+
+            val backupData = fetchBackupData()
+
+            if (backupData == null) {
+                listenerRef.get()?.onFail(R.string.restore_error_cannot_fetch_metadata_description)
+                return mutableListOf()
+            }
+
+            fetchImageAndStoreInLocalAppFilesDir(backupData.imageFileNameToDriveFileId)
+
+            val records = backupData.records
+            return records
+        } catch (e: Exception) {
+            Log.e(TAG, e.message, e)
+            throw e
         }
-        appFilesDir = contextRef.get()?.filesDir.toString()
-
-        this.driveService = buildDriveService(account)
-
-        if (driveService == null) {
-            return mutableListOf()
-        }
-
-        val backupData = fetchBackupData()
-
-        if (backupData == null) {
-            listenerRef.get()?.onFail(R.string.restore_error_cannot_fetch_metadata_description)
-            return mutableListOf()
-        }
-
-        fetchImageAndStoreInLocalAppFilesDir(backupData.imageFileNameToDriveFileId)
-
-        val records = backupData.records
-        return records
     }
 
     override fun onProgressUpdate(vararg values: RestoreStatus?) {

@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import org.macho.beforeandafter.record.Record
 import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.shared.data.RecordRepository
+import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -73,6 +74,8 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
                 recordRepository.update(this.record, null)
             }
         }
+
+        SharedPreferencesUtil.setBoolean(context, SharedPreferencesUtil.Key.CAN_BACKUP_AND_RESTORE, "backup".equals(record.memo)) // FIXME:
 
         view?.finish()
     }
