@@ -40,36 +40,41 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
     }
 
     override fun doInBackground(vararg recordLists: List<Record>): Unit {
-        val records = recordLists[0]
-        if (records.isEmpty()) {
-            val message = contextRef.get()?.getString(R.string.backup_error_description_no_records)!!
-            listenerRef.get()?.onFail(message)
-        }
+        try {
+            val records = recordLists[0]
+            if (records.isEmpty()) {
+                val message = contextRef.get()?.getString(R.string.backup_error_description_no_records)!!
+                listenerRef.get()?.onFail(message)
+            }
 
 
-        if (contextRef.get() == null) {
-            return
-        }
-        appFilesDir = contextRef.get()?.filesDir.toString()
+            if (contextRef.get() == null) {
+                return
+            }
+            appFilesDir = contextRef.get()?.filesDir.toString()
 
-        this.driveService = buildDriveService(account)
+            this.driveService = buildDriveService(account)
 
-        if (driveService == null) {
-            return
-        }
+            if (driveService == null) {
+                return
+            }
 
 
-        // save images
-        val imageFileNames = extractImageFileNames(records)
-        val imageFileNameToDriveFileId = saveImages(imageFileNames)
+            // save images
+            val imageFileNames = extractImageFileNames(records)
+            val imageFileNameToDriveFileId = saveImages(imageFileNames)
 
-        // save records
-        val backupData = BackupData(records, imageFileNameToDriveFileId)
-        val fileId = saveData(backupData)
-        if (fileId == null) {
-            val message = contextRef.get()?.getString(R.string.backup_error_description)!!
-            listenerRef.get()?.onFail(message)
-            return
+            // save records
+            val backupData = BackupData(records, imageFileNameToDriveFileId)
+            val fileId = saveData(backupData)
+            if (fileId == null) {
+                val message = contextRef.get()?.getString(R.string.backup_error_description)!!
+                listenerRef.get()?.onFail(message)
+                return
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, e.message, e)
+            throw e
         }
     }
 
