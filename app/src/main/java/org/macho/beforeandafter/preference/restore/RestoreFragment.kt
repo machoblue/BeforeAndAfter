@@ -100,7 +100,7 @@ class RestoreFragment @Inject constructor(): DaggerFragment(), RestoreContract.V
         activity?.runOnUiThread {
             AlertDialog.newInstance(activity!!, title, description) {
                 finish()
-            }
+            } .show(fragmentManager, null)
         }
     }
 }
