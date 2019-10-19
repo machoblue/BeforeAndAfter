@@ -6,6 +6,7 @@ import android.os.AsyncTask
 import android.util.Log
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.http.FileContent
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
@@ -14,6 +15,7 @@ import com.google.api.services.drive.model.File
 import com.google.gson.Gson
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.record.Record
+import java.io.IOException
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
 import java.lang.ref.WeakReference
@@ -59,7 +61,6 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
                 return
             }
 
-
             // save images
             val imageFileNames = extractImageFileNames(records)
             val imageFileNameToDriveFileId = saveImages(imageFileNames)
@@ -72,8 +73,23 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
                 listenerRef.get()?.onFail(message)
                 return
             }
+        } catch (e: UserRecoverableAuthIOException) {
+            val listener = listenerRef.get()
+            if (listener == null) {
+                Log.e(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
+                throw e
+
+            } else {
+                Log.w(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
+                listener.onRecoverableAuthErrorOccured(e)
+                return
+            }
+        } catch (e: IOException) {
+            Log.e(TAG, "doInBackground.catch IOException:${e::class.java}", e)
+            return
+
         } catch (e: Exception) {
-            Log.e(TAG, e.message, e)
+            Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
             throw e
         }
     }
@@ -177,6 +193,7 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
     interface BackupTaskListener {
         fun onProgress(status: BackupStatus)
         fun onFail(message: String)
+        fun onRecoverableAuthErrorOccured(e: UserRecoverableAuthIOException)
     }
 
 }

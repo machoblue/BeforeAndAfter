@@ -11,6 +11,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.DriveScopes
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.backup.BackupPresenter
@@ -24,6 +25,7 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
     companion object {
         const val TAG = "RestorePresenter"
         const val RC_SIGN_IN = 9001
+        const val RC_RECOVERABLE = 9002
     }
     var view: RestoreContract.View? = null
 
@@ -48,9 +50,15 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
     }
 
     override fun result(requestCode: Int, resultCode: Int, data: Intent) {
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
+        when (requestCode) {
+            RC_SIGN_IN -> {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                handleSignInResult(task)
+            }
+            RC_RECOVERABLE -> {
+                Log.w(TAG, "*** RestorePresenter.result.when.RC_RECOVERABLE ***")
+                restoreRecords()
+            }
         }
     }
 
@@ -139,6 +147,10 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
 
     override fun onFail(resourceId: Int) {
         view?.showAlert(context.getString(R.string.restore_error_title), context.getString(resourceId))
+    }
+
+    override fun onRecoverableAuthErrorOccured(e: UserRecoverableAuthIOException) {
+        view?.startActivityForResult(e.intent, RC_RECOVERABLE)
     }
 
 }

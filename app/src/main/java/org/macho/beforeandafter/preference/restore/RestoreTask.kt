@@ -6,6 +6,7 @@ import android.os.AsyncTask
 import android.util.Log
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.client.util.DateTime
 import com.google.api.services.drive.Drive
@@ -61,8 +62,24 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTask.
 
             val records = backupData.records
             return records
+
+        } catch (e: UserRecoverableAuthIOException) {
+            val listener = listenerRef.get()
+            if (listener == null) {
+                Log.e(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
+                throw e
+
+            } else {
+                Log.w(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
+                listener.onRecoverableAuthErrorOccured(e)
+                return mutableListOf()
+            }
+        } catch (e: IOException) {
+            Log.e(TAG, "doInBackground.catch IOException:${e::class.java}", e)
+            return mutableListOf()
+
         } catch (e: Exception) {
-            Log.e(TAG, e.message, e)
+            Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
             throw e
         }
     }
@@ -184,6 +201,7 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTask.
         fun onProgress(status: RestoreStatus)
         fun onComplete(records: List<Record>)
         fun onFail(resourceId: Int)
+        fun onRecoverableAuthErrorOccured(e: UserRecoverableAuthIOException)
     }
 
 }

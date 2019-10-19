@@ -11,6 +11,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.DriveScopes
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.RecordRepository
@@ -20,7 +21,9 @@ import javax.inject.Inject
 @ActivityScoped
 class BackupPresenter @Inject constructor(val recordRepository: RecordRepository): BackupContract.Presenter, BackupTask.BackupTaskListener {
     companion object {
+        const val TAG = "BackupPresenter"
         const val RC_SIGN_IN = 9001
+        const val RC_RECOVERABLE = 9002
     }
     var view: BackupContract.View? = null
 
@@ -45,9 +48,15 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
     }
 
     override fun result(requestCode: Int, resultCode: Int, data: Intent) {
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
+        when (requestCode) {
+            RC_SIGN_IN -> {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                handleSignInResult(task)
+            }
+            RC_RECOVERABLE -> {
+                Log.w(TAG, "*** BackpuPresenter.result.when.RC_RECOVERABLE ***")
+                backupRecords()
+            }
         }
     }
 
@@ -59,7 +68,7 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
             this.account = account.account
 
             // Asynchronously access the People API for the account
-            Log.d("BackupFragment", "handleSignInResult")
+            Log.d(TAG, "handleSignInResult")
 
             backupRecords()
 
@@ -121,6 +130,10 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
 
     override fun onFail(message: String) {
         view?.showAlert(context.getString(R.string.backup_error_title), message)
+    }
+
+    override fun onRecoverableAuthErrorOccured(e: UserRecoverableAuthIOException) {
+        view?.startActivityForResult(e.intent, RC_RECOVERABLE)
     }
 
 }
