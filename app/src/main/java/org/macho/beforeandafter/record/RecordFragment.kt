@@ -78,6 +78,16 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         this@RecordFragment.startActivityForResult(intent, EDIT_REQUEST_CODE)
     }
 
+    override fun hideEmptyView() {
+        emptyView.visibility = View.GONE
+        listView.visibility = View.VISIBLE
+    }
+
+    override fun showEmptyView() {
+        emptyView.visibility = View.VISIBLE
+        listView.visibility = View.GONE
+    }
+
     inner class RecordAdapter(val context: Context, val records: List<Record>, val viewHeight: Int, val imageCache: ImageCache)
         : RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
         val layoutInflater = LayoutInflater.from(context)

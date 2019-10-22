@@ -14,6 +14,11 @@
     <string name="review_message">差し支えなければ、当アプリの評価をしていただけないでしょうか。いただいた評価・ご意見を参考にアプリを改善してまいります。</string>
     <string name="review_neutral">二度と表示しない</string>
 
+    <!-- Records Fragment -->
+    <string name="empty_title">記録がありません。</string>
+    <string name="empty_description">右下のえんぴつボタンで\n記録を追加してください。</string>
+
+
     <!-- Edit Fragment -->
     <string name="weight_label">体重(kg)</string>
     <string name="rate_label">体脂肪率(%)</string>
