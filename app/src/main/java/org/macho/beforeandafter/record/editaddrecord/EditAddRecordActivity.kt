@@ -17,4 +17,9 @@ class EditAddRecordActivity: DaggerAppCompatActivity() {
         supportFragmentManager.beginTransaction().add(R.id.container, fragment).commit()
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        fragment.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
 }
