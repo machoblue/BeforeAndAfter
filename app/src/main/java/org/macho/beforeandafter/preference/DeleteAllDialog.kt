@@ -35,9 +35,9 @@ class DeleteAllDialog: DialogFragment() {
                 .setMessage(R.string.delete_all_confirmation_message)
                 .setPositiveButton(R.string.ok) { dialogInterface, i ->
                     recordDao.deleteAll()
-                    val fileArray = File(BeforeAndAfterConst.PATH).listFiles()
+                    val fileArray = File(context!!.filesDir.toString()).listFiles()
                     if (fileArray != null) {
-                        for (file in File(BeforeAndAfterConst.PATH).listFiles()) {
+                        for (file in fileArray) {
                             file.delete()
                         }
                     }

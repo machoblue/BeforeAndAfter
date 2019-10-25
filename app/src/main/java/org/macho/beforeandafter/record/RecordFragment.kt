@@ -105,7 +105,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         override fun onBindViewHolder(holder: RecordItemViewHolder, position: Int) {
             val currentRecord = records.get(position)
 
-            val frontImageFile = "${BeforeAndAfterConst.PATH}/${currentRecord.frontImagePath}"
+            val frontImageFile = "${context.filesDir}/${currentRecord.frontImagePath}"
             val frontImageBitmap = imageCache.get(frontImageFile)
             if (frontImageBitmap == null) {
                 val task = ImageLoadTask(position, frontImageFile, viewHeight, this@RecordAdapter)
@@ -115,7 +115,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
                 holder.frontImage.setImageBitmap(frontImageBitmap)
             }
 
-            val sideImageFile = "${BeforeAndAfterConst.PATH}/${currentRecord.sideImagePath}"
+            val sideImageFile = "${context.filesDir}/${currentRecord.sideImagePath}"
             val sideImageBitmap = imageCache.get(sideImageFile)
             if (sideImageBitmap == null) {
                 val task = ImageLoadTask(position, sideImageFile, viewHeight, this@RecordAdapter)

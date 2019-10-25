@@ -31,7 +31,7 @@ class GridAdapter(val fragment: Fragment, val items: List<String>): RecyclerView
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val path = items.get(position)
         GlideApp.with(fragment)
-                .load(Uri.fromFile(File(BeforeAndAfterConst.PATH, path ?: "")))
+                .load(Uri.fromFile(File(context.filesDir, path ?: "")))
                 .thumbnail(.1f)
                 .error(ColorDrawable(Color.GRAY))
                 .into(holder.imageView)

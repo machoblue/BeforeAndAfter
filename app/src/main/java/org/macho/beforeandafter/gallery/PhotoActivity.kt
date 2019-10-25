@@ -95,7 +95,7 @@ class PhotoActivity: AppCompatActivity() {
     fun showImage() {
         val path = items.get(index)
         GlideApp.with(this)
-                .load(Uri.fromFile(File(BeforeAndAfterConst.PATH, path ?: "")))
+                .load(Uri.fromFile(File(filesDir, path ?: "")))
                 .thumbnail(.1f)
                 .error(ColorDrawable(Color.GRAY))
                 .into(imageView)

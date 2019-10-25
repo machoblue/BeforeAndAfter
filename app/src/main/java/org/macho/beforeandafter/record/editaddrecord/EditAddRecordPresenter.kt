@@ -101,7 +101,7 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     }
 
     private fun isFileExists(fileName: String?): Boolean {
-        return fileName != null && File(BeforeAndAfterConst.PATH, fileName).exists()
+        return fileName != null && File(context.filesDir, fileName).exists()
     }
 
     private fun updateView() {
