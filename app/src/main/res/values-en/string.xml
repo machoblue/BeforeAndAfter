@@ -16,6 +16,10 @@
     <string name="review_message">Please review this app.</string>
     <string name="review_neutral">never display</string>
 
+    <!-- Records Fragment -->
+    <string name="empty_title">No records</string>
+    <string name="empty_description">Please add a record \nby the right bottom button.</string>
+
     <!-- Edit Fragment -->
     <string name="weight_label">weight(kg)</string>
     <string name="rate_label">rate(%)</string>

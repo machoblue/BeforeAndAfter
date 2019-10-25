@@ -24,9 +24,7 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     override var tempSideImageFileName: String? = null
 
     override fun setDate(date: Long) {
-        // recordの初期化
-        // deleteButtonの表示
-        // 各種viewへの値の設定
+        record = Record()
         if (date != 0L) {
             recordRepository.getRecord(date) { record ->
                 if (record == null) {
@@ -40,7 +38,8 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
                 view?.showDeleteButton()
             }
         } else {
-            this.record = Record()
+            record.weight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT)
+            record.rate = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_RATE)
         }
 
         tempFrontImageFileName = null
@@ -76,6 +75,8 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
         }
 
         SharedPreferencesUtil.setBoolean(context, SharedPreferencesUtil.Key.CAN_BACKUP_AND_RESTORE, "backup".equals(record.memo)) // FIXME:
+        SharedPreferencesUtil.setFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT, record.weight)
+        SharedPreferencesUtil.setFloat(context, SharedPreferencesUtil.Key.LATEST_RATE, record.rate)
 
         view?.finish()
     }
@@ -89,6 +90,7 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     // NOTE: this method will be called Fragment.onResume()
     override fun takeView(view: EditAddRecordContract.View) {
         this.view = view
+        updateView()
     }
 
     // NOTE: this method will be called Fragment.onDestoryView()

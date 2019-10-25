@@ -10,10 +10,14 @@ import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.google.android.gms.ads.InterstitialAd
@@ -118,6 +122,38 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         sideImage.setOnClickListener(onSideImageViewClickListener)
         cancelButton.setOnClickListener(onCancelButtonClickListener)
         saveButton.setOnClickListener(onSaveButtonClickListener)
+
+        rateUpButton.setOnClickListener {
+            val rateText = rate.text.toString()
+            var rateValue = if (rateText.isEmpty()) 0.0f else rateText.toFloat()
+            rateValue += 0.1f
+            rate.setText("%.2f".format(rateValue))
+        }
+        rateDownButton.setOnClickListener {
+            val rateText = rate.text.toString()
+            var rateValue = if (rateText.isEmpty()) 0.0f else rateText.toFloat()
+            rateValue -= 0.1f
+            if (rateValue >= 0) {
+                rate.setText("%.2f".format(rateValue))
+            }
+        }
+        weightUpButton.setOnClickListener {
+            val weightText = weight.text.toString()
+            var weightValue = if (weightText.isEmpty()) 0.0f else weightText.toFloat()
+            weightValue = (weightValue * 10 + 1) / 10
+            weight.setText("%.2f".format(weightValue))
+        }
+        weightDownButton.setOnClickListener {
+            val weightText = weight.text.toString()
+            var weightValue = if (weightText.isEmpty()) 0.0f else weightText.toFloat()
+            weightValue = (weightValue * 10 - 1) / 10
+            if (weightValue >= 0) {
+                weight.setText("%.2f".format(weightValue))
+            }
+        }
+
+        weight.setupClearButtonWithAction()
+        rate.setupClearButtonWithAction()
 
         MobileAds.initialize(context, getString(R.string.admob_app_id))
 
@@ -227,7 +263,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         }
     }
 
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -334,4 +369,27 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             }
         }
     }
+}
+
+fun EditText.setupClearButtonWithAction() {
+
+    addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(editable: Editable?) {
+            val clearIcon = if (editable?.isNotEmpty() == true) R.drawable.baseline_clear_24 else 0
+            setCompoundDrawablesWithIntrinsicBounds(0, 0, clearIcon, 0)
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+    })
+
+    setOnTouchListener(View.OnTouchListener { _, event ->
+        if (event.action == MotionEvent.ACTION_UP) {
+            if (event.rawX >= (this.right - this.compoundPaddingRight)) {
+                this.setText("")
+                return@OnTouchListener true
+            }
+        }
+        return@OnTouchListener false
+    })
 }

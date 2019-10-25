@@ -21,7 +21,13 @@ class RecordPresenter @Inject constructor(val recordRepository: RecordRepository
 
     override fun loadRecords() {
         recordRepository.getRecords {records ->
-            view?.showItems(records)
+            if (records.isEmpty()) {
+                view?.showEmptyView()
+
+            } else {
+                view?.hideEmptyView()
+                view?.showItems(records)
+            }
         }
     }
 

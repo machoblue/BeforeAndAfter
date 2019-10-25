@@ -7,6 +7,8 @@ interface RecordContract {
         fun showItems(items: List<Record>)
         fun showAddRecordUI()
         fun showEditRecordUI(date: Long)
+        fun showEmptyView()
+        fun hideEmptyView()
     }
 
     interface Presenter: BaseContract.Presenter<View> {

@@ -36,6 +36,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     private lateinit var recordAdapter: RecordAdapter
     private val imageCache = ImageCache()
 
+    // MARK: - Lifecycle
     override fun onCreateView(layoutInflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return layoutInflater.inflate(R.layout.record_frag, container, false)
     }
@@ -62,6 +63,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         // do nothing
     }
 
+
     override fun showItems(items: List<Record>) {
         recordAdapter = RecordAdapter(this.context!!, items, 100, imageCache)
         listView.adapter = recordAdapter
@@ -76,6 +78,16 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         val intent = Intent(context, EditAddRecordActivity::class.java)
         intent.putExtra("DATE", date)
         this@RecordFragment.startActivityForResult(intent, EDIT_REQUEST_CODE)
+    }
+
+    override fun hideEmptyView() {
+        emptyView.visibility = View.GONE
+        listView.visibility = View.VISIBLE
+    }
+
+    override fun showEmptyView() {
+        emptyView.visibility = View.VISIBLE
+        listView.visibility = View.GONE
     }
 
     inner class RecordAdapter(val context: Context, val records: List<Record>, val viewHeight: Int, val imageCache: ImageCache)
