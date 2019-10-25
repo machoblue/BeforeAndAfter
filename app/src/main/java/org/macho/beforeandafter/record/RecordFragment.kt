@@ -36,6 +36,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     private lateinit var recordAdapter: RecordAdapter
     private val imageCache = ImageCache()
 
+    // MARK: - Lifecycle
     override fun onCreateView(layoutInflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return layoutInflater.inflate(R.layout.record_frag, container, false)
     }
@@ -61,6 +62,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // do nothing
     }
+
 
     override fun showItems(items: List<Record>) {
         recordAdapter = RecordAdapter(this.context!!, items, 100, imageCache)

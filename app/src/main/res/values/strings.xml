@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">見た目ダイエット日記</string>
+    <string name="app_name">写真記録ダイエット日記</string>
     <!-- main activity -->
     <string name="record">記録</string>
     <string name="garally">ギャラリー</string>
