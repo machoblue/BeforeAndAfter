@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </android.support.design.widget.TextInputLayout>
-        <ImageButton
+        <org.macho.beforeandafter.shared.view.PressButton
             android:layout_marginStart="20dp"
             android:id="@+id/weightUpButton"
             android:layout_weight="0.15"
@@ -48,7 +48,7 @@
             android:background="@drawable/ripple_green"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
-        <ImageButton
+        <org.macho.beforeandafter.shared.view.PressButton
             android:id="@+id/weightDownButton"
             android:layout_weight="0.15"
             android:src="@drawable/baseline_remove_24"
@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </android.support.design.widget.TextInputLayout>
-        <ImageButton
+        <org.macho.beforeandafter.shared.view.PressButton
             android:layout_marginStart="20dp"
             android:id="@+id/rateUpButton"
             android:layout_weight="0.15"
@@ -85,7 +85,7 @@
             android:background="@drawable/ripple_green"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
-        <ImageButton
+        <org.macho.beforeandafter.shared.view.PressButton
             android:id="@+id/rateDownButton"
             android:layout_weight="0.15"
             android:src="@drawable/baseline_remove_24"
