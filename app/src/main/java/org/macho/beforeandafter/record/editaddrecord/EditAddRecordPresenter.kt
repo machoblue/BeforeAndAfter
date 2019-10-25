@@ -69,16 +69,16 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
             if (record == null) {
                 this.record.date = Date().time
                 recordRepository.register(this.record, null)
+                view?.finish()
             } else {
                 recordRepository.update(this.record, null)
+                view?.finish()
             }
         }
 
         SharedPreferencesUtil.setBoolean(context, SharedPreferencesUtil.Key.CAN_BACKUP_AND_RESTORE, "backup".equals(record.memo)) // FIXME:
         SharedPreferencesUtil.setFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT, record.weight)
         SharedPreferencesUtil.setFloat(context, SharedPreferencesUtil.Key.LATEST_RATE, record.rate)
-
-        view?.finish()
     }
 
     override fun deleteRecord() {
