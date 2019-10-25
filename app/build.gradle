@@ -6,14 +6,14 @@ apply plugin: 'realm-android'
 
 
 android {
-    compileSdkVersion  27
+    compileSdkVersion  28
 //    buildToolsVersion "27.0.3" // below the minimum supported version (28.0.3) for Android Gradle Plugin 3.3.0.
     defaultConfig {
         applicationId "org.macho.beforeandafter"
         minSdkVersion 21
-        targetSdkVersion 27
-        versionCode 24
-        versionName "2.0.7"
+        targetSdkVersion 28
+        versionCode 25
+        versionName "2.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled=true
     }
@@ -61,15 +61,15 @@ dependencies {
 
     // TODO: 何か別の依存関係が26.1.0に依存しているとエラーが出るが、何が26.1.0に依存しているか不明
     // noinspection GradleCompatible
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
     implementation 'io.realm:android-adapters:1.2.1'
 
     implementation 'com.google.android.gms:play-services:12.0.1'
     // interstitialのため
-    implementation 'com.android.support:exifinterface:27.1.1'
+    implementation 'com.android.support:exifinterface:28.0.0'
     testImplementation 'junit:junit:4.12'
     implementation 'com.google.android.gms:play-services-ads:12.0.1'
     implementation 'com.google.android.ads.consent:consent-library:1.0.4'
