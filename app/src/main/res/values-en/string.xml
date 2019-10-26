@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BeforeAndAfter</string>
+    <string name="app_name">Weight Loss Tracker</string>
     <!-- main activity -->
     <string name="record">record</string>
     <string name="garally">gallery</string>
