@@ -5,7 +5,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.LinearLayout
@@ -16,9 +16,9 @@ import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 
 
-class UseStandardCameraDialog: DialogFragment() {
+class UseStandardCameraDialog: androidx.fragment.app.DialogFragment() {
     companion object {
-        fun newInstance(activity: Activity): DialogFragment {
+        fun newInstance(activity: Activity): androidx.fragment.app.DialogFragment {
             return UseStandardCameraDialog()
         }
     }

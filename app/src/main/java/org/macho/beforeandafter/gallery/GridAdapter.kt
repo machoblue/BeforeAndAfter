@@ -5,8 +5,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +16,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.GlideApp
 import java.io.File
 
-class GridAdapter(val fragment: Fragment, val items: List<String>): RecyclerView.Adapter<GridAdapter.ViewHolder>() {
+class GridAdapter(val fragment: androidx.fragment.app.Fragment, val items: List<String>): androidx.recyclerview.widget.RecyclerView.Adapter<GridAdapter.ViewHolder>() {
     private val layoutInflater: LayoutInflater
     private val context: Context
     init {
@@ -41,7 +41,7 @@ class GridAdapter(val fragment: Fragment, val items: List<String>): RecyclerView
         return items.size
     }
 
-    inner class ViewHolder(val parent: View): RecyclerView.ViewHolder(parent) {
+    inner class ViewHolder(val parent: View): androidx.recyclerview.widget.RecyclerView.ViewHolder(parent) {
         val imageView: ImageView
         init {
             parent.setOnClickListener { view ->

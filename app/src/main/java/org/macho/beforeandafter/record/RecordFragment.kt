@@ -5,8 +5,8 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +42,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        listView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        listView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
         fab.setOnClickListener { _ ->
             presenter.openAddRecord()
         }
@@ -91,7 +91,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     }
 
     inner class RecordAdapter(val context: Context, val records: List<Record>, val viewHeight: Int, val imageCache: ImageCache)
-        : RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
+        : androidx.recyclerview.widget.RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
         val layoutInflater = LayoutInflater.from(context)
 
         override fun getItemCount(): Int {
@@ -131,7 +131,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
             holder.memo.text = currentRecord.memo
         }
 
-        inner class RecordItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        inner class RecordItemViewHolder(view: View): androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
             val parent: View = view
             val frontImage: ImageView
             val sideImage: ImageView
@@ -152,7 +152,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
             }
         }
 
-        private inner class ImageLoadTask(val position: Int, val filePath: String, val viewHeight: Int, val adapter: RecyclerView.Adapter<RecordItemViewHolder>)
+        private inner class ImageLoadTask(val position: Int, val filePath: String, val viewHeight: Int, val adapter: androidx.recyclerview.widget.RecyclerView.Adapter<RecordItemViewHolder>)
             : AsyncTask<Void, Void, Boolean>() {
 
             override fun doInBackground(vararg p0: Void?): Boolean {

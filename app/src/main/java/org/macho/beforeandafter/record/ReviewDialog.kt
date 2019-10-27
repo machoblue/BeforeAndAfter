@@ -6,12 +6,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import org.macho.beforeandafter.R
 
-class ReviewDialog: DialogFragment() {
+class ReviewDialog: androidx.fragment.app.DialogFragment() {
     companion object {
-        fun newInstance(): DialogFragment {
+        fun newInstance(): androidx.fragment.app.DialogFragment {
             return ReviewDialog()
         }
     }

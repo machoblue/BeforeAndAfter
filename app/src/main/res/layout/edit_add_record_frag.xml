@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_weight=".166"
         android:layout_height="0dp">
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_weight="0.7"
             android:layout_width="0dp"
             android:layout_height="wrap_content">
@@ -38,7 +38,7 @@
                 android:id="@+id/weight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
         <org.macho.beforeandafter.shared.view.PressButton
             android:layout_marginStart="20dp"
             android:id="@+id/weightUpButton"
@@ -65,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_weight="0.166"
         android:layout_height="0dp">
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_weight="0.7"
             android:layout_width="0dp"
             android:layout_height="wrap_content">
@@ -75,7 +75,7 @@
                 android:id="@+id/rate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
         <org.macho.beforeandafter.shared.view.PressButton
             android:layout_marginStart="20dp"
             android:id="@+id/rateUpButton"
@@ -102,7 +102,7 @@
         android:layout_width="match_parent"
         android:layout_weight="0.166"
         android:layout_height="0dp">
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
@@ -110,7 +110,7 @@
                 android:id="@+id/memo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
     <LinearLayout
         android:padding="10dp"

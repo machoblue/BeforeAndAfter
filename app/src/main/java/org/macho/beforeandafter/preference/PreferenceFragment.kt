@@ -3,7 +3,7 @@ package org.macho.beforeandafter.preference
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +15,9 @@ import org.macho.beforeandafter.preference.editgoal.EditGoalActivity
 import org.macho.beforeandafter.preference.restore.RestoreDialog
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 
-class PreferenceFragment: Fragment() {
+class PreferenceFragment: androidx.fragment.app.Fragment() {
     companion object {
-        fun newFragment(activity: Activity): Fragment {
+        fun newFragment(activity: Activity): androidx.fragment.app.Fragment {
             var fragment = PreferenceFragment()
             fragment.items.add(PreferenceItem(R.string.goal_title, R.string.goal_description) {
                 val intent = Intent(activity.applicationContext, EditGoalActivity::class.java)

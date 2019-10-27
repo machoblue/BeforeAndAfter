@@ -7,7 +7,7 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.support.media.ExifInterface
+import androidx.exifinterface.media.ExifInterface
 import android.widget.ImageView
 import java.io.File
 
@@ -18,8 +18,8 @@ object ImageUtil {
             return
         }
 
-        val exifInterface = ExifInterface(file.path)
-        val orientation = exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION)?.toInt()
+        val exifInterface = androidx.exifinterface.media.ExifInterface(file.path)
+        val orientation = exifInterface.getAttribute(androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION)?.toInt()
 
         if (orientation == null) {
             imageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
@@ -41,12 +41,12 @@ object ImageUtil {
         val matrix = Matrix()
 
         when(orientation) {
-            ExifInterface.ORIENTATION_UNDEFINED,
-            ExifInterface.ORIENTATION_FLIP_HORIZONTAL,
-            ExifInterface.ORIENTATION_FLIP_VERTICAL,
-            ExifInterface.ORIENTATION_TRANSPOSE,
-            ExifInterface.ORIENTATION_TRANSVERSE,
-            ExifInterface.ORIENTATION_NORMAL -> {
+            androidx.exifinterface.media.ExifInterface.ORIENTATION_UNDEFINED,
+            androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_HORIZONTAL,
+            androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_VERTICAL,
+            androidx.exifinterface.media.ExifInterface.ORIENTATION_TRANSPOSE,
+            androidx.exifinterface.media.ExifInterface.ORIENTATION_TRANSVERSE,
+            androidx.exifinterface.media.ExifInterface.ORIENTATION_NORMAL -> {
                 // adjust scale
                 ratio = Math.max(imageViewWidth / bitmapWidth, imageViewHeight / bitmapHeight)
                 matrix.postScale(ratio, ratio)
@@ -58,7 +58,7 @@ object ImageUtil {
                 val diffY = imageViewHeight - (scaledBitmapHeight + imageViewHeight) / 2
                 matrix.postTranslate(diffX, diffY)
             }
-            ExifInterface.ORIENTATION_ROTATE_180 -> {
+            androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180 -> {
                 matrix.postRotate(180f, bitmapWidth / 2, bitmapHeight / 2)
 
                 // adjust scale
@@ -72,7 +72,7 @@ object ImageUtil {
                 val diffY = imageViewHeight - (scaledBitmapHeight + imageViewHeight) / 2
                 matrix.postTranslate(diffX, diffY)
             }
-            ExifInterface.ORIENTATION_ROTATE_90 -> {
+            androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90 -> {
                 matrix.postRotate(90f)
                 matrix.postTranslate(bitmapHeight, 0f)
 
@@ -87,7 +87,7 @@ object ImageUtil {
                 val diffY = imageViewHeight - (scaledBitmapWidth + imageViewHeight) / 2
                 matrix.postTranslate(diffX, diffY)
             }
-            ExifInterface.ORIENTATION_ROTATE_270 -> {
+            androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270 -> {
                 matrix.postRotate(270f)
                 matrix.postTranslate(0f, bitmapWidth)
 
@@ -109,8 +109,8 @@ object ImageUtil {
     }
 
     fun getOrientationModifiedBitmap(bitmap: Bitmap, file: File): Bitmap {
-        val exifInterface = ExifInterface(file.path)
-        val orientation = exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION)?.toInt()
+        val exifInterface = androidx.exifinterface.media.ExifInterface(file.path)
+        val orientation = exifInterface.getAttribute(androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION)?.toInt()
         if (orientation == null) {
             return bitmap
         }
@@ -118,9 +118,9 @@ object ImageUtil {
     }
 
     fun getOrientationModifiedBitmap(bitmap: Bitmap, orientation: Int): Bitmap {
-        if(!(orientation == ExifInterface.ORIENTATION_ROTATE_90
-            || orientation == ExifInterface.ORIENTATION_ROTATE_180
-            || orientation == ExifInterface.ORIENTATION_ROTATE_270)) {
+        if(!(orientation == androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90
+            || orientation == androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180
+            || orientation == androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270)) {
             return bitmap
         }
 
@@ -129,14 +129,14 @@ object ImageUtil {
         val bitmapHeight = bitmap.height.toFloat()
 
         when(orientation) {
-            ExifInterface.ORIENTATION_ROTATE_180 -> {
+            androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180 -> {
                 matrix.postRotate(180f, bitmapWidth / 2, bitmapHeight / 2)
             }
-            ExifInterface.ORIENTATION_ROTATE_90 -> {
+            androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90 -> {
                 matrix.postRotate(90f)
                 matrix.postTranslate(bitmapHeight, 0f)
             }
-            ExifInterface.ORIENTATION_ROTATE_270 -> {
+            androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270 -> {
                 matrix.postRotate(280f)
                 matrix.postTranslate(0f, bitmapWidth)
             }
@@ -178,11 +178,11 @@ object ImageUtil {
         }
 
         if (path == null) {
-            return ExifInterface.ORIENTATION_UNDEFINED
+            return androidx.exifinterface.media.ExifInterface.ORIENTATION_UNDEFINED
         }
 
-        val exifInterface = ExifInterface(path!!)
-        return exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION)?.toInt() ?: ExifInterface.ORIENTATION_UNDEFINED
+        val exifInterface = androidx.exifinterface.media.ExifInterface(path!!)
+        return exifInterface.getAttribute(androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION)?.toInt() ?: androidx.exifinterface.media.ExifInterface.ORIENTATION_UNDEFINED
     }
 
     fun releaseImageView(imageView: ImageView) {
