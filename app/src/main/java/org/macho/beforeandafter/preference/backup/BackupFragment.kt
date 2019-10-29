@@ -100,7 +100,7 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
         activity?.runOnUiThread {
             AlertDialog.newInstance(activity!!, title, message) {
                 finish()
-            } .show(fragmentManager, null)
+            } .show(fragmentManager!!, null)
         }
     }
 }

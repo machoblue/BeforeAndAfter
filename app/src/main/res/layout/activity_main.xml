@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_marginBottom="-1dp"
-    android:paddingRight="-1dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="org.macho.beforeandafter.MainActivity">
-    <LinearLayout
-        android:background="@color/dark_gray"
-        android:orientation="vertical"
-        android:id="@+id/ad_layout"
-        android:gravity="center"
+    tools:context=".MainActivity">
+    <FrameLayout
+        android:background="@color/light_gray"
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <com.google.android.gms.ads.AdView
@@ -20,23 +15,23 @@
             android:id="@+id/adView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             ads:adSize="BANNER"
             ads:adUnitId="@string/admob_unit_id">
         </com.google.android.gms.ads.AdView>
-    </LinearLayout>
-    <FrameLayout
-        android:id="@+id/content"
-        android:layout_weight="0.9"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
     </FrameLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
+        android:background="@drawable/border_top_bg"
+        android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@drawable/border_top_bg"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/item_bottom_navigation" />
-
+        app:menu="@menu/item_bottom_navigation"/>
 </LinearLayout>
