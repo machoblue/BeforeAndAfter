@@ -104,4 +104,14 @@
     <string name="admob_unit_id">ca-app-pub-2062076007725970/4292543358</string>
     <string name="admob_unit_id_interstitial">ca-app-pub-2062076007725970/5738923755</string>
     <string name="publisher_id">pub-2062076007725970</string>
+
+    <!-- ActionBar Title -->
+    <string name="action_bar_title_records">Records</string>
+    <string name="action_bar_title_record_detail">Record Detail</string>
+    <string name="action_bar_title_gallery">Gallery</string>
+    <string name="action_bar_title_graphe">Graph</string>
+    <string name="action_bar_title_settings">Settings</string>
+    <string name="action_bar_title_edit_goal">Goal</string>
+    <string name="action_bar_title_backup">Backup</string>
+    <string name="action_bar_title_restore">Restore</string>
 </resources>

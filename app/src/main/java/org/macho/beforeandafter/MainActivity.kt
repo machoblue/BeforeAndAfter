@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
-import com.google.android.gms.ads.MobileAds
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -43,12 +43,10 @@ class MainActivity: DaggerAppCompatActivity() {
     }
 
     private fun setUpBottomNavigationBar() {
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
-
         val navGraphIds = listOf(R.navigation.records, R.navigation.gallery, R.navigation.graphe, R.navigation.settings)
 
         // Setup the bottom navigation view with a list of navigation graphs
-        val controller = bottomNavigationView.setupWithNavController(
+        val controller = bottom_nav.setupWithNavController(
                 navGraphIds = navGraphIds,
                 fragmentManager = supportFragmentManager,
                 containerId = R.id.nav_host_container,
@@ -57,7 +55,7 @@ class MainActivity: DaggerAppCompatActivity() {
 
         // Whenever the selected controller changes, setup the action bar.
         controller.observe(this, Observer { navController ->
-//            setupActionBarWithNavController(navController)
+            setupActionBarWithNavController(navController)
         })
         currentNavController = controller
     }
@@ -68,10 +66,6 @@ class MainActivity: DaggerAppCompatActivity() {
 
     private fun configureAd() {
         AdUtil.requestConsentInfoUpdateIfNeed(applicationContext)
-
-        MobileAds.initialize(this, getString(R.string.admob_app_id))
-
-        AdUtil.loadBannerAd(adView, applicationContext)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

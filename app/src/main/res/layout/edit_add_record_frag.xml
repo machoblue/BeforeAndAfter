@@ -1,10 +1,166 @@
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ad_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <LinearLayout
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_weight="0.7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="@string/weight_label"
+                        android:inputType="numberDecimal"
+                        android:id="@+id/weight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <org.macho.beforeandafter.shared.view.PressButton
+                    android:layout_marginStart="20dp"
+                    android:id="@+id/weightUpButton"
+                    android:layout_weight="0.15"
+                    android:src="@drawable/baseline_add_24"
+                    android:tint="@color/dark_gray"
+                    android:background="@drawable/ripple_green"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+                <org.macho.beforeandafter.shared.view.PressButton
+                    android:id="@+id/weightDownButton"
+                    android:layout_weight="0.15"
+                    android:src="@drawable/baseline_remove_24"
+                    android:tint="@color/dark_gray"
+                    android:background="@drawable/ripple_green"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_weight="0.7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:inputType="numberDecimal"
+                        android:hint="@string/rate_label"
+                        android:id="@+id/rate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <org.macho.beforeandafter.shared.view.PressButton
+                    android:layout_marginStart="20dp"
+                    android:id="@+id/rateUpButton"
+                    android:layout_weight="0.15"
+                    android:src="@drawable/baseline_add_24"
+                    android:tint="@color/dark_gray"
+                    android:background="@drawable/ripple_green"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+                <org.macho.beforeandafter.shared.view.PressButton
+                    android:id="@+id/rateDownButton"
+                    android:layout_weight="0.15"
+                    android:src="@drawable/baseline_remove_24"
+                    android:tint="@color/dark_gray"
+                    android:background="@drawable/ripple_green"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="@string/memo_label"
+                        android:id="@+id/memo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_weight=".5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@drawable/image4463"
+                        android:id="@+id/frontImage"
+                        android:scaleType="centerCrop"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".5"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@drawable/image4467"
+                        android:id="@+id/sideImage"
+                        android:scaleType="centerCrop"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/buttonLayout"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:textColor="#ff0000"
+                    android:background="@drawable/ripple_red"
+                    android:text="@string/delete"
+                    android:id="@+id/deleteButton"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
     <LinearLayout
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/dark_gray"
         android:orientation="vertical"
         android:id="@+id/ad_layout"
@@ -20,157 +176,4 @@
             ads:adUnitId="@string/admob_unit_id">
         </com.google.android.gms.ads.AdView>
     </LinearLayout>
-    <LinearLayout
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_weight=".166"
-        android:layout_height="0dp">
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_weight="0.7"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:hint="@string/weight_label"
-                android:inputType="numberDecimal"
-                android:id="@+id/weight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <org.macho.beforeandafter.shared.view.PressButton
-            android:layout_marginStart="20dp"
-            android:id="@+id/weightUpButton"
-            android:layout_weight="0.15"
-            android:src="@drawable/baseline_add_24"
-            android:tint="@color/dark_gray"
-            android:background="@drawable/ripple_green"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-        <org.macho.beforeandafter.shared.view.PressButton
-            android:id="@+id/weightDownButton"
-            android:layout_weight="0.15"
-            android:src="@drawable/baseline_remove_24"
-            android:tint="@color/dark_gray"
-            android:background="@drawable/ripple_green"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-    <LinearLayout
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_weight="0.166"
-        android:layout_height="0dp">
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_weight="0.7"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:inputType="numberDecimal"
-                android:hint="@string/rate_label"
-                android:id="@+id/rate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <org.macho.beforeandafter.shared.view.PressButton
-            android:layout_marginStart="20dp"
-            android:id="@+id/rateUpButton"
-            android:layout_weight="0.15"
-            android:src="@drawable/baseline_add_24"
-            android:tint="@color/dark_gray"
-            android:background="@drawable/ripple_green"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-        <org.macho.beforeandafter.shared.view.PressButton
-            android:id="@+id/rateDownButton"
-            android:layout_weight="0.15"
-            android:src="@drawable/baseline_remove_24"
-            android:tint="@color/dark_gray"
-            android:background="@drawable/ripple_green"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-    <LinearLayout
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_weight="0.166"
-        android:layout_height="0dp">
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:hint="@string/memo_label"
-                android:id="@+id/memo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:padding="10dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_weight=".5"
-        android:layout_height="0dp">
-        <LinearLayout
-            android:padding="10dp"
-            android:layout_weight=".5"
-            android:layout_width="0dp"
-            android:layout_height="match_parent">
-            <ImageView
-                android:src="@drawable/image4463"
-                android:id="@+id/frontImage"
-                android:scaleType="centerCrop"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
-        <LinearLayout
-            android:padding="10dp"
-            android:layout_width="0dp"
-            android:layout_weight=".5"
-            android:layout_height="match_parent">
-            <ImageView
-                android:src="@drawable/image4467"
-                android:id="@+id/sideImage"
-                android:scaleType="centerCrop"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/buttonLayout"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_weight=".166"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
-        <Button
-            android:text="@string/cancel"
-            android:id="@+id/cancelButton"
-            android:layout_weight=".5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <!--
-        <Button
-            android:text="@string/delete"
-            android:id="@+id/delete"
-            android:layout_weight=".5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-            -->
-        <Button
-            android:text="@string/save"
-            android:id="@+id/saveButton"
-            android:layout_weight=".5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

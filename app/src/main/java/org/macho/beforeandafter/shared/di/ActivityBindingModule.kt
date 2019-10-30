@@ -16,7 +16,7 @@ import org.macho.beforeandafter.record.editaddrecord.EditAddRecordModule
 @Module
 abstract class ActivityBindingModule {
     @ActivityScoped
-    @ContributesAndroidInjector(modules = [RecordModule::class])
+    @ContributesAndroidInjector(modules = [RecordModule::class, EditAddRecordModule::class])
     abstract fun mainActivity(): MainActivity
 
     @ActivityScoped

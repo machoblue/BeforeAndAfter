@@ -12,13 +12,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
+import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.record_frag.*
-import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.record.editaddrecord.EditAddRecordActivity
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.util.AdUtil
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -46,6 +47,9 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         fab.setOnClickListener { _ ->
             presenter.openAddRecord()
         }
+
+        MobileAds.initialize(context, getString(R.string.admob_app_id))
+        AdUtil.loadBannerAd(adView, context!!)
     }
 
     override fun onResume() {
@@ -70,14 +74,13 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     }
 
     override fun showAddRecordUI() {
-        val intent = Intent(context, EditAddRecordActivity::class.java)
-        startActivityForResult(intent, EDIT_REQUEST_CODE)
+        val action = RecordFragmentDirections.actionRecordFragmentToEditAddRecordFragment()
+        findNavController().navigate(action)
     }
 
     override fun showEditRecordUI(date: Long) {
-        val intent = Intent(context, EditAddRecordActivity::class.java)
-        intent.putExtra("DATE", date)
-        this@RecordFragment.startActivityForResult(intent, EDIT_REQUEST_CODE)
+        val action = RecordFragmentDirections.actionRecordFragmentToEditAddRecordFragment(date)
+        findNavController().navigate(action)
     }
 
     override fun hideEmptyView() {
