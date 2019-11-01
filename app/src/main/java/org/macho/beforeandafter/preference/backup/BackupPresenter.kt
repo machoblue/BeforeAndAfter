@@ -65,7 +65,7 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
             val account = completedTask.getResult(ApiException::class.java)
 
             // Store the account from the result
-            this.account = account.account
+            this.account = account?.account
 
             // Asynchronously access the People API for the account
             Log.d(TAG, "handleSignInResult")
