@@ -112,29 +112,21 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_weight=".5"
+                <ImageView
+                    android:src="@drawable/image4463"
+                    android:id="@+id/frontImage"
+                    android:scaleType="centerCrop"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:src="@drawable/image4463"
-                        android:id="@+id/frontImage"
-                        android:scaleType="centerCrop"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </LinearLayout>
-                <LinearLayout
+                    android:layout_weight="0.5"
+                    android:layout_height="225dp" />
+                <ImageView
                     android:layout_marginLeft="10dp"
+                    android:src="@drawable/image4467"
+                    android:id="@+id/sideImage"
+                    android:scaleType="centerCrop"
                     android:layout_width="0dp"
-                    android:layout_weight=".5"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:src="@drawable/image4467"
-                        android:id="@+id/sideImage"
-                        android:scaleType="centerCrop"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </LinearLayout>
+                    android:layout_weight="0.5"
+                    android:layout_height="225dp" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/buttonLayout"
