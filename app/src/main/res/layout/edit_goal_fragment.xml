@@ -1,9 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0">
+        <LinearLayout
+            android:layout_margin="30dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:hint="@string/goal_weight_label"
+                    android:id="@+id/goalWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:hint="@string/goal_rate_label"
+                    android:id="@+id/goalRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+    </ScrollView>
     <LinearLayout
-        android:background="#B71C1C"
+        android:background="@color/dark_gray"
         android:orientation="vertical"
         android:id="@+id/ad_layout"
         android:gravity="center"
@@ -18,68 +52,4 @@
             ads:adUnitId="@string/admob_unit_id">
         </com.google.android.gms.ads.AdView>
     </LinearLayout>
-    <LinearLayout
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_weight=".166"
-        android:layout_height="0dp">
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:inputType="numberDecimal"
-                android:hint="@string/goal_weight_label"
-                android:id="@+id/goalWeight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </android.support.design.widget.TextInputLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_weight="0.166"
-        android:layout_height="0dp">
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:inputType="numberDecimal"
-                android:hint="@string/goal_rate_label"
-                android:id="@+id/goalRate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </android.support.design.widget.TextInputLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/button_layout"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_weight=".166"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
-        <Button
-            android:text="@string/cancel"
-            android:id="@+id/cancel"
-            android:layout_weight=".5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <Button
-            android:text="@string/save"
-            android:id="@+id/save"
-            android:layout_weight=".5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_weight=".5"
-        android:layout_height="0dp"></LinearLayout>
 </LinearLayout>

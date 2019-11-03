@@ -4,17 +4,17 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import org.macho.beforeandafter.R
 
-class AlertDialog: DialogFragment() {
+class AlertDialog: androidx.fragment.app.DialogFragment() {
 
     private lateinit var title: String
     private lateinit var message: String
     private var onComplete: (() -> Unit)? = null
 
     companion object {
-        fun newInstance(activity: Activity, title: String, message: String, onComplete: (() -> Unit)? = null): DialogFragment {
+        fun newInstance(activity: Activity, title: String, message: String, onComplete: (() -> Unit)? = null): androidx.fragment.app.DialogFragment {
             val alertDialog = AlertDialog()
             alertDialog.title = title
             alertDialog.message = message

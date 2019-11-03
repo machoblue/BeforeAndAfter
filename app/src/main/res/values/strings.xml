@@ -2,7 +2,7 @@
     <string name="app_name">写真記録ダイエット日記</string>
     <!-- main activity -->
     <string name="record">記録</string>
-    <string name="garally">ギャラリー</string>
+    <string name="gallery">ギャラリー</string>
     <string name="graphe">グラフ</string>
     <string name="setting">設定</string>
 
@@ -103,4 +103,14 @@
     <string name="admob_unit_id">ca-app-pub-2062076007725970/4292543358</string>
     <string name="admob_unit_id_interstitial">ca-app-pub-2062076007725970/5738923755</string>
     <string name="publisher_id">pub-2062076007725970</string>
+
+    <!-- Action Bar Title -->
+    <string name="action_bar_title_records">記録一覧</string>
+    <string name="action_bar_title_record_detail">記録詳細</string>
+    <string name="action_bar_title_gallery">ギャラリー</string>
+    <string name="action_bar_title_graphe">グラフ</string>
+    <string name="action_bar_title_settings">設定</string>
+    <string name="action_bar_title_edit_goal">目標設定</string>
+    <string name="action_bar_title_backup">バックアップ</string>
+    <string name="action_bar_title_restore">データ復元</string>
 </resources>

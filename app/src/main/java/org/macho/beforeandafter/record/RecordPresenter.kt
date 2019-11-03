@@ -26,7 +26,7 @@ class RecordPresenter @Inject constructor(val recordRepository: RecordRepository
 
             } else {
                 view?.hideEmptyView()
-                view?.showItems(records)
+                view?.showItems(records.sortedBy { - it.date }) // sort descendant
             }
         }
     }

@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import org.macho.beforeandafter.shared.util.AdUtil
@@ -14,9 +14,9 @@ import org.macho.beforeandafter.shared.data.RecordDao
 import org.macho.beforeandafter.shared.data.RecordDaoImpl
 import java.io.File
 
-class DeleteAllDialog: DialogFragment() {
+class DeleteAllDialog: androidx.fragment.app.DialogFragment() {
     companion object {
-        fun newInstance(activity: Activity): DialogFragment {
+        fun newInstance(activity: Activity): androidx.fragment.app.DialogFragment {
             return DeleteAllDialog()
         }
     }

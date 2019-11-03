@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +16,11 @@ import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.RecordDao
 import org.macho.beforeandafter.shared.data.RecordDaoImpl
+import org.macho.beforeandafter.shared.util.AdUtil
 import java.text.SimpleDateFormat
 import java.util.*
 
-class GrapheFragment: Fragment() {
+class GrapheFragment: androidx.fragment.app.Fragment() {
     private lateinit var frameLayout: FrameLayout
     private lateinit var scrollView: HorizontalScrollView
     private lateinit var grapheView: LineGrapheView
@@ -38,7 +39,7 @@ class GrapheFragment: Fragment() {
     private var recordDao: RecordDao = RecordDaoImpl() // TODO: take from Dagger
 
     companion object {
-        fun getInstance(): Fragment {
+        fun getInstance(): androidx.fragment.app.Fragment {
             return GrapheFragment()
         }
     }
@@ -68,6 +69,8 @@ class GrapheFragment: Fragment() {
         linearLayout.addView(frameLayout)
 
         currentDate.text = format.format(Date())
+
+        AdUtil.loadBannerAd(adView, context!!)
     }
 
     private fun refresh() {

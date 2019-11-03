@@ -12,7 +12,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppThemeNoTitle"
+        android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity android:name=".SplashActivity" android:theme="@style/SplashTheme">
@@ -24,8 +24,8 @@
 
         <activity android:name=".MainActivity" />
         <activity android:name=".record.editaddrecord.EditAddRecordActivity"/>
-        <activity android:name=".record.camera.CameraActivity"/>
-        <activity android:name=".gallery.PhotoActivity"/>
+        <activity android:name=".record.camera.CameraActivity" android:theme="@style/AppThemeNoTitle"/>
+        <activity android:name=".gallery.PhotoActivity" android:theme="@style/AppThemeNoTitle"/>
         <activity android:name=".preference.editgoal.EditGoalActivity"/>
         <activity android:name=".preference.backup.BackupActivity"/>
         <activity android:name=".preference.restore.RestoreActivity"/>
@@ -33,7 +33,7 @@
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

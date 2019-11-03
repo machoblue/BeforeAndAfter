@@ -100,6 +100,27 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
         view = null
     }
 
+    override fun setMemo(memo: String?) {
+        if (memo == null) {
+            return
+        }
+        record.memo = memo
+    }
+
+    override fun setWeight(weight: String?) {
+        if (weight == null) {
+            return
+        }
+        record.weight = weight.toFloat()
+    }
+
+    override fun setRate(rate: String?) {
+        if (rate == null) {
+            return
+        }
+        record.rate = rate.toFloat()
+    }
+
     private fun isFileExists(fileName: String?): Boolean {
         return fileName != null && File(context.filesDir, fileName).exists()
     }

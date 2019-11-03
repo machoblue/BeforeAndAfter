@@ -1,8 +1,27 @@
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/adLayout"
+        android:background="@color/dark_gray"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="50dp">
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/admob_unit_id">
+        </com.google.android.gms.ads.AdView>
+    </FrameLayout>
     <!--
     <ListView
         android:id="@+id/workname_list_view"
@@ -10,9 +29,15 @@
         android:layout_height="match_parent"></ListView>
         -->
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerView
+        android:id="@+id/recordsLayout"
+        app:layout_constraintTop_toBottomOf="@id/adLayout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listView"
             android:visibility="visible"
             android:layout_width="match_parent"
@@ -42,14 +67,14 @@
 
     </FrameLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginRight="24dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
         android:src="@mipmap/ic_mode_edit_white_24dp"
         app:fabSize="normal"/>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

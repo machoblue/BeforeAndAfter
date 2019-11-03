@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/graphe"
+    app:startDestination="@id/grapheFragment">
+
+    <fragment
+        android:id="@+id/grapheFragment"
+        android:name="org.macho.beforeandafter.graphe2.GrapheFragment"
+        android:label="@string/action_bar_title_graphe" />
+</navigation>

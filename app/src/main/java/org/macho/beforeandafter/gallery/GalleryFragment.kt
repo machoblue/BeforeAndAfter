@@ -1,8 +1,6 @@
 package org.macho.beforeandafter.gallery
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +8,12 @@ import kotlinx.android.synthetic.main.fragment_gallery.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.RecordDao
 import org.macho.beforeandafter.shared.data.RecordDaoImpl
+import org.macho.beforeandafter.shared.util.AdUtil
 
 
-class GalleryFragment: Fragment() {
+class GalleryFragment: androidx.fragment.app.Fragment() {
     companion object {
-        fun getInstance(): Fragment {
+        fun getInstance(): androidx.fragment.app.Fragment {
             return GalleryFragment()
         }
     }
@@ -41,16 +40,18 @@ class GalleryFragment: Fragment() {
         tab2.setContent(R.id.tab2)
         tabHost.addTab(tab2)
 
-        frontGridView.layoutManager = GridLayoutManager(context, 3)
+        frontGridView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 3)
         frontGridView.setHasFixedSize(true)
 
-        sideGridView.layoutManager = GridLayoutManager(context, 3)
+        sideGridView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 3)
         sideGridView.setHasFixedSize(true)
+
+        AdUtil.loadBannerAd(adView, context!!)
     }
 
     override fun onStart() {
         super.onStart()
-        for (record in recordDao.findAll()) {
+        for (record in recordDao.findAll().sortedBy { - it.date }) { // sort descendant
             frontImagePaths.add(record.frontImagePath ?: "")
             sideImagePaths.add(record.sideImagePath ?: "")
         }

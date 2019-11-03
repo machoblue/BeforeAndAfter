@@ -4,9 +4,11 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.View
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_photo.*
 import org.macho.beforeandafter.shared.BeforeAndAfterConst
@@ -19,24 +21,34 @@ class PhotoActivity: AppCompatActivity() {
         private const val SWIPE_MIN_DISTANCE = 50  // X軸最低スワイプ距離
         private const val SWIPE_THRESHOLD_VELOCITY = 200 // X軸最低スワイプスピード
         private const val SWIPE_MAX_OFF_PATH = 250 // Y軸の移動距離　これ以上なら横移動を判定しない
+        private const val TAG = "PhotoActivity"
     }
 
     private var items: MutableList<String> = mutableListOf()
     private var index = 0
 
     private lateinit var gestureDetector: GestureDetector
+
+    private var showViews = true
+
     private val onGestureListener = object: GestureDetector.SimpleOnGestureListener() {
+        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+            Log.d(TAG, "onSingleTapUp")
+            toggleViews()
+            return false
+        }
+
         override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
             if (e1 == null || e2 == null) {
                 return true
             }
 
-            // Y軸の移動距離が大きすぎる場合
-            if (Math.abs(e1.y - e2.y) > SWIPE_MAX_OFF_PATH) {
+            if (Math.abs(velocityX) <= SWIPE_THRESHOLD_VELOCITY) {
                 return true
             }
 
-            if (Math.abs(velocityX) <= SWIPE_THRESHOLD_VELOCITY) {
+            // Y軸の移動距離が大きすぎる場合
+            if (Math.abs(e1.y - e2.y) > SWIPE_MAX_OFF_PATH) {
                 return true
             }
 
@@ -86,6 +98,33 @@ class PhotoActivity: AppCompatActivity() {
         gestureDetector = GestureDetector(this, onGestureListener)
 
         showImage()
+
+        closeButton.setOnClickListener {
+            finish()
+        }
+
+        previousButton.setOnClickListener {
+            if (index == 0) {
+                return@setOnClickListener
+            }
+            seekBar.progress = --index
+        }
+
+        nextButton.setOnClickListener {
+            if (index == items.lastIndex) {
+                return@setOnClickListener
+            }
+            seekBar.progress = ++index
+        }
+
+    }
+
+    private fun toggleViews() {
+        showViews = !showViews
+        closeButton.visibility = if (showViews) View.VISIBLE else View.GONE
+        previousButton.visibility = if (showViews) View.VISIBLE else View.GONE
+        nextButton.visibility = if (showViews) View.VISIBLE else View.GONE
+        seekBar.visibility = if (showViews) View.VISIBLE else View.GONE
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

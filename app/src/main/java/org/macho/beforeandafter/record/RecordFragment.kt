@@ -5,20 +5,19 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
+import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.record_frag.*
-import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.record.editaddrecord.EditAddRecordActivity
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.util.AdUtil
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -42,10 +41,13 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        listView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        listView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
         fab.setOnClickListener { _ ->
             presenter.openAddRecord()
         }
+
+        MobileAds.initialize(context, getString(R.string.admob_app_id))
+        AdUtil.loadBannerAd(adView, context!!)
     }
 
     override fun onResume() {
@@ -70,14 +72,13 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     }
 
     override fun showAddRecordUI() {
-        val intent = Intent(context, EditAddRecordActivity::class.java)
-        startActivityForResult(intent, EDIT_REQUEST_CODE)
+        val action = RecordFragmentDirections.actionRecordFragmentToEditAddRecordFragment()
+        findNavController().navigate(action)
     }
 
     override fun showEditRecordUI(date: Long) {
-        val intent = Intent(context, EditAddRecordActivity::class.java)
-        intent.putExtra("DATE", date)
-        this@RecordFragment.startActivityForResult(intent, EDIT_REQUEST_CODE)
+        val action = RecordFragmentDirections.actionRecordFragmentToEditAddRecordFragment(date)
+        findNavController().navigate(action)
     }
 
     override fun hideEmptyView() {
@@ -91,7 +92,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     }
 
     inner class RecordAdapter(val context: Context, val records: List<Record>, val viewHeight: Int, val imageCache: ImageCache)
-        : RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
+        : androidx.recyclerview.widget.RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
         val layoutInflater = LayoutInflater.from(context)
 
         override fun getItemCount(): Int {
@@ -131,7 +132,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
             holder.memo.text = currentRecord.memo
         }
 
-        inner class RecordItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        inner class RecordItemViewHolder(view: View): androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
             val parent: View = view
             val frontImage: ImageView
             val sideImage: ImageView
@@ -152,7 +153,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
             }
         }
 
-        private inner class ImageLoadTask(val position: Int, val filePath: String, val viewHeight: Int, val adapter: RecyclerView.Adapter<RecordItemViewHolder>)
+        private inner class ImageLoadTask(val position: Int, val filePath: String, val viewHeight: Int, val adapter: androidx.recyclerview.widget.RecyclerView.Adapter<RecordItemViewHolder>)
             : AsyncTask<Void, Void, Boolean>() {
 
             override fun doInBackground(vararg p0: Void?): Boolean {

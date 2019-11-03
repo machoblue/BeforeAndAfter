@@ -8,18 +8,15 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.provider.MediaStore
-import android.support.v4.content.FileProvider
-import android.support.v7.app.AlertDialog
+import androidx.core.content.FileProvider
+import androidx.appcompat.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
+import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
@@ -56,9 +53,9 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     @Inject
     override lateinit var presenter: EditAddRecordContract.Presenter
 
-    private lateinit var deleteButton: Button
-
     private lateinit var interstitialAd: InterstitialAd
+
+    val args: EditAddRecordFragmentArgs by navArgs()
 
     private val onFrontImageViewClickListener = object: View.OnClickListener {
         override fun onClick(view: View?) {
@@ -90,24 +87,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         }
     }
 
-    private val onCancelButtonClickListener = object: View.OnClickListener {
-        override fun onClick(view: View?) {
-            finish();
-        }
-    }
-
-    private val onSaveButtonClickListener = object: View.OnClickListener {
-        override fun onClick(view: View?) {
-            presenter.saveRecord(weight.text.toString(), rate.text.toString(), memo.text.toString())
-        }
-    }
-
-    private val onDeleteButtonClickListener = object: View.OnClickListener {
-        override fun onClick(view: View?) {
-            presenter.deleteRecord()
-        }
-    }
-
 
     // MARK: Lifecycle
 
@@ -120,8 +99,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
         frontImage.setOnClickListener(onFrontImageViewClickListener)
         sideImage.setOnClickListener(onSideImageViewClickListener)
-        cancelButton.setOnClickListener(onCancelButtonClickListener)
-        saveButton.setOnClickListener(onSaveButtonClickListener)
 
         rateUpButton.setOnClickListener {
             val rateText = rate.text.toString()
@@ -155,6 +132,33 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         weight.setupClearButtonWithAction()
         rate.setupClearButtonWithAction()
 
+        setHasOptionsMenu(true); // for save button on navBar
+
+        weight.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                presenter.setWeight(s?.toString())
+            }
+        })
+
+        rate.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                presenter.setRate(s?.toString())
+            }
+        })
+
+        memo.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                presenter.setMemo(s?.toString())
+            }
+        })
+
+
         MobileAds.initialize(context, getString(R.string.admob_app_id))
 
         AdUtil.loadBannerAd(adView, context!!)
@@ -162,8 +166,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         interstitialAd = InterstitialAd(context)
         AdUtil.loadInterstitialAd(interstitialAd, context!!)
 
-        val intent = activity!!.getIntent()
-        presenter.setDate(intent.getLongExtra("DATE", 0))
+        presenter.setDate(args.date)
     }
 
     override fun onResume() {
@@ -289,6 +292,20 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.editaddrecord_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.save -> {
+                presenter.saveRecord(weight.text.toString(), rate.text.toString(), memo.text.toString())
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     // MARK: EditAddRecordContract.View
     override fun setWeight(value: String) {
         weight.setText(value)
@@ -311,17 +328,15 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     }
 
     override fun showDeleteButton() {
-        deleteButton = Button(context)
-        val params = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 0.5f)
-        deleteButton.layoutParams = params
-        deleteButton.text = resources.getString(R.string.delete)
-        deleteButton.setOnClickListener(onDeleteButtonClickListener)
-        buttonLayout.addView(deleteButton)
+        deleteButton.visibility = View.VISIBLE
+        deleteButton.setOnClickListener {
+            presenter.deleteRecord()
+        }
     }
 
     override fun finish() {
         AdUtil.show(interstitialAd)
-        activity?.finish()
+        findNavController().popBackStack()
     }
 
 
@@ -337,7 +352,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     private fun startGalleryChooser(front: Boolean) {
         val requestCode = if (front) GALLERY_PERMISSIONS_REQUEST else GALLERY_PERMISSIONS_REQUEST_SIDE
-        if (PermissionUtils.requestPermission(activity!!, requestCode, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (PermissionUtils.requestPermission(this, requestCode, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             val intent = Intent()
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
@@ -350,7 +365,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     private fun startCamera(front: Boolean) {
         val requestCode = if (front) CAMERA_PERMISSIONS_REQUEST else CAMERA_PERMISSIONS_REQUEST_SIDE
-        if (PermissionUtils.requestPermission(activity!!, requestCode,
+        if (PermissionUtils.requestPermission(this, requestCode,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.CAMERA)) {
 
