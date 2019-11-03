@@ -327,7 +327,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     private fun startGalleryChooser(front: Boolean) {
         val requestCode = if (front) GALLERY_PERMISSIONS_REQUEST else GALLERY_PERMISSIONS_REQUEST_SIDE
-        if (PermissionUtils.requestPermission(activity!!, requestCode, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (PermissionUtils.requestPermission(this, requestCode, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             val intent = Intent()
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
@@ -340,7 +340,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     private fun startCamera(front: Boolean) {
         val requestCode = if (front) CAMERA_PERMISSIONS_REQUEST else CAMERA_PERMISSIONS_REQUEST_SIDE
-        if (PermissionUtils.requestPermission(activity!!, requestCode,
+        if (PermissionUtils.requestPermission(this, requestCode,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.CAMERA)) {
 

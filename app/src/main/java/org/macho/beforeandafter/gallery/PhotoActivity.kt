@@ -32,17 +32,23 @@ class PhotoActivity: AppCompatActivity() {
     private var showViews = true
 
     private val onGestureListener = object: GestureDetector.SimpleOnGestureListener() {
+        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+            Log.d(TAG, "onSingleTapUp")
+            toggleViews()
+            return false
+        }
+
         override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
             if (e1 == null || e2 == null) {
                 return true
             }
 
-            // Y軸の移動距離が大きすぎる場合
-            if (Math.abs(e1.y - e2.y) > SWIPE_MAX_OFF_PATH) {
+            if (Math.abs(velocityX) <= SWIPE_THRESHOLD_VELOCITY) {
                 return true
             }
 
-            if (Math.abs(velocityX) <= SWIPE_THRESHOLD_VELOCITY) {
+            // Y軸の移動距離が大きすぎる場合
+            if (Math.abs(e1.y - e2.y) > SWIPE_MAX_OFF_PATH) {
                 return true
             }
 
@@ -95,11 +101,6 @@ class PhotoActivity: AppCompatActivity() {
 
         closeButton.setOnClickListener {
             finish()
-        }
-
-        imageView.setOnClickListener {
-            Log.i(TAG, "onClick")
-            toggleViews()
         }
 
         previousButton.setOnClickListener {
