@@ -25,7 +25,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".record.editaddrecord.EditAddRecordActivity"/>
         <activity android:name=".record.camera.CameraActivity"/>
-        <activity android:name=".gallery.PhotoActivity"/>
+        <activity android:name=".gallery.PhotoActivity" android:theme="@style/AppThemeNoTitle"/>
         <activity android:name=".preference.editgoal.EditGoalActivity"/>
         <activity android:name=".preference.backup.BackupActivity"/>
         <activity android:name=".preference.restore.RestoreActivity"/>

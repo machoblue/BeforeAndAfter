@@ -1,14 +1,13 @@
 package org.macho.beforeandafter.preference.editgoal
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.edit_goal_fragment.*
+import kotlinx.android.synthetic.main.edit_goal_fragment.adView
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.di.ActivityScoped
@@ -33,27 +32,35 @@ class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract
         interstitialAd = InterstitialAd(context)
         AdUtil.loadInterstitialAd(interstitialAd, context!!)
 
-        cancel.setOnClickListener { view ->
-            AdUtil.show(interstitialAd)
+        setHasOptionsMenu(true); // for save button on navBar
 
-            presenter.back()
-        }
-
-        save.setOnClickListener { view ->
-            // TODO: Guard
-            val weightGoalText = goalWeight.text.toString()
-            val rateGoalText = goalRate.text.toString()
-            presenter.saveGoal(weightGoalText, rateGoalText)
-
-            AdUtil.show(interstitialAd)
-
-            presenter.back()
-        }
+        AdUtil.loadBannerAd(adView, context!!)
     }
 
     override fun onResume() {
         super.onResume()
         presenter.takeView(this)
+    }
+
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.editaddrecord_menu, menu) // TODO: refactor
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.save -> {
+                // TODO: Guard
+                val weightGoalText = goalWeight.text.toString()
+                val rateGoalText = goalRate.text.toString()
+                presenter.saveGoal(weightGoalText, rateGoalText)
+
+                presenter.back()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun setWeightGoalText(weightGoalText: String) {
@@ -65,6 +72,7 @@ class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract
     }
 
     override fun finish() {
-        activity?.finish()
+        AdUtil.show(interstitialAd)
+        findNavController().popBackStack()
     }
 }

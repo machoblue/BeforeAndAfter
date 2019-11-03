@@ -7,15 +7,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_preference.*
+import kotlinx.android.synthetic.main.fragment_preference.adView
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.backup.BackupDialog
-import org.macho.beforeandafter.preference.editgoal.EditGoalActivity
 import org.macho.beforeandafter.preference.restore.RestoreDialog
+import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import javax.inject.Inject
 
-class PreferenceFragment: androidx.fragment.app.Fragment() {
+@ActivityScoped
+class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
     private var items: MutableList<PreferenceItem> = mutableListOf()
 
@@ -29,6 +34,8 @@ class PreferenceFragment: androidx.fragment.app.Fragment() {
         listView.setOnItemClickListener { adapterView, view, i, l ->
             items.get(i).action.invoke()
         }
+
+        AdUtil.loadBannerAd(adView, context!!)
     }
 
     override fun onStart() {
@@ -41,8 +48,8 @@ class PreferenceFragment: androidx.fragment.app.Fragment() {
         val activity = this.activity ?: return mutableListOf()
 
         items.add(PreferenceItem(R.string.goal_title, R.string.goal_description) {
-            val intent = Intent(activity.applicationContext, EditGoalActivity::class.java)
-            activity.startActivity(intent)
+            val action = PreferenceFragmentDirections.actionPreferenceFragmentToEditGoalFragment()
+            findNavController().navigate(action)
         })
         items.add(PreferenceItem(R.string.delete_all_title, R.string.delete_all_description) {
             DeleteAllDialog.newInstance(activity).show(fragmentManager!!, "")

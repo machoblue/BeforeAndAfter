@@ -86,6 +86,10 @@ class PhotoActivity: AppCompatActivity() {
         gestureDetector = GestureDetector(this, onGestureListener)
 
         showImage()
+
+        closeButton.setOnClickListener {
+            finish()
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

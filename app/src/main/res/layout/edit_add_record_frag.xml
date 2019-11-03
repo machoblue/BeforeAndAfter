@@ -176,4 +176,5 @@
             ads:adUnitId="@string/admob_unit_id">
         </com.google.android.gms.ads.AdView>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

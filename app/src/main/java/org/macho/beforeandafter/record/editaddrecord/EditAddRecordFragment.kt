@@ -132,7 +132,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         weight.setupClearButtonWithAction()
         rate.setupClearButtonWithAction()
 
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true); // for save button on navBar
 
         MobileAds.initialize(context, getString(R.string.admob_app_id))
 

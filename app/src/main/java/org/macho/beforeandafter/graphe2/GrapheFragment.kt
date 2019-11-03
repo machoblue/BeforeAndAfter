@@ -16,6 +16,7 @@ import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.RecordDao
 import org.macho.beforeandafter.shared.data.RecordDaoImpl
+import org.macho.beforeandafter.shared.util.AdUtil
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -68,6 +69,8 @@ class GrapheFragment: androidx.fragment.app.Fragment() {
         linearLayout.addView(frameLayout)
 
         currentDate.text = format.format(Date())
+
+        AdUtil.loadBannerAd(adView, context!!)
     }
 
     private fun refresh() {

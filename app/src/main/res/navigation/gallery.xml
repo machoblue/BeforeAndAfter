@@ -6,5 +6,5 @@
     <fragment
         android:id="@+id/galleryFragment"
         android:name="org.macho.beforeandafter.gallery.GalleryFragment"
-        android:label="GalleryFragment" />
+        android:label="@string/action_bar_title_gallery" />
 </navigation>

@@ -1,8 +1,6 @@
 package org.macho.beforeandafter.gallery
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +8,7 @@ import kotlinx.android.synthetic.main.fragment_gallery.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.RecordDao
 import org.macho.beforeandafter.shared.data.RecordDaoImpl
+import org.macho.beforeandafter.shared.util.AdUtil
 
 
 class GalleryFragment: androidx.fragment.app.Fragment() {
@@ -46,6 +45,8 @@ class GalleryFragment: androidx.fragment.app.Fragment() {
 
         sideGridView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 3)
         sideGridView.setHasFixedSize(true)
+
+        AdUtil.loadBannerAd(adView, context!!)
     }
 
     override fun onStart() {
