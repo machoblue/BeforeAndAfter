@@ -23,5 +23,8 @@ interface EditAddRecordContract {
         fun setDate(date: Long)
         fun saveRecord(weight: String?, rate: String?, memo: String?)
         fun deleteRecord()
+        fun setWeight(weight: String?)
+        fun setRate(rate: String?)
+        fun setMemo(memo: String?)
     }
 }

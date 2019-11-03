@@ -134,6 +134,31 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
         setHasOptionsMenu(true); // for save button on navBar
 
+        weight.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                presenter.setWeight(s?.toString())
+            }
+        })
+
+        rate.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                presenter.setRate(s?.toString())
+            }
+        })
+
+        memo.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                presenter.setMemo(s?.toString())
+            }
+        })
+
+
         MobileAds.initialize(context, getString(R.string.admob_app_id))
 
         AdUtil.loadBannerAd(adView, context!!)
