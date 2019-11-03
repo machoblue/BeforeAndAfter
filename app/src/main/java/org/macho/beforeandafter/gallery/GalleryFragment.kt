@@ -51,7 +51,7 @@ class GalleryFragment: androidx.fragment.app.Fragment() {
 
     override fun onStart() {
         super.onStart()
-        for (record in recordDao.findAll()) {
+        for (record in recordDao.findAll().sortedBy { - it.date }) { // sort descendant
             frontImagePaths.add(record.frontImagePath ?: "")
             sideImagePaths.add(record.sideImagePath ?: "")
         }
