@@ -35,6 +35,8 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     private lateinit var recordAdapter: RecordAdapter
     private val imageCache = ImageCache()
 
+//    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     // MARK: - Lifecycle
     override fun onCreateView(layoutInflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return layoutInflater.inflate(R.layout.record_frag, container, false)
@@ -48,11 +50,15 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
         MobileAds.initialize(context, getString(R.string.admob_app_id))
         AdUtil.loadBannerAd(adView, context!!)
+
+//        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
     }
 
     override fun onResume() {
         super.onResume()
         presenter.takeView(this)
+
+//        firebaseAnalytics.setCurrentScreen(activity!!, "Records", null)
     }
 
     override fun onDestroyView() {
@@ -72,6 +78,12 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     }
 
     override fun showAddRecordUI() {
+//        val bundle = Bundle()
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "myId")
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "add")
+//        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image")
+//        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+
         val action = RecordFragmentDirections.actionRecordFragmentToEditAddRecordFragment()
         findNavController().navigate(action)
     }
