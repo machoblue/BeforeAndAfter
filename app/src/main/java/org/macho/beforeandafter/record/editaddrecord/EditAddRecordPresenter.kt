@@ -108,17 +108,19 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     }
 
     override fun setWeight(weight: String?) {
-        if (weight == null) {
-            return
+        if (weight == null || weight.isEmpty()) {
+            record.weight = 0f
+        } else {
+            record.weight = weight.toFloat()
         }
-        record.weight = weight.toFloat()
     }
 
     override fun setRate(rate: String?) {
-        if (rate == null) {
-            return
+        if (rate == null || rate.isEmpty()) {
+            record.rate = 0f
+        } else {
+            record.rate = rate.toFloat()
         }
-        record.rate = rate.toFloat()
     }
 
     private fun isFileExists(fileName: String?): Boolean {
@@ -138,8 +140,8 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
             }
         }
 
-        view?.setWeight("%.2f".format(record.weight))
-        view?.setRate("%.2f".format(record.rate))
+        view?.setWeight(if (record.weight == 0f) "" else "%.2f".format(record.weight))
+        view?.setRate(if (record.rate == 0f) "" else "%.2f".format(record.rate))
         view?.setMemo(record.memo)
     }
 

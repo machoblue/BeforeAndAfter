@@ -167,6 +167,11 @@ object ImageUtil {
 
             val docId = DocumentsContract.getDocumentId(galleryUri)
             val split = docId.split(":")
+
+            if (split.size < 2) { // Driveから取得した場合、docIdは:で区切れない。
+                return androidx.exifinterface.media.ExifInterface.ORIENTATION_UNDEFINED
+            }
+
             val selectionArgs = arrayOf(split[1])
 
             context.contentResolver.query(contentUri, projection, selection, selectionArgs, null).use {
