@@ -3,22 +3,22 @@ package org.macho.beforeandafter.record.camera
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.ImageFormat
-import android.graphics.Matrix
-import android.graphics.RectF
-import android.graphics.SurfaceTexture
+import android.graphics.*
 import android.hardware.camera2.*
 import android.media.ImageReader
 import android.media.MediaActionSound
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Size
+import android.view.MotionEvent
 import android.view.Surface
 import android.view.TextureView
+import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_camera.*
 import org.macho.beforeandafter.R
@@ -26,6 +26,7 @@ import org.macho.beforeandafter.R
 class CameraActivity: AppCompatActivity() {
 
     companion object {
+        private const val TAG = "CameraActivity"
         private const val REQUEST_CAMERA_PERMISSION = 1
     }
 
@@ -45,7 +46,9 @@ class CameraActivity: AppCompatActivity() {
         setContentView(R.layout.activity_camera)
 
         shutterButton.setOnClickListener { _ -> takePicture() }
-        frame.addView(SquaresView(this))
+        val squaresView = SquaresView(this)
+        squaresView.setOnTouchListener(onTouchListener)
+        frame.addView(squaresView)
 
         mediaActionSound = MediaActionSound()
         mediaActionSound.load(MediaActionSound.SHUTTER_CLICK)
@@ -224,6 +227,7 @@ class CameraActivity: AppCompatActivity() {
         captureBuilder.addTarget(imageReader.surface)
 
         captureBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
+        captureBuilder.set(CaptureRequest.SCALER_CROP_REGION, cropRegion) // enable zoom
 
         val rotation = activity.windowManager.defaultDisplay.rotation
         val sensorOrientation = cameraInfo.sensorOrientation
@@ -260,4 +264,106 @@ class CameraActivity: AppCompatActivity() {
 //        cameraCaptureSession.setRepeatingRequest(captureRequest, null, backgroundHandler) // previewにもどる
     }
 
+    private var currentFingerSpace = 0f
+
+    private val onTouchListener = object: View.OnTouchListener {
+        override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+            try {
+                Log.i(TAG, "*** onTouch: ${event?.action}, ${event?.pointerCount}, UP: ${MotionEvent.ACTION_UP}, DOWN: ${MotionEvent.ACTION_DOWN}, MOVE: ${MotionEvent.ACTION_MOVE}")
+                if (event == null) {
+                    return false
+                }
+
+                if (event.pointerCount != 2) {
+                    currentFingerSpace = 0f
+                    return true
+                }
+
+                when (event.action) {
+                    MotionEvent.ACTION_UP -> {
+                        currentFingerSpace = 0f
+                        return false
+                    }
+                    MotionEvent.ACTION_DOWN -> {
+                        currentFingerSpace = event.fingerSpace()
+                        return true
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        val fingerSpace = event.fingerSpace()
+                        val fingerSpaceDiff = fingerSpace - currentFingerSpace
+                        if (fingerSpaceDiff > 0) {
+                            val level = currentZoomLevel + 0.1f
+                            changeZoomLevel(level)
+                        } else {
+                            val level = currentZoomLevel - 0.1f
+                            changeZoomLevel(level)
+                        }
+                        currentFingerSpace = fingerSpace
+                        return true
+                    }
+                }
+                return true
+
+            } catch (e: Exception) {
+                Log.e(TAG, "*** Error!", e)
+
+                return true
+            }
+        }
+    }
+
+
+    // MARK: - Zoom
+
+    private var currentZoomLevel = 1f
+    private var cropRegion: Rect? = null
+
+    private fun changeZoomLevel(level: Float) {
+        if (level < 1) {
+            return
+        }
+
+        if (level == currentZoomLevel) {
+            return
+        }
+
+        val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val characteristics = cameraManager.getCameraCharacteristics(cameraInfo.cameraId)
+
+        val max = characteristics.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM)
+        Log.i(TAG, "max:${max}")
+        if (max != null && level > max) {
+            return
+        }
+
+        val activeArraySize = characteristics.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)
+        if (level == 1f) {
+            cropRegion = activeArraySize
+        } else {
+            val centerX = activeArraySize.centerX()
+            val centerY = activeArraySize.centerY()
+            val newHalfWidth = ((activeArraySize.width() / 2) / currentZoomLevel).toInt()
+            val newHalfHeight = ((activeArraySize.height() / 2) / currentZoomLevel).toInt()
+
+            val left = centerX - newHalfWidth
+            val top = centerY - newHalfHeight
+            val right = centerX + newHalfWidth
+            val bottom = centerX + newHalfHeight
+            cropRegion = Rect(left, top, right, bottom)
+        }
+
+        currentZoomLevel = level
+
+        captureRequestBuilder.set(CaptureRequest.SCALER_CROP_REGION, cropRegion);
+        cameraCaptureSession.setRepeatingRequest(captureRequestBuilder.build(), null, null);
+    }
+}
+
+fun MotionEvent.fingerSpace(): Float {
+    if (pointerCount != 2) {
+        return 0f
+    }
+    val xDiff = getX(0) - getX(1)
+    val yDiff = getY(0) - getY(0)
+    return Math.sqrt((xDiff * xDiff + yDiff * yDiff).toDouble()).toFloat()
 }
