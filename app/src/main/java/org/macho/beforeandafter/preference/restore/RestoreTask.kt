@@ -21,62 +21,60 @@ import java.lang.ref.WeakReference
 import java.util.*
 
 
-class RestoreTask(context: Context, val account: Account, listener: RestoreTask.RestoreTaskListener): AsyncTask<Void, RestoreTask.RestoreStatus, List<Record>>() {
+class RestoreTask(context: Context, val account: Account, listener: RestoreTaskListener): AsyncTask<Void, RestoreTask.RestoreStatus, List<Record>?>() {
     companion object {
         const val TAG = "RestoreTask"
     }
 
     private val contextRef: WeakReference<Context>
-    private val listenerRef: WeakReference<RestoreTask.RestoreTaskListener>
+    private val listenerRef: WeakReference<RestoreTaskListener>
 
-    private var driveService: Drive? = null
-
-    private lateinit var appFilesDir: String
+    private lateinit var driveService: Drive
 
     init {
         contextRef = WeakReference(context)
         listenerRef = WeakReference(listener)
     }
 
-    override fun doInBackground(vararg p0: Void?): List<Record> {
+    override fun doInBackground(vararg p0: Void?): List<Record>? {
         try {
-            if (contextRef.get() == null) {
-                return mutableListOf()
-            }
-            appFilesDir = contextRef.get()?.filesDir.toString()
-
-            this.driveService = buildDriveService(account)
-
-            if (driveService == null) {
-                return mutableListOf()
+            this.driveService = buildDriveService() ?: let {
+                it.cancel(true)
+                return@doInBackground null
             }
 
-            val backupData = fetchBackupData()
+            publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_RECORDS))
 
-            if (backupData == null) {
-                listenerRef.get()?.onFail(R.string.restore_error_cannot_fetch_metadata_description)
-                return mutableListOf()
+            val backupData: BackupData = fetchLatestBackupFileId()?.let { fileId ->
+                fetchBackupData(fileId) ?: let {
+                    it.cancel(true)
+                    listenerRef.get()?.onFail(R.string.restore_error_file_format_invalid)
+                    return@doInBackground null
+                }
+            } ?: let {
+                return@doInBackground emptyList() // latestFileIdがない場合、ただBackupしてないだけ。emptyListを返し、backupを促す。
             }
 
-            fetchImageAndStoreInLocalAppFilesDir(backupData.imageFileNameToDriveFileId)
+            backupData.imageFileNameToDriveFileId.entries.forEachIndexed { index, entry ->
+                if (isCancelled) return@doInBackground null
 
-            val records = backupData.records
-            return records
+                publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_IMAGES, index, backupData.imageFileNameToDriveFileId.size))
+
+                val (fileName, fileId) = entry
+                fetchImage(fileName, fileId)
+            }
+
+            return backupData.records
 
         } catch (e: UserRecoverableAuthIOException) {
-            val listener = listenerRef.get()
-            if (listener == null) {
-                Log.e(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
-                throw e
+            Log.w(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
+            listenerRef.get()?.onRecoverableAuthErrorOccured(e)
+            cancel(true)
+            return null
 
-            } else {
-                Log.w(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
-                listener.onRecoverableAuthErrorOccured(e)
-                return mutableListOf()
-            }
         } catch (e: IOException) {
             Log.e(TAG, "doInBackground.catch IOException:${e::class.java}", e)
-            return mutableListOf()
+            throw e
 
         } catch (e: Exception) {
             Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
@@ -85,106 +83,81 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTask.
     }
 
     override fun onProgressUpdate(vararg values: RestoreStatus?) {
-        if (listenerRef.get() == null) {
-            return
+        values.firstOrNull()?.let { status ->
+            listenerRef.get()?.onProgress(status)
         }
-
-        if (values == null || values.size == 0 || values[0] == null) {
-            return
-        }
-
-        listenerRef.get()?.onProgress(values[0]!!)
     }
 
     override fun onPostExecute(result: List<Record>?) {
-        if (listenerRef.get() == null) {
-            return
-        }
-
         listenerRef.get()?.onProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_COMPLETE))
-        if (result == null) {
-            listenerRef.get()?.onComplete(mutableListOf<Record>())
-        } else {
+        if (result != null) {
             listenerRef.get()?.onComplete(result)
         }
     }
 
-    private fun buildDriveService(account: Account): Drive? {
-        if (contextRef.get() == null) {
-            return null
-        }
-
-        val credential = GoogleAccountCredential.usingOAuth2(contextRef.get(), Collections.singleton(DriveScopes.DRIVE_APPDATA))
-        credential.setSelectedAccount(this.account)
-
-        return Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
-                .setApplicationName("BeforeAndAfter")
-                .build()
+    override fun onCancelled() {
+        Log.w(TAG, "RestoreTask has been cancelled.")
     }
 
-    private fun fetchBackupData(): BackupData? {
-        listenerRef.get()?.onProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_RECORDS))
-        // search for backup.json
-        var backupJsonFileId: Pair<String, DateTime>? = null
-        val filesListRequest = driveService!!.files().list()
+    override fun onCancelled(result: List<Record>?) {
+        Log.w(TAG, "RestoreTask has been cancelled. :${result}")
+    }
+
+    private fun buildDriveService(): Drive? {
+        return contextRef.get()?.let { context ->
+            GoogleAccountCredential.usingOAuth2(context, Collections.singleton(DriveScopes.DRIVE_APPDATA)).let { credential ->
+                credential.selectedAccount = account
+                Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
+                    .setApplicationName("BeforeAndAfter")
+                    .build()
+            }
+        }
+    }
+
+    private fun fetchBackupData(fileId: String): BackupData? {
+        return contextRef.get()?.let { context ->
+            BufferedOutputStream(context.openFileOutput("temp/${BackupTask.FILE_NAME}", Context.MODE_PRIVATE)).use { bos ->
+                driveService.files().get(fileId).executeMediaAndDownloadTo(bos)
+            }
+
+            BufferedReader(InputStreamReader(context.openFileInput("temp/${BackupTask.FILE_NAME}"))).use { br ->
+                br.readText().let { json ->
+                    Gson().fromJson<BackupData>(json, BackupData::class.java)
+                }
+            }
+        }
+    }
+
+    private fun fetchLatestBackupFileId(): String? {
+        var fileIdToCreatedTime: Pair<String, DateTime>? = null
+
+        val filesListRequest = driveService.files().list()
                 .setSpaces("appDataFolder")
                 .setFields("nextPageToken, files(id, name, createdTime)")
                 .setPageSize(100)
+
         do {
-            var fileList = filesListRequest.execute()
+            val fileList = filesListRequest.execute()
             for (file in fileList.files) {
                 Log.i(TAG, "fileName:${file.name}, createdTime: ${file.createdTime}")
-                if (file.name.equals(BackupTask.FILE_NAME)) {
-                    if (backupJsonFileId == null || file.createdTime.value > backupJsonFileId.second.value) {
-                        backupJsonFileId = file.id to file.createdTime
-                    }
+                if (file.name.equals(BackupTask.FILE_NAME)
+                    && file.createdTime.value > fileIdToCreatedTime?.second?.value ?: 0)
+                {
+                    fileIdToCreatedTime = file.id to file.createdTime
                 }
             }
-            filesListRequest.setPageToken(fileList.nextPageToken)
+            filesListRequest.pageToken = fileList.nextPageToken
 
         } while (fileList.nextPageToken != null && !fileList.nextPageToken.isEmpty())
 
-        if (backupJsonFileId == null) {
-            return null
-        }
-
-        Log.i(TAG, "*** ${backupJsonFileId}")
-
-        val tempFile = File("${contextRef.get()!!.filesDir}/backup.json")
-        BufferedOutputStream(FileOutputStream(tempFile)).use {
-            driveService!!.files().get(backupJsonFileId.first).executeMediaAndDownloadTo(it)
-        }
-
-        var json: String? = null
-        BufferedReader(InputStreamReader(FileInputStream(tempFile))).use {
-            json = it.readText()
-        }
-        Log.i(TAG, "reponse:${json}")
-
-
-        // parse backup.json
-        if (json == null) {
-            listenerRef.get()?.onFail(R.string.restore_error_cannot_download_content_description)
-        }
-        val backupData = Gson().fromJson<BackupData>(json, BackupData::class.java)
-
-        return backupData
+        Log.i(TAG, "*** ${fileIdToCreatedTime}")
+        return fileIdToCreatedTime?.first
     }
 
-    private fun fetchImageAndStoreInLocalAppFilesDir(imageFileNameToDriveFileIds: Map<String, String>) {
-        if (contextRef.get() == null) {
-            return
-        }
-
-        val size = imageFileNameToDriveFileIds.size
-
-        for ((index, imageFileNameToDriveFileId) in imageFileNameToDriveFileIds.entries.withIndex()) {
-            listenerRef.get()?.onProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_IMAGES, index, size))
-            Log.i(TAG, "fileId: ${imageFileNameToDriveFileId.value}")
-            val imageFileName = imageFileNameToDriveFileId.key
-            val driveFileId = imageFileNameToDriveFileId.value
-            BufferedOutputStream(contextRef.get()!!.openFileOutput(imageFileName, Context.MODE_PRIVATE)).use {
-                driveService!!.files().get(driveFileId).executeMediaAndDownloadTo(it)
+    private fun fetchImage(fileName: String, fileId: String) {
+        contextRef.get()?.let { context ->
+            BufferedOutputStream(context.openFileOutput(fileName, Context.MODE_PRIVATE)).use {
+                driveService.files().get(fileId).executeMediaAndDownloadTo(it)
             }
         }
     }
@@ -203,5 +176,4 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTask.
         fun onFail(resourceId: Int)
         fun onRecoverableAuthErrorOccured(e: UserRecoverableAuthIOException)
     }
-
 }

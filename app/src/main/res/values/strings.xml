@@ -91,7 +91,7 @@
     <string name="restore_status_message_complete">復元が完了しました。</string>
     <string name="restore_error_title">バックアップエラー</string>
     <string name="restore_error_cannot_fetch_metadata_description">GoogleDriveにバックアップデータがありません。</string>
-    <string name="restore_error_cannot_download_content_description">GoogleDriveから取得したバックアップファイルのフォーマットが不正です。もう一度バックアップをし直してください。
+    <string name="restore_error_file_format_invalid">GoogleDriveから取得したバックアップファイルのフォーマットが不正です。もう一度バックアップをし直してください。
     </string>
     <string name="restore_error_no_data_title">記録データを1件も取得できませんでした。</string>
     <string name="restore_error_no_data_description">記録データを1件も取得できませんでした。もう一度バックアップができているかご確認ください。</string>
