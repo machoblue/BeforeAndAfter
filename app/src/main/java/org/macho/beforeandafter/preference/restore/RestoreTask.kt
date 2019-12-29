@@ -24,17 +24,13 @@ import java.util.*
 class RestoreTask(context: Context, val account: Account, listener: RestoreTaskListener): AsyncTask<Void, RestoreTask.RestoreStatus, List<Record>?>() {
     companion object {
         const val TAG = "RestoreTask"
+        const val TEMP_FILE = "temp_backup.json"
     }
 
-    private val contextRef: WeakReference<Context>
-    private val listenerRef: WeakReference<RestoreTaskListener>
+    private val contextRef: WeakReference<Context> = WeakReference(context)
+    private val listenerRef: WeakReference<RestoreTaskListener> = WeakReference(listener)
 
     private lateinit var driveService: Drive
-
-    init {
-        contextRef = WeakReference(context)
-        listenerRef = WeakReference(listener)
-    }
 
     override fun doInBackground(vararg p0: Void?): List<Record>? {
         try {
@@ -116,11 +112,11 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
     private fun fetchBackupData(fileId: String): BackupData? {
         return contextRef.get()?.let { context ->
-            BufferedOutputStream(context.openFileOutput("temp/${BackupTask.FILE_NAME}", Context.MODE_PRIVATE)).use { bos ->
+            BufferedOutputStream(context.openFileOutput(TEMP_FILE, Context.MODE_PRIVATE)).use { bos ->
                 driveService.files().get(fileId).executeMediaAndDownloadTo(bos)
             }
 
-            BufferedReader(InputStreamReader(context.openFileInput("temp/${BackupTask.FILE_NAME}"))).use { br ->
+            BufferedReader(InputStreamReader(context.openFileInput(TEMP_FILE))).use { br ->
                 br.readText().let { json ->
                     Gson().fromJson<BackupData>(json, BackupData::class.java)
                 }
