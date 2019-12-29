@@ -40,7 +40,7 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
             } ?: let {
                 it.cancel(true)
                 listenerRef.get()?.onFail(R.string.backup_error_drive_connection_error)
-                return@doInBackground null
+                return null
             }
 
             publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_RECORDS))
@@ -49,14 +49,14 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
                 fetchBackupData(fileId) ?: let {
                     it.cancel(true)
                     listenerRef.get()?.onFail(R.string.restore_error_file_format_invalid)
-                    return@doInBackground null
+                    return null
                 }
             } ?: let {
-                return@doInBackground emptyList() // latestFileIdがない場合、ただBackupしてないだけ。emptyListを返し、backupを促す。
+                return emptyList() // latestFileIdがない場合、ただBackupしてないだけ。emptyListを返し、backupを促す。
             }
 
             backupData.imageFileNameToDriveFileId.entries.forEachIndexed { index, entry ->
-                if (isCancelled) return@doInBackground null
+                if (isCancelled) return null
 
                 publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_IMAGES, index, backupData.imageFileNameToDriveFileId.size))
 
