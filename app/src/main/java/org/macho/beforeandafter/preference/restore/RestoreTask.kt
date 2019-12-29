@@ -15,6 +15,7 @@ import com.google.gson.Gson
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.backup.BackupData
 import org.macho.beforeandafter.preference.backup.BackupTask
+import org.macho.beforeandafter.preference.backup.DriveUtil
 import org.macho.beforeandafter.record.Record
 import java.io.*
 import java.lang.ref.WeakReference
@@ -34,8 +35,11 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
     override fun doInBackground(vararg p0: Void?): List<Record>? {
         try {
-            this.driveService = buildDriveService() ?: let {
+            this.driveService = contextRef.get()?.let { context ->
+                DriveUtil.buildDriveService(context, account)
+            } ?: let {
                 it.cancel(true)
+                listenerRef.get()?.onFail(R.string.backup_error_drive_connection_error)
                 return@doInBackground null
             }
 
@@ -97,17 +101,6 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
     override fun onCancelled(result: List<Record>?) {
         Log.w(TAG, "RestoreTask has been cancelled. :${result}")
-    }
-
-    private fun buildDriveService(): Drive? {
-        return contextRef.get()?.let { context ->
-            GoogleAccountCredential.usingOAuth2(context, Collections.singleton(DriveScopes.DRIVE_APPDATA)).let { credential ->
-                credential.selectedAccount = account
-                Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
-                    .setApplicationName("BeforeAndAfter")
-                    .build()
-            }
-        }
     }
 
     private fun fetchBackupData(fileId: String): BackupData? {
