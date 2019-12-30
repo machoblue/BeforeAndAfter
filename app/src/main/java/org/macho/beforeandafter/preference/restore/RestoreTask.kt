@@ -121,7 +121,7 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
         var fileIdToCreatedTime: Pair<String, DateTime>? = null
 
         val filesListRequest = driveService.files().list()
-                .setSpaces("appDataFolder")
+                .setSpaces(DriveUtil.DRIVE_SPACE_APPDATA)
                 .setFields("nextPageToken, files(id, name, createdTime)")
                 .setPageSize(100)
 

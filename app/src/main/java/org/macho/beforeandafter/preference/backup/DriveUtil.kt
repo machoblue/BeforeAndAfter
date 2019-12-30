@@ -10,6 +10,8 @@ import com.google.api.services.drive.DriveScopes
 import java.util.*
 
 object DriveUtil {
+    const val DRIVE_SPACE_APPDATA = "appDataFolder"
+
     fun buildDriveService(context: Context, account: Account): Drive? {
         return GoogleAccountCredential.usingOAuth2(context, Collections.singleton(DriveScopes.DRIVE_APPDATA)).let { credential ->
             credential.selectedAccount = account

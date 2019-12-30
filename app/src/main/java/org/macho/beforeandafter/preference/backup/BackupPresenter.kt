@@ -128,8 +128,8 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
         view?.setProgress(progress)
     }
 
-    override fun onFail(message: String) {
-        view?.showAlert(context.getString(R.string.backup_error_title), message)
+    override fun onFail(resourceId: Int) {
+        view?.showAlert(context.getString(R.string.backup_error_title), context.getString(resourceId))
     }
 
     override fun onRecoverableAuthErrorOccured(e: UserRecoverableAuthIOException) {

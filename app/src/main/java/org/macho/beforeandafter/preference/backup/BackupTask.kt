@@ -4,13 +4,9 @@ import android.accounts.Account
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
-import com.google.api.client.extensions.android.http.AndroidHttp
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.http.FileContent
-import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import com.google.gson.Gson
 import org.macho.beforeandafter.R
@@ -25,68 +21,59 @@ import java.util.*
 class BackupTask(context: Context, val account: Account, listener: BackupTaskListener): AsyncTask<List<Record>, BackupTask.BackupStatus, Unit>() {
     companion object {
         const val TAG = "BackupTask"
-        const val DRIVE_SPACE = "appDataFolder"
         const val FILE_NAME = "backup.json"
     }
 
-    private val contextRef: WeakReference<Context>
-    private val listenerRef: WeakReference<BackupTaskListener>
+    private val contextRef = WeakReference(context)
+    private val listenerRef = WeakReference(listener)
 
-    private var driveService: Drive? = null
-
-    private lateinit var appFilesDir: String
-
-    init {
-        contextRef = WeakReference(context)
-        listenerRef = WeakReference(listener)
-    }
+    private lateinit var driveService: Drive
 
     override fun doInBackground(vararg recordLists: List<Record>): Unit {
         try {
-            val records = recordLists[0]
-            if (records.isEmpty()) {
-                val message = contextRef.get()?.getString(R.string.backup_error_description_no_records)!!
-                listenerRef.get()?.onFail(message)
-            }
-
-
-            if (contextRef.get() == null) {
+            val records = recordLists.firstOrNull() ?: let {
+                cancel(true)
+                listenerRef.get()?.onFail(R.string.backup_error_description_no_records)
                 return
             }
-            appFilesDir = contextRef.get()?.filesDir.toString()
 
-            this.driveService = buildDriveService(account)
-
-            if (driveService == null) {
+            this.driveService = contextRef.get()?.let { context ->
+                DriveUtil.buildDriveService(context, account)
+            } ?: let {
+                cancel(true)
+                listenerRef.get()?.onFail(R.string.backup_error_drive_connection_error)
                 return
             }
 
             // save images
             val imageFileNames = extractImageFileNames(records)
-            val imageFileNameToDriveFileId = saveImages(imageFileNames)
+            val size = imageFileNames.size
+            val imageFileNameToDriveFileId: MutableMap<String, String> = hashMapOf()
+            imageFileNames.forEachIndexed { index, fileName ->
+                if (isCancelled) return
+                publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_SAVING_IMAGES, index + 1, size))
+                val fileId = saveImage(fileName) ?: let { return@forEachIndexed }
+                imageFileNameToDriveFileId[fileName] = fileId
+            }
 
             // save records
-            val backupData = BackupData(records, imageFileNameToDriveFileId)
-            val fileId = saveData(backupData)
-            if (fileId == null) {
-                val message = contextRef.get()?.getString(R.string.backup_error_description)!!
-                listenerRef.get()?.onFail(message)
+            if (isCancelled) return
+            publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_SAVING_RECORDS))
+            saveData(BackupData(records, imageFileNameToDriveFileId)) ?: let {
+                cancel(true)
+                listenerRef.get()?.onFail(R.string.backup_error_description)
                 return
             }
-        } catch (e: UserRecoverableAuthIOException) {
-            val listener = listenerRef.get()
-            if (listener == null) {
-                Log.e(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
-                throw e
 
-            } else {
-                Log.w(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
-                listener.onRecoverableAuthErrorOccured(e)
-                return
-            }
+        } catch (e: UserRecoverableAuthIOException) {
+            Log.w(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
+            listenerRef.get()?.onRecoverableAuthErrorOccured(e)
+            cancel(true)
+            return
+
         } catch (e: IOException) {
             Log.e(TAG, "doInBackground.catch IOException:${e::class.java}", e)
-            return
+            throw e
 
         } catch (e: Exception) {
             Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
@@ -95,9 +82,10 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
     }
 
     override fun onProgressUpdate(vararg statusArray: BackupStatus?) {
-        val status = statusArray[0]!!
-        Log.i(TAG, "*** In progress: (%d/%d) *** ".format(status.finishFilesCount, status.allFilesCount))
-        listenerRef.get()?.onProgress(status)
+        statusArray.firstOrNull()?.let { status ->
+            Log.i(TAG, "*** In progress: (%d/%d) *** ".format(status.finishFilesCount, status.allFilesCount))
+            listenerRef.get()?.onProgress(status)
+        }
     }
 
     override fun onPostExecute(result: Unit?) {
@@ -105,40 +93,33 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
         listenerRef.get()?.onProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_COMPLETE))
     }
 
-    private fun buildDriveService(account: Account): Drive? {
-        if (contextRef.get() == null) {
-            return null
-        }
+    override fun onCancelled() {
+        Log.w(TAG, "BackupTask has been cancelled.")
+    }
 
-        val credential = GoogleAccountCredential.usingOAuth2(contextRef.get(), Collections.singleton(DriveScopes.DRIVE_APPDATA))
-        credential.setSelectedAccount(this.account)
-
-        return Drive.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory(), credential)
-                .setApplicationName("BeforeAndAfter")
-                .build()
+    override fun onCancelled(result: Unit?) {
+        Log.w(TAG, "BackupTask has been cancelled.: ${result}")
     }
 
     private fun saveData(data: BackupData): String? {
-        publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_SAVING_RECORDS))
-        if (contextRef.get() == null) {
-            return null
-        }
+        return contextRef.get()?.let { context ->
+            val recordsJson = Gson().toJson(data)
+            Log.d(TAG, "recordsJson: ${recordsJson.toString()}")
+            PrintWriter(OutputStreamWriter(context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE), "UTF-8")).use {
+                it.append(recordsJson)
+                it.close()
+            }
 
-        val recordsJson = Gson().toJson(data)
-        Log.d(TAG, "recordsJson: ${recordsJson.toString()}")
-        PrintWriter(OutputStreamWriter(contextRef.get()?.openFileOutput(FILE_NAME, Context.MODE_PRIVATE), "UTF-8")).use {
-            it.append(recordsJson)
-            it.close()
+            val fileMetadata = File().also {
+                it.setName(FILE_NAME)
+                it.setParents(Collections.singletonList(DriveUtil.DRIVE_SPACE_APPDATA))
+            }
+            val filePathStr = fileNameToFilePath(FILE_NAME) ?: let { return null }
+            val mediaContent = FileContent("application/json", java.io.File(filePathStr))
+            val file = driveService.files()?.create(fileMetadata, mediaContent)?.setFields("id")?.execute()
+            Log.i(TAG, "File ID: " + file?.id)
+            return file?.id
         }
-
-        var fileMetadata = File()
-        fileMetadata.setName(FILE_NAME)
-        fileMetadata.setParents(Collections.singletonList(DRIVE_SPACE))
-        val filePath = java.io.File(fileNameToFilePath(FILE_NAME))
-        val mediaContent = FileContent("application/json", filePath)
-        val file = driveService?.files()?.create(fileMetadata, mediaContent)?.setFields("id")?.execute()
-        Log.i(TAG, "File ID: " + file?.id)
-        return file?.id
     }
 
     private fun extractImageFileNames(records: List<Record>): List<String> {
@@ -156,29 +137,21 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
         return imageFileNames
     }
 
-    private fun saveImages(imageFileNames: List<String>): Map<String, String> {
-        val imageFileIds = hashMapOf<String, String>()
-        val size = imageFileNames.size
-        for ((index, imageFileName) in imageFileNames.withIndex()) {
-            publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_SAVING_IMAGES, index + 1, size))
-            var fileMetadata = File()
-//            val fileName = filePathToFileName(imageFilePath)
-            fileMetadata.setName(imageFileName)
-            fileMetadata.setParents(Collections.singletonList("appDataFolder"))
-            val filePath = java.io.File(fileNameToFilePath(imageFileName))
-            val mediaContent = FileContent("image/jpg", filePath)
-            val file = driveService?.files()?.create(fileMetadata, mediaContent)?.setFields("id")?.execute()
-            Log.i(TAG, "Image File ID: " + file?.id)
-            if (file == null) {
-                continue
-            }
-            imageFileIds[imageFileName] = file.id
+    private fun saveImage(fileName: String): String? {
+        val fileMetadata = File().also {
+            it.setName(fileName)
+            it.setParents(Collections.singletonList(DriveUtil.DRIVE_SPACE_APPDATA))
         }
-        return imageFileIds
+        val filePathStr = fileNameToFilePath(fileName) ?: let { return null }
+        val mediaContent = FileContent("image/jpg", java.io.File(filePathStr))
+        val file = driveService.files()?.create(fileMetadata, mediaContent)?.setFields("id")?.execute()
+        return file?.id
     }
 
-    private fun fileNameToFilePath(fileName: String): String {
-        return "%s/%s".format(appFilesDir, fileName)
+    private fun fileNameToFilePath(fileName: String): String? {
+        return contextRef.get()?.let { context ->
+            return "${context.filesDir}/${fileName}"
+        }
     }
 
     // SAVING_IMAGESには、全何ファイル中何ファイルを処理中かを表す値をもたせたいので、enumではなくクラスで実装する。
@@ -192,7 +165,7 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
 
     interface BackupTaskListener {
         fun onProgress(status: BackupStatus)
-        fun onFail(message: String)
+        fun onFail(messageId: Int)
         fun onRecoverableAuthErrorOccured(e: UserRecoverableAuthIOException)
     }
 
