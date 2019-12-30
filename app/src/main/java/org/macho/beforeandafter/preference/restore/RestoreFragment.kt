@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
@@ -68,7 +69,7 @@ class RestoreFragment @Inject constructor(): DaggerFragment(), RestoreContract.V
 
     override fun finish() {
         AdUtil.show(interstitialAd)
-        activity?.finish()
+        findNavController().popBackStack()
     }
 
     override fun setBackupStatusMessageTitle(title: String) {

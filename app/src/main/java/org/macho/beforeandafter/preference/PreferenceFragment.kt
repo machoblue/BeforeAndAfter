@@ -71,7 +71,8 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             })
 
             items.add(PreferenceItem(R.string.preference_item_restore_title, R.string.preference_item_restore_description) {
-                RestoreDialog.newInstance(activity).show(fragmentManager!!, "")
+                val action = PreferenceFragmentDirections.actionPreferenceFragmentToRestoreDialog()
+                findNavController().navigate(action)
             })
         }
         return items
