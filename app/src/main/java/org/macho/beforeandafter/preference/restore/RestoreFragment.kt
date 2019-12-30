@@ -3,9 +3,7 @@ package org.macho.beforeandafter.preference.restore
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
@@ -33,19 +31,12 @@ class RestoreFragment @Inject constructor(): DaggerFragment(), RestoreContract.V
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        cancelButton.setOnClickListener { view ->
-            presenter.cancelRestore()
-            finish()
-        }
-
-        finishButton.setOnClickListener { view ->
-            finish()
-        }
-
         presenter.takeView(this)
         presenter.restore()
 
         progressBar.max = 100
+
+        setHasOptionsMenu(true)
 
         MobileAds.initialize(context, getString(R.string.admob_app_id))
 
@@ -91,17 +82,35 @@ class RestoreFragment @Inject constructor(): DaggerFragment(), RestoreContract.V
         }
     }
 
-    override fun setFinishButtonEnabled(enabled: Boolean) {
-        activity?.runOnUiThread {
-            finishButton.isEnabled = enabled
-        }
-    }
-
     override fun showAlert(title: String, description: String) {
         activity?.runOnUiThread {
             AlertDialog.newInstance(activity!!, title, description) {
                 finish()
             } .show(fragmentManager!!, null)
         }
+    }
+
+    var finishButtonActive = false
+    override fun setFinishButtonEnabled(enabled: Boolean) {
+        finishButtonActive = enabled
+        activity?.invalidateOptionsMenu()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.getItem(0).setEnabled(finishButtonActive)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.restore_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.finish -> {
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
