@@ -27,7 +27,6 @@
         <activity android:name=".record.camera.CameraActivity" android:theme="@style/AppThemeNoTitle"/>
         <activity android:name=".gallery.PhotoActivity" android:theme="@style/AppThemeNoTitle"/>
         <activity android:name=".preference.editgoal.EditGoalActivity"/>
-        <activity android:name=".preference.backup.BackupActivity"/>
         <activity android:name=".preference.restore.RestoreActivity"/>
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />

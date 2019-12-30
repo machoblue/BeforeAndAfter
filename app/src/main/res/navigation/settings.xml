@@ -10,9 +10,24 @@
         <action
             android:id="@+id/action_preferenceFragment_to_editGoalFragment"
             app:destination="@id/editGoalFragment" />
+        <action
+            android:id="@+id/action_preferenceFragment_to_backupDialog4"
+            app:destination="@id/backupDialog4" />
     </fragment>
     <fragment
         android:id="@+id/editGoalFragment"
         android:name="org.macho.beforeandafter.preference.editgoal.EditGoalFragment"
         android:label="@string/action_bar_title_edit_goal" />
+    <fragment
+        android:id="@+id/backupFragment"
+        android:name="org.macho.beforeandafter.preference.backup.BackupFragment"
+        android:label="@string/action_bar_title_backup" />
+    <dialog
+        android:id="@+id/backupDialog4"
+        android:name="org.macho.beforeandafter.preference.backup.BackupDialog"
+        android:label="BackupDialog" >
+        <action
+            android:id="@+id/action_backupDialog4_to_backupFragment"
+            app:destination="@id/backupFragment" />
+    </dialog>
 </navigation>

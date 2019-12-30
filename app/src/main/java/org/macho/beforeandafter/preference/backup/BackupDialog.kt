@@ -3,15 +3,15 @@ package org.macho.beforeandafter.preference.backup
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 
-class BackupDialog: androidx.fragment.app.DialogFragment() {
+class BackupDialog: DialogFragment() {
     companion object {
         fun newInstance(activity: Activity): androidx.fragment.app.DialogFragment {
             return BackupDialog()
@@ -29,8 +29,8 @@ class BackupDialog: androidx.fragment.app.DialogFragment() {
         return AlertDialog.Builder(activity).setTitle(R.string.backup_dialog_title)
                 .setMessage(R.string.backup_dialog_message)
                 .setPositiveButton(R.string.ok) { dialogInterface, i ->
-                    val intent = Intent(context, BackupActivity::class.java)
-                    startActivity(intent)
+                    val action = BackupDialogDirections.actionBackupDialog4ToBackupFragment()
+                    findNavController().navigate(action)
                 }
                 .setNegativeButton(R.string.cancel) { dialogInterface, i ->
                     AdUtil.show(interstitialAd)

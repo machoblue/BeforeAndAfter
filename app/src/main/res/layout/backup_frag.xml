@@ -22,13 +22,11 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/messageLayout"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+        android:padding="20dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:layout_weight=".166"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="wrap_content">
         <TextView
             android:text="@string/backup_message"
             android:textSize="30dp"
@@ -45,9 +43,8 @@
         android:paddingRight="20dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:layout_weight=".166"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/backupStatusMessageTitle"
             android:text=""
@@ -68,27 +65,5 @@
             android:layout_height="20dp"
             android:layout_margin="30dp"
             android:indeterminate="false" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/buttonLayout"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_weight=".166"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
-        <Button
-            android:text="@string/cancel"
-            android:id="@+id/cancelButton"
-            android:layout_weight=".5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <Button
-            android:text="@string/finish"
-            android:id="@+id/finishButton"
-            android:layout_weight=".5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

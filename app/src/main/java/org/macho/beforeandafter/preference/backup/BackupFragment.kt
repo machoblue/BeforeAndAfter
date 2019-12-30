@@ -3,9 +3,8 @@ package org.macho.beforeandafter.preference.backup
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
@@ -16,6 +15,7 @@ import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.view.AlertDialog
 import javax.inject.Inject
+
 
 @ActivityScoped
 class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.View {
@@ -32,21 +32,14 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        cancelButton.setOnClickListener { view ->
-            presenter.cancelBackup()
-            finish()
-        }
-
-        finishButton.setOnClickListener { view ->
-            finish()
-        }
-
         presenter.takeView(this)
         presenter.backup()
 
         progressBar.max = 100
 
-        MobileAds.initialize(context, getString(R.string.admob_app_id))
+        setHasOptionsMenu(true)
+
+        MobileAds.initialize(context, getString(org.macho.beforeandafter.R.string.admob_app_id))
 
         AdUtil.loadBannerAd(adView, context!!)
 
@@ -68,7 +61,7 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
 
     override fun finish() {
         AdUtil.show(interstitialAd)
-        activity?.finish()
+        findNavController().popBackStack()
     }
 
     override fun setBackupStatusMessageTitle(title: String) {
@@ -90,17 +83,35 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
         }
     }
 
-    override fun setFinishButtonEnabled(enabled: Boolean) {
-        activity?.runOnUiThread {
-            finishButton.isEnabled = enabled
-        }
-    }
-
     override fun showAlert(title: String, message: String) {
         activity?.runOnUiThread {
             AlertDialog.newInstance(activity!!, title, message) {
                 finish()
             } .show(fragmentManager!!, null)
         }
+    }
+
+    var finishButtonActive = false
+    override fun setFinishButtonEnabled(enabled: Boolean) {
+        finishButtonActive = enabled
+        activity?.invalidateOptionsMenu()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.getItem(0).setEnabled(finishButtonActive)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.backup_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.finish -> {
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

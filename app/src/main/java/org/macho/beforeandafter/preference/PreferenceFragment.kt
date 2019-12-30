@@ -66,7 +66,8 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
         if (SharedPreferencesUtil.getBoolean(activity, SharedPreferencesUtil.Key.CAN_BACKUP_AND_RESTORE)) {
             items.add(PreferenceItem(R.string.preference_item_backup_title, R.string.preference_item_backup_description) {
-                BackupDialog.newInstance(activity).show(fragmentManager!!, "")
+                val action = PreferenceFragmentDirections.actionPreferenceFragmentToBackupDialog4()
+                findNavController().navigate(action)
             })
 
             items.add(PreferenceItem(R.string.preference_item_restore_title, R.string.preference_item_restore_description) {
