@@ -9,6 +9,10 @@ import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.restore_frag.*
+import kotlinx.android.synthetic.main.restore_frag.adView
+import kotlinx.android.synthetic.main.restore_frag.backupStatusMessageDescription
+import kotlinx.android.synthetic.main.restore_frag.backupStatusMessageTitle
+import kotlinx.android.synthetic.main.restore_frag.progressBar
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
@@ -31,6 +35,11 @@ class RestoreFragment @Inject constructor(): DaggerFragment(), RestoreContract.V
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        cancelButton.setOnClickListener {
+            presenter.cancelRestore()
+            finish()
+        }
+
         presenter.takeView(this)
         presenter.restore()
 

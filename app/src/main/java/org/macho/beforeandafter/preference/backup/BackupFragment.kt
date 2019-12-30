@@ -32,6 +32,11 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        cancelButton.setOnClickListener {
+            presenter.cancelBackup()
+            finish()
+        }
+
         presenter.takeView(this)
         presenter.backup()
 
