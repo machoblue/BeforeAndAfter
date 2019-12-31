@@ -13,16 +13,21 @@ import kotlinx.android.synthetic.main.fragment_preference.*
 import kotlinx.android.synthetic.main.fragment_preference.adView
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.preference.backup.BackupDialog
-import org.macho.beforeandafter.preference.restore.RestoreDialog
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import java.util.*
 import javax.inject.Inject
 
 @ActivityScoped
 class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
     private var items: MutableList<PreferenceItem> = mutableListOf()
+
+    private var haveWatchedAdRecently: Boolean = false
+        get() {
+            val elapsedTime = Date().time - SharedPreferencesUtil.getLong(activity!!, SharedPreferencesUtil.Key.LATEST_WATCH_REWARDED_AD)
+            return elapsedTime < 1000 * 60 * 60 * 24
+        }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = layoutInflater.inflate(R.layout.fragment_preference, container, false)
@@ -66,7 +71,7 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
         if (SharedPreferencesUtil.getBoolean(activity, SharedPreferencesUtil.Key.CAN_BACKUP_AND_RESTORE)) {
             items.add(PreferenceItem(R.string.preference_item_backup_title, R.string.preference_item_backup_description) {
-                val action = PreferenceFragmentDirections.actionPreferenceFragmentToBackupDialog4()
+                val action = if (haveWatchedAdRecently) PreferenceFragmentDirections.actionPreferenceFragmentToBackupDialog4() else PreferenceFragmentDirections.actionPreferenceFragmentToRewardDialog2()
                 findNavController().navigate(action)
             })
 

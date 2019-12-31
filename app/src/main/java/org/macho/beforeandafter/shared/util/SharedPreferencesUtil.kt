@@ -7,7 +7,8 @@ object SharedPreferencesUtil {
     enum class Key(val string: String) {
         CAN_BACKUP_AND_RESTORE("canBackupAndRestore"),
         LATEST_WEIGHT("latestWeight"),
-        LATEST_RATE("latestRate")
+        LATEST_RATE("latestRate"),
+        LATEST_WATCH_REWARDED_AD("latest_watch_rewarded_ad")
     }
     fun getBoolean(context: Context, key: Key): Boolean {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(key.string, false)
@@ -22,5 +23,13 @@ object SharedPreferencesUtil {
 
     fun setFloat(context: Context, key: Key, value: Float) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putFloat(key.string, value).apply()
+    }
+
+    fun getLong(context: Context, key: Key): Long {
+        return PreferenceManager.getDefaultSharedPreferences(context).getLong(key.string, 0)
+    }
+
+    fun setLong(context: Context, key: Key, value: Long) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putLong(key.string, value).apply()
     }
 }

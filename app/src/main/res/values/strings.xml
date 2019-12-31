@@ -67,7 +67,9 @@
     <string name="preference_item_restore_description">バックアップデータを復元します。</string>
 
     <string name="backup_dialog_title">データのバックアップ</string>
-    <string name="backup_dialog_message">記録データや写真を全てバックアップします。よろしいですか？\n<small>※注意点※\n・通信量が多くなるためWi-Fi環境で行うことを推奨します。\n・GoogleDriveに保存するためGoogleアカウントが必要です。</small></string>
+    <string name="backup_dialog_message">バックアップするにはCMをみる必要があります。よろしいですか？\n<small>※注意点※\n・通信量が多くなるためWi-Fi環境で行うことを推奨します。\n・GoogleDriveに保存するためGoogleアカウントが必要です。</small></string>
+    <string name="backup_dialog_ok_button">CMをみる</string>
+    <string name="backup_dialog_ok_button_loading">準備中</string>
     <string name="finish">終了</string>
     <string name="backup_message">バックアップ中です。</string>
     <string name="backup_message_detail">バックアップには時間がかかります。しばらくお待ちください。</string>
@@ -104,6 +106,7 @@
     <string name="admob_app_id">ca-app-pub-2062076007725970~3676986758</string>
     <string name="admob_unit_id">ca-app-pub-2062076007725970/4292543358</string>
     <string name="admob_unit_id_interstitial">ca-app-pub-2062076007725970/5738923755</string>
+    <string name="admob_unit_id_rewarded">ca-app-pub-2062076007725970/6878707656</string>
     <string name="publisher_id">pub-2062076007725970</string>
 
     <!-- Action Bar Title -->

@@ -69,7 +69,9 @@
     <string name="backup_status_message_complete">Backup has completed.</string>
 
     <string name="backup_dialog_title">Backup</string>
-    <string name="backup_dialog_message">Do you backup all photos and records?<small>\n* NOTE *\n- Please use Wi-Fi.\n- You need Google account.</small></string>
+    <string name="backup_dialog_message">To backup you need to watch movie AD. OK?<small>\n* NOTE *\n- Please use Wi-Fi.\n- You need Google account.</small></string>
+    <string name="backup_dialog_ok_button">Watch movie AD</string>
+    <string name="backup_dialog_ok_button_loading">Loading</string>
     <string name="finish">Finish</string>
     <string name="backup_message">Backup</string>
     <string name="backup_message_detail">Please wait a minute.</string>
@@ -104,6 +106,7 @@
     <string name="admob_app_id">ca-app-pub-2062076007725970~3676986758</string>
     <string name="admob_unit_id">ca-app-pub-2062076007725970/4292543358</string>
     <string name="admob_unit_id_interstitial">ca-app-pub-2062076007725970/5738923755</string>
+    <string name="admob_unit_id_rewarded">ca-app-pub-2062076007725970/6878707656</string>
     <string name="publisher_id">pub-2062076007725970</string>
 
     <!-- ActionBar Title -->

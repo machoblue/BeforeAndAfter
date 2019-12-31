@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_preferenceFragment_to_restoreDialog"
             app:destination="@id/restoreDialog" />
+        <action
+            android:id="@+id/action_preferenceFragment_to_rewardDialog2"
+            app:destination="@id/rewardDialog2" />
     </fragment>
     <fragment
         android:id="@+id/editGoalFragment"
@@ -45,4 +48,12 @@
         android:id="@+id/restoreFragment"
         android:name="org.macho.beforeandafter.preference.restore.RestoreFragment"
         android:label="@string/action_bar_title_restore" />
+    <dialog
+        android:id="@+id/rewardDialog2"
+        android:name="org.macho.beforeandafter.preference.backup.RewardDialog"
+        android:label="RewardDialog" >
+        <action
+            android:id="@+id/action_rewardDialog2_to_backupFragment"
+            app:destination="@id/backupFragment" />
+    </dialog>
 </navigation>
