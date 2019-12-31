@@ -71,11 +71,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'io.realm:android-adapters:2.1.1'
 
-    // interstitialのため
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
+
+    // interstitialのため
     testImplementation 'junit:junit:4.12'
-    implementation 'com.google.android.gms:play-services-ads:18.2.0'
-    implementation 'com.google.android.ads.consent:consent-library:1.0.4'
+    implementation 'com.google.android.gms:play-services-ads:18.3.0'
+    implementation 'com.google.android.ads.consent:consent-library:1.0.8'
     // Google のサイトによると1.0.4
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     kapt 'com.github.bumptech.glide:compiler:4.9.0'
