@@ -69,17 +69,16 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             })
         }
 
-        if (SharedPreferencesUtil.getBoolean(activity, SharedPreferencesUtil.Key.CAN_BACKUP_AND_RESTORE)) {
-            items.add(PreferenceItem(R.string.preference_item_backup_title, R.string.preference_item_backup_description) {
-                val action = if (haveWatchedAdRecently) PreferenceFragmentDirections.actionPreferenceFragmentToBackupDialog4() else PreferenceFragmentDirections.actionPreferenceFragmentToRewardDialog2()
-                findNavController().navigate(action)
-            })
+        items.add(PreferenceItem(R.string.preference_item_backup_title, R.string.preference_item_backup_description) {
+            val action = if (haveWatchedAdRecently) PreferenceFragmentDirections.actionPreferenceFragmentToBackupDialog4() else PreferenceFragmentDirections.actionPreferenceFragmentToRewardDialog2()
+            findNavController().navigate(action)
+        })
 
-            items.add(PreferenceItem(R.string.preference_item_restore_title, R.string.preference_item_restore_description) {
-                val action = PreferenceFragmentDirections.actionPreferenceFragmentToRestoreDialog()
-                findNavController().navigate(action)
-            })
-        }
+        items.add(PreferenceItem(R.string.preference_item_restore_title, R.string.preference_item_restore_description) {
+            val action = PreferenceFragmentDirections.actionPreferenceFragmentToRestoreDialog()
+            findNavController().navigate(action)
+        })
+
         return items
     }
 }

@@ -5,7 +5,6 @@ import android.preference.PreferenceManager
 
 object SharedPreferencesUtil {
     enum class Key(val string: String) {
-        CAN_BACKUP_AND_RESTORE("canBackupAndRestore"),
         LATEST_WEIGHT("latestWeight"),
         LATEST_RATE("latestRate"),
         LATEST_WATCH_REWARDED_AD("latest_watch_rewarded_ad"),

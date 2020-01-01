@@ -76,7 +76,6 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
             }
         }
 
-        SharedPreferencesUtil.setBoolean(context, SharedPreferencesUtil.Key.CAN_BACKUP_AND_RESTORE, "backup".equals(record.memo)) // FIXME:
         SharedPreferencesUtil.setFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT, record.weight)
         SharedPreferencesUtil.setFloat(context, SharedPreferencesUtil.Key.LATEST_RATE, record.rate)
     }
