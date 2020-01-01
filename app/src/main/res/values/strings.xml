@@ -17,6 +17,7 @@
     <!-- Records Fragment -->
     <string name="empty_title">記録がありません。</string>
     <string name="empty_description">右下のえんぴつボタンで\n記録を追加してください。</string>
+    <string name="interstitial_message">毎日欠かさず記録すると、全画面広告は出なくなります。</string>
 
 
     <!-- Edit Fragment -->

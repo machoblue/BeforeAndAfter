@@ -15,8 +15,10 @@ import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
@@ -28,6 +30,7 @@ import org.macho.beforeandafter.record.camera.PermissionUtils
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.ImageUtil
+import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -56,6 +59,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     private lateinit var interstitialAd: InterstitialAd
 
     val args: EditAddRecordFragmentArgs by navArgs()
+
+    var shouldShowInterstitialAd = false
 
     private val onFrontImageViewClickListener = object: View.OnClickListener {
         override fun onClick(view: View?) {
@@ -163,8 +168,22 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
         AdUtil.loadBannerAd(adView, context!!)
 
+        val contextRef = activity!!
+
         interstitialAd = InterstitialAd(context)
+        interstitialAd.adListener = object: AdListener() {
+            override fun onAdClosed() {
+                Toast.makeText(contextRef, R.string.interstitial_message, Toast.LENGTH_LONG).show()
+            }
+        }
         AdUtil.loadInterstitialAd(interstitialAd, context!!)
+
+        val timeOfLastRecord = SharedPreferencesUtil.getLong(activity!!, SharedPreferencesUtil.Key.TIME_OF_LATEST_RECORD)
+        val isFirstRecord = timeOfLastRecord == 0L
+        val cal1 = Calendar.getInstance().also { it.time = Date() }
+        val cal2 = Calendar.getInstance().also{ it.time = Date(timeOfLastRecord)}
+        val recordEveryday = cal1.get(Calendar.DATE) - cal2.get(Calendar.DATE) < 2
+        shouldShowInterstitialAd = !isFirstRecord && !recordEveryday
 
         presenter.setDate(args.date)
     }
@@ -301,6 +320,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         when (item.itemId) {
             R.id.save -> {
                 presenter.saveRecord(weight.text.toString(), rate.text.toString(), memo.text.toString())
+                SharedPreferencesUtil.setLong(activity!!, SharedPreferencesUtil.Key.TIME_OF_LATEST_RECORD, Date().time)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -335,7 +355,9 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     }
 
     override fun finish() {
-        AdUtil.show(interstitialAd)
+        if (shouldShowInterstitialAd) {
+            AdUtil.show(interstitialAd)
+        }
         findNavController().popBackStack()
     }
 

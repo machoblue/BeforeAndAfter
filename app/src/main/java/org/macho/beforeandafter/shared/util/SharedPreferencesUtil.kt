@@ -8,7 +8,8 @@ object SharedPreferencesUtil {
         CAN_BACKUP_AND_RESTORE("canBackupAndRestore"),
         LATEST_WEIGHT("latestWeight"),
         LATEST_RATE("latestRate"),
-        LATEST_WATCH_REWARDED_AD("latest_watch_rewarded_ad")
+        LATEST_WATCH_REWARDED_AD("latest_watch_rewarded_ad"),
+        TIME_OF_LATEST_RECORD("time_of_latest_record")
     }
     fun getBoolean(context: Context, key: Key): Boolean {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(key.string, false)

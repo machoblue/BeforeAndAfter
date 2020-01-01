@@ -19,6 +19,7 @@
     <!-- Records Fragment -->
     <string name="empty_title">No records</string>
     <string name="empty_description">Please add a record \nby the right bottom button.</string>
+    <string name="interstitial_message">Please record everyday, and interstitial ad does not appear.</string>
 
     <!-- Edit Fragment -->
     <string name="weight_label">weight(kg)</string>
