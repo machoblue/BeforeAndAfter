@@ -23,10 +23,8 @@
         </activity>
 
         <activity android:name=".MainActivity" />
-        <activity android:name=".record.editaddrecord.EditAddRecordActivity"/>
         <activity android:name=".record.camera.CameraActivity" android:theme="@style/AppThemeNoTitle"/>
         <activity android:name=".gallery.PhotoActivity" android:theme="@style/AppThemeNoTitle"/>
-        <activity android:name=".preference.editgoal.EditGoalActivity"/>
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
