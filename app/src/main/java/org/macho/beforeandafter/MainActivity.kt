@@ -11,6 +11,7 @@ import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.macho.beforeandafter.record.RecordFragment
 import org.macho.beforeandafter.shared.util.AdUtil
+import org.macho.beforeandafter.shared.util.LogUtil
 import javax.inject.Inject
 
 class MainActivity: DaggerAppCompatActivity() {
@@ -24,7 +25,7 @@ class MainActivity: DaggerAppCompatActivity() {
     private var currentNavController: LiveData<NavController>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.i(TAG, "### onCreate")
+        LogUtil.i(this, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
