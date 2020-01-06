@@ -43,6 +43,10 @@ class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract
     }
 
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.dropView()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.editaddrecord_menu, menu) // TODO: refactor

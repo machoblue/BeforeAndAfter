@@ -12,11 +12,6 @@ import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 
 class BackupDialog: DialogFragment() {
-    companion object {
-        fun newInstance(activity: Activity): androidx.fragment.app.DialogFragment {
-            return BackupDialog()
-        }
-    }
 
     private lateinit var interstitialAd: InterstitialAd
 

@@ -24,11 +24,6 @@ import javax.inject.Inject
 
 @ActivityScoped
 class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.View {
-
-    companion object {
-        const val EDIT_REQUEST_CODE = 98
-    }
-
     @Inject
     override lateinit var presenter: RecordContract.Presenter
 
