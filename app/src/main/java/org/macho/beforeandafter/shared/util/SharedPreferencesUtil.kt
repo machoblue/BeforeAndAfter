@@ -8,7 +8,8 @@ object SharedPreferencesUtil {
         LATEST_WEIGHT("latestWeight"),
         LATEST_RATE("latestRate"),
         LATEST_WATCH_REWARDED_AD("latest_watch_rewarded_ad"),
-        TIME_OF_LATEST_RECORD("time_of_latest_record")
+        TIME_OF_LATEST_RECORD("time_of_latest_record"),
+        ENABLE_PASSCODE("enable_passcode")
     }
     fun getBoolean(context: Context, key: Key): Boolean {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(key.string, false)
