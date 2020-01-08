@@ -66,6 +66,9 @@
     <string name="preference_item_backup_description">記録をバックアップします。</string>
     <string name="preference_item_restore_title">バックアップデータの復元</string>
     <string name="preference_item_restore_description">バックアップデータを復元します。</string>
+    <string name="preference_section_header_base_settings">基本設定</string>
+    <string name="preference_section_header_privacy">プライバシー</string>
+    <string name="preference_section_header_data">データ管理</string>
 
     <string name="backup_dialog_title">データのバックアップ</string>
     <string name="backup_dialog_message">バックアップするにはCMをみる必要があります。よろしいですか？\n<small>※注意点※\n・通信量が多くなるためWi-Fi環境で行うことを推奨します。\n・GoogleDriveに保存するためGoogleアカウントが必要です。</small></string>
