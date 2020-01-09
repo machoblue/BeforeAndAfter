@@ -88,7 +88,7 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             DeleteAllDialog.newInstance(activity).show(fragmentManager!!, "")
         })
 
-        items.add(PreferenceFooter(BuildConfig.VERSION_NAME))
+        items.add(PreferenceFooter("ver.${BuildConfig.VERSION_NAME}"))
 
         return items
     }
