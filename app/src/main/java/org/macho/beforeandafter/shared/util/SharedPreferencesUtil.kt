@@ -27,4 +27,13 @@ object SharedPreferencesUtil {
     fun setLong(context: Context, key: Key, value: Long) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putLong(key.string, value).apply()
     }
+
+    fun getBoolean(context: Context, key: Key): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(key.string, false)
+    }
+
+    fun setBoolean(context: Context, key: Key, value: Boolean) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(key.string, value).apply()
+    }
+
 }
