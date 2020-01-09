@@ -6,12 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import org.macho.beforeandafter.R
 
-class PreferenceAdapter(context: Context, val items: List<PreferenceItem>): BaseAdapter() {
-    private val layoutInflater: LayoutInflater
-    init {
-        layoutInflater = LayoutInflater.from(context)
-    }
+class PreferenceAdapter(context: Context, private val items: List<PreferenceElement>): BaseAdapter() {
+    private val layoutInflater = LayoutInflater.from(context)
 
     override fun getCount(): Int {
         return items.size
@@ -26,10 +24,29 @@ class PreferenceAdapter(context: Context, val items: List<PreferenceItem>): Base
     }
 
     override fun getView(i: Int, convertView: View?, parent: ViewGroup?): View {
-        val view = convertView ?: layoutInflater.inflate(android.R.layout.simple_list_item_2, parent, false)
-        val currentItem = items.get(i)
-        view.findViewById<TextView>(android.R.id.text1).setText(currentItem.title)
-        view.findViewById<TextView>(android.R.id.text2).setText(currentItem.description)
-        return view
+        when (val item = items.get(i)) {
+            is PreferenceItem -> {
+                val view = layoutInflater.inflate(android.R.layout.simple_list_item_2, parent, false)
+                view.findViewById<TextView>(android.R.id.text1).setText(item.title)
+                view.findViewById<TextView>(android.R.id.text2).setText(item.description)
+                return view
+            }
+
+            is SectionHeader -> {
+                val view = layoutInflater.inflate(R.layout.list_preference_section_header, parent, false)
+                view.findViewById<TextView>(R.id.sectionHeaderTitle).setText(item.title)
+                return view
+            }
+
+            is PreferenceFooter -> {
+                val view = layoutInflater.inflate(R.layout.list_preference_footer, parent, false)
+                view.findViewById<TextView>(R.id.sectionFooter).setText(item.appVersion)
+                return view
+            }
+
+            else -> {
+                throw RuntimeException("This line shouldn't be reached.")
+            }
+        }
     }
 }

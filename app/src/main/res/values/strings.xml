@@ -60,12 +60,15 @@
     <string name="use_standard_camera_description">Android標準のカメラを利用します。ズームやフロントカメラを利用する場合、この設定を有効にする必要があります。</string>
     <string name="use_standard_camera_message">Android標準のカメラを利用しますか。</string>
     <string name="use_standard_camera_yes">はい、Android標準のカメラを利用します。</string>
-    <string name="preference_item_change_or_revoke_consent_title">Change or revoke consent</string>
-    <string name="preference_item_change_or_revoke_consent_description">Change or revoke consent you have made.</string>
+    <string name="preference_item_change_or_revoke_consent_title">同意の撤回・同意内容の変更</string>
+    <string name="preference_item_change_or_revoke_consent_description">同意の撤回、または同意内容の変更を行います。</string>
     <string name="preference_item_backup_title">バックアップ</string>
     <string name="preference_item_backup_description">記録をバックアップします。</string>
     <string name="preference_item_restore_title">バックアップデータの復元</string>
     <string name="preference_item_restore_description">バックアップデータを復元します。</string>
+    <string name="preference_section_header_base_settings">基本設定</string>
+    <string name="preference_section_header_privacy">プライバシー</string>
+    <string name="preference_section_header_data">データ管理</string>
 
     <string name="backup_dialog_title">データのバックアップ</string>
     <string name="backup_dialog_message">バックアップするにはCMをみる必要があります。よろしいですか？\n<small>※注意点※\n・通信量が多くなるためWi-Fi環境で行うことを推奨します。\n・GoogleDriveに保存するためGoogleアカウントが必要です。</small></string>

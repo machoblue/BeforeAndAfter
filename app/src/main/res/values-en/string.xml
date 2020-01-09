@@ -67,6 +67,9 @@
     <string name="preference_item_backup_description">backup data you have recorded.</string>
     <string name="preference_item_restore_title">Restore</string>
     <string name="preference_item_restore_description">Restore backup data.</string>
+    <string name="preference_section_header_base_settings">Basic Settings</string>
+    <string name="preference_section_header_privacy">Privacy</string>
+    <string name="preference_section_header_data">Data</string>
     <string name="backup_status_message_complete">Backup has completed.</string>
 
     <string name="backup_dialog_title">Backup</string>

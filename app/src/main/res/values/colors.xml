@@ -17,4 +17,6 @@
 
     <color name="dark_gray">#5a5a5a</color>
     <color name="white">#ffffff</color>
+
+    <color name="blue_gray">#ECEFF1</color>
 </resources>
