@@ -16,7 +16,11 @@ class SplashActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val showPasscode = true // SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.ENABLE_PASSCODE)
+        // TODO: remove
+        SharedPreferencesUtil.setBoolean(this, SharedPreferencesUtil.Key.ENABLE_PASSCODE, true)
+        SharedPreferencesUtil.setString(this, SharedPreferencesUtil.Key.PASSCODE, "0000")
+
+        val showPasscode = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.ENABLE_PASSCODE)
 
         if (showPasscode) {
             val intent = Intent(this, PasscodeActivity::class.java)

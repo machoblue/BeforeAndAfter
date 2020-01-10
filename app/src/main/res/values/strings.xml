@@ -122,4 +122,10 @@
     <string name="action_bar_title_edit_goal">目標設定</string>
     <string name="action_bar_title_backup">バックアップ</string>
     <string name="action_bar_title_restore">データ復元</string>
+
+    <!-- passcode -->
+    <string name="passcode_auth_title">パスコード入力</string>
+    <string name="passcode_auth_message">パスコードを入力してください。</string>
+    <string name="passcode_auth_message_ok">OK!</string>
+    <string name="passcode_auth_message_ng">パスコードが不正です。</string>
 </resources>
