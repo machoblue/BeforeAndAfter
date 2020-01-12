@@ -16,6 +16,7 @@ import org.macho.beforeandafter.BuildConfig
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.util.*
 import javax.inject.Inject
@@ -66,10 +67,20 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             UseStandardCameraDialog.newInstance(activity).show(fragmentManager!!, "")
         })
 
-
-
+        items.add(SectionHeader(R.string.preference_section_header_privacy))
+        items.add(CheckboxPreferenceItem(R.string.preference_pin_title,
+                R.string.preference_pin_description,
+                SharedPreferencesUtil.getBoolean(context!!, SharedPreferencesUtil.Key.ENABLE_PASSCODE)
+        ) { enablePIN ->
+            if (enablePIN) {
+                // TODO: enable PIN
+                LogUtil.d(this, "enablePIN")
+            } else {
+                // TODO: disable PIN
+                LogUtil.d(this, "disablePIN")
+            }
+        })
         if (AdUtil.isInEEA(activity.applicationContext)) {
-            items.add(SectionHeader(R.string.preference_section_header_privacy))
             items.add(PreferenceItem(R.string.preference_item_change_or_revoke_consent_title, R.string.preference_item_change_or_revoke_consent_description) {
                 AdUtil.showConsentForm(activity.applicationContext)
             })

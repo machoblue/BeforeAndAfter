@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Switch
 import android.widget.TextView
 import org.macho.beforeandafter.R
 
@@ -41,6 +42,18 @@ class PreferenceAdapter(context: Context, private val items: List<PreferenceElem
             is PreferenceFooter -> {
                 val view = layoutInflater.inflate(R.layout.list_preference_footer, parent, false)
                 view.findViewById<TextView>(R.id.sectionFooter).setText(item.appVersion)
+                return view
+            }
+
+            is CheckboxPreferenceItem -> {
+                val view = layoutInflater.inflate(R.layout.list_preference_checkbox_item, parent, false)
+                view.findViewById<TextView>(R.id.preferenceItemTitle).setText(item.title)
+//                view.findViewById<TextView>(R.id.preferenceItemDescription).setText(item.description)
+                val switch = view.findViewById<Switch>(R.id.pinSwitch)
+                switch.isChecked = item.isOn
+                switch.setOnCheckedChangeListener { checkbox, isChecked ->
+                    item.action(isChecked)
+                }
                 return view
             }
 

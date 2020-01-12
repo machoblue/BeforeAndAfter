@@ -69,6 +69,8 @@
     <string name="preference_section_header_base_settings">基本設定</string>
     <string name="preference_section_header_privacy">プライバシー</string>
     <string name="preference_section_header_data">データ管理</string>
+    <string name="preference_pin_title">暗証番号を有効にする</string>
+    <string name="preference_pin_description">アプリを開くときの暗証番号を設定します。</string>
 
     <string name="backup_dialog_title">データのバックアップ</string>
     <string name="backup_dialog_message">バックアップするにはCMをみる必要があります。よろしいですか？\n<small>※注意点※\n・通信量が多くなるためWi-Fi環境で行うことを推奨します。\n・GoogleDriveに保存するためGoogleアカウントが必要です。</small></string>
