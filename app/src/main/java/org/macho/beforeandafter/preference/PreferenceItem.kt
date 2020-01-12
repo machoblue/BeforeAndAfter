@@ -6,6 +6,9 @@ interface PreferenceElement {
 class PreferenceItem(val title: Int, val description: Int, val action: () -> Unit): PreferenceElement {
 }
 
+class CheckboxPreferenceItem(var title: Int, val description: Int, isOn: Boolean): PreferenceElement {
+}
+
 class SectionHeader(val title: Int): PreferenceElement {
 }
 
