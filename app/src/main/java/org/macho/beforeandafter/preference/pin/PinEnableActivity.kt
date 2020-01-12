@@ -1,18 +1,12 @@
 package org.macho.beforeandafter.preference.pin
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.WindowManager
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_pin.*
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.shared.screen.pin.PinActivity2
-import org.macho.beforeandafter.shared.util.LogUtil
+import org.macho.beforeandafter.shared.base.BasePinActivity
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 
-class PinEnableActivity: PinActivity2() {
+class PinEnableActivity: BasePinActivity() {
 
     private var tempPIN = ""
 
@@ -32,8 +26,7 @@ class PinEnableActivity: PinActivity2() {
             val secondInput = hiddenEditText.text.toString()
             if (tempPIN.equals(secondInput)) {
                 pinMessage.text = getString(R.string.pin_enable_message_ok)
-                SharedPreferencesUtil.setBoolean(this, SharedPreferencesUtil.Key.ENABLE_PASSCODE, true)
-                SharedPreferencesUtil.setString(this, SharedPreferencesUtil.Key.PASSCODE, secondInput)
+               SharedPreferencesUtil.setString(this, SharedPreferencesUtil.Key.PIN, secondInput)
                 setResult(RESULT_OK)
                 finish()
 

@@ -106,10 +106,14 @@
     <string name="restore_error_no_data_description">記録データを1件も取得できませんでした。もう一度バックアップができているかご確認ください。</string>
 
     <string name="pin_enable_title">暗証番号の登録</string>
-    <string name="pin_enable_message">暗証番号を設定してください</string>
+    <string name="pin_enable_message">暗証番号を設定してください。</string>
     <string name="pin_enable_message_confirm">確認のため、もう一度入力してください。</string>
     <string name="pin_enable_message_error">１度目と２度目の入力が一致しません。最初から設定しなおしてください。</string>
     <string name="pin_enable_message_ok">設定完了</string>
+
+    <string name="pin_disable_title">暗証番号の解除</string>
+    <string name="pin_disable_message">暗証番号を解除するには、暗証番号を入力する必要があります。</string>
+    <string name="pin_disable_message_ok">解除完了</string>
 
     <string name="dialog_select_prompt">画像を選択してください</string>
     <string name="dialog_select_camera">カメラ</string>
@@ -131,9 +135,9 @@
     <string name="action_bar_title_backup">バックアップ</string>
     <string name="action_bar_title_restore">データ復元</string>
 
-    <!-- passcode -->
-    <string name="passcode_auth_title">パスコード入力</string>
-    <string name="passcode_auth_message">パスコードを入力してください。</string>
-    <string name="passcode_auth_message_ok">OK!</string>
-    <string name="passcode_auth_message_ng">パスコードが不正です。</string>
+    <!-- pin -->
+    <string name="pin_auth_title">暗証番号入力</string>
+    <string name="pin_auth_message">暗証番号を入力してください。</string>
+    <string name="pin_auth_message_ok">OK!</string>
+    <string name="pin_auth_message_ng">暗証番号をが不正です。</string>
 </resources>

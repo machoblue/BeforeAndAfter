@@ -3,12 +3,10 @@ package org.macho.beforeandafter.preference
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.google.api.client.util.PemReader
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_preference.*
 import kotlinx.android.synthetic.main.fragment_preference.adView
@@ -17,7 +15,7 @@ import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.pin.PinEnableActivity
 import org.macho.beforeandafter.shared.di.ActivityScoped
-import org.macho.beforeandafter.shared.screen.pin.PinActivity2
+import org.macho.beforeandafter.preference.pin.PinDisableActivity
 import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.util.*
@@ -78,10 +76,8 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
         items.add(SectionHeader(R.string.preference_section_header_privacy))
 
-        val pinItem = CheckboxPreferenceItem(R.string.preference_pin_title,
-                R.string.preference_pin_description,
-                SharedPreferencesUtil.getBoolean(context!!, SharedPreferencesUtil.Key.ENABLE_PASSCODE)
-        ) { enablePIN ->
+        val enabledPIN = !SharedPreferencesUtil.getString(context!!, SharedPreferencesUtil.Key.PIN).isEmpty()
+        val pinItem = CheckboxPreferenceItem(R.string.preference_pin_title,  R.string.preference_pin_description, enabledPIN) { enablePIN ->
             if (enablePIN) {
                 enablePIN()
             } else {
@@ -127,8 +123,6 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             }
 
             RC_DISABLE_PIN -> {
-                SharedPreferencesUtil.setBoolean(context!!, SharedPreferencesUtil.Key.ENABLE_PASSCODE, false)
-                SharedPreferencesUtil.setString(context!!, SharedPreferencesUtil.Key.PASSCODE, "")
                 pinItem?.isOn = false
                 adapter.notifyDataSetChanged()
             }
@@ -143,7 +137,7 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
     private fun disablePIN() {
         LogUtil.d(this, "disablePIN")
-        val intent = Intent(context!!, PinActivity2::class.java)
+        val intent = Intent(context!!, PinDisableActivity::class.java)
         startActivityForResult(intent, RC_DISABLE_PIN)
     }
 }

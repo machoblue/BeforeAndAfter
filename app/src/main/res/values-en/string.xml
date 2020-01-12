@@ -111,6 +111,10 @@
     <string name="pin_enable_message_error">Error. First does not match second.</string>
     <string name="pin_enable_message_ok">Complete</string>
 
+    <string name="pin_disable_title">Disable PIN</string>
+    <string name="pin_disable_message">To disable PIN you need to enter PIN.</string>
+    <string name="pin_disable_message_ok">Complete</string>
+
     <string name="dialog_select_prompt">Choose Image</string>
     <string name="dialog_select_camera">Camera</string>
     <string name="dialog_select_gallery">Gallery</string>
@@ -131,9 +135,9 @@
     <string name="action_bar_title_backup">Backup</string>
     <string name="action_bar_title_restore">Restore</string>
 
-    <!-- passcode -->
-    <string name="passcode_auth_title">PIN</string>
-    <string name="passcode_auth_message">Please input PIN</string>
-    <string name="passcode_auth_message_ok">OK!</string>
-    <string name="passcode_auth_message_ng">ERROR!</string>
+    <!-- pin -->
+    <string name="pin_auth_title">PIN</string>
+    <string name="pin_auth_message">Please input PIN</string>
+    <string name="pin_auth_message_ok">OK!</string>
+    <string name="pin_auth_message_ng">ERROR!</string>
 </resources>

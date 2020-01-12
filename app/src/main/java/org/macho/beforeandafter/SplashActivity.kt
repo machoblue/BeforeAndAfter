@@ -3,31 +3,26 @@ package org.macho.beforeandafter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
-import org.macho.beforeandafter.shared.screen.pin.PinActivity2
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 
 
 class SplashActivity: AppCompatActivity() {
 
     companion object {
-        const val PASSCODE_RC = 3001
+        const val PIN_RC = 3001
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // TODO: remove
-        SharedPreferencesUtil.setBoolean(this, SharedPreferencesUtil.Key.ENABLE_PASSCODE, true)
-        SharedPreferencesUtil.setString(this, SharedPreferencesUtil.Key.PASSCODE, "0000")
+        val skipPin = SharedPreferencesUtil.getString(this, SharedPreferencesUtil.Key.PIN).isEmpty()
 
-        val showPasscode = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.ENABLE_PASSCODE)
-
-        if (showPasscode) {
-            val intent = Intent(this, PinActivity2::class.java)
-            startActivityForResult(intent, PASSCODE_RC)
+        if (skipPin) {
+            showHome()
 
         } else {
-            showHome()
+            val intent = Intent(this, PinAuthActivity::class.java)
+            startActivityForResult(intent, PIN_RC)
         }
     }
 
@@ -38,7 +33,7 @@ class SplashActivity: AppCompatActivity() {
             return
         }
 
-        if (requestCode == PASSCODE_RC) {
+        if (requestCode == PIN_RC) {
             showHome()
         }
     }

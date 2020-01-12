@@ -12,7 +12,7 @@
         android:textSize="25sp"
         android:gravity="center"
         android:id="@+id/pinTitle"
-        android:text="@string/passcode_auth_title"/>
+        android:text="@string/pin_auth_title"/>
 
     <TextView
         android:layout_marginBottom="10dp"
@@ -23,7 +23,7 @@
         android:textSize="15sp"
         android:gravity="center"
         android:id="@+id/pinMessage"
-        android:text="@string/passcode_auth_message"/>
+        android:text="@string/pin_auth_message"/>
 
     <TextView
         android:layout_marginBottom="20dp"
