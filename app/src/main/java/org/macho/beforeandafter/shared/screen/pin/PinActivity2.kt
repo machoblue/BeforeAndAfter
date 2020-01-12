@@ -11,7 +11,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 
-class PinActivity2: AppCompatActivity() {
+open class PinActivity2: AppCompatActivity() {
     companion object {
         const val length = 4
     }
@@ -32,7 +32,8 @@ class PinActivity2: AppCompatActivity() {
                 updateText()
 
                 if (s?.length == 4) {
-                    auth()
+//                    auth()
+                    completeInput()
                 }
             }
         })
@@ -40,6 +41,10 @@ class PinActivity2: AppCompatActivity() {
 
     private fun updateText() {
         maskedPin.text = "${"●".repeat(hiddenEditText.text.length)}${"○".repeat(length - hiddenEditText.text.length)}"
+    }
+
+    open fun completeInput() {
+        auth()
     }
 
     private fun auth() {
@@ -55,7 +60,7 @@ class PinActivity2: AppCompatActivity() {
         }
     }
 
-    private fun clear() {
+    fun clear() {
         hiddenEditText.setText("", TextView.BufferType.NORMAL)
         updateText()
     }

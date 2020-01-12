@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_preference.adView
 import org.macho.beforeandafter.BuildConfig
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.preference.pin.PinEnableActivity
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.screen.pin.PinActivity2
 import org.macho.beforeandafter.shared.util.LogUtil
@@ -121,7 +122,8 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
         when (requestCode) {
             RC_ENABLE_PIN -> {
-                // TODO: enable PIN
+                pinItem?.isOn = true
+                adapter.notifyDataSetChanged()
             }
 
             RC_DISABLE_PIN -> {
@@ -134,8 +136,9 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
     }
 
     private fun enablePIN() {
-        // TODO: enable PIN
         LogUtil.d(this, "enablePIN")
+        val intent = Intent(context!!, PinEnableActivity::class.java)
+        startActivityForResult(intent, RC_ENABLE_PIN)
     }
 
     private fun disablePIN() {

@@ -26,6 +26,7 @@
         <activity android:name=".record.camera.CameraActivity" android:theme="@style/AppThemeNoTitle"/>
         <activity android:name=".gallery.PhotoActivity" android:theme="@style/AppThemeNoTitle"/>
         <activity android:name=".shared.screen.pin.PinActivity2" android:theme="@style/AppThemeNoTitle"/>
+        <activity android:name=".preference.pin.PinEnableActivity" android:theme="@style/AppThemeNoTitle"/>
 
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
