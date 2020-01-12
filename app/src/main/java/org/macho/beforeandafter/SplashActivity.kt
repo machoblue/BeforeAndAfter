@@ -3,7 +3,7 @@ package org.macho.beforeandafter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
-import org.macho.beforeandafter.shared.screen.passcode.PasscodeActivity
+import org.macho.beforeandafter.shared.screen.pin.PinActivity2
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 
 
@@ -23,7 +23,7 @@ class SplashActivity: AppCompatActivity() {
         val showPasscode = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.ENABLE_PASSCODE)
 
         if (showPasscode) {
-            val intent = Intent(this, PasscodeActivity::class.java)
+            val intent = Intent(this, PinActivity2::class.java)
             startActivityForResult(intent, PASSCODE_RC)
 
         } else {

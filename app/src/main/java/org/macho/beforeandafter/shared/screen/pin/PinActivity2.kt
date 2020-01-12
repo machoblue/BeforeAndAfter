@@ -1,21 +1,20 @@
 package org.macho.beforeandafter.shared.screen.pin
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_pin.*
-import kotlinx.android.synthetic.main.passcode_act.*
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.shared.screen.passcode.PasscodeActivity.Companion.length
 import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 
 class PinActivity2: AppCompatActivity() {
+    companion object {
+        const val length = 4
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin)
@@ -39,17 +38,6 @@ class PinActivity2: AppCompatActivity() {
         })
     }
 
-
-//    private fun input(num: String) {
-//        typedPasscode = typedPasscode.plus(num)
-//        updateText()
-//    }
-
-//    private fun backspace() {
-//        typedPasscode = typedPasscode.removeRange(typedPasscode.length - 1, typedPasscode.length)
-//        updateText()
-//    }
-
     private fun updateText() {
         maskedPin.text = "${"●".repeat(hiddenEditText.text.length)}${"○".repeat(length - hiddenEditText.text.length)}"
     }
@@ -68,7 +56,6 @@ class PinActivity2: AppCompatActivity() {
     }
 
     private fun clear() {
-//        hiddenEditText.text = ""
         hiddenEditText.setText("", TextView.BufferType.NORMAL)
         updateText()
     }
