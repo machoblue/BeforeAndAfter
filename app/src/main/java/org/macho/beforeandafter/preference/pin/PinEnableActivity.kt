@@ -19,26 +19,26 @@ class PinEnableActivity: PinActivity2() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        pinTitle.text = "暗証番号の登録"
-        pinMessage.text = "暗証番号を設定してください。"
+        pinTitle.text = getString(R.string.pin_enable_title)
+        pinMessage.text = getString(R.string.pin_enable_message)
     }
 
     override fun completeInput() {
         if (tempPIN.isEmpty()) {
             tempPIN = hiddenEditText.text.toString()
             clear()
-            pinMessage.text = "確認のため、もう一度入力してください。"
+            pinMessage.text = getString(R.string.pin_enable_message_confirm)
         } else {
             val secondInput = hiddenEditText.text.toString()
             if (tempPIN.equals(secondInput)) {
-                pinMessage.text = "OK!"
+                pinMessage.text = getString(R.string.pin_enable_message_ok)
                 SharedPreferencesUtil.setBoolean(this, SharedPreferencesUtil.Key.ENABLE_PASSCODE, true)
                 SharedPreferencesUtil.setString(this, SharedPreferencesUtil.Key.PASSCODE, secondInput)
                 setResult(RESULT_OK)
                 finish()
 
             } else {
-                pinMessage.text = "１度目と２度目が一致しません。最初から設定しなおしてください。"
+                pinMessage.text = getString(R.string.pin_enable_message_error)
                 clear()
                 tempPIN = ""
             }

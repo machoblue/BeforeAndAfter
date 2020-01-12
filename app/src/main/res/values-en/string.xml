@@ -105,6 +105,12 @@
     <string name="restore_error_no_data_title">No data to restore</string>
     <string name="restore_error_no_data_description">No data to restore.</string>
 
+    <string name="pin_enable_title">Enable PIN</string>
+    <string name="pin_enable_message">Please enter PIN.</string>
+    <string name="pin_enable_message_confirm">Please enter PIN again for confirmation.</string>
+    <string name="pin_enable_message_error">Error. First does not match second.</string>
+    <string name="pin_enable_message_ok">Complete</string>
+
     <string name="dialog_select_prompt">Choose Image</string>
     <string name="dialog_select_camera">Camera</string>
     <string name="dialog_select_gallery">Gallery</string>
