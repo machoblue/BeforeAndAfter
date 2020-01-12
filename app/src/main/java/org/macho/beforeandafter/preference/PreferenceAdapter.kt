@@ -48,7 +48,7 @@ class PreferenceAdapter(context: Context, private val items: List<PreferenceElem
             is CheckboxPreferenceItem -> {
                 val view = layoutInflater.inflate(R.layout.list_preference_checkbox_item, parent, false)
                 view.findViewById<TextView>(R.id.preferenceItemTitle).setText(item.title)
-//                view.findViewById<TextView>(R.id.preferenceItemDescription).setText(item.description)
+                view.findViewById<TextView>(R.id.preferenceItemDescription).setText(item.description)
                 val switch = view.findViewById<Switch>(R.id.pinSwitch)
                 switch.isChecked = item.isOn
                 switch.setOnCheckedChangeListener { checkbox, isChecked ->
