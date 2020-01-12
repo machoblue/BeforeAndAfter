@@ -16,6 +16,7 @@ import org.macho.beforeandafter.BuildConfig
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.screen.pin.PinActivity2
 import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.util.*
@@ -23,8 +24,14 @@ import javax.inject.Inject
 
 @ActivityScoped
 class PreferenceFragment @Inject constructor(): DaggerFragment() {
+    companion object {
+        const val RC_ENABLE_PIN = 4001
+        const val RC_DISABLE_PIN = 4002
+    }
 
     private var items: MutableList<PreferenceElement> = mutableListOf()
+    private lateinit var adapter: PreferenceAdapter
+    private var pinItem: CheckboxPreferenceItem? = null
 
     private var haveWatchedAdRecently: Boolean = false
         get() {
@@ -51,7 +58,8 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
     override fun onStart() {
         super.onStart()
-        listView.adapter = PreferenceAdapter(context!!, items)
+        adapter = PreferenceAdapter(context!!, items)
+        listView.adapter = adapter
     }
 
     private fun createItems(): MutableList<PreferenceElement> {
@@ -68,18 +76,20 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
         })
 
         items.add(SectionHeader(R.string.preference_section_header_privacy))
-        items.add(CheckboxPreferenceItem(R.string.preference_pin_title,
+
+        val pinItem = CheckboxPreferenceItem(R.string.preference_pin_title,
                 R.string.preference_pin_description,
                 SharedPreferencesUtil.getBoolean(context!!, SharedPreferencesUtil.Key.ENABLE_PASSCODE)
         ) { enablePIN ->
             if (enablePIN) {
-                // TODO: enable PIN
-                LogUtil.d(this, "enablePIN")
+                enablePIN()
             } else {
-                // TODO: disable PIN
-                LogUtil.d(this, "disablePIN")
+                disablePIN()
             }
-        })
+        }
+        items.add(pinItem)
+        this.pinItem = pinItem
+
         if (AdUtil.isInEEA(activity.applicationContext)) {
             items.add(PreferenceItem(R.string.preference_item_change_or_revoke_consent_title, R.string.preference_item_change_or_revoke_consent_description) {
                 AdUtil.showConsentForm(activity.applicationContext)
@@ -102,5 +112,35 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
         items.add(PreferenceFooter("ver.${BuildConfig.VERSION_NAME}"))
 
         return items
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+
+        when (requestCode) {
+            RC_ENABLE_PIN -> {
+                // TODO: enable PIN
+            }
+
+            RC_DISABLE_PIN -> {
+                SharedPreferencesUtil.setBoolean(context!!, SharedPreferencesUtil.Key.ENABLE_PASSCODE, false)
+                SharedPreferencesUtil.setString(context!!, SharedPreferencesUtil.Key.PASSCODE, "")
+                pinItem?.isOn = false
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun enablePIN() {
+        // TODO: enable PIN
+        LogUtil.d(this, "enablePIN")
+    }
+
+    private fun disablePIN() {
+        LogUtil.d(this, "disablePIN")
+        val intent = Intent(context!!, PinActivity2::class.java)
+        startActivityForResult(intent, RC_DISABLE_PIN)
     }
 }
