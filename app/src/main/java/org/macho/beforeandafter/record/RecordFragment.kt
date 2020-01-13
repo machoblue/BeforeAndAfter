@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.record_frag.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.GlideApp
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.extensions.loadImage
 import org.macho.beforeandafter.shared.util.AdUtil
 import java.io.File
 import java.util.*
@@ -111,21 +112,8 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
         override fun onBindViewHolder(holder: RecordItemViewHolder, position: Int) {
             val currentRecord = records.get(position)
-
-            GlideApp.with(this@RecordFragment)
-                    .load(Uri.fromFile(File(context.filesDir, currentRecord.frontImagePath ?: "")))
-                    .sizeMultiplier(.4f)
-                    .thumbnail(.1f)
-                    .error(ColorDrawable(Color.LTGRAY))
-                    .into(holder.frontImage)
-
-            GlideApp.with(this@RecordFragment)
-                    .load(Uri.fromFile(File(context.filesDir, currentRecord.sideImagePath ?: "")))
-                    .sizeMultiplier(.4f)
-                    .thumbnail(.1f)
-                    .error(ColorDrawable(Color.LTGRAY))
-                    .into(holder.sideImage)
-
+            holder.frontImage.loadImage(this@RecordFragment, Uri.fromFile(File(context.filesDir, currentRecord.frontImagePath ?: "")))
+            holder.sideImage.loadImage(this@RecordFragment, Uri.fromFile(File(context.filesDir, currentRecord.sideImagePath ?: "")))
             holder.date.text = "%1\$tF %1\$tH:%1\$tM:%1\$tS".format(Date(currentRecord.date))
             holder.weight.text = "%.2fkg".format(currentRecord.weight)
             holder.rate.text = "%.2f％".format(currentRecord.rate)

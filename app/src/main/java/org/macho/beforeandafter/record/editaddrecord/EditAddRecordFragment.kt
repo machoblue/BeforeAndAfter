@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.provider.MediaStore
@@ -29,6 +30,7 @@ import org.macho.beforeandafter.record.camera.CameraActivity
 import org.macho.beforeandafter.record.camera.PermissionUtils
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.extensions.addTextChangedListener
+import org.macho.beforeandafter.shared.extensions.loadImage
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
@@ -195,20 +197,23 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         when (requestCode) {
             FRONT_IMAGE -> {
                 val frontImageFilePath = data?.getStringExtra("PATH") ?: return
-                ImageUtil.setOrientationModifiedImageFile(frontImage, File(frontImageFilePath))
+//                ImageUtil.setOrientationModifiedImageFile(frontImage, File(frontImageFilePath))
+                frontImage.loadImage(this, Uri.fromFile(File(frontImageFilePath)))
                 val frontImageFileName = frontImageFilePath.replace(context!!.filesDir.toString() + "/", "")
                 presenter.tempFrontImageFileName = frontImageFileName
             }
             SIDE_IMAGE -> {
                 val sideImageFilePath = data?.getStringExtra("PATH") ?: return
-                ImageUtil.setOrientationModifiedImageFile(sideImage, File(sideImageFilePath))
+//                ImageUtil.setOrientationModifiedImageFile(sideImage, File(sideImageFilePath))
+                sideImage.loadImage(this, Uri.fromFile(File(sideImageFilePath)))
                 val sideImageFileName = sideImageFilePath.replace(context!!.filesDir.toString() + "/", "")
                 presenter.tempSideImageFileName = sideImageFileName
 
             }
             FRONT_IMAGE_STANDARD_CAMERA -> {
-                val tempFile = getCameraFile()
-                ImageUtil.setOrientationModifiedImageFile(frontImage, tempFile)
+                val tempFile = getCameraFile(true)
+//                ImageUtil.setOrientationModifiedImageFile(frontImage, tempFile)
+                frontImage.loadImage(this, Uri.fromFile(tempFile))
 
                 val outputDir = context!!.filesDir
                 val fileName = FILE_NAME_TEMPLATE.format(Date())
@@ -220,8 +225,9 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                 presenter.tempFrontImageFileName = fileName
             }
             SIDE_IMAGE_STANDARD_CAMERA -> {
-                val tempFile = getCameraFile()
-                ImageUtil.setOrientationModifiedImageFile(sideImage, tempFile)
+                val tempFile = getCameraFile(false)
+//                ImageUtil.setOrientationModifiedImageFile(sideImage, tempFile)
+                sideImage.loadImage(this, Uri.fromFile(tempFile))
 
                 val outputDir = context!!.filesDir
                 val fileName = FILE_NAME_TEMPLATE.format(Date())
@@ -247,7 +253,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                 }
 
                 frontImage.scaleType = ImageView.ScaleType.CENTER_CROP
-                frontImage.setImageBitmap(orientationModifiedBitmap)
+//                frontImage.setImageBitmap(orientationModifiedBitmap)
+                frontImage.loadImage(this, uri)
 
                 presenter.tempFrontImageFileName = fileName
             }
@@ -266,7 +273,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                 }
 
                 sideImage.scaleType = ImageView.ScaleType.CENTER_CROP
-                sideImage.setImageBitmap(orientationModifiedBitmap)
+//                sideImage.setImageBitmap(orientationModifiedBitmap)
+                sideImage.loadImage(this, uri)
 
                 presenter.tempSideImageFileName = fileName
             }
@@ -352,12 +360,12 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     // MARK: Private method
 
-    private fun getCameraFile(): File {
+    private fun getCameraFile(isFront: Boolean): File {
         val dir = File(context!!.filesDir, "/temp")
         if (!dir.exists()) {
             dir.mkdir()
         }
-        return File(dir, "temp.jpg")
+        return File(dir, "temp_${if (isFront) "front" else "side"}.jpg")
     }
 
     private fun startGalleryChooser(front: Boolean) {
@@ -383,7 +391,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             val useStandardCamera = preferences.getBoolean("USE_STANDARD_CAMERA", false)
             if (useStandardCamera) {
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                val uri = FileProvider.getUriForFile(context!!, "${BuildConfig.APPLICATION_ID}.fileprovider", getCameraFile())
+                val uri = FileProvider.getUriForFile(context!!, "${BuildConfig.APPLICATION_ID}.fileprovider", getCameraFile(front))
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
                 val requestCode2 = if (front) FRONT_IMAGE_STANDARD_CAMERA else SIDE_IMAGE_STANDARD_CAMERA
                 startActivityForResult(intent, requestCode2)
