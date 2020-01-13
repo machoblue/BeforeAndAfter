@@ -2,11 +2,9 @@ package org.macho.beforeandafter.record
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.record_frag.*
-import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.GlideApp
 import org.macho.beforeandafter.shared.di.ActivityScoped

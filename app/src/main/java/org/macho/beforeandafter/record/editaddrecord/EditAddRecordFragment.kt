@@ -28,6 +28,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.record.camera.CameraActivity
 import org.macho.beforeandafter.record.camera.PermissionUtils
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.extensions.addTextChangedListener
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
@@ -139,30 +140,17 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
         setHasOptionsMenu(true); // for save button on navBar
 
-        weight.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                presenter.setWeight(s?.toString())
-            }
-        })
+        weight.addTextChangedListener { newText ->
+            presenter.setWeight(newText)
+        }
 
-        rate.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                presenter.setRate(s?.toString())
-            }
-        })
+        rate.addTextChangedListener { newText ->
+            presenter.setRate(newText)
+        }
 
-        memo.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                presenter.setMemo(s?.toString())
-            }
-        })
-
+        memo.addTextChangedListener { newText ->
+            presenter.setMemo(newText)
+        }
 
         MobileAds.initialize(context, getString(R.string.admob_app_id))
 
