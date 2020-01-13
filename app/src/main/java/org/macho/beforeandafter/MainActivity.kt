@@ -2,7 +2,6 @@ package org.macho.beforeandafter
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -10,6 +9,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.macho.beforeandafter.record.RecordFragment
+import org.macho.beforeandafter.shared.extensions.setupWithNavController
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
 import javax.inject.Inject

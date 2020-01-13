@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:id="@+id/pinTitle"
+        android:text="@string/pin_auth_title"/>
+
+    <TextView
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:id="@+id/pinMessage"
+        android:text="@string/pin_auth_message"/>
+
+    <TextView
+        android:layout_marginBottom="20dp"
+        android:id="@+id/maskedPin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="○○○○"
+        android:textSize="40sp" />
+
+    <EditText
+        android:maxLength="4"
+        android:inputType="number"
+        android:textColor="#00000000"
+        android:textCursorDrawable="@null"
+        android:id="@+id/hiddenEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00000000" />
+
+</LinearLayout>

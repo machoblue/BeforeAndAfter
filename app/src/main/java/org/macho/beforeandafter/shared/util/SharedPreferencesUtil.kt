@@ -8,7 +8,8 @@ object SharedPreferencesUtil {
         LATEST_WEIGHT("latestWeight"),
         LATEST_RATE("latestRate"),
         LATEST_WATCH_REWARDED_AD("latest_watch_rewarded_ad"),
-        TIME_OF_LATEST_RECORD("time_of_latest_record")
+        TIME_OF_LATEST_RECORD("time_of_latest_record"),
+        PIN("pin")
     }
 
     fun getFloat(context: Context, key: Key): Float {
@@ -25,5 +26,21 @@ object SharedPreferencesUtil {
 
     fun setLong(context: Context, key: Key, value: Long) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putLong(key.string, value).apply()
+    }
+
+    fun getBoolean(context: Context, key: Key): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(key.string, false)
+    }
+
+    fun setBoolean(context: Context, key: Key, value: Boolean) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(key.string, value).apply()
+    }
+
+    fun getString(context: Context, key: Key): String {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(key.string, "")!!
+    }
+
+    fun setString(context: Context, key: Key, value: String) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(key.string, value).apply()
     }
 }

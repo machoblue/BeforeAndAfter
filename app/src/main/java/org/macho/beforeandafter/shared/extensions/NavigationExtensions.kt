@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.macho.beforeandafter
+package org.macho.beforeandafter.shared.extensions
 
 import android.content.Intent
 import android.util.SparseArray
@@ -26,6 +26,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.macho.beforeandafter.R
 
 /**
  * Manages the various graphs needed for a [BottomNavigationView].
@@ -52,10 +53,10 @@ fun BottomNavigationView.setupWithNavController(
 
         // Find or create the Navigation host fragment
         val navHostFragment = obtainNavHostFragment(
-            fragmentManager,
-            fragmentTag,
-            navGraphId,
-            containerId
+                fragmentManager,
+                fragmentTag,
+                navGraphId,
+                containerId
         )
 
         // Obtain its id
@@ -103,10 +104,10 @@ fun BottomNavigationView.setupWithNavController(
                     // to it, creating the fixed started destination.
                     fragmentManager.beginTransaction()
                         .setCustomAnimations(
-                            R.anim.nav_default_enter_anim,
-                            R.anim.nav_default_exit_anim,
-                            R.anim.nav_default_pop_enter_anim,
-                            R.anim.nav_default_pop_exit_anim)
+                                R.anim.nav_default_enter_anim,
+                                R.anim.nav_default_exit_anim,
+                                R.anim.nav_default_pop_enter_anim,
+                                R.anim.nav_default_pop_exit_anim)
                         .attach(selectedFragment)
                         .setPrimaryNavigationFragment(selectedFragment)
                         .apply {
@@ -165,10 +166,10 @@ private fun BottomNavigationView.setupDeepLinks(
 
         // Find or create the Navigation host fragment
         val navHostFragment = obtainNavHostFragment(
-            fragmentManager,
-            fragmentTag,
-            navGraphId,
-            containerId
+                fragmentManager,
+                fragmentTag,
+                navGraphId,
+                containerId
         )
         // Handle Intent
         if (navHostFragment.navController.handleDeepLink(intent)

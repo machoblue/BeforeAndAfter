@@ -70,6 +70,8 @@
     <string name="preference_section_header_base_settings">Basic Settings</string>
     <string name="preference_section_header_privacy">Privacy</string>
     <string name="preference_section_header_data">Data</string>
+    <string name="preference_pin_title">Enable PIN</string>
+    <string name="preference_pin_description">Enable PIN on launching this app.</string>
     <string name="backup_status_message_complete">Backup has completed.</string>
 
     <string name="backup_dialog_title">Backup</string>
@@ -103,6 +105,16 @@
     <string name="restore_error_no_data_title">No data to restore</string>
     <string name="restore_error_no_data_description">No data to restore.</string>
 
+    <string name="pin_enable_title">Enable PIN</string>
+    <string name="pin_enable_message">Please enter PIN.</string>
+    <string name="pin_enable_message_confirm">Please enter PIN again for confirmation.</string>
+    <string name="pin_enable_message_error">Error. First does not match second.</string>
+    <string name="pin_enable_message_ok">Complete</string>
+
+    <string name="pin_disable_title">Disable PIN</string>
+    <string name="pin_disable_message">To disable PIN you need to enter PIN.</string>
+    <string name="pin_disable_message_ok">Complete</string>
+
     <string name="dialog_select_prompt">Choose Image</string>
     <string name="dialog_select_camera">Camera</string>
     <string name="dialog_select_gallery">Gallery</string>
@@ -122,4 +134,10 @@
     <string name="action_bar_title_edit_goal">Goal</string>
     <string name="action_bar_title_backup">Backup</string>
     <string name="action_bar_title_restore">Restore</string>
+
+    <!-- pin -->
+    <string name="pin_auth_title">PIN</string>
+    <string name="pin_auth_message">Please input PIN</string>
+    <string name="pin_auth_message_ok">OK!</string>
+    <string name="pin_auth_message_ng">ERROR!</string>
 </resources>
