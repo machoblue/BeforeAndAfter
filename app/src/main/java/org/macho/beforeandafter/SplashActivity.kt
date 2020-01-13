@@ -21,8 +21,7 @@ class SplashActivity: AppCompatActivity() {
             showHome()
 
         } else {
-            val intent = Intent(this, PinAuthActivity::class.java)
-            startActivityForResult(intent, PIN_RC)
+            showPIN()
         }
     }
 
@@ -42,6 +41,11 @@ class SplashActivity: AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    private fun showPIN() {
+        val intent = Intent(this, PinAuthActivity::class.java)
+        startActivityForResult(intent, PIN_RC)
     }
 
 }

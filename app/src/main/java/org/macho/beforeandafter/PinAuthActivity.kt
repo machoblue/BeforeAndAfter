@@ -13,7 +13,7 @@ open class PinAuthActivity: BasePinActivity() {
 
     private fun auth() {
         val pin = SharedPreferencesUtil.getString(this, SharedPreferencesUtil.Key.PIN)
-        LogUtil.d(this, "validpin:${pin}")
+        LogUtil.d(this, "validPIN:${pin}")
         if (pin.equals(hiddenEditText.text.toString())) {
             pinMessage.text = getString(R.string.pin_auth_message_ok)
             setResult(RESULT_OK)

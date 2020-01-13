@@ -65,6 +65,7 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
         var items = mutableListOf<PreferenceElement>()
         val activity = this.activity ?: return mutableListOf()
 
+        // MARK: - Basic Settings
         items.add(SectionHeader(R.string.preference_section_header_base_settings))
         items.add(PreferenceItem(R.string.goal_title, R.string.goal_description) {
             val action = PreferenceFragmentDirections.actionPreferenceFragmentToEditGoalFragment()
@@ -74,6 +75,7 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             UseStandardCameraDialog.newInstance(activity).show(fragmentManager!!, "")
         })
 
+        // MARK: - Privacy Settings
         items.add(SectionHeader(R.string.preference_section_header_privacy))
 
         val enabledPIN = !SharedPreferencesUtil.getString(context!!, SharedPreferencesUtil.Key.PIN).isEmpty()
@@ -93,6 +95,7 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             })
         }
 
+        // MARK: - Data Settings
         items.add(SectionHeader(R.string.preference_section_header_data))
         items.add(PreferenceItem(R.string.preference_item_backup_title, R.string.preference_item_backup_description) {
             val action = if (haveWatchedAdRecently) PreferenceFragmentDirections.actionPreferenceFragmentToBackupDialog4() else PreferenceFragmentDirections.actionPreferenceFragmentToRewardDialog2()
@@ -106,6 +109,7 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             DeleteAllDialog.newInstance(activity).show(fragmentManager!!, "")
         })
 
+        // MARK: - Version
         items.add(PreferenceFooter("ver.${BuildConfig.VERSION_NAME}"))
 
         return items
@@ -130,13 +134,11 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
     }
 
     private fun enablePIN() {
-        LogUtil.d(this, "enablePIN")
         val intent = Intent(context!!, PinEnableActivity::class.java)
         startActivityForResult(intent, RC_ENABLE_PIN)
     }
 
     private fun disablePIN() {
-        LogUtil.d(this, "disablePIN")
         val intent = Intent(context!!, PinDisableActivity::class.java)
         startActivityForResult(intent, RC_DISABLE_PIN)
     }
