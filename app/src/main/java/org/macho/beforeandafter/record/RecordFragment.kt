@@ -29,7 +29,6 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     override lateinit var presenter: RecordContract.Presenter
 
     private lateinit var recordAdapter: RecordAdapter
-    private val imageCache = ImageCache()
 
 //    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -59,7 +58,6 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
     override fun onDestroyView() {
         super.onDestroyView()
-        imageCache.clear()
         presenter.dropView()
     }
 
@@ -69,7 +67,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
 
     override fun showItems(items: List<Record>) {
-        recordAdapter = RecordAdapter(this.context!!, items, 100, imageCache)
+        recordAdapter = RecordAdapter(this.context!!, items, 100)
         listView.adapter = recordAdapter
     }
 
@@ -99,7 +97,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         listView.visibility = View.GONE
     }
 
-    inner class RecordAdapter(val context: Context, val records: List<Record>, val viewHeight: Int, val imageCache: ImageCache)
+    inner class RecordAdapter(val context: Context, val records: List<Record>, val viewHeight: Int)
         : androidx.recyclerview.widget.RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
         val layoutInflater = LayoutInflater.from(context)
 
