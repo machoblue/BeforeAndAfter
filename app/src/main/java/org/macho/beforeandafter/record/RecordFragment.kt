@@ -3,6 +3,9 @@ package org.macho.beforeandafter.record
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +19,7 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.record_frag.*
 import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.GlideApp
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
 import java.io.File
@@ -113,25 +117,19 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         override fun onBindViewHolder(holder: RecordItemViewHolder, position: Int) {
             val currentRecord = records.get(position)
 
-            val frontImageFile = "${context.filesDir}/${currentRecord.frontImagePath}"
-            val frontImageBitmap = imageCache.get(frontImageFile)
-            if (frontImageBitmap == null) {
-                val task = ImageLoadTask(position, frontImageFile, viewHeight, this@RecordAdapter)
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null)
-                holder.frontImage.setImageDrawable(null)
-            } else {
-                holder.frontImage.setImageBitmap(frontImageBitmap)
-            }
+            GlideApp.with(this@RecordFragment)
+                    .load(Uri.fromFile(File(context.filesDir, currentRecord.frontImagePath ?: "")))
+                    .sizeMultiplier(.4f)
+                    .thumbnail(.1f)
+                    .error(ColorDrawable(Color.LTGRAY))
+                    .into(holder.frontImage)
 
-            val sideImageFile = "${context.filesDir}/${currentRecord.sideImagePath}"
-            val sideImageBitmap = imageCache.get(sideImageFile)
-            if (sideImageBitmap == null) {
-                val task = ImageLoadTask(position, sideImageFile, viewHeight, this@RecordAdapter)
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null)
-                holder.sideImage.setImageDrawable(null)
-            } else {
-                holder.sideImage.setImageBitmap(sideImageBitmap)
-            }
+            GlideApp.with(this@RecordFragment)
+                    .load(Uri.fromFile(File(context.filesDir, currentRecord.sideImagePath ?: "")))
+                    .sizeMultiplier(.4f)
+                    .thumbnail(.1f)
+                    .error(ColorDrawable(Color.LTGRAY))
+                    .into(holder.sideImage)
 
             holder.date.text = "%1\$tF %1\$tH:%1\$tM:%1\$tS".format(Date(currentRecord.date))
             holder.weight.text = "%.2fkg".format(currentRecord.weight)
@@ -140,70 +138,18 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         }
 
         inner class RecordItemViewHolder(view: View): androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
-            val parent: View = view
-            val frontImage: ImageView
-            val sideImage: ImageView
-            val date: TextView
-            val weight: TextView
-            val rate: TextView
-            val memo: TextView
+            val frontImage: ImageView = view.findViewById(R.id.frontImage)
+            val sideImage: ImageView = view.findViewById(R.id.sideImage)
+            val date: TextView = view.findViewById(R.id.date)
+            val weight: TextView = view.findViewById(R.id.weight)
+            val rate: TextView = view.findViewById(R.id.rate)
+            val memo: TextView = view.findViewById(R.id.memo)
+
             init {
-                frontImage = view.findViewById(R.id.frontImage)
-                sideImage = view.findViewById(R.id.sideImage)
-                date = view.findViewById(R.id.date)
-                weight = view.findViewById(R.id.weight)
-                rate = view.findViewById(R.id.rate)
-                memo = view.findViewById(R.id.memo)
-                parent.setOnClickListener {_ ->
+                view.setOnClickListener {_ ->
                     presenter.openEditRecord(this@RecordAdapter.records.get(adapterPosition).date)
                 }
             }
         }
-
-        private inner class ImageLoadTask(val position: Int, val filePath: String, val viewHeight: Int, val adapter: androidx.recyclerview.widget.RecyclerView.Adapter<RecordItemViewHolder>)
-            : AsyncTask<Void, Void, Boolean>() {
-
-            override fun doInBackground(vararg p0: Void?): Boolean {
-                val file = File(filePath)
-
-                if (!file.exists()) {
-                    return false
-                }
-
-                val options = BitmapFactory.Options()
-                options.inJustDecodeBounds = true
-
-                BitmapFactory.decodeFile(filePath, options)
-                val imageHeight = options.outHeight
-
-                // 縮小率を計算する。1:等倍。2:は1辺が1/2になる
-                // 2の累乗以外の数字を指定した場合には、その値以下の2の累乗にまとめられる
-                // 3の場合には2、6の場合には4など
-                var inSampleSize = 1
-                if (imageHeight > viewHeight) {
-                    inSampleSize = Math.round(imageHeight.toFloat() / viewHeight.toFloat())
-                }
-
-                options.inJustDecodeBounds = false
-                options.inSampleSize = inSampleSize
-
-                val tempBitmap = BitmapFactory.decodeFile(filePath, options)
-                val orientationModifiedBitmap = ImageUtil.getOrientationModifiedBitmap(tempBitmap, file)
-
-                this@RecordAdapter.imageCache.put(filePath, orientationModifiedBitmap)
-                return true
-            }
-
-            override fun onPostExecute(result: Boolean?) {
-                if (result == null) {
-                    return
-                }
-
-                if (result) {
-                    adapter.notifyItemChanged(position)
-                }
-            }
-        }
     }
-
 }
