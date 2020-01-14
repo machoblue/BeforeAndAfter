@@ -197,14 +197,12 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         when (requestCode) {
             FRONT_IMAGE -> {
                 val frontImageFilePath = data?.getStringExtra("PATH") ?: return
-//                ImageUtil.setOrientationModifiedImageFile(frontImage, File(frontImageFilePath))
                 frontImage.loadImage(this, Uri.fromFile(File(frontImageFilePath)))
                 val frontImageFileName = frontImageFilePath.replace(context!!.filesDir.toString() + "/", "")
                 presenter.tempFrontImageFileName = frontImageFileName
             }
             SIDE_IMAGE -> {
                 val sideImageFilePath = data?.getStringExtra("PATH") ?: return
-//                ImageUtil.setOrientationModifiedImageFile(sideImage, File(sideImageFilePath))
                 sideImage.loadImage(this, Uri.fromFile(File(sideImageFilePath)))
                 val sideImageFileName = sideImageFilePath.replace(context!!.filesDir.toString() + "/", "")
                 presenter.tempSideImageFileName = sideImageFileName
@@ -212,30 +210,28 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             }
             FRONT_IMAGE_STANDARD_CAMERA -> {
                 val tempFile = getCameraFile(true)
-//                ImageUtil.setOrientationModifiedImageFile(frontImage, tempFile)
-                frontImage.loadImage(this, Uri.fromFile(tempFile))
-
                 val outputDir = context!!.filesDir
                 val fileName = FILE_NAME_TEMPLATE.format(Date())
-                FileOutputStream(File(outputDir, fileName)).use {
+                val filePath = File(outputDir, fileName)
+                FileOutputStream(filePath).use {
                     val bitmap = BitmapFactory.decodeFile(tempFile.path)
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
                     ImageUtil.releaseBitmap(bitmap)
                 }
+                frontImage.loadImage(this, Uri.fromFile(filePath))
                 presenter.tempFrontImageFileName = fileName
             }
             SIDE_IMAGE_STANDARD_CAMERA -> {
                 val tempFile = getCameraFile(false)
-//                ImageUtil.setOrientationModifiedImageFile(sideImage, tempFile)
-                sideImage.loadImage(this, Uri.fromFile(tempFile))
-
                 val outputDir = context!!.filesDir
                 val fileName = FILE_NAME_TEMPLATE.format(Date())
-                FileOutputStream(File(outputDir, fileName)).use {
+                val filePath = File(outputDir, fileName)
+                FileOutputStream(filePath).use {
                     val bitmap = BitmapFactory.decodeFile(tempFile.path)
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
                     ImageUtil.releaseBitmap(bitmap)
                 }
+                sideImage.loadImage(this, Uri.fromFile(filePath))
                 presenter.tempSideImageFileName = fileName
             }
             FRONT_GALLERY_IMAGE_REQUEST -> {
@@ -253,7 +249,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                 }
 
                 frontImage.scaleType = ImageView.ScaleType.CENTER_CROP
-//                frontImage.setImageBitmap(orientationModifiedBitmap)
                 frontImage.loadImage(this, uri)
 
                 presenter.tempFrontImageFileName = fileName
@@ -273,7 +268,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                 }
 
                 sideImage.scaleType = ImageView.ScaleType.CENTER_CROP
-//                sideImage.setImageBitmap(orientationModifiedBitmap)
                 sideImage.loadImage(this, uri)
 
                 presenter.tempSideImageFileName = fileName
