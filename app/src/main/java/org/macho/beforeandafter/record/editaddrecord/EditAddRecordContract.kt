@@ -3,6 +3,7 @@ package org.macho.beforeandafter.record.editaddrecord
 import android.content.Intent
 import android.graphics.Bitmap
 import org.macho.beforeandafter.shared.BaseContract
+import java.io.File
 
 interface EditAddRecordContract {
     // notify event, display
@@ -10,8 +11,8 @@ interface EditAddRecordContract {
         fun setWeight(value: String)
         fun setRate(value: String)
         fun setMemo(value: String)
-        fun setFrontImageBitmap(bitmap: Bitmap)
-        fun setSideImageBitmap(bitmap: Bitmap)
+        fun setFrontImage(file: File)
+        fun setSideImage(file: File)
         fun showDeleteButton()
         fun finish()
     }

@@ -128,15 +128,11 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
 
     private fun updateView() {
         if (isFileExists(record.frontImagePath)) {
-            context.openFileInput(record.frontImagePath).use {
-                view?.setFrontImageBitmap(BitmapFactory.decodeStream(it))
-            }
+            view?.setFrontImage(File(context.filesDir, record.frontImagePath))
         }
 
         if (isFileExists(record.sideImagePath)) {
-            context.openFileInput(record.sideImagePath).use {
-                view?.setSideImageBitmap(BitmapFactory.decodeStream(it))
-            }
+            view?.setSideImage(File(context.filesDir, record.sideImagePath))
         }
 
         view?.setWeight(if (record.weight == 0f) "" else "%.2f".format(record.weight))

@@ -329,12 +329,12 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         memo.setText(value)
     }
 
-    override fun setFrontImageBitmap(bitmap: Bitmap) {
-        frontImage.setImageBitmap(bitmap)
+    override fun setFrontImage(file: File) {
+        frontImage.loadImage(this, Uri.fromFile(file))
     }
 
-    override fun setSideImageBitmap(bitmap: Bitmap) {
-        sideImage.setImageBitmap(bitmap)
+    override fun setSideImage(file: File) {
+        sideImage.loadImage(this, Uri.fromFile(file))
     }
 
     override fun showDeleteButton() {
