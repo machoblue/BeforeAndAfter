@@ -12,19 +12,17 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.util.*
 
 class RewardDialog: DialogFragment() {
     private lateinit var rewardedAd: RewardedAd
 
-    private var haveWatchedAdRecently: Boolean = false
-        get() {
-            val elapsedTime = Date().time - SharedPreferencesUtil.getLong(activity!!, SharedPreferencesUtil.Key.LATEST_WATCH_REWARDED_AD)
-            return elapsedTime < 1000 * 60 * 60 * 24
-        }
+    private var haveWatchedAd = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        LogUtil.d(this, "onCreateDialog")
 
         val dialog = AlertDialog.Builder(activity).setTitle(R.string.backup_dialog_title)
                 .setMessage(R.string.backup_dialog_message)
@@ -35,6 +33,7 @@ class RewardDialog: DialogFragment() {
         rewardedAd = RewardedAd(activity, activity!!.getString(R.string.admob_unit_id_rewarded))
         rewardedAd.loadAd(AdRequest.Builder().build(), object: RewardedAdLoadCallback() {
             override fun onRewardedAdLoaded() {
+                LogUtil.d(this, "onRewardAdLoaded")
                 if (dialog.isShowing) {
                     enablePositiveButton(dialog)
                 }
@@ -45,6 +44,7 @@ class RewardDialog: DialogFragment() {
         })
 
         dialog.setOnShowListener {
+            LogUtil.d(this, "onShow")
             val dialog = it as AlertDialog
             val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             positiveButton.isEnabled = false
@@ -63,17 +63,19 @@ class RewardDialog: DialogFragment() {
         positiveButton.text = activity?.getString(R.string.backup_dialog_ok_button)
         positiveButton.setOnClickListener {
             rewardedAd.show(activity, object: RewardedAdCallback() {
+                override fun onUserEarnedReward(reward: RewardItem) {
+                    SharedPreferencesUtil.setLong(activity!!, SharedPreferencesUtil.Key.LATEST_WATCH_REWARDED_AD, Date().time)
+                    haveWatchedAd = true
+                }
+
                 override fun onRewardedAdClosed() {
                     Log.i("backupDialog", "### onRewardedAdClosed")
-                    if (haveWatchedAdRecently) {
+                    if (haveWatchedAd) {
                         val action = RewardDialogDirections.actionRewardDialog2ToBackupFragment()
                         findNavController().navigate(action)
                     } else {
                         findNavController().popBackStack()
                     }
-                }
-                override fun onUserEarnedReward(reward: RewardItem) {
-                    SharedPreferencesUtil.setLong(activity!!, SharedPreferencesUtil.Key.LATEST_WATCH_REWARDED_AD, Date().time)
                 }
             })
         }
