@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" >
+    <data>
+        <variable name="record" type="org.macho.beforeandafter.record.Record" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <TextView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/date"
+            android:text="@{record.memo}" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+<!--
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/border_top_bottom_bg"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    -->
     <!-- rippleを表示するためのlayout -->
+<!--
     <LinearLayout
         android:background="?android:attr/selectableItemBackground"
         android:paddingTop="5dp"
@@ -77,3 +96,4 @@
     </LinearLayout>
     </LinearLayout>
 </LinearLayout>
+-->

@@ -15,7 +15,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.record_frag.*
+import org.macho.beforeandafter.BR
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.databinding.ListItemRecordBinding
 import org.macho.beforeandafter.shared.GlideApp
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.extensions.loadImage
@@ -107,32 +109,37 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordItemViewHolder {
+//            val binding = ListItemRecordBinding.infrate(layoutInflater, parent, false)
             return RecordItemViewHolder(layoutInflater.inflate(R.layout.list_item_record, parent, false))
         }
 
         override fun onBindViewHolder(holder: RecordItemViewHolder, position: Int) {
-            val currentRecord = records.get(position)
-            holder.frontImage.loadImage(this@RecordFragment, Uri.fromFile(File(context.filesDir, currentRecord.frontImagePath ?: "")))
-            holder.sideImage.loadImage(this@RecordFragment, Uri.fromFile(File(context.filesDir, currentRecord.sideImagePath ?: "")))
-            holder.date.text = "%1\$tF %1\$tH:%1\$tM:%1\$tS".format(Date(currentRecord.date))
-            holder.weight.text = "%.2fkg".format(currentRecord.weight)
-            holder.rate.text = "%.2f％".format(currentRecord.rate)
-            holder.memo.text = currentRecord.memo
+//            val currentRecord = records.get(position)
+//            holder.frontImage.loadImage(this@RecordFragment, Uri.fromFile(File(context.filesDir, currentRecord.frontImagePath ?: "")))
+//            holder.sideImage.loadImage(this@RecordFragment, Uri.fromFile(File(context.filesDir, currentRecord.sideImagePath ?: "")))
+//            holder.date.text = "%1\$tF %1\$tH:%1\$tM:%1\$tS".format(Date(currentRecord.date))
+//            holder.weight.text = "%.2fkg".format(currentRecord.weight)
+//            holder.rate.text = "%.2f％".format(currentRecord.rate)
+//            holder.memo.text = currentRecord.memo
+//            holder.binding.setVariable(BR.record, records.get(position)) // こっちでないとだめ？
+            holder.binding.record = records.get(position)
+            holder.binding.executePendingBindings()
         }
 
         inner class RecordItemViewHolder(view: View): androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
-            val frontImage: ImageView = view.findViewById(R.id.frontImage)
-            val sideImage: ImageView = view.findViewById(R.id.sideImage)
-            val date: TextView = view.findViewById(R.id.date)
-            val weight: TextView = view.findViewById(R.id.weight)
-            val rate: TextView = view.findViewById(R.id.rate)
-            val memo: TextView = view.findViewById(R.id.memo)
-
-            init {
-                view.setOnClickListener {_ ->
-                    presenter.openEditRecord(this@RecordAdapter.records.get(adapterPosition).date)
-                }
-            }
+//            val frontImage: ImageView = view.findViewById(R.id.frontImage)
+//            val sideImage: ImageView = view.findViewById(R.id.sideImage)
+//            val date: TextView = view.findViewById(R.id.date)
+//            val weight: TextView = view.findViewById(R.id.weight)
+//            val rate: TextView = view.findViewById(R.id.rate)
+//            val memo: TextView = view.findViewById(R.id.memo)
+//
+//            init {
+//                view.setOnClickListener {_ ->
+//                    presenter.openEditRecord(this@RecordAdapter.records.get(adapterPosition).date)
+//                }
+//            }
+            val binding = ListItemRecordBinding.bind(view)
         }
     }
 }
