@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.record_frag.*
@@ -101,16 +102,16 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     }
 
     inner class RecordAdapter(val context: Context, val records: List<Record>, val viewHeight: Int)
-        : androidx.recyclerview.widget.RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
-        val layoutInflater = LayoutInflater.from(context)
+        : RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
+        private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
         override fun getItemCount(): Int {
             return records.size
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordItemViewHolder {
-//            val binding = ListItemRecordBinding.infrate(layoutInflater, parent, false)
-            return RecordItemViewHolder(layoutInflater.inflate(R.layout.list_item_record, parent, false))
+            val view = layoutInflater.inflate(R.layout.list_item_record, parent, false)
+            return RecordItemViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: RecordItemViewHolder, position: Int) {
@@ -121,7 +122,6 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 //            holder.weight.text = "%.2fkg".format(currentRecord.weight)
 //            holder.rate.text = "%.2f％".format(currentRecord.rate)
 //            holder.memo.text = currentRecord.memo
-//            holder.binding.setVariable(BR.record, records.get(position)) // こっちでないとだめ？
             holder.binding.record = records.get(position)
             holder.binding.executePendingBindings()
         }
