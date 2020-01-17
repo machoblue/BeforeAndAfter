@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Switch
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import org.macho.beforeandafter.R
 
-class PreferenceAdapter(context: Context, private val items: List<PreferenceElement>): BaseAdapter() {
+class PreferenceAdapter(val context: Context, private val items: List<PreferenceElement>): BaseAdapter() {
     private val layoutInflater = LayoutInflater.from(context)
 
     override fun getCount(): Int {
@@ -28,8 +29,12 @@ class PreferenceAdapter(context: Context, private val items: List<PreferenceElem
         when (val item = items.get(i)) {
             is PreferenceItem -> {
                 val view = layoutInflater.inflate(android.R.layout.simple_list_item_2, parent, false)
-                view.findViewById<TextView>(android.R.id.text1).setText(item.title)
-                view.findViewById<TextView>(android.R.id.text2).setText(item.description)
+                val text1 = view.findViewById<TextView>(android.R.id.text1)
+                text1.setText(item.title)
+                text1.setTextColor(ContextCompat.getColor(context, R.color.dark_gray_text))
+                val text2 = view.findViewById<TextView>(android.R.id.text2)
+                text2.setText(item.description)
+                text2.setTextColor(ContextCompat.getColor(context, R.color.light_gray_text))
                 return view
             }
 

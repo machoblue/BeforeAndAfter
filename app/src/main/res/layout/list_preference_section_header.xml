@@ -10,7 +10,7 @@
         android:layout_height="35dp"
         android:text="section_header_title"
         android:textSize="12dp"
-        android:textColor="@color/colorGrayText"
+        android:textColor="@color/light_gray_text"
         android:gravity="bottom"
         android:id="@+id/sectionHeaderTitle"/>
 </LinearLayout>
