@@ -148,31 +148,18 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         }
 
         override fun onBindViewHolder(holder: RecordItemViewHolder, position: Int) {
-//            val currentRecord = records.get(position)
-//            holder.frontImage.loadImage(this@RecordFragment, Uri.fromFile(File(context.filesDir, currentRecord.frontImagePath ?: "")))
-//            holder.sideImage.loadImage(this@RecordFragment, Uri.fromFile(File(context.filesDir, currentRecord.sideImagePath ?: "")))
-//            holder.date.text = "%1\$tF %1\$tH:%1\$tM:%1\$tS".format(Date(currentRecord.date))
-//            holder.weight.text = "%.2fkg".format(currentRecord.weight)
-//            holder.rate.text = "%.2f％".format(currentRecord.rate)
-//            holder.memo.text = currentRecord.memo
             holder.binding.item = records.get(position)
             holder.binding.executePendingBindings()
         }
 
         inner class RecordItemViewHolder(view: View): androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
-//            val frontImage: ImageView = view.findViewById(R.id.frontImage)
-//            val sideImage: ImageView = view.findViewById(R.id.sideImage)
-//            val date: TextView = view.findViewById(R.id.date)
-//            val weight: TextView = view.findViewById(R.id.weight)
-//            val rate: TextView = view.findViewById(R.id.rate)
-//            val memo: TextView = view.findViewById(R.id.memo)
-//
-//            init {
-//                view.setOnClickListener {_ ->
-//                    presenter.openEditRecord(this@RecordAdapter.records.get(adapterPosition).date)
-//                }
-//            }
             val binding = ListItemRecordBinding.bind(view)
+
+            init {
+                view.setOnClickListener {_ ->
+                    presenter.openEditRecord(this@RecordAdapter.records.get(adapterPosition).date)
+                }
+            }
         }
     }
 }
@@ -195,5 +182,19 @@ fun formatFloatWithSign(view: TextView, floatValue: Float) {
         view.setText("+${roundedValue}", null)
         view.setTextColor(Color.RED)
     }
-//    view.setText(().toString(), null)
+}
+
+@BindingAdapter("imageFilePath")
+fun loadImage(view: ImageView, path: String?) {
+    if (path == null) {
+        view.setImageResource(android.R.color.transparent)
+        return
+    }
+
+    GlideApp.with(view.context)
+            .load(Uri.fromFile(File(view.context.filesDir, path)))
+            .sizeMultiplier(.4f)
+            .thumbnail(.1f)
+            .error(ColorDrawable(Color.LTGRAY))
+            .into(view)
 }

@@ -6,9 +6,22 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/border_top_bottom_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border_top_bottom_bg">
+        >
+
+        <!--
+        -->
+        <FrameLayout
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            />
 
         <TextView
             android:id="@+id/yearText"
@@ -127,6 +140,8 @@
             android:layout_marginBottom="5dp"
             android:text="@{item.memo}"
             android:textColor="@color/colorGrayText"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
@@ -142,7 +157,9 @@
             android:layout_marginTop="7.5dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="7.5dp"
-            android:background="@color/ultra_light_gray"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="w, 1:1"
+            app:imageFilePath="@{item.frontImagePath}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideline4"
             app:layout_constraintStart_toStartOf="@id/guideline3"
@@ -156,7 +173,9 @@
             android:layout_marginTop="7.5dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="7.5dp"
-            android:background="@color/ultra_light_gray"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="w, 1:1"
+            app:imageFilePath="@{item.sideImagePath}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/guideline4"
@@ -191,85 +210,3 @@
             app:layout_constraintGuide_percent="0.8" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
-<!--
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/border_top_bottom_bg"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    -->
-    <!-- rippleを表示するためのlayout -->
-<!--
-    <LinearLayout
-        android:background="?android:attr/selectableItemBackground"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-        <ImageView
-            android:background="@drawable/image_blank"
-            android:id="@+id/frontImage"
-            android:scaleType="centerCrop"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_marginLeft="10dp"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-        <ImageView
-            android:background="@drawable/image_blank"
-            android:id="@+id/sideImage"
-            android:scaleType="centerCrop"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_marginLeft="10dp"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:text="yyyy-MM-dd HH:mm:ss"
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:textSize="20sp"
-                android:paddingRight="0dp"
-                android:text="999kg"
-                android:id="@+id/weight"
-                android:layout_weight=".5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:textSize="20sp"
-                android:paddingRight="0dp"
-                android:text="99.9%"
-                android:id="@+id/rate"
-                android:layout_weight=".5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <TextView
-            android:id="@+id/memo"
-            android:text="memo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
--->
