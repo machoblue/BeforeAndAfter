@@ -2,6 +2,7 @@
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" >
     <data>
+        <import type="android.view.View" />
         <variable name="item" type="org.macho.beforeandafter.record.RecordItem" />
     </data>
 
@@ -64,6 +65,7 @@
             android:layout_marginTop="7.5dp"
             android:text="50.0"
             android:textSize="20dp"
+            android:visibility="@{item.weight > 0f ? View.VISIBLE : View.INVISIBLE }"
             app:floatValue="@{item.weight}"
             app:layout_constraintEnd_toStartOf="@+id/weightUnitText"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -76,6 +78,7 @@
             android:layout_height="wrap_content"
             android:text="kg"
             android:textSize="12.5dp"
+            android:visibility="@{item.weight > 0f ? View.VISIBLE : View.INVISIBLE }"
             app:layout_constraintBottom_toBottomOf="@id/weightText"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintStart_toEndOf="@+id/weightText" />
@@ -86,6 +89,7 @@
             android:layout_height="wrap_content"
             android:text="+0.5"
             android:textColor="#ff0000"
+            android:visibility="@{item.weight > 0f ? View.VISIBLE : View.INVISIBLE }"
             app:floatValueWithSign="@{item.weightDiff}"
             app:layout_constraintBottom_toTopOf="@id/memo"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
@@ -100,6 +104,7 @@
             android:layout_marginTop="7.5dp"
             android:text="50.0"
             android:textSize="20dp"
+            android:visibility="@{item.rate > 0f ? View.VISIBLE : View.INVISIBLE }"
             app:floatValue="@{item.rate}"
             app:layout_constraintEnd_toStartOf="@+id/rateUnitText"
             app:layout_constraintHorizontal_bias="0.5"
@@ -114,6 +119,7 @@
             android:layout_height="wrap_content"
             android:text="%"
             android:textSize="12.5dp"
+            android:visibility="@{item.rate > 0f ? View.VISIBLE : View.INVISIBLE }"
             app:layout_constraintBottom_toBottomOf="@id/rateText"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintEnd_toStartOf="@+id/frontImage"
@@ -126,6 +132,7 @@
             android:layout_height="wrap_content"
             android:text="+0.5"
             android:textColor="#ff0000"
+            android:visibility="@{item.rate > 0f ? View.VISIBLE : View.INVISIBLE }"
             app:floatValueWithSign="@{item.rateDiff}"
             app:layout_constraintBottom_toBottomOf="@id/weightRatioText"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
