@@ -6,6 +6,7 @@
     <color name="colorGrayText">#ffb0b0b0</color>
     <color name="colorPrimaryLight">#99f44336</color>
     <color name="light_gray">#c8c8c8</color>
+    <color name="ultra_light_gray">#efefef</color>
     <color name="colorBottomNaviItemPressed">#601C1C</color>
 
     <color name="colorWeight">#C62828</color>
