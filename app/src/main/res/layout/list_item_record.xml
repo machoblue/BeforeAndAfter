@@ -6,214 +6,216 @@
         <variable name="item" type="org.macho.beforeandafter.record.RecordItem" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/border_top_bottom_bg"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:background="@drawable/border_top_bottom_bg">
 
-        <!--
-        -->
-        <FrameLayout
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:background="?android:attr/selectableItemBackground"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/yearText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7.5dp"
-            android:text="@{item.yearText}"
-            android:textSize="10dp"
-            app:layout_constraintEnd_toEndOf="@id/guideline1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <FrameLayout
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                />
 
-        <TextView
-            android:id="@+id/dateText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{item.dateText}"
-            android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="@id/guideline1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/yearText" />
+            <TextView
+                android:id="@+id/yearText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7.5dp"
+                android:text="@{item.yearText}"
+                android:textSize="10dp"
+                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/timeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="@{item.timeText}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dateText"
-            app:layout_constraintVertical_bias="0.0" />
+            <TextView
+                android:id="@+id/dateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{item.dateText}"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/yearText" />
 
-        <!-- weight -->
-        <TextView
-            android:id="@+id/weightText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7.5dp"
-            android:text="50.0"
-            android:textSize="20dp"
-            android:visibility="@{item.weight > 0f ? View.VISIBLE : View.INVISIBLE }"
-            app:floatValue="@{item.weight}"
-            app:layout_constraintEnd_toStartOf="@+id/weightUnitText"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/timeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@{item.timeText}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dateText"
+                app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/weightUnitText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="kg"
-            android:textSize="12.5dp"
-            android:visibility="@{item.weight > 0f ? View.VISIBLE : View.INVISIBLE }"
-            app:layout_constraintBottom_toBottomOf="@id/weightText"
-            app:layout_constraintEnd_toEndOf="@id/guideline2"
-            app:layout_constraintStart_toEndOf="@+id/weightText" />
+            <!-- weight -->
+            <TextView
+                android:id="@+id/weightText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7.5dp"
+                android:text="50.0"
+                android:textSize="20dp"
+                android:visibility="@{item.weight > 0f ? View.VISIBLE : View.INVISIBLE }"
+                app:floatValue="@{item.weight}"
+                app:layout_constraintEnd_toStartOf="@+id/weightUnitText"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/weightRatioText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+0.5"
-            android:textColor="#ff0000"
-            android:visibility="@{item.weight > 0f ? View.VISIBLE : View.INVISIBLE }"
-            app:floatValueWithSign="@{item.weightDiff}"
-            app:layout_constraintBottom_toTopOf="@id/memo"
-            app:layout_constraintEnd_toEndOf="@id/guideline2"
-            app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toBottomOf="@id/weightText" />
+            <TextView
+                android:id="@+id/weightUnitText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="kg"
+                android:textSize="12.5dp"
+                android:visibility="@{item.weight > 0f ? View.VISIBLE : View.INVISIBLE }"
+                app:layout_constraintBottom_toBottomOf="@id/weightText"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toEndOf="@+id/weightText" />
 
-        <!-- rate -->
-        <TextView
-            android:id="@+id/rateText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7.5dp"
-            android:text="50.0"
-            android:textSize="20dp"
-            android:visibility="@{item.rate > 0f ? View.VISIBLE : View.INVISIBLE }"
-            app:floatValue="@{item.rate}"
-            app:layout_constraintEnd_toStartOf="@+id/rateUnitText"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@+id/weightUnitText"
-            app:layout_constraintStart_toStartOf="@id/guideline2"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/weightRatioText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+0.5"
+                android:textColor="#ff0000"
+                android:visibility="@{item.weight > 0f ? View.VISIBLE : View.INVISIBLE }"
+                app:floatValueWithSign="@{item.weightDiff}"
+                app:layout_constraintBottom_toTopOf="@id/memo"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintTop_toBottomOf="@id/weightText" />
 
-        <TextView
-            android:id="@+id/rateUnitText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="%"
-            android:textSize="12.5dp"
-            android:visibility="@{item.rate > 0f ? View.VISIBLE : View.INVISIBLE }"
-            app:layout_constraintBottom_toBottomOf="@id/rateText"
-            app:layout_constraintEnd_toEndOf="@id/guideline3"
-            app:layout_constraintEnd_toStartOf="@+id/frontImage"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/rateText" />
+            <!-- rate -->
+            <TextView
+                android:id="@+id/rateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7.5dp"
+                android:text="50.0"
+                android:textSize="20dp"
+                android:visibility="@{item.rate > 0f ? View.VISIBLE : View.INVISIBLE }"
+                app:floatValue="@{item.rate}"
+                app:layout_constraintEnd_toStartOf="@+id/rateUnitText"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/weightUnitText"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/rateRatioText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+0.5"
-            android:textColor="#ff0000"
-            android:visibility="@{item.rate > 0f ? View.VISIBLE : View.INVISIBLE }"
-            app:floatValueWithSign="@{item.rateDiff}"
-            app:layout_constraintBottom_toBottomOf="@id/weightRatioText"
-            app:layout_constraintEnd_toEndOf="@id/guideline3"
-            app:layout_constraintStart_toStartOf="@id/guideline2"
-            app:layout_constraintTop_toBottomOf="@id/weightText" />
+            <TextView
+                android:id="@+id/rateUnitText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="%"
+                android:textSize="12.5dp"
+                android:visibility="@{item.rate > 0f ? View.VISIBLE : View.INVISIBLE }"
+                app:layout_constraintBottom_toBottomOf="@id/rateText"
+                app:layout_constraintEnd_toEndOf="@id/guideline3"
+                app:layout_constraintEnd_toStartOf="@+id/frontImage"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/rateText" />
 
-        <!-- memo -->
-        <TextView
-            android:id="@+id/memo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="@{item.memo}"
-            android:textColor="@color/colorGrayText"
-            android:maxLines="1"
-            android:ellipsize="end"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline3"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toBottomOf="@id/weightRatioText" />
+            <TextView
+                android:id="@+id/rateRatioText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+0.5"
+                android:textColor="#ff0000"
+                android:visibility="@{item.rate > 0f ? View.VISIBLE : View.INVISIBLE }"
+                app:floatValueWithSign="@{item.rateDiff}"
+                app:layout_constraintBottom_toBottomOf="@id/weightRatioText"
+                app:layout_constraintEnd_toEndOf="@id/guideline3"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@id/weightText" />
 
-        <ImageView
-            android:id="@+id/frontImage"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="7.5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="7.5dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintDimensionRatio="w, 1:1"
-            app:imageFilePath="@{item.frontImagePath}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline4"
-            app:layout_constraintStart_toStartOf="@id/guideline3"
-            app:layout_constraintTop_toTopOf="parent" />
+            <!-- memo -->
+            <TextView
+                android:id="@+id/memo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@{item.memo}"
+                android:textColor="@color/colorGrayText"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/guideline3"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintTop_toBottomOf="@id/weightRatioText" />
 
-        <ImageView
-            android:id="@+id/sideImage"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="7.5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="7.5dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintDimensionRatio="w, 1:1"
-            app:imageFilePath="@{item.sideImagePath}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideline4"
-            app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/frontImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="7.5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="7.5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="w, 1:1"
+                app:imageFilePath="@{item.frontImagePath}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/guideline4"
+                app:layout_constraintStart_toStartOf="@id/guideline3"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.2" />
+            <ImageView
+                android:id="@+id/sideImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="7.5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="7.5dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="w, 1:1"
+                app:imageFilePath="@{item.sideImagePath}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/guideline4"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.4" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.2" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.6" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.4" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.8" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.6" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.8" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </layout>
