@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" >
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" >
     <data>
         <variable name="item" type="org.macho.beforeandafter.record.RecordItem" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/border_top_bottom_bg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_top_bottom_bg">
+
         <TextView
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline1"
+            android:id="@+id/yearText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7.5dp"
-            android:textSize="10dp"
-            android:id="@+id/yearText"
             android:text="@{item.yearText}"
-            />
-        <TextView
-            app:layout_constraintTop_toBottomOf="@id/yearText"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="10dp"
             app:layout_constraintEnd_toEndOf="@id/guideline1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/dateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:id="@+id/dateText"
             android:text="@{item.dateText}"
-            />
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="@id/guideline1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/yearText" />
 
         <TextView
             android:id="@+id/timeText"
@@ -41,55 +43,79 @@
             app:layout_constraintTop_toBottomOf="@id/dateText"
             app:layout_constraintVertical_bias="0.0" />
 
-        <!--
-        -->
-
+        <!-- weight -->
         <TextView
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            android:id="@+id/weightText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7.5dp"
+            android:text="50.0"
             android:textSize="20dp"
-            android:id="@+id/weightText"
-            android:text="50.0kg"
-            />
+            app:layout_constraintEnd_toStartOf="@+id/weightUnitText"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/weightUnitText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="kg"
+            android:textSize="12.5dp"
+            app:layout_constraintBottom_toBottomOf="@id/weightText"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintStart_toEndOf="@+id/weightText" />
 
         <TextView
             android:id="@+id/weightRatioText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+0.5kg"
+            android:text="+0.5"
             android:textColor="#ff0000"
             app:layout_constraintBottom_toTopOf="@id/memo"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintStart_toStartOf="@id/guideline1"
             app:layout_constraintTop_toBottomOf="@id/weightText" />
 
+        <!-- rate -->
         <TextView
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideline2"
-            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            android:id="@+id/rateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7.5dp"
+            android:text="50.0"
             android:textSize="20dp"
-            android:id="@+id/rateText"
-            android:text="50.0%"
-            />
+            app:layout_constraintEnd_toStartOf="@+id/rateUnitText"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/weightUnitText"
+            app:layout_constraintStart_toStartOf="@id/guideline2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/rateUnitText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:textSize="12.5dp"
+            app:layout_constraintBottom_toBottomOf="@id/rateText"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            app:layout_constraintEnd_toStartOf="@+id/frontImage"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/rateText" />
 
         <TextView
             android:id="@+id/rateRatioText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+0.5%"
+            android:text="+0.5"
             android:textColor="#ff0000"
             app:layout_constraintBottom_toBottomOf="@id/weightRatioText"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toStartOf="@id/guideline2"
             app:layout_constraintTop_toBottomOf="@id/weightText" />
 
+        <!-- memo -->
         <TextView
             android:id="@+id/memo"
             android:layout_width="wrap_content"
@@ -107,8 +133,8 @@
             android:id="@+id/frontImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="7.5dp"
             android:layout_marginStart="0dp"
+            android:layout_marginTop="7.5dp"
             android:layout_marginEnd="10dp"
             android:background="@color/ultra_light_gray"
             app:layout_constraintBottom_toBottomOf="@id/memo"
@@ -120,8 +146,8 @@
             android:id="@+id/sideImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="7.5dp"
             android:layout_marginStart="0dp"
+            android:layout_marginTop="7.5dp"
             android:layout_marginEnd="10dp"
             android:background="@color/ultra_light_gray"
             app:layout_constraintBottom_toBottomOf="@id/memo"
