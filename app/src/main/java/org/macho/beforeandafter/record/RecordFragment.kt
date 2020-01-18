@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.MobileAds
@@ -81,11 +83,11 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         var recordItems = mutableListOf<RecordItem>()
         val yearFormatter = SimpleDateFormat("yyyy")
         val dateFormatter = SimpleDateFormat("MM/dd")
-        val timeFormatter = SimpleDateFormat("hh:mm")
+        val timeFormatter = SimpleDateFormat("kk:mm")
         for ((index, record) in records.withIndex()) {
             val beforeRecord: Record? = if (index + 1 < records.size) records[index + 1] else null
-            val weightDiff: Float? = beforeRecord?.let { if (beforeRecord.weight > 0.0f) beforeRecord.weight - record.weight else null }
-            val rateDiff: Float? = beforeRecord?.let { if (beforeRecord.rate > 0.0f) beforeRecord.rate - record.rate else null }
+            val weightDiff: Float? = beforeRecord?.let { if (beforeRecord.weight > 0.0f) record.weight - beforeRecord.weight else null }
+            val rateDiff: Float? = beforeRecord?.let { if (beforeRecord.rate > 0.0f) record.rate - beforeRecord.rate else null }
             recordItems.add(RecordItem(
                     record.date,
                     yearFormatter.format(record.date),
@@ -173,4 +175,25 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
             val binding = ListItemRecordBinding.bind(view)
         }
     }
+}
+
+@BindingAdapter("floatValue")
+fun formatFloat(view: TextView, floatValue: Float) {
+    view.setText(((floatValue * 10).toInt() / 10f).toString(), null)
+}
+
+@BindingAdapter("floatValueWithSign")
+fun formatFloatWithSign(view: TextView, floatValue: Float) {
+    val roundedValue = (floatValue * 10).toInt() / 10f
+    if (floatValue == 0f) {
+        view.setText("±${roundedValue}", null)
+        view.setTextColor(Color.GRAY)
+    } else if (floatValue < 0f) {
+        view.setText("${roundedValue}", null)
+        view.setTextColor(Color.GREEN)
+    } else if (floatValue > 0f) {
+        view.setText("+${roundedValue}", null)
+        view.setTextColor(Color.RED)
+    }
+//    view.setText(().toString(), null)
 }
