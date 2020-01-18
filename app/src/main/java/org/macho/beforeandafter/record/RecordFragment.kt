@@ -24,6 +24,7 @@ import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.extensions.loadImage
 import org.macho.beforeandafter.shared.util.AdUtil
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -71,9 +72,39 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
 
     override fun showItems(items: List<Record>) {
-        recordAdapter = RecordAdapter(this.context!!, items, 100)
+        val recordItems = convertToRecordItemList(items)
+        recordAdapter = RecordAdapter(this.context!!, recordItems, 100)
         listView.adapter = recordAdapter
     }
+
+    private fun convertToRecordItemList(records: List<Record>): List<RecordItem> {
+        var recordItems = mutableListOf<RecordItem>()
+        val yearFormatter = SimpleDateFormat("yyyy")
+        val dateFormatter = SimpleDateFormat("MM/dd")
+        val timeFormatter = SimpleDateFormat("hh:mm")
+        for ((index, record) in records.withIndex()) {
+            val beforeRecord: Record? = if (index + 1 < records.size) records[index + 1] else null
+            val weightDiff: Float? = beforeRecord?.let { if (beforeRecord.weight > 0.0f) beforeRecord.weight - record.weight else null }
+            val rateDiff: Float? = beforeRecord?.let { if (beforeRecord.rate > 0.0f) beforeRecord.rate - record.rate else null }
+            recordItems.add(RecordItem(
+                    record.date,
+                    yearFormatter.format(record.date),
+                    dateFormatter.format(record.date),
+                    timeFormatter.format(record.date),
+                    record.weight,
+                    weightDiff,
+                    record.rate,
+                    rateDiff,
+                    record.frontImagePath,
+                    record.sideImagePath,
+                    record.memo
+            ))
+        }
+        return recordItems
+    }
+
+//    private fun convertToRecordItem(record: Record): RecordItem {
+//    }
 
     override fun showAddRecordUI() {
 //        val bundle = Bundle()
@@ -101,7 +132,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         listView.visibility = View.GONE
     }
 
-    inner class RecordAdapter(val context: Context, val records: List<Record>, val viewHeight: Int)
+    inner class RecordAdapter(val context: Context, val records: List<RecordItem>, val viewHeight: Int)
         : RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
         private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -122,7 +153,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 //            holder.weight.text = "%.2fkg".format(currentRecord.weight)
 //            holder.rate.text = "%.2f％".format(currentRecord.rate)
 //            holder.memo.text = currentRecord.memo
-            holder.binding.record = records.get(position)
+            holder.binding.item = records.get(position)
             holder.binding.executePendingBindings()
         }
 
