@@ -35,6 +35,7 @@
                         android:hint="@string/weight_label"
                         android:inputType="numberDecimal"
                         android:id="@+id/weight"
+                        android:imeOptions="actionDone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -70,6 +71,7 @@
                         android:inputType="numberDecimal"
                         android:hint="@string/rate_label"
                         android:id="@+id/rate"
+                        android:imeOptions="actionDone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -103,6 +105,8 @@
                     <EditText
                         android:hint="@string/memo_label"
                         android:id="@+id/memo"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
