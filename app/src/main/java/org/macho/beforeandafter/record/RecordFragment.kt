@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,16 +12,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.record_frag.*
+import org.macho.beforeandafter.BR
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.databinding.ListItemRecordBinding
 import org.macho.beforeandafter.shared.GlideApp
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.extensions.loadImage
 import org.macho.beforeandafter.shared.util.AdUtil
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -68,8 +74,35 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
 
     override fun showItems(items: List<Record>) {
-        recordAdapter = RecordAdapter(this.context!!, items, 100)
+        val recordItems = convertToRecordItemList(items)
+        recordAdapter = RecordAdapter(this.context!!, recordItems, 100)
         listView.adapter = recordAdapter
+    }
+
+    private fun convertToRecordItemList(records: List<Record>): List<RecordItem> {
+        var recordItems = mutableListOf<RecordItem>()
+        val yearFormatter = SimpleDateFormat("yyyy")
+        val dateFormatter = SimpleDateFormat("MM/dd")
+        val timeFormatter = SimpleDateFormat("kk:mm")
+        for ((index, record) in records.withIndex()) {
+            val beforeRecord: Record? = if (index + 1 < records.size) records[index + 1] else null
+            val weightDiff: Float? = beforeRecord?.let { if (beforeRecord.weight > 0.0f) record.weight - beforeRecord.weight else null }
+            val rateDiff: Float? = beforeRecord?.let { if (beforeRecord.rate > 0.0f) record.rate - beforeRecord.rate else null }
+            recordItems.add(RecordItem(
+                    record.date,
+                    yearFormatter.format(record.date),
+                    dateFormatter.format(record.date),
+                    timeFormatter.format(record.date),
+                    record.weight,
+                    weightDiff,
+                    record.rate,
+                    rateDiff,
+                    record.frontImagePath,
+                    record.sideImagePath,
+                    record.memo
+            ))
+        }
+        return recordItems
     }
 
     override fun showAddRecordUI() {
@@ -98,35 +131,26 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         listView.visibility = View.GONE
     }
 
-    inner class RecordAdapter(val context: Context, val records: List<Record>, val viewHeight: Int)
-        : androidx.recyclerview.widget.RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
-        val layoutInflater = LayoutInflater.from(context)
+    inner class RecordAdapter(val context: Context, val records: List<RecordItem>, val viewHeight: Int)
+        : RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
+        private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
         override fun getItemCount(): Int {
             return records.size
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordItemViewHolder {
-            return RecordItemViewHolder(layoutInflater.inflate(R.layout.list_item_record, parent, false))
+            val view = layoutInflater.inflate(R.layout.list_item_record, parent, false)
+            return RecordItemViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: RecordItemViewHolder, position: Int) {
-            val currentRecord = records.get(position)
-            holder.frontImage.loadImage(this@RecordFragment, Uri.fromFile(File(context.filesDir, currentRecord.frontImagePath ?: "")))
-            holder.sideImage.loadImage(this@RecordFragment, Uri.fromFile(File(context.filesDir, currentRecord.sideImagePath ?: "")))
-            holder.date.text = "%1\$tF %1\$tH:%1\$tM:%1\$tS".format(Date(currentRecord.date))
-            holder.weight.text = "%.2fkg".format(currentRecord.weight)
-            holder.rate.text = "%.2f％".format(currentRecord.rate)
-            holder.memo.text = currentRecord.memo
+            holder.binding.item = records.get(position)
+            holder.binding.executePendingBindings()
         }
 
         inner class RecordItemViewHolder(view: View): androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
-            val frontImage: ImageView = view.findViewById(R.id.frontImage)
-            val sideImage: ImageView = view.findViewById(R.id.sideImage)
-            val date: TextView = view.findViewById(R.id.date)
-            val weight: TextView = view.findViewById(R.id.weight)
-            val rate: TextView = view.findViewById(R.id.rate)
-            val memo: TextView = view.findViewById(R.id.memo)
+            val binding = ListItemRecordBinding.bind(view)
 
             init {
                 view.setOnClickListener {_ ->
@@ -135,4 +159,39 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
             }
         }
     }
+}
+
+@BindingAdapter("floatValue")
+fun formatFloat(view: TextView, floatValue: Float) {
+    view.setText(((floatValue * 10).toInt() / 10f).toString(), null)
+}
+
+@BindingAdapter("floatValueWithSign")
+fun formatFloatWithSign(view: TextView, floatValue: Float) {
+    val roundedValue = (floatValue * 10).toInt() / 10f
+    if (floatValue == 0f) {
+        view.setText("±${roundedValue}", null)
+        view.setTextColor(Color.GRAY)
+    } else if (floatValue < 0f) {
+        view.setText("${roundedValue}", null)
+        view.setTextColor(Color.GREEN)
+    } else if (floatValue > 0f) {
+        view.setText("+${roundedValue}", null)
+        view.setTextColor(Color.RED)
+    }
+}
+
+@BindingAdapter("imageFilePath")
+fun loadImage(view: ImageView, path: String?) {
+    if (path == null) {
+        view.setImageResource(android.R.color.transparent)
+        return
+    }
+
+    GlideApp.with(view.context)
+            .load(Uri.fromFile(File(view.context.filesDir, path)))
+            .sizeMultiplier(.4f)
+            .thumbnail(.1f)
+            .error(ColorDrawable(Color.LTGRAY))
+            .into(view)
 }
