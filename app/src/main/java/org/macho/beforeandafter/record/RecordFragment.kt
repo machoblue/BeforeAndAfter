@@ -105,9 +105,6 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         return recordItems
     }
 
-//    private fun convertToRecordItem(record: Record): RecordItem {
-//    }
-
     override fun showAddRecordUI() {
 //        val bundle = Bundle()
 //        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "myId")
