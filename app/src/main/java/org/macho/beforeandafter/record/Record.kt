@@ -2,7 +2,7 @@ package org.macho.beforeandafter.record
 
 import java.util.*
 
-class Record(var date: Long = Date().time,
+data class Record(var date: Long = Date().time,
              var weight: Float = 0f,
              var rate: Float = 0f,
              var frontImagePath: String? = null,

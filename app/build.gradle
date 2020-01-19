@@ -54,6 +54,10 @@ android {
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
