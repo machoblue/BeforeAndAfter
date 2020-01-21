@@ -1,9 +1,7 @@
 package org.macho.beforeandafter.record.editaddrecord
 
 import android.content.Context
-import android.graphics.BitmapFactory
-import org.macho.beforeandafter.record.Record
-import org.macho.beforeandafter.shared.BeforeAndAfterConst
+import org.macho.beforeandafter.shared.data.Record
 import org.macho.beforeandafter.shared.data.RecordRepository
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.io.File

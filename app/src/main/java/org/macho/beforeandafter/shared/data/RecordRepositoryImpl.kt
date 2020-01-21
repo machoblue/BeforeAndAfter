@@ -1,6 +1,5 @@
 package org.macho.beforeandafter.shared.data
 
-import org.macho.beforeandafter.record.Record
 import org.macho.beforeandafter.shared.util.AppExecutors
 import javax.inject.Inject
 

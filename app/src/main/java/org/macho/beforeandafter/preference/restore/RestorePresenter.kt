@@ -15,7 +15,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import com.google.api.services.drive.DriveScopes
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.backup.BackupPresenter
-import org.macho.beforeandafter.record.Record
+import org.macho.beforeandafter.shared.data.Record
 import org.macho.beforeandafter.shared.data.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import javax.inject.Inject

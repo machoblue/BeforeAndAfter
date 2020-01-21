@@ -4,22 +4,17 @@ import android.accounts.Account
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
-import com.google.api.client.extensions.android.http.AndroidHttp
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
-import com.google.api.client.json.gson.GsonFactory
 import com.google.api.client.util.DateTime
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import com.google.gson.Gson
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.backup.BackupData
 import org.macho.beforeandafter.preference.backup.BackupTask
 import org.macho.beforeandafter.preference.backup.DriveUtil
-import org.macho.beforeandafter.record.Record
+import org.macho.beforeandafter.shared.data.Record
 import java.io.*
 import java.lang.ref.WeakReference
-import java.util.*
 
 
 class RestoreTask(context: Context, val account: Account, listener: RestoreTaskListener): AsyncTask<Void, RestoreTask.RestoreStatus, List<Record>?>() {

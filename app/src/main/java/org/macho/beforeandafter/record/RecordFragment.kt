@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,16 +17,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.record_frag.*
-import org.macho.beforeandafter.BR
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.databinding.ListItemRecordBinding
 import org.macho.beforeandafter.shared.GlideApp
+import org.macho.beforeandafter.shared.data.Record
 import org.macho.beforeandafter.shared.di.ActivityScoped
-import org.macho.beforeandafter.shared.extensions.loadImage
 import org.macho.beforeandafter.shared.util.AdUtil
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 @ActivityScoped

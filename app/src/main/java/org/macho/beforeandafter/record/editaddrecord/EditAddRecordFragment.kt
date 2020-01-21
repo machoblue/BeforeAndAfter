@@ -31,6 +31,7 @@ import org.macho.beforeandafter.record.camera.PermissionUtils
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.extensions.addTextChangedListener
 import org.macho.beforeandafter.shared.extensions.loadImage
+import org.macho.beforeandafter.shared.extensions.setupClearButtonWithAction
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
@@ -396,27 +397,4 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             }
         }
     }
-}
-
-fun EditText.setupClearButtonWithAction() {
-
-    addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(editable: Editable?) {
-            val clearIcon = if (editable?.isNotEmpty() == true) R.drawable.baseline_clear_24 else 0
-            setCompoundDrawablesWithIntrinsicBounds(0, 0, clearIcon, 0)
-        }
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
-    })
-
-    setOnTouchListener(View.OnTouchListener { _, event ->
-        if (event.action == MotionEvent.ACTION_UP) {
-            if (event.rawX >= (this.right - this.compoundPaddingRight)) {
-                this.setText("")
-                return@OnTouchListener true
-            }
-        }
-        return@OnTouchListener false
-    })
 }

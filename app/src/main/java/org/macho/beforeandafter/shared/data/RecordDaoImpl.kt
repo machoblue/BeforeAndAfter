@@ -1,7 +1,6 @@
 package org.macho.beforeandafter.shared.data
 
 import io.realm.Realm
-import org.macho.beforeandafter.record.Record
 
 class RecordDaoImpl: RecordDao {
     override fun findAll(): List<Record> {
