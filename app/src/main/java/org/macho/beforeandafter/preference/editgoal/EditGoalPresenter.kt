@@ -29,8 +29,8 @@ class EditGoalPresenter @Inject constructor(): EditGoalContract.Presenter {
     }
 
     override fun saveGoal(weightGoalText: String, rateGoalText: String) {
-        preferences.edit().putFloat("GOAL_WEIGHT", weightGoalText.toString().toFloat()).commit()
-        preferences.edit().putFloat("GOAL_RATE", rateGoalText.toString().toFloat()).commit()
+        preferences.edit().putFloat("GOAL_WEIGHT", if (weightGoalText.isEmpty()) weightGoalText.toFloat() else 0f).apply()
+        preferences.edit().putFloat("GOAL_RATE", if (rateGoalText.isEmpty()) rateGoalText.toFloat() else 0f).apply()
     }
 
     override fun back() {
