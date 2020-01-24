@@ -11,17 +11,13 @@ import android.preference.PreferenceManager
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import androidx.appcompat.app.AlertDialog
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.*
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
-import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.edit_add_record_frag.*
 import org.macho.beforeandafter.BuildConfig
@@ -159,7 +155,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         AdUtil.initializeMobileAds(context!!)
 
         AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
 
         val contextRef = activity!!
 

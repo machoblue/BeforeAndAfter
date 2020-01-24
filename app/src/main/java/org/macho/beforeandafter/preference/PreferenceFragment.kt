@@ -16,7 +16,6 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.pin.PinEnableActivity
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.preference.pin.PinDisableActivity
-import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.util.*
 import javax.inject.Inject
@@ -53,7 +52,7 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
         }
 
         AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
     }
 
     override fun onStart() {
@@ -99,7 +98,7 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
         // MARK: - Data Settings
         items.add(SectionHeader(R.string.preference_section_header_data))
         items.add(PreferenceItem(R.string.preference_item_backup_title, R.string.preference_item_backup_description) {
-            val action = if (haveWatchedAdRecently || !resources.getBoolean(R.bool.showAd)) {
+            val action = if (haveWatchedAdRecently || AdUtil.isRewardAdHidden(context!!)) {
                 PreferenceFragmentDirections.actionPreferenceFragmentToBackupDialog4()
             } else {
                 PreferenceFragmentDirections.actionPreferenceFragmentToRewardDialog2()

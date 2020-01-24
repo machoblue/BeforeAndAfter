@@ -95,17 +95,25 @@ object AdUtil {
         .build()
     }
 
-    fun showAd(context: Context): Boolean {
-        return context.resources.getBoolean(R.bool.showAd)
+    fun isBannerAdHidden(context: Context): Boolean {
+        return context.resources.getBoolean(R.bool.hide_banner_ad)
+    }
+
+    fun isInterstitialAdHidden(context: Context): Boolean {
+        return context.resources.getBoolean(R.bool.hide_interstitial_ad)
+    }
+
+    fun isRewardAdHidden(context: Context): Boolean {
+        return context.resources.getBoolean(R.bool.hide_reward_ad)
     }
 
     fun initializeMobileAds(context: Context) {
-        if (!showAd(context)) return
+        if (isBannerAdHidden(context) && isInterstitialAdHidden(context)) return
         MobileAds.initialize(context, context.getString(R.string.admob_app_id))
     }
 
     fun loadBannerAd(adView: AdView, context: Context) {
-        if (!showAd(context)) return
+        if (isBannerAdHidden(context)) return
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val canForwardPersonalizedAdRequest = preferences.getBoolean(CAN_FORWARD_PERSONALIZED_AD_REQUEST, true)
         if (isInEEA(context) && canForwardPersonalizedAdRequest) {
@@ -120,7 +128,7 @@ object AdUtil {
     }
 
     fun instantiateAndLoadInterstitialAd(context: Context): InterstitialAd? {
-        if (!showAd(context)) return null
+        if (isInterstitialAdHidden(context)) return null
         val interstitialAd = InterstitialAd(context)
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val canForwardPersonalizedAdRequest = preferences.getBoolean(CAN_FORWARD_PERSONALIZED_AD_REQUEST, true)
@@ -140,7 +148,7 @@ object AdUtil {
 }
 
 fun InterstitialAd.showIfNeeded(context: Context) {
-    if (!AdUtil.showAd(context)) return
+    if (AdUtil.isInterstitialAdHidden(context)) return
     if (isLoaded) {
         show()
     } else {

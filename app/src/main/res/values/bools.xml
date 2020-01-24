@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="showAd">true</bool>
+    <bool name="hide_banner_ad">false</bool>
+    <bool name="hide_interstitial_ad">true</bool>
+    <bool name="hide_reward_ad">false</bool>
 </resources>

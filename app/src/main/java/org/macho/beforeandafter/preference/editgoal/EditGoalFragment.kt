@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.InterstitialAd
-import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.edit_goal_fragment.*
 import kotlinx.android.synthetic.main.edit_goal_fragment.adView
@@ -29,7 +28,7 @@ class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         AdUtil.initializeMobileAds(context!!)
         AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
 
 
         interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)

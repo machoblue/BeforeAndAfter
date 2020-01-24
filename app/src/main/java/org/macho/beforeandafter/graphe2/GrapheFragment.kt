@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,7 +70,7 @@ class GrapheFragment: androidx.fragment.app.Fragment() {
         currentDate.text = format.format(Date())
 
         AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
     }
 
     private fun refresh() {

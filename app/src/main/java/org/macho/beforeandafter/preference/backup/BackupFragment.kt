@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.*
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.InterstitialAd
-import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.backup_frag.*
 import org.macho.beforeandafter.R
@@ -48,7 +47,7 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
         AdUtil.initializeMobileAds(context!!)
 
         AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
 
 
         interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)

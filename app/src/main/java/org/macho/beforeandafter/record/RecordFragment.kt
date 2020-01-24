@@ -14,7 +14,6 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.MobileAds
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.record_frag.*
 import org.macho.beforeandafter.R
@@ -49,7 +48,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
         AdUtil.initializeMobileAds(context!!)
         AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
     }
 
     override fun onResume() {
