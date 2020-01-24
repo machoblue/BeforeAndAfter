@@ -12,6 +12,7 @@ import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.RecordDao
 import org.macho.beforeandafter.shared.data.RecordDaoImpl
+import org.macho.beforeandafter.shared.util.showIfNeeded
 import java.io.File
 
 class DeleteAllDialog: androidx.fragment.app.DialogFragment() {
@@ -21,15 +22,13 @@ class DeleteAllDialog: androidx.fragment.app.DialogFragment() {
         }
     }
 
-    private lateinit var interstitialAd: InterstitialAd
+    private var interstitialAd: InterstitialAd? = null
 
     private val recordDao: RecordDao = RecordDaoImpl() // TODO: take from Dagger
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        MobileAds.initialize(activity, getString(R.string.admob_app_id))
-
-        interstitialAd = InterstitialAd(activity)
-        AdUtil.loadInterstitialAd(interstitialAd, context!!)
+        AdUtil.initializeMobileAds(context!!)
+        interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)
 
         return AlertDialog.Builder(activity).setTitle(R.string.delete_all_title)
                 .setMessage(R.string.delete_all_confirmation_message)
@@ -41,10 +40,10 @@ class DeleteAllDialog: androidx.fragment.app.DialogFragment() {
                             file.delete()
                         }
                     }
-                    AdUtil.show(interstitialAd)
+                    interstitialAd?.showIfNeeded(context!!)
                 }
                 .setNegativeButton(R.string.cancel) { dialogInterface, i ->
-                    AdUtil.show(interstitialAd)
+                    interstitialAd?.showIfNeeded(context!!)
                 }
                 .create()
     }

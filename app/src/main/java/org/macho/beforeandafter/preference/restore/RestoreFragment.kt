@@ -17,6 +17,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
+import org.macho.beforeandafter.shared.util.showIfNeeded
 import org.macho.beforeandafter.shared.view.AlertDialog
 import javax.inject.Inject
 
@@ -28,7 +29,7 @@ class RestoreFragment @Inject constructor(): DaggerFragment(), RestoreContract.V
     @Inject
     lateinit var recordRepository: RecordRepository
 
-    private lateinit var interstitialAd: InterstitialAd
+    private var interstitialAd: InterstitialAd? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.restore_frag, container, false)
@@ -47,12 +48,13 @@ class RestoreFragment @Inject constructor(): DaggerFragment(), RestoreContract.V
 
         setHasOptionsMenu(true)
 
-        MobileAds.initialize(context, getString(R.string.admob_app_id))
+        AdUtil.initializeMobileAds(context!!)
 
         AdUtil.loadBannerAd(adView, context!!)
+        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
 
-        interstitialAd = InterstitialAd(context)
-        AdUtil.loadInterstitialAd(interstitialAd, context!!)
+
+        interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -68,7 +70,7 @@ class RestoreFragment @Inject constructor(): DaggerFragment(), RestoreContract.V
     }
 
     override fun finish() {
-        AdUtil.show(interstitialAd)
+        interstitialAd?.showIfNeeded(context!!)
         findNavController().popBackStack()
     }
 

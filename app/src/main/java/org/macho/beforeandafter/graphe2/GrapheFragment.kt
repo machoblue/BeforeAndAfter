@@ -71,6 +71,7 @@ class GrapheFragment: androidx.fragment.app.Fragment() {
         currentDate.text = format.format(Date())
 
         AdUtil.loadBannerAd(adView, context!!)
+        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
     }
 
     private fun refresh() {

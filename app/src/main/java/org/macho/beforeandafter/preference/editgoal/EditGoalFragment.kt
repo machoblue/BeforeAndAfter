@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.edit_goal_fragment.adView
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.util.showIfNeeded
 import javax.inject.Inject
 
 @ActivityScoped
@@ -19,22 +20,21 @@ class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract
     @Inject
     override lateinit var presenter: EditGoalContract.Presenter
 
-    private lateinit var interstitialAd: InterstitialAd
+    private var interstitialAd: InterstitialAd? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.edit_goal_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        MobileAds.initialize(context, getString(R.string.admob_app_id))
+        AdUtil.initializeMobileAds(context!!)
         AdUtil.loadBannerAd(adView, context!!)
+        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
 
-        interstitialAd = InterstitialAd(context)
-        AdUtil.loadInterstitialAd(interstitialAd, context!!)
+
+        interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)
 
         setHasOptionsMenu(true); // for save button on navBar
-
-        AdUtil.loadBannerAd(adView, context!!)
     }
 
     override fun onResume() {
@@ -76,7 +76,7 @@ class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract
     }
 
     override fun finish() {
-        AdUtil.show(interstitialAd)
+        interstitialAd?.showIfNeeded(context!!)
         findNavController().popBackStack()
     }
 }

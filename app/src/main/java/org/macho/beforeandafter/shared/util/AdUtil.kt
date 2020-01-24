@@ -9,6 +9,7 @@ import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
 import org.macho.beforeandafter.R
 import java.net.URL
 
@@ -94,7 +95,17 @@ object AdUtil {
         .build()
     }
 
+    fun showAd(context: Context): Boolean {
+        return context.resources.getBoolean(R.bool.showAd)
+    }
+
+    fun initializeMobileAds(context: Context) {
+        if (!showAd(context)) return
+        MobileAds.initialize(context, context.getString(R.string.admob_app_id))
+    }
+
     fun loadBannerAd(adView: AdView, context: Context) {
+        if (!showAd(context)) return
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val canForwardPersonalizedAdRequest = preferences.getBoolean(CAN_FORWARD_PERSONALIZED_AD_REQUEST, true)
         if (isInEEA(context) && canForwardPersonalizedAdRequest) {
@@ -108,7 +119,9 @@ object AdUtil {
         }
     }
 
-    fun loadInterstitialAd(interstitialAd: InterstitialAd, context: Context) {
+    fun instantiateAndLoadInterstitialAd(context: Context): InterstitialAd? {
+        if (!showAd(context)) return null
+        val interstitialAd = InterstitialAd(context)
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val canForwardPersonalizedAdRequest = preferences.getBoolean(CAN_FORWARD_PERSONALIZED_AD_REQUEST, true)
         var adRequest: AdRequest? = null
@@ -121,14 +134,16 @@ object AdUtil {
         }
         interstitialAd.setAdUnitId(context.getString(R.string.admob_unit_id_interstitial))
         interstitialAd.loadAd(adRequest!!)
+        return interstitialAd
     }
 
-    fun show(interstitialAd: InterstitialAd) {
-        if (interstitialAd.isLoaded) {
-            interstitialAd.show()
-        } else {
-            Log.d("TAG", "The interstitial wasn't loaded yet.")
-        }
-    }
+}
 
+fun InterstitialAd.showIfNeeded(context: Context) {
+    if (!AdUtil.showAd(context)) return
+    if (isLoaded) {
+        show()
+    } else {
+        Log.d("TAG", "The interstitial wasn't loaded yet.")
+    }
 }

@@ -47,6 +47,7 @@ class GalleryFragment: androidx.fragment.app.Fragment() {
         sideGridView.setHasFixedSize(true)
 
         AdUtil.loadBannerAd(adView, context!!)
+        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
     }
 
     override fun onStart() {

@@ -10,16 +10,16 @@ import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.util.showIfNeeded
 
 class RestoreDialog: DialogFragment() {
 
-    private lateinit var interstitialAd: InterstitialAd
+    private var interstitialAd: InterstitialAd? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        MobileAds.initialize(activity, getString(R.string.admob_app_id))
+        AdUtil.initializeMobileAds(context!!)
 
-        interstitialAd = InterstitialAd(activity)
-        AdUtil.loadInterstitialAd(interstitialAd, context!!)
+        interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)
 
         return AlertDialog.Builder(activity).setTitle(R.string.restore_dialog_title)
                 .setMessage(R.string.backup_dialog_message)
@@ -28,7 +28,7 @@ class RestoreDialog: DialogFragment() {
                     findNavController().navigate(action)
                 }
                 .setNegativeButton(R.string.cancel) { dialogInterface, i ->
-                    AdUtil.show(interstitialAd)
+                    interstitialAd?.showIfNeeded(context!!)
                 }
                 .create()
     }

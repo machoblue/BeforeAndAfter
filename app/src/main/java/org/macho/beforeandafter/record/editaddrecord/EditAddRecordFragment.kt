@@ -35,6 +35,7 @@ import org.macho.beforeandafter.shared.extensions.setupClearButtonWithAction
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.ImageUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import org.macho.beforeandafter.shared.util.showIfNeeded
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -60,7 +61,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     @Inject
     override lateinit var presenter: EditAddRecordContract.Presenter
 
-    private lateinit var interstitialAd: InterstitialAd
+    private var interstitialAd: InterstitialAd? = null
 
     val args: EditAddRecordFragmentArgs by navArgs()
 
@@ -155,19 +156,19 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             presenter.setMemo(newText)
         }
 
-        MobileAds.initialize(context, getString(R.string.admob_app_id))
+        AdUtil.initializeMobileAds(context!!)
 
         AdUtil.loadBannerAd(adView, context!!)
+        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
 
         val contextRef = activity!!
 
-        interstitialAd = InterstitialAd(context)
-        interstitialAd.adListener = object: AdListener() {
+        interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)
+        interstitialAd?.adListener = object: AdListener() {
             override fun onAdClosed() {
                 Toast.makeText(contextRef, R.string.interstitial_message, Toast.LENGTH_LONG).show()
             }
         }
-        AdUtil.loadInterstitialAd(interstitialAd, context!!)
 
         val timeOfLastRecord = SharedPreferencesUtil.getLong(activity!!, SharedPreferencesUtil.Key.TIME_OF_LATEST_RECORD)
         val isFirstRecord = timeOfLastRecord == 0L
@@ -347,7 +348,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     override fun finish() {
         if (shouldShowInterstitialAd) {
-            AdUtil.show(interstitialAd)
+            interstitialAd?.showIfNeeded(context!!)
         }
         findNavController().popBackStack()
     }

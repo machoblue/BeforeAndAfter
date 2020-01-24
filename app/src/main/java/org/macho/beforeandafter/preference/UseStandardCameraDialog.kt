@@ -14,6 +14,7 @@ import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.util.showIfNeeded
 
 
 class UseStandardCameraDialog: androidx.fragment.app.DialogFragment() {
@@ -25,13 +26,12 @@ class UseStandardCameraDialog: androidx.fragment.app.DialogFragment() {
 
     private lateinit var layout: LinearLayout
     private lateinit var checkBox: CheckBox
-    private lateinit var interstitialAd: InterstitialAd
+    private var interstitialAd: InterstitialAd? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        MobileAds.initialize(activity, getString(R.string.admob_app_id))
+        AdUtil.initializeMobileAds(context!!)
 
-        interstitialAd = InterstitialAd(activity)
-        AdUtil.loadInterstitialAd(interstitialAd, context!!)
+        interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)
 
         layout = LinearLayout(context!!)
         val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
@@ -55,10 +55,10 @@ class UseStandardCameraDialog: androidx.fragment.app.DialogFragment() {
                 .setView(layout)
                 .setPositiveButton(R.string.ok) { dialogInterface, i ->
                     preferences.edit().putBoolean("USE_STANDARD_CAMERA", checkBox.isChecked).commit()
-                    AdUtil.show(interstitialAd)
+                    interstitialAd?.showIfNeeded(context!!)
                 }
                 .setNegativeButton(R.string.cancel) { dialogInterface, i ->
-                    AdUtil.show(interstitialAd)
+                    interstitialAd?.showIfNeeded(context!!)
                 }
                 .create()
 

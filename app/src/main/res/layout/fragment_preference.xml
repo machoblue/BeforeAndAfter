@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/dark_gray"
         android:orientation="vertical"
-        android:id="@+id/ad_layout"
+        android:id="@+id/adLayout"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="50dp">

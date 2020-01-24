@@ -53,6 +53,7 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
         }
 
         AdUtil.loadBannerAd(adView, context!!)
+        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
     }
 
     override fun onStart() {
@@ -98,7 +99,11 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
         // MARK: - Data Settings
         items.add(SectionHeader(R.string.preference_section_header_data))
         items.add(PreferenceItem(R.string.preference_item_backup_title, R.string.preference_item_backup_description) {
-            val action = if (haveWatchedAdRecently) PreferenceFragmentDirections.actionPreferenceFragmentToBackupDialog4() else PreferenceFragmentDirections.actionPreferenceFragmentToRewardDialog2()
+            val action = if (haveWatchedAdRecently || !resources.getBoolean(R.bool.showAd)) {
+                PreferenceFragmentDirections.actionPreferenceFragmentToBackupDialog4()
+            } else {
+                PreferenceFragmentDirections.actionPreferenceFragmentToRewardDialog2()
+            }
             findNavController().navigate(action)
         })
         items.add(PreferenceItem(R.string.preference_item_restore_title, R.string.preference_item_restore_description) {

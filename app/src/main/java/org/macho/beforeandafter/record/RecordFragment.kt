@@ -47,10 +47,9 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
             presenter.openAddRecord()
         }
 
-        MobileAds.initialize(context, getString(R.string.admob_app_id))
+        AdUtil.initializeMobileAds(context!!)
         AdUtil.loadBannerAd(adView, context!!)
-
-//        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+        adLayout.visibility = if (AdUtil.showAd(context!!)) View.VISIBLE else View.GONE
     }
 
     override fun onResume() {
