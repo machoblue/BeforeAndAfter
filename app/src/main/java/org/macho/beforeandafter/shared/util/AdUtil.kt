@@ -14,7 +14,7 @@ import org.macho.beforeandafter.R
 import java.net.URL
 
 object AdUtil {
-    const val PRIVACY_URL = "https://sites.google.com/site/jiantamudaiettoriji/"
+    const val PRIVACY_URL = "https://beforeandafter.matsuchiyo.com/privacy.html"
     const val CAN_FORWARD_PERSONALIZED_AD_REQUEST = "CAN_FORWARD_PERSONALIZED_AD_REQUEST"
 
     private var form: ConsentForm? = null
