@@ -23,11 +23,13 @@
 
     <!-- Edit Fragment -->
     <string name="weight_label">weight(kg)</string>
-    <string name="rate_label">rate(%)</string>
+    <string name="rate_label">rate(%) (Optional)</string>
     <string name="save">save</string>
     <string name="cancel">cancel</string>
     <string name="delete">delete</string>
-    <string name="memo_label">memo</string>
+    <string name="memo_label">memo (Optional)</string>
+    <string name="front_image_label">Front (Optional)</string>
+    <string name="side_image_label">Side (Optional)</string>
 
     <!-- Camera Activity -->
     <string name="camera_in_preparation">The camera is in preparation.</string>

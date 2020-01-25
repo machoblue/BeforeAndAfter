@@ -22,11 +22,13 @@
 
     <!-- Edit Fragment -->
     <string name="weight_label">体重(kg)</string>
-    <string name="rate_label">体脂肪率(%)</string>
+    <string name="rate_label">体脂肪率(%)(任意)</string>
     <string name="save">保存</string>
     <string name="cancel">キャンセル</string>
     <string name="delete">削除</string>
-    <string name="memo_label">メモ</string>
+    <string name="memo_label">メモ (任意)</string>
+    <string name="front_image_label">正面の写真 (任意)</string>
+    <string name="side_image_label">側面の写真 (任意)</string>
 
     <!-- Camera Activity -->
     <string name="camera_in_preparation">カメラは準備中です。</string>

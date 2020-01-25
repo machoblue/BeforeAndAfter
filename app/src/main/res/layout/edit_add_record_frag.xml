@@ -113,6 +113,29 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/front_image_label"
+                    android:textColor="@color/colorGrayText"
+                    android:paddingLeft="5dp"
+                    android:textSize="11sp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".5"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:text="@string/side_image_label"
+                    android:textColor="@color/colorGrayText"
+                    android:textSize="11sp"
+                    android:paddingLeft="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="0dp"
+                    android:layout_weight=".5"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
