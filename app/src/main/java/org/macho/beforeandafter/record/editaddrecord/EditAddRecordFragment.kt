@@ -2,6 +2,7 @@ package org.macho.beforeandafter.record.editaddrecord
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -12,6 +13,7 @@ import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import androidx.appcompat.app.AlertDialog
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
@@ -26,12 +28,10 @@ import org.macho.beforeandafter.record.camera.CameraActivity
 import org.macho.beforeandafter.record.camera.PermissionUtils
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.extensions.addTextChangedListener
+import org.macho.beforeandafter.shared.extensions.hideKeyboardIfNeeded
 import org.macho.beforeandafter.shared.extensions.loadImage
 import org.macho.beforeandafter.shared.extensions.setupClearButtonWithAction
-import org.macho.beforeandafter.shared.util.AdUtil
-import org.macho.beforeandafter.shared.util.ImageUtil
-import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
-import org.macho.beforeandafter.shared.util.showIfNeeded
+import org.macho.beforeandafter.shared.util.*
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -179,6 +179,11 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     override fun onResume() {
         super.onResume()
         presenter.takeView(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        hideKeyboardIfNeeded()
     }
 
     override fun onDestroyView() {

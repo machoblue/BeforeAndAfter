@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.edit_goal_fragment.adView
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.extensions.hideKeyboardIfNeeded
 import org.macho.beforeandafter.shared.util.showIfNeeded
 import javax.inject.Inject
 
@@ -41,6 +42,10 @@ class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract
         presenter.takeView(this)
     }
 
+    override fun onStop() {
+        super.onStop()
+        hideKeyboardIfNeeded()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
