@@ -12,13 +12,14 @@
     <FrameLayout
         android:id="@+id/graphContainer"
         android:padding="15dp"
-        android:background="#0000ff"
+        android:background="@color/light_gray"
         android:layout_weight=".8"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
         <org.macho.beforeandafter.graph.TwoScaleGraphView
             android:id="@+id/graphView"
+            android:background="@color/ultra_light_gray"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
