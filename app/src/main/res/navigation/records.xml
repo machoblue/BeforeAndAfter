@@ -14,10 +14,14 @@
     <fragment
         android:id="@+id/editAddRecordFragment"
         android:name="org.macho.beforeandafter.record.editaddrecord.EditAddRecordFragment"
-        android:label="@string/action_bar_title_record_detail" >
+        android:label="{title}" >
         <argument
             android:name="date"
             app:argType="long"
             android:defaultValue="0L" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue="Record Detail"/>
     </fragment>
 </navigation>

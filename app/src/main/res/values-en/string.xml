@@ -127,7 +127,7 @@
 
     <!-- ActionBar Title -->
     <string name="action_bar_title_records">Records</string>
-    <string name="action_bar_title_record_detail">Record Detail</string>
+    <string name="action_bar_title_record_detail_new">New Record</string>
     <string name="action_bar_title_gallery">Gallery</string>
     <string name="action_bar_title_graphe">Graph</string>
     <string name="action_bar_title_settings">Settings</string>

@@ -23,7 +23,9 @@ import org.macho.beforeandafter.shared.data.Record
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
 import java.io.File
+import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @ActivityScoped
@@ -107,12 +109,14 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 //        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image")
 //        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
 
-        val action = RecordFragmentDirections.actionRecordFragmentToEditAddRecordFragment()
+        val title = getString(R.string.action_bar_title_record_detail_new)
+        val action = RecordFragmentDirections.actionRecordFragmentToEditAddRecordFragment(0L, title)
         findNavController().navigate(action)
     }
 
     override fun showEditRecordUI(date: Long) {
-        val action = RecordFragmentDirections.actionRecordFragmentToEditAddRecordFragment(date)
+        val title = SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(Date(date))
+        val action = RecordFragmentDirections.actionRecordFragmentToEditAddRecordFragment(date, title)
         findNavController().navigate(action)
     }
 
