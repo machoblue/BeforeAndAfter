@@ -28,7 +28,7 @@ class GraphFragment: DaggerFragment() {
         LogUtil.d(this, "onViewCreated")
 
         val records = mutableListOf<Record>()
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 21, 78f, 20f))
+        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 21, 78f, 35f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 20, 78.5f, 20f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 19, 78f, 20f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 18, 76f, 20f))

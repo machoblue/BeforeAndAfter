@@ -22,6 +22,9 @@ class TwoScaleGraphView: View {
     var maxX = 0f
     var maxY = 0f
 
+    var maxValues = FloatArray(2)
+    var minValues = FloatArray(2)
+
     constructor(context: Context): super(context) {
     }
 
@@ -73,30 +76,35 @@ class TwoScaleGraphView: View {
     }
 
     private fun drawHorizontalLines(canvas: Canvas) {
-        val sortedByWeight = records.sortedBy { it.weight }
-        val weightMin = sortedByWeight.firstOrNull()?.weight ?: 0f
-        val weightMax = sortedByWeight.lastOrNull()?.weight ?: 0f
-        val sortedByRate = records.sortedBy { it.rate }
-        val rateMin = sortedByRate.lastOrNull()?.rate ?: 0f
-        val rateMax = sortedByRate.lastOrNull()?.rate ?: 0f
+        val ranges = FloatArray(2)
+        val minFloors = FloatArray(2)
+        val maxCeils = FloatArray(2)
 
-        val weightMinFloor = floor(weightMin)
-        val weightMaxCeil = ceil(weightMax)
-        val weightRange = weightMaxCeil - weightMinFloor
-        val rateMinFloor = floor(rateMin)
-        val rateMaxCeil = ceil(rateMax)
-        val rateRange = rateMaxCeil - rateMinFloor
+        val sortedByCategory1 = records.sortedBy { it.weight }
+        minFloors[0] = floor(sortedByCategory1.firstOrNull()?.weight ?: 0f)
+        maxCeils[0] = ceil(sortedByCategory1.lastOrNull()?.weight ?: 0f)
+        ranges[0] = maxCeils[0] - minFloors[0]
 
-        if (weightRange > rateRange) {
-            val unitHeight = (oY - maxY) / weightRange
-            for (i in (weightMinFloor.toInt() + 1)..weightMaxCeil.toInt()) {
-                val lineY = oY - unitHeight * (i - weightMinFloor.toInt())
-//                canvas.drawLine(oX, maxX, lineY, lineY, linePaint)
-                canvas.drawLine(oX, lineY, maxX, lineY, linePaint)
-            }
+        val sortedByCategory2 = records.sortedBy { it.rate }
+        minFloors[1] = floor(sortedByCategory2.firstOrNull()?.rate ?: 0f)
+        maxCeils[1] = ceil(sortedByCategory2.lastOrNull()?.rate ?: 0f)
+        ranges[1] = maxCeils[1] - minFloors[1]
 
-        } else {
-
+        val isCategory1Base = ranges[0] > ranges[1]
+        val index = if (isCategory1Base) 0 else 1
+        val unitHeight = (oY - maxY) / ranges[index]
+        val from = minFloors[index].toInt() + 1
+        val to = maxCeils[index].toInt()
+        for (i in from..to) {
+            val lineY = oY - unitHeight * (i - from)
+            canvas.drawLine(oX, lineY, maxX, lineY, linePaint)
         }
+
+        minValues[index] = minFloors[index]
+        maxValues[index] = maxCeils[index]
+
+        val index2 = if (isCategory1Base) 1 else 0
+        minValues[index2] = minFloors[index2] - ((ranges[index] - ranges[index2]) / 2).toInt()
+        maxValues[index2] = minValues[index2] + ranges[index]
     }
 }
