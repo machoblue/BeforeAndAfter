@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.View
 import org.macho.beforeandafter.shared.data.Record
 import org.macho.beforeandafter.shared.util.LogUtil
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -30,7 +31,8 @@ class TwoScaleGraphView: View {
 //    var dateFrom = Date()
 //    var dateTo = Date()
 //    var unitTime = 0L
-    var range: GraphRange = GraphRange.THREE_WEEKS
+    var range: GraphRange = GraphRange.ONE_YEAR
+    var from: Date? = null
 
     constructor(context: Context): super(context) {
     }
@@ -62,6 +64,13 @@ class TwoScaleGraphView: View {
         it.style = Paint.Style.FILL_AND_STROKE
         it.textSize = 40f
     }
+
+    private val xAxisLabelPaint = Paint().also {
+        it.color = Color.GRAY
+        it.style = Paint.Style.FILL
+        it.textSize = 30f
+    }
+
 
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
@@ -153,25 +162,44 @@ class TwoScaleGraphView: View {
     private fun drawVerticalLines(canvas: Canvas) {
 
         val to = Date()
-        val from = Date(to.time - range.time)
+        from = Date(to.time - range.time)
         val firstDate = Calendar.getInstance().also {
             it.time = from
             it.set(Calendar.MILLISECOND, 0)
             it.set(Calendar.SECOND, 0)
             it.set(Calendar.MINUTE, 0)
             it.set(Calendar.HOUR_OF_DAY, 0)
-            it.add(Calendar.DAY_OF_MONTH, 1)
+            if (range == GraphRange.THREE_WEEKS) {
+                it.add(Calendar.DAY_OF_MONTH, 1)
+            } else if (range == GraphRange.THREE_MONTHS) {
+                it.set(Calendar.DAY_OF_WEEK, 1) // 1が日曜日
+                it.add(Calendar.WEEK_OF_YEAR, 1)
+            } else if (range == GraphRange.ONE_YEAR) {
+                LogUtil.d(this, it.time.toString())
+                it.set(Calendar.DAY_OF_MONTH, 1) // 1が1日
+                LogUtil.d(this, it.time.toString())
+                it.add(Calendar.MONTH, 1)
+                LogUtil.d(this, it.time.toString())
+            }
         }.time
-        for (i in firstDate.time..to.time step 1000L * 60 * 60 * 24) {
-            val x = oX + (maxX - oX) * (i - from.time) / (to.time - from.time)
+        LogUtil.d(this, firstDate.toString())
+
+        val format = SimpleDateFormat(range.labelFormat)
+
+        val textSize = 30f
+        val y = (height - oY) / 2 + textSize / 2 + oY
+        for (i in firstDate.time..to.time step range.step) {
+            val x = oX + (maxX - oX) * (i - from!!.time) / (to.time - from!!.time)
             canvas.drawLine(x, oY, x, maxY, linePaint)
+            val date = Date(if (range == GraphRange.ONE_YEAR) i + range.step / 2 else i)
+            canvas.drawText(format.format(date), x, y, xAxisLabelPaint)
         }
     }
 
 }
 
-enum class GraphRange(val time: Long) {
-    THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3),
-    THREE_MONTHS(1000L * 60 * 60 * 24 * 90),
-    ONE_YEAR(1000L * 60 * 60 * 24 * 365),
+enum class GraphRange(val time: Long, val step: Long, val labelFormat: String) {
+    THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3, 1000L * 60 * 60 * 24, "d"),
+    THREE_MONTHS(1000L * 60 * 60 * 24 * 90, 1000L * 60 * 60 * 24 * 7, "M/d"),
+    ONE_YEAR(1000L * 60 * 60 * 24 * 365, 1000L * 60 * 60 * 24 * 30, "M"),
 }
