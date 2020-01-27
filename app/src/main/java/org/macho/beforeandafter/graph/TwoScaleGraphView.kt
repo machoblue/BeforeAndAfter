@@ -27,9 +27,10 @@ class TwoScaleGraphView: View {
     var maxValues = FloatArray(2)
     var minValues = FloatArray(2)
 
-    var dateFrom = Date()
-    var dateTo = Date()
-    var unitTime = 0L
+//    var dateFrom = Date()
+//    var dateTo = Date()
+//    var unitTime = 0L
+    var range: GraphRange = GraphRange.THREE_WEEKS
 
     constructor(context: Context): super(context) {
     }
@@ -150,13 +151,27 @@ class TwoScaleGraphView: View {
     }
 
     private fun drawVerticalLines(canvas: Canvas) {
-        val count = ((dateTo.time - dateFrom.time) / unitTime).toInt()
-        val unitWidth = (maxX - oX) / count
-        for (i in 1..count) {
-            val x = oX + unitWidth * i
+
+        val to = Date()
+        val from = Date(to.time - range.time)
+        val firstDate = Calendar.getInstance().also {
+            it.time = from
+            it.set(Calendar.MILLISECOND, 0)
+            it.set(Calendar.SECOND, 0)
+            it.set(Calendar.MINUTE, 0)
+            it.set(Calendar.HOUR_OF_DAY, 0)
+            it.add(Calendar.DAY_OF_MONTH, 1)
+        }.time
+        for (i in firstDate.time..to.time step 1000L * 60 * 60 * 24) {
+            val x = oX + (maxX - oX) * (i - from.time) / (to.time - from.time)
             canvas.drawLine(x, oY, x, maxY, linePaint)
         }
-
     }
 
+}
+
+enum class GraphRange(val time: Long) {
+    THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3),
+    THREE_MONTHS(1000L * 60 * 60 * 24 * 90),
+    ONE_YEAR(1000L * 60 * 60 * 24 * 365),
 }

@@ -52,8 +52,8 @@ class GraphFragment: DaggerFragment() {
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 0, 73f, 20f))
         graphView.records = records
 
-        graphView.dateFrom = Date(Date().time - 1000L * 60 * 60 * 24 * 7 * 3)
-        graphView.dateTo = Date()
-        graphView.unitTime = 1000L * 60 * 60 * 24
+//        graphView.dateFrom = Date(Date().time - 1000L * 60 * 60 * 24 * 7 * 3)
+//        graphView.dateTo = Date()
+//        graphView.unitTime = 1000L * 60 * 60 * 24
     }
 }
