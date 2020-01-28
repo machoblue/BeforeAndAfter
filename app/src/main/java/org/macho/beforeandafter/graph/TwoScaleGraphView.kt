@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.math.max
+import kotlin.math.min
 
 class TwoScaleGraphView: View {
     companion object {
@@ -68,7 +70,6 @@ class TwoScaleGraphView: View {
     private val xAxisLabelPaint = Paint().also {
         it.color = Color.GRAY
         it.style = Paint.Style.FILL
-        it.textSize = 30f
     }
 
 
@@ -186,20 +187,30 @@ class TwoScaleGraphView: View {
 
         val format = SimpleDateFormat(range.labelFormat)
 
-        val textSize = 30f
-        val y = (height - oY) / 2 + textSize / 2 + oY
+        val widthPerStep = (maxX - oX) / (range.time / range.step)
+        val calculatedTextSize = widthPerStep / range.maxCharCount * 1.5f // 文字の幅:高さ=1:1.5という想定。
+        val maxTextSize = (height - oY) - 10
+        xAxisLabelPaint.textSize = min(calculatedTextSize, maxTextSize)
+        val y = (height - oY) / 2 + xAxisLabelPaint.textSize / 2 + oY
         for (i in firstDate.time..to.time step range.step) {
             val x = oX + (maxX - oX) * (i - from!!.time) / (to.time - from!!.time)
             canvas.drawLine(x, oY, x, maxY, linePaint)
+
+            val isLastColumn = (i + range.step) > to.time
+            if (isLastColumn) return
+
             val date = Date(if (range == GraphRange.ONE_YEAR) i + range.step / 2 else i)
-            canvas.drawText(format.format(date), x, y, xAxisLabelPaint)
+            val text = format.format(date)
+            val marginLeft = (widthPerStep - (xAxisLabelPaint.textSize / 1.5f) * text.length) / 2
+            val textX = if (range.alignCenter) x + marginLeft else x
+            canvas.drawText(text, textX, y, xAxisLabelPaint)
         }
     }
 
 }
 
-enum class GraphRange(val time: Long, val step: Long, val labelFormat: String) {
-    THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3, 1000L * 60 * 60 * 24, "d"),
-    THREE_MONTHS(1000L * 60 * 60 * 24 * 90, 1000L * 60 * 60 * 24 * 7, "M/d"),
-    ONE_YEAR(1000L * 60 * 60 * 24 * 365, 1000L * 60 * 60 * 24 * 30, "M"),
+enum class GraphRange(val time: Long, val step: Long, val labelFormat: String, val maxCharCount: Int, val alignCenter: Boolean) {
+    THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3, 1000L * 60 * 60 * 24, "d", 2, true),
+    THREE_MONTHS(1000L * 60 * 60 * 24 * 90, 1000L * 60 * 60 * 24 * 7, "M/d", 5, false),
+    ONE_YEAR(1000L * 60 * 60 * 24 * 365, 1000L * 60 * 60 * 24 * 30, "M", 2, true),
 }
