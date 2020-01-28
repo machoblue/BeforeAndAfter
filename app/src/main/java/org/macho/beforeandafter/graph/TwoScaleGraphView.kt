@@ -45,7 +45,7 @@ class TwoScaleGraphView: View {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int): super(context, attrs, defStyleAttr) {
     }
 
-    var records: List<Record> = mutableListOf()
+    var dataSetList: List<DataSet> = mutableListOf()
 
     private val axisPaint = Paint().also {
         it.color = Color.BLACK
@@ -108,14 +108,16 @@ class TwoScaleGraphView: View {
 
         val margin = 1f
 
-        val sortedByCategory1 = records.sortedBy { it.weight }
-        minFloors[0] = floor(sortedByCategory1.firstOrNull()?.weight ?: 0f) - margin
-        maxCeils[0] = ceil(sortedByCategory1.lastOrNull()?.weight ?: 0f) + margin
+
+
+        val sortedByCategory1 = dataSetList.filter { it.type == DataType.LEFT }.flatMap { it.dataList }.sortedBy { it.value }
+        minFloors[0] = floor(sortedByCategory1.firstOrNull()?.value ?: 0f) - margin
+        maxCeils[0] = ceil(sortedByCategory1.lastOrNull()?.value ?: 0f) + margin
         ranges[0] = maxCeils[0] - minFloors[0]
 
-        val sortedByCategory2 = records.sortedBy { it.rate }
-        minFloors[1] = floor(sortedByCategory2.firstOrNull()?.rate ?: 0f) - margin
-        maxCeils[1] = ceil(sortedByCategory2.lastOrNull()?.rate ?: 0f) + margin
+        val sortedByCategory2 = dataSetList.filter { it.type == DataType.RIGHT }.flatMap { it.dataList }.sortedBy { it.value }
+        minFloors[1] = floor(sortedByCategory2.firstOrNull()?.value ?: 0f) - margin
+        maxCeils[1] = ceil(sortedByCategory2.lastOrNull()?.value ?: 0f) + margin
         ranges[1] = maxCeils[1] - minFloors[1]
 
         val isCategory1Base = ranges[0] > ranges[1]
@@ -213,4 +215,8 @@ enum class GraphRange(val time: Long, val step: Long, val labelFormat: String, v
     THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3, 1000L * 60 * 60 * 24, "d", 2, true),
     THREE_MONTHS(1000L * 60 * 60 * 24 * 90, 1000L * 60 * 60 * 24 * 7, "M/d", 5, false),
     ONE_YEAR(1000L * 60 * 60 * 24 * 365, 1000L * 60 * 60 * 24 * 30, "M", 2, true),
+}
+
+enum class DataType {
+    LEFT, RIGHT
 }

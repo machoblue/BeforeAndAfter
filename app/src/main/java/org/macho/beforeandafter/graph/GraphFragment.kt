@@ -50,10 +50,10 @@ class GraphFragment: DaggerFragment() {
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 2, 74f, 20f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 1, 74f, 20f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 0, 73f, 20f))
-        graphView.records = records
 
-//        graphView.dateFrom = Date(Date().time - 1000L * 60 * 60 * 24 * 7 * 3)
-//        graphView.dateTo = Date()
-//        graphView.unitTime = 1000L * 60 * 60 * 24
+        val list = mutableListOf<DataSet>()
+        list.add(DataSet(DataType.LEFT, records.map { Data(it.date, it.weight) }))
+        list.add(DataSet(DataType.RIGHT, records.map { Data(it.date, it.rate) }))
+        graphView.dataSetList = list
     }
 }
