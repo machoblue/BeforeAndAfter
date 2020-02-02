@@ -1,5 +1,6 @@
 package org.macho.beforeandafter.graph
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,29 +32,29 @@ class GraphFragment: DaggerFragment() {
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 21, 78f, 35f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 20, 78.5f, 20f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 19, 78f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 18, 76f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 17, 77f, 20f))
+        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 18, 76f, 22f))
+        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 17, 77f, 28f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 16, 78f, 20f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 15, 79f, 20f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 14, 75f, 20f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 13, 74f, 20f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 12, 75f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 11, 75f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 10, 76f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 9, 74f, 20f))
+        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 11, 75f, 22f))
+        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 10, 76f, 21f))
+        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 9, 74f, 23f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 8, 76f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 7, 75f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 6, 76f, 20f))
+        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 7, 75f, 24f))
+        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 6, 76f, 22f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 5, 76f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 4, 75f, 20f))
+        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 4, 75f, 23f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 3, 75f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 2, 74f, 20f))
+        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 2, 74f, 21f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 1, 74f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 0, 73f, 20f))
+        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 0, 73f, 22.2f))
 
         val list = mutableListOf<DataSet>()
-        list.add(DataSet(DataType.LEFT, records.map { Data(it.date, it.weight) }))
-        list.add(DataSet(DataType.RIGHT, records.map { Data(it.date, it.rate) }))
+        list.add(DataSet(DataType.LEFT, records.map { Data(it.date, it.weight) }, Color.RED))
+        list.add(DataSet(DataType.RIGHT, records.map { Data(it.date, it.rate) }, Color.BLUE))
         graphView.dataSetList = list
     }
 }

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.graphics.alpha
 import org.macho.beforeandafter.shared.data.Record
 import org.macho.beforeandafter.shared.util.LogUtil
 import java.text.SimpleDateFormat
@@ -19,6 +20,7 @@ class TwoScaleGraphView: View {
     companion object {
         const val AXIS_WIDTH = 2f
         const val LINE_WIDTH = 1f
+        const val LABEL_BORDER_WIDTH = 4f
     }
 
     var oX = 0f
@@ -33,7 +35,9 @@ class TwoScaleGraphView: View {
 //    var dateFrom = Date()
 //    var dateTo = Date()
 //    var unitTime = 0L
-    var range: GraphRange = GraphRange.ONE_YEAR
+//    var range: GraphRange = GraphRange.ONE_YEAR
+//    var range: GraphRange = GraphRange.THREE_MONTHS
+    var range: GraphRange = GraphRange.THREE_WEEKS
     var from: Date? = null
 
     constructor(context: Context): super(context) {
@@ -61,10 +65,19 @@ class TwoScaleGraphView: View {
     }
 
     private val yAxisCategory1LabelPaint = Paint().also {
-        it.color = Color.GRAY
-        it.strokeWidth = LINE_WIDTH
-        it.style = Paint.Style.FILL_AND_STROKE
+//        it.color = Color.GRAY
+        it.color = Color.argb(128, 64, 64, 64)
+        it.style = Paint.Style.FILL
         it.textSize = 40f
+        it.isAntiAlias = true
+    }
+
+    private val yAxisCategory1LabelBorderPaint = Paint().also {
+        it.color = Color.argb(128, 255, 255, 255)
+        it.strokeWidth = LABEL_BORDER_WIDTH
+        it.style = Paint.Style.STROKE
+        it.textSize = 40f
+        it.isAntiAlias = true
     }
 
     private val xAxisLabelPaint = Paint().also {
@@ -72,6 +85,15 @@ class TwoScaleGraphView: View {
         it.style = Paint.Style.FILL
     }
 
+    private val graphPaint = Paint().also {
+        it.style = Paint.Style.STROKE
+        it.isAntiAlias = true
+    }
+
+    private val graphDotPaint = Paint().also {
+        it.style = Paint.Style.FILL
+        it.isAntiAlias = true
+    }
 
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
@@ -89,8 +111,10 @@ class TwoScaleGraphView: View {
 
         drawAxis(canvas)
         drawHorizontalLines(canvas)
-        drawYAxisLabel(canvas)
         drawVerticalLines(canvas)
+        drawLineGraph(canvas)
+
+        drawYAxisLabel(canvas)
     }
 
     private fun drawAxis(canvas: Canvas) {
@@ -148,6 +172,7 @@ class TwoScaleGraphView: View {
         val to = maxValues[0].toInt()
         for (i in (from + 1)..to) {
             val y = oY - unitHeight * (i - from) + (yAxisCategory1LabelPaint.textSize / 2)
+            canvas.drawText(i.toString(), 10f /* offset */, y, yAxisCategory1LabelBorderPaint)
             canvas.drawText(i.toString(), 10f /* offset */, y, yAxisCategory1LabelPaint)
         }
     }
@@ -158,13 +183,14 @@ class TwoScaleGraphView: View {
         for (i in (from + 1)..to) {
             val x = maxX - yAxisCategory1LabelPaint.textSize - 20 // offset
             val y = oY - unitHeight * (i - from) + (yAxisCategory1LabelPaint.textSize / 2)
+            canvas.drawText(i.toString(), x, y, yAxisCategory1LabelBorderPaint)
             canvas.drawText(i.toString(), x, y, yAxisCategory1LabelPaint)
         }
     }
 
     private fun drawVerticalLines(canvas: Canvas) {
 
-        val to = Date()
+        val to = Date() // TODO: refactor 外から渡せるようにしたい。
         from = Date(to.time - range.time)
         val firstDate = Calendar.getInstance().also {
             it.time = from
@@ -209,14 +235,39 @@ class TwoScaleGraphView: View {
         }
     }
 
+    private fun drawLineGraph(canvas: Canvas) {
+        for ((type, dataList, color) in dataSetList) {
+            graphPaint.color = color
+            graphPaint.strokeWidth = range.graphWidth
+            for ((index, data) in dataList.withIndex()) {
+                // dot
+                val x1 = (maxX - oX) * ((data.time - from!!.time).toFloat() / (range.time))
+                val y1 = oY - (oY - maxY) * ((data.value - minValues[type.index]) / (maxValues[type.index] - minValues[type.index]))
+                if (range.drawDot) {
+                    graphDotPaint.color = color
+                    canvas.drawCircle(x1, y1,  range.graphWidth * 2, graphDotPaint)
+                }
+
+                // line
+                if (dataList.size < index + 2) continue
+                val nextData = dataList[index + 1]
+                val x2 = (maxX - oX) * ((nextData.time - from!!.time).toFloat() / (range.time))
+                val y2 = oY - (oY - maxY) * ((nextData.value - minValues[type.index]) / (maxValues[type.index] - minValues[type.index]))
+                canvas.drawLine(x1, y1, x2, y2, graphPaint)
+                LogUtil.d(this, "${x1}, ${y1}, ${x2}, ${y2}" )
+
+            }
+        }
+    }
+
 }
 
-enum class GraphRange(val time: Long, val step: Long, val labelFormat: String, val maxCharCount: Int, val alignCenter: Boolean) {
-    THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3, 1000L * 60 * 60 * 24, "d", 2, true),
-    THREE_MONTHS(1000L * 60 * 60 * 24 * 90, 1000L * 60 * 60 * 24 * 7, "M/d", 5, false),
-    ONE_YEAR(1000L * 60 * 60 * 24 * 365, 1000L * 60 * 60 * 24 * 30, "M", 2, true),
+enum class GraphRange(val time: Long, val step: Long, val labelFormat: String, val maxCharCount: Int, val alignCenter: Boolean, val graphWidth: Float, val drawDot: Boolean) {
+    THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3, 1000L * 60 * 60 * 24, "d", 2, true, 2.5f, true),
+    THREE_MONTHS(1000L * 60 * 60 * 24 * 90, 1000L * 60 * 60 * 24 * 7, "M/d", 5, false, 2.5f, true),
+    ONE_YEAR(1000L * 60 * 60 * 24 * 365, 1000L * 60 * 60 * 24 * 30, "M", 2, true, 2.5f, true),
 }
 
-enum class DataType {
-    LEFT, RIGHT
+enum class DataType(val index: Int) {
+    LEFT(0), RIGHT(1)
 }
