@@ -1,11 +1,11 @@
 package org.macho.beforeandafter.graph
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.core.content.ContextCompat
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.graph_frag.*
 import org.macho.beforeandafter.R
@@ -19,7 +19,6 @@ import javax.inject.Inject
 class GraphFragment: DaggerFragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
-        print("#####")
         button1.isSelected = false
         button2.isSelected = false
         button3.isSelected = false
@@ -71,10 +70,9 @@ class GraphFragment: DaggerFragment(), View.OnClickListener {
 
         repository.getRecords { records ->
             val list = mutableListOf<DataSet>()
-            list.add(DataSet(DataType.LEFT, records.map { Data(it.date, it.weight) }, Color.RED))
-            list.add(DataSet(DataType.RIGHT, records.map { Data(it.date, it.rate) }, Color.BLUE))
+            list.add(DataSet(DataType.LEFT, records.filter { it.weight != 0f }.map { Data(it.date, it.weight) }, ContextCompat.getColor(context!!, R.color.colorWeight)))
+            list.add(DataSet(DataType.RIGHT, records.filter {it.rate != 0f}.map { Data(it.date, it.rate) }, ContextCompat.getColor(context!!, R.color.colorRate)))
             graphView.dataSetList = list
-
 
             graphView.invalidate()
         }
@@ -82,9 +80,13 @@ class GraphFragment: DaggerFragment(), View.OnClickListener {
         val index = SharedPreferencesUtil.getInt(context!!, SharedPreferencesUtil.Key.GRAPH_SELECTION)
         graphView.range = GraphRange.values()[index]
 
-        button1.setOnClickListener (this)
-        button2.setOnClickListener (this)
-        button3.setOnClickListener (this)
+        button1.isSelected = index == 0
+        button2.isSelected = index == 1
+        button3.isSelected = index == 2
+
+        button1.setOnClickListener(this)
+        button2.setOnClickListener(this)
+        button3.setOnClickListener(this)
 
     }
 }

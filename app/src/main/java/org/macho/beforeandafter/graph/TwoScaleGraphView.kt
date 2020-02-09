@@ -6,14 +6,13 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.graphics.alpha
-import org.macho.beforeandafter.shared.data.Record
+import androidx.core.content.ContextCompat
+import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.util.LogUtil
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.ceil
 import kotlin.math.floor
-import kotlin.math.max
 import kotlin.math.min
 
 class TwoScaleGraphView: View {
@@ -95,6 +94,12 @@ class TwoScaleGraphView: View {
         it.isAntiAlias = true
     }
 
+    private val legendsPaint = Paint().also {
+        it.style = Paint.Style.FILL
+        it.isAntiAlias = true
+        it.textSize = 30f
+    }
+
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
         LogUtil.d(this, "draw")
@@ -115,6 +120,8 @@ class TwoScaleGraphView: View {
         drawLineGraph(canvas)
 
         drawYAxisLabel(canvas)
+
+        drawLegends(canvas)
     }
 
     private fun drawAxis(canvas: Canvas) {
@@ -260,12 +267,25 @@ class TwoScaleGraphView: View {
         }
     }
 
+    private fun drawLegends(canvas: Canvas) {
+        val y = height * 0.05f - (height * 0.05f - legendsPaint.textSize) / 2
+        val x = yAxisCategory1LabelPaint.textSize + 10f
+        legendsPaint.color = ContextCompat.getColor(context!!, R.color.colorWeight)
+        canvas.drawText("●", x, y, legendsPaint)
+        legendsPaint.color = Color.BLACK
+        canvas.drawText("体重", x + legendsPaint.textSize, y, legendsPaint)
+        legendsPaint.color = ContextCompat.getColor(context!!, R.color.colorRate)
+        canvas.drawText("●", x + legendsPaint.textSize * (1 + 2) + 10, y, legendsPaint)
+        legendsPaint.color = Color.BLACK
+        canvas.drawText("体脂肪率", x + legendsPaint.textSize * (1 + 2 + 1) + 10, y, legendsPaint)
+    }
+
 }
 
 enum class GraphRange(val time: Long, val step: Long, val labelFormat: String, val maxCharCount: Int, val alignCenter: Boolean, val graphWidth: Float, val drawDot: Boolean) {
-    THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3, 1000L * 60 * 60 * 24, "d", 2, true, 2.5f, true),
-    THREE_MONTHS(1000L * 60 * 60 * 24 * 90, 1000L * 60 * 60 * 24 * 7, "M/d", 5, false, 2.5f, true),
-    ONE_YEAR(1000L * 60 * 60 * 24 * 365, 1000L * 60 * 60 * 24 * 30, "M", 2, true, 2.5f, false),
+    THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3, 1000L * 60 * 60 * 24, "d", 2, true, 3f, true),
+    THREE_MONTHS(1000L * 60 * 60 * 24 * 90, 1000L * 60 * 60 * 24 * 7, "M/d", 5, false, 3f, true),
+    ONE_YEAR(1000L * 60 * 60 * 24 * 365, 1000L * 60 * 60 * 24 * 30, "M", 2, true, 3f, false),
 }
 
 enum class DataType(val index: Int) {
