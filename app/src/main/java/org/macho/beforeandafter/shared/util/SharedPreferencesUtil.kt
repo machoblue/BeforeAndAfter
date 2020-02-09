@@ -9,7 +9,8 @@ object SharedPreferencesUtil {
         LATEST_RATE("latestRate"),
         LATEST_WATCH_REWARDED_AD("latest_watch_rewarded_ad"),
         TIME_OF_LATEST_RECORD("time_of_latest_record"),
-        PIN("pin")
+        PIN("pin"),
+        GRAPH_SELECTION("graph_selection")
     }
 
     fun getFloat(context: Context, key: Key): Float {
@@ -43,4 +44,14 @@ object SharedPreferencesUtil {
     fun setString(context: Context, key: Key, value: String) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(key.string, value).apply()
     }
+
+    fun getInt(context: Context, key: Key): Int {
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(key.string, 0)
+    }
+
+    fun setInt(context: Context, key: Key, value: Int) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(key.string, value).apply()
+    }
+
 }
+

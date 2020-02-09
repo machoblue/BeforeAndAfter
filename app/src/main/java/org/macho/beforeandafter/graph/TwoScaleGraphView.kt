@@ -20,7 +20,7 @@ class TwoScaleGraphView: View {
     companion object {
         const val AXIS_WIDTH = 2f
         const val LINE_WIDTH = 1f
-        const val LABEL_BORDER_WIDTH = 4f
+        const val LABEL_BORDER_WIDTH = 7f
     }
 
     var oX = 0f
@@ -66,14 +66,14 @@ class TwoScaleGraphView: View {
 
     private val yAxisCategory1LabelPaint = Paint().also {
 //        it.color = Color.GRAY
-        it.color = Color.argb(128, 64, 64, 64)
+        it.color = Color.argb(192, 64, 64, 64)
         it.style = Paint.Style.FILL
         it.textSize = 40f
         it.isAntiAlias = true
     }
 
     private val yAxisCategory1LabelBorderPaint = Paint().also {
-        it.color = Color.argb(128, 255, 255, 255)
+        it.color = Color.argb(192, 255, 255, 255)
         it.strokeWidth = LABEL_BORDER_WIDTH
         it.style = Paint.Style.STROKE
         it.textSize = 40f
@@ -265,7 +265,7 @@ class TwoScaleGraphView: View {
 enum class GraphRange(val time: Long, val step: Long, val labelFormat: String, val maxCharCount: Int, val alignCenter: Boolean, val graphWidth: Float, val drawDot: Boolean) {
     THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3, 1000L * 60 * 60 * 24, "d", 2, true, 2.5f, true),
     THREE_MONTHS(1000L * 60 * 60 * 24 * 90, 1000L * 60 * 60 * 24 * 7, "M/d", 5, false, 2.5f, true),
-    ONE_YEAR(1000L * 60 * 60 * 24 * 365, 1000L * 60 * 60 * 24 * 30, "M", 2, true, 2.5f, true),
+    ONE_YEAR(1000L * 60 * 60 * 24 * 365, 1000L * 60 * 60 * 24 * 30, "M", 2, true, 2.5f, false),
 }
 
 enum class DataType(val index: Int) {

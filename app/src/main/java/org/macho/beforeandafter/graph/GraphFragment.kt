@@ -5,18 +5,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.graph_frag.*
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.shared.data.Record
 import org.macho.beforeandafter.shared.data.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.LogUtil
-import java.util.*
+import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import javax.inject.Inject
 
 @ActivityScoped
-class GraphFragment: DaggerFragment() {
+class GraphFragment: DaggerFragment(), View.OnClickListener {
+
+    override fun onClick(v: View?) {
+        print("#####")
+        button1.isSelected = false
+        button2.isSelected = false
+        button3.isSelected = false
+
+        val clickedButton = v as Button
+        clickedButton.isSelected = true
+        val index = (clickedButton.tag as String).toInt()
+        graphView.range = GraphRange.values()[index]
+        graphView.invalidate()
+        SharedPreferencesUtil.setInt(context!!, SharedPreferencesUtil.Key.GRAPH_SELECTION, index)
+    }
+
     @Inject
     lateinit var repository: RecordRepository
 
@@ -28,6 +43,7 @@ class GraphFragment: DaggerFragment() {
         super.onViewCreated(view, savedInstanceState)
         LogUtil.d(this, "onViewCreated")
 
+        /*
         val records = mutableListOf<Record>()
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 21, 78f, 35f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 20, 78.5f, 20f))
@@ -51,10 +67,24 @@ class GraphFragment: DaggerFragment() {
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 2, 74f, 21f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 1, 74f, 20f))
         records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 0, 73f, 22.2f))
+         */
 
-        val list = mutableListOf<DataSet>()
-        list.add(DataSet(DataType.LEFT, records.map { Data(it.date, it.weight) }, Color.RED))
-        list.add(DataSet(DataType.RIGHT, records.map { Data(it.date, it.rate) }, Color.BLUE))
-        graphView.dataSetList = list
+        repository.getRecords { records ->
+            val list = mutableListOf<DataSet>()
+            list.add(DataSet(DataType.LEFT, records.map { Data(it.date, it.weight) }, Color.RED))
+            list.add(DataSet(DataType.RIGHT, records.map { Data(it.date, it.rate) }, Color.BLUE))
+            graphView.dataSetList = list
+
+
+            graphView.invalidate()
+        }
+
+        val index = SharedPreferencesUtil.getInt(context!!, SharedPreferencesUtil.Key.GRAPH_SELECTION)
+        graphView.range = GraphRange.values()[index]
+
+        button1.setOnClickListener (this)
+        button2.setOnClickListener (this)
+        button3.setOnClickListener (this)
+
     }
 }
