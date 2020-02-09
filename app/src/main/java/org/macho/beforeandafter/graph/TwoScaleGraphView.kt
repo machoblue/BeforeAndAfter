@@ -283,8 +283,8 @@ class TwoScaleGraphView: View {
 }
 
 enum class GraphRange(val time: Long, val step: Long, val labelFormat: String, val maxCharCount: Int, val alignCenter: Boolean, val graphWidth: Float, val drawDot: Boolean) {
-    THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3, 1000L * 60 * 60 * 24, "d", 2, true, 3f, true),
-    THREE_MONTHS(1000L * 60 * 60 * 24 * 90, 1000L * 60 * 60 * 24 * 7, "M/d", 5, false, 3f, true),
+    THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3, 1000L * 60 * 60 * 24, "d", 2, true, 4f, true),
+    THREE_MONTHS(1000L * 60 * 60 * 24 * 90, 1000L * 60 * 60 * 24 * 7, "M/d", 5, false, 4f, true),
     ONE_YEAR(1000L * 60 * 60 * 24 * 365, 1000L * 60 * 60 * 24 * 30, "M", 2, true, 3f, false),
 }
 

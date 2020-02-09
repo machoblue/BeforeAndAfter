@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.graph_frag.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import javax.inject.Inject
@@ -88,5 +89,8 @@ class GraphFragment: DaggerFragment(), View.OnClickListener {
         button2.setOnClickListener(this)
         button3.setOnClickListener(this)
 
+        AdUtil.initializeMobileAds(context!!)
+        AdUtil.loadBannerAd(adView, context!!)
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
     }
 }
