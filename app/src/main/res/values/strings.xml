@@ -38,12 +38,13 @@
     <string name="side">横</string>
 
     <!-- Graphe Fragment -->
-    <string name="one_week">1週間</string>
-    <string name="one_month">1ヶ月</string>
+<!--    <string name="one_week">1週間</string>-->
+    <string name="three_weeks">3週間</string>
+<!--    <string name="one_month">1ヶ月</string>-->
     <string name="three_month">3ヶ月</string>
-    <string name="six_month">半年</string>
+<!--    <string name="six_month">半年</string>-->
     <string name="one_year">1年</string>
-    <string name="three_year">3年</string>
+<!--    <string name="three_year">3年</string>-->
 
     <!-- Preference Fragment -->
     <string name="goal_title">目標</string>

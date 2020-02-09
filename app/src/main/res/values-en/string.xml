@@ -39,12 +39,13 @@
     <string name="side">side</string>
 
     <!-- Graphe Fragment -->
-    <string name="one_week">7days</string>
-    <string name="one_month">30days</string>
+<!--    <string name="one_week">7days</string>-->
+    <string name="three_weeks">3weeks</string>
+<!--    <string name="one_month">30days</string>-->
     <string name="three_month">90days</string>
-    <string name="six_month">180days</string>
+<!--    <string name="six_month">180days</string>-->
     <string name="one_year">1year</string>
-    <string name="three_year">3years</string>
+<!--    <string name="three_year">3years</string>-->
 
     <!-- Preference Fragment -->
     <string name="goal_title">target</string>
