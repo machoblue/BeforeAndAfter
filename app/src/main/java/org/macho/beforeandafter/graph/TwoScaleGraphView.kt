@@ -31,13 +31,9 @@ class TwoScaleGraphView: View {
     var maxValues = FloatArray(2)
     var minValues = FloatArray(2)
 
-//    var dateFrom = Date()
-//    var dateTo = Date()
-//    var unitTime = 0L
-//    var range: GraphRange = GraphRange.ONE_YEAR
-//    var range: GraphRange = GraphRange.THREE_MONTHS
     var range: GraphRange = GraphRange.THREE_WEEKS
     var from: Date? = null
+    var to: Date? = null
 
     constructor(context: Context): super(context) {
     }
@@ -53,7 +49,6 @@ class TwoScaleGraphView: View {
     private val axisPaint = Paint().also {
         it.color = Color.BLACK
         it.strokeWidth = AXIS_WIDTH
-//        it.isAntiAlias = false
         it.style = Paint.Style.STROKE
     }
 
@@ -64,7 +59,6 @@ class TwoScaleGraphView: View {
     }
 
     private val yAxisCategory1LabelPaint = Paint().also {
-//        it.color = Color.GRAY
         it.color = Color.argb(192, 64, 64, 64)
         it.style = Paint.Style.FILL
         it.textSize = 40f
@@ -197,7 +191,7 @@ class TwoScaleGraphView: View {
 
     private fun drawVerticalLines(canvas: Canvas) {
 
-        val to = Date() // TODO: refactor 外から渡せるようにしたい。
+        val to = to ?: Date()
         from = Date(to.time - range.time)
         val firstDate = Calendar.getInstance().also {
             it.time = from
