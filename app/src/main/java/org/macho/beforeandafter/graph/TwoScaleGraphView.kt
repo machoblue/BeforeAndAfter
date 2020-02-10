@@ -22,18 +22,20 @@ class TwoScaleGraphView: View {
         const val LABEL_BORDER_WIDTH = 7f
     }
 
-    var oX = 0f
-    var oY = 0f
-    var maxX = 0f
-    var maxY = 0f
+    private var oX = 0f
+    private var oY = 0f
+    private var maxX = 0f
+    private var maxY = 0f
 
-    var unitHeight = 0f
-    var maxValues = FloatArray(2)
-    var minValues = FloatArray(2)
+    private var unitHeight = 0f
+    private var maxValues = FloatArray(2)
+    private var minValues = FloatArray(2)
 
     var range: GraphRange = GraphRange.THREE_WEEKS
-    var from: Date? = null
+    private var from: Date? = null
     var to: Date? = null
+
+    var legends: List<Legend>? = null
 
     constructor(context: Context): super(context) {
     }
@@ -264,15 +266,20 @@ class TwoScaleGraphView: View {
     private fun drawLegends(canvas: Canvas) {
         val y = height * 0.05f - (height * 0.05f - legendsPaint.textSize) / 2
         val x = yAxisCategory1LabelPaint.textSize + 10f
-        legendsPaint.color = ContextCompat.getColor(context!!, R.color.colorWeight)
-        canvas.drawText("●", x, y, legendsPaint)
-        legendsPaint.color = Color.BLACK
-        canvas.drawText("体重", x + legendsPaint.textSize, y, legendsPaint)
-        legendsPaint.color = ContextCompat.getColor(context!!, R.color.colorRate)
-        canvas.drawText("●", x + legendsPaint.textSize * (1 + 2) + 10, y, legendsPaint)
-        legendsPaint.color = Color.BLACK
-        canvas.drawText("体脂肪率", x + legendsPaint.textSize * (1 + 2 + 1) + 10, y, legendsPaint)
+
+        var xPosition = x
+        for (legend in (legends ?: mutableListOf())) {
+            val icon = "●"
+            legendsPaint.color = legend.color
+            canvas.drawText(icon, xPosition, y, legendsPaint)
+            xPosition += legendsPaint.measureText(icon)
+
+            legendsPaint.color = Color.BLACK
+            canvas.drawText(legend.name, xPosition, y, legendsPaint)
+            xPosition += legendsPaint.measureText(legend.name) + 10 // 10: right margin
+        }
     }
+
 
 }
 
@@ -280,8 +287,4 @@ enum class GraphRange(val time: Long, val step: Long, val labelFormat: String, v
     THREE_WEEKS(1000L * 60 * 60 * 24 * 7 * 3, 1000L * 60 * 60 * 24, "d", 2, true, 4f, true),
     THREE_MONTHS(1000L * 60 * 60 * 24 * 90, 1000L * 60 * 60 * 24 * 7, "M/d", 5, false, 4f, true),
     ONE_YEAR(1000L * 60 * 60 * 24 * 365, 1000L * 60 * 60 * 24 * 30, "M", 2, true, 3f, false),
-}
-
-enum class DataType(val index: Int) {
-    LEFT(0), RIGHT(1)
 }

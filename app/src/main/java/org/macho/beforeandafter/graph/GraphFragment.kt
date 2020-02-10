@@ -81,6 +81,12 @@ class GraphFragment: DaggerFragment(), View.OnClickListener {
         val index = SharedPreferencesUtil.getInt(context!!, SharedPreferencesUtil.Key.GRAPH_SELECTION)
         graphView.range = GraphRange.values()[index]
 
+        val legends = mutableListOf<Legend>().also {
+            it.add(Legend(getString(R.string.legend_weight), ContextCompat.getColor(context!!, R.color.colorWeight)))
+            it.add(Legend(getString(R.string.legend_rate), ContextCompat.getColor(context!!, R.color.colorRate)))
+        }
+        graphView.legends = legends
+
         button1.isSelected = index == 0
         button2.isSelected = index == 1
         button3.isSelected = index == 2
