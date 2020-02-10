@@ -135,8 +135,6 @@ class TwoScaleGraphView: View {
 
         val margin = 1f
 
-
-
         val sortedByCategory1 = dataSetList.filter { it.type == DataType.LEFT }.flatMap { it.dataList }.sortedBy { it.value }
         minFloors[0] = floor(sortedByCategory1.firstOrNull()?.value ?: 0f) - margin
         maxCeils[0] = ceil(sortedByCategory1.lastOrNull()?.value ?: 0f) + margin
@@ -243,22 +241,25 @@ class TwoScaleGraphView: View {
             graphPaint.color = color
             graphPaint.strokeWidth = range.graphWidth
             for ((index, data) in dataList.withIndex()) {
+
+                if (data.time < (from?.time ?: 0)) continue
+
                 // dot
                 val x1 = (maxX - oX) * ((data.time - from!!.time).toFloat() / (range.time))
                 val y1 = oY - (oY - maxY) * ((data.value - minValues[type.index]) / (maxValues[type.index] - minValues[type.index]))
                 if (range.drawDot) {
                     graphDotPaint.color = color
-                    canvas.drawCircle(x1, y1,  range.graphWidth * 2, graphDotPaint)
+                    canvas.drawCircle(x1, y1,range.graphWidth * 2, graphDotPaint)
                 }
 
-                // line
-                if (dataList.size < index + 2) continue
-                val nextData = dataList[index + 1]
-                val x2 = (maxX - oX) * ((nextData.time - from!!.time).toFloat() / (range.time))
-                val y2 = oY - (oY - maxY) * ((nextData.value - minValues[type.index]) / (maxValues[type.index] - minValues[type.index]))
-                canvas.drawLine(x1, y1, x2, y2, graphPaint)
-                LogUtil.d(this, "${x1}, ${y1}, ${x2}, ${y2}" )
+                if (index == 0) continue
 
+                // line
+                val prevData = dataList[index - 1]
+                val x0 = (maxX - oX) * ((prevData.time - from!!.time).toFloat() / range.time)
+                val y0 = oY - (oY - maxY) * ((prevData.value - minValues[type.index]) / (maxValues[type.index] - minValues[type.index]))
+                canvas.drawLine(x0, y0, x1, y1, graphPaint)
+                LogUtil.d(this, "${x1}, ${y1}, ${x0}, ${y0}" )
             }
         }
     }
