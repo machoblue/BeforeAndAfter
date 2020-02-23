@@ -33,6 +33,7 @@ import org.macho.beforeandafter.shared.extensions.loadImage
 import org.macho.beforeandafter.shared.extensions.setupClearButtonWithAction
 import org.macho.beforeandafter.shared.util.*
 import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -239,16 +240,15 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             }
             FRONT_GALLERY_IMAGE_REQUEST -> {
                 val uri = data?.getData() ?: return
-                val bis = BufferedInputStream(activity!!.contentResolver.openInputStream(uri))
-                val bitmap = BitmapFactory.decodeStream(bis)
-
-                val orientation = ImageUtil.extractOrientationFromGalleryImage(context!!, uri)
-                val orientationModifiedBitmap = ImageUtil.getOrientationModifiedBitmap(bitmap, orientation)
-
                 val outputDir = context!!.filesDir
                 val fileName = FILE_NAME_TEMPLATE.format(Date())
-                FileOutputStream(File(outputDir, fileName)).use {
-                    orientationModifiedBitmap.compress(Bitmap.CompressFormat.JPEG, 100 ,it)
+
+                BufferedInputStream(activity!!.contentResolver.openInputStream(uri)).use { bis ->
+                    BufferedOutputStream(FileOutputStream(File(outputDir, fileName))).use { bos ->
+                        while(bis.available() > 0) {
+                            bos.write(bis.read())
+                        }
+                    }
                 }
 
                 frontImage.scaleType = ImageView.ScaleType.CENTER_CROP
@@ -258,16 +258,15 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             }
             SIDE_GALLERY_IMAGE_REQUEST -> {
                 val uri = data?.getData() ?: return
-                val bis = BufferedInputStream(activity!!.contentResolver.openInputStream(uri))
-                val bitmap = BitmapFactory.decodeStream(bis)
-
-                val orientation = ImageUtil.extractOrientationFromGalleryImage(context!!, uri)
-                val orientationModifiedBitmap = ImageUtil.getOrientationModifiedBitmap(bitmap, orientation)
-
                 val outputDir = context!!.filesDir
                 val fileName = FILE_NAME_TEMPLATE.format(Date())
-                FileOutputStream(File(outputDir, fileName)).use {
-                    orientationModifiedBitmap.compress(Bitmap.CompressFormat.JPEG, 100 ,it)
+
+                BufferedInputStream(activity!!.contentResolver.openInputStream(uri)).use { bis ->
+                    BufferedOutputStream(FileOutputStream(File(outputDir, fileName))).use { bos ->
+                        while(bis.available() > 0) {
+                            bos.write(bis.read())
+                        }
+                    }
                 }
 
                 sideImage.scaleType = ImageView.ScaleType.CENTER_CROP
