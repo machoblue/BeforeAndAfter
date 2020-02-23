@@ -60,7 +60,6 @@ class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                // TODO: Guard
                 val weightGoalText = goalWeight.text.toString()
                 val rateGoalText = goalRate.text.toString()
                 presenter.saveGoal(weightGoalText, rateGoalText)

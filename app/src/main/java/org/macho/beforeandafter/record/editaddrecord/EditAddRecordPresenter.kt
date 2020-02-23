@@ -7,6 +7,7 @@ import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.io.File
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.max
 
 class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRepository): EditAddRecordContract.Presenter {
 
@@ -47,20 +48,20 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     override fun saveRecord(weight: String?, rate: String?, memo: String?) {
         record.weight = returnZeroIfEmptyOrMinus(weight)
         record.rate = returnZeroIfEmptyOrMinus(rate)
-        record.memo = if (memo == null) "" else memo
+        record.memo = memo ?: ""
 
         if (tempFrontImageFileName != null) {
             val oldName = record.frontImagePath
             deleteIfExists(oldName)
             record.frontImagePath = tempFrontImageFileName
-            tempFrontImageFileName = null // destory時にファイルを削除するので、その時に消さないようにnullにする
+            tempFrontImageFileName = null /* destroy時にファイルを削除するので、その時に消さないようにnullにする */
         }
 
         if (tempSideImageFileName != null) {
-            val oldName = record.sideImagePath;
+            val oldName = record.sideImagePath
             deleteIfExists(oldName)
-            record.sideImagePath = tempSideImageFileName;
-            tempSideImageFileName = null // destory時にファイルを削除するので、その時に消さないようにnullにする
+            record.sideImagePath = tempSideImageFileName
+            tempSideImageFileName = null /* destroy時にファイルを削除するので、その時に消さないようにnullにする */
         }
 
         recordRepository.getRecord(record.date) { record ->
@@ -105,19 +106,11 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     }
 
     override fun setWeight(weight: String?) {
-        if (weight == null || weight.isEmpty()) {
-            record.weight = 0f
-        } else {
-            record.weight = weight.toFloat()
-        }
+        record.weight = weight?.toFloatOrNull() ?: 0f
     }
 
     override fun setRate(rate: String?) {
-        if (rate == null || rate.isEmpty()) {
-            record.rate = 0f
-        } else {
-            record.rate = rate.toFloat()
-        }
+        record.rate = rate?.toFloatOrNull() ?: 0f
     }
 
     private fun isFileExists(fileName: String?): Boolean {
@@ -139,11 +132,7 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     }
 
     private fun returnZeroIfEmptyOrMinus(value: String?): Float {
-        if (value == null || value.isEmpty()) {
-            return 0f
-        }
-        val floatValue = value.toFloat()
-        return if (floatValue < 0) 0f else floatValue
+        return max(value?.toFloatOrNull() ?: 0f, 0f)
     }
 
     private fun deleteIfExists(fileName: String?) {
