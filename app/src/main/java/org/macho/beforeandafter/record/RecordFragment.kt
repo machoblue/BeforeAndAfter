@@ -153,7 +153,8 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
             init {
                 view.setOnClickListener {_ ->
-                    presenter.openEditRecord(this@RecordAdapter.records.get(adapterPosition).date)
+                    val date = this@RecordItemViewHolder.binding.item?.date ?: return@setOnClickListener
+                    presenter.openEditRecord(date)
                 }
             }
         }
