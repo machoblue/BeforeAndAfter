@@ -17,16 +17,20 @@ class PinEnableActivity: BasePinActivity() {
         pinMessage.text = getString(R.string.pin_enable_message)
     }
 
-    override fun completeInput() {
+    override fun completeInput(text: String) {
+        enablePINIfNeeded(text)
+    }
+
+    private fun enablePINIfNeeded(text: String) {
         if (tempPIN.isEmpty()) {
-            tempPIN = hiddenEditText.text.toString()
+            tempPIN = text
             clear()
             pinMessage.text = getString(R.string.pin_enable_message_confirm)
         } else {
-            val secondInput = hiddenEditText.text.toString()
+            val secondInput = text
             if (tempPIN.equals(secondInput)) {
                 pinMessage.text = getString(R.string.pin_enable_message_ok)
-               SharedPreferencesUtil.setString(this, SharedPreferencesUtil.Key.PIN, secondInput)
+                SharedPreferencesUtil.setString(this, SharedPreferencesUtil.Key.PIN, secondInput)
                 setResult(RESULT_OK)
                 finish()
 
@@ -35,7 +39,6 @@ class PinEnableActivity: BasePinActivity() {
                 clear()
                 tempPIN = ""
             }
-
         }
     }
 

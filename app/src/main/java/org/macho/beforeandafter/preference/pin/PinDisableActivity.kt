@@ -16,14 +16,14 @@ open class PinDisableActivity: BasePinActivity() {
         pinMessage.text = getString(R.string.pin_disable_message)
     }
 
-    override fun completeInput() {
-        disablePINIfNeeded()
+    override fun completeInput(text: String) {
+        disablePINIfNeeded(text)
     }
 
-    private fun disablePINIfNeeded() {
+    private fun disablePINIfNeeded(text: String) {
         val pin = SharedPreferencesUtil.getString(this, SharedPreferencesUtil.Key.PIN)
         LogUtil.d(this, "validPIN:${pin}")
-        if (pin.equals(hiddenEditText.text.toString())) {
+        if (pin.equals(text)) {
             pinMessage.text = getString(R.string.pin_disable_message_ok)
             SharedPreferencesUtil.setString(this, SharedPreferencesUtil.Key.PIN, "")
             setResult(RESULT_OK)

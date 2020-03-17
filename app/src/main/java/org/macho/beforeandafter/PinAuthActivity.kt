@@ -7,14 +7,14 @@ import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 
 open class PinAuthActivity: BasePinActivity() {
 
-    override fun completeInput() {
-        auth()
+    override fun completeInput(text: String) {
+        auth(text)
     }
 
-    private fun auth() {
+    private fun auth(text: String) {
         val pin = SharedPreferencesUtil.getString(this, SharedPreferencesUtil.Key.PIN)
         LogUtil.d(this, "validPIN:${pin}")
-        if (pin.equals(hiddenEditText.text.toString())) {
+        if (pin.equals(text)) {
             pinMessage.text = getString(R.string.pin_auth_message_ok)
             setResult(RESULT_OK)
             finish()
