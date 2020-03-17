@@ -36,6 +36,10 @@ android {
         all {
             // conflict error対策
             resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+            // Workaround: Bitrise android-lint Error: httpclient defines classes that conflict with classes now provided by Android.
+            exclude module: 'httpclient'
+            // Workaround: Bitrise android-lint Error: commons-logging defines classes that conflict with classes now provided by Android.
+            exclude module: 'commons-logging'
         }
     }
     compileOptions {
