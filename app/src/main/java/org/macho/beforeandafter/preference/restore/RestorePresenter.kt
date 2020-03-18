@@ -1,6 +1,7 @@
 package org.macho.beforeandafter.preference.restore
 
 import android.accounts.Account
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -50,6 +51,10 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
     }
 
     override fun result(requestCode: Int, resultCode: Int, data: Intent) {
+        if (resultCode != Activity.RESULT_OK) {
+            return // do nothing
+        }
+
         when (requestCode) {
             RC_SIGN_IN -> {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
