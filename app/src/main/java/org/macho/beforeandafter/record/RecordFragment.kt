@@ -134,6 +134,8 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         : RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
         private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
+        private var lastClickTime = 0L
+
         override fun getItemCount(): Int {
             return records.size
         }
@@ -153,6 +155,13 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
             init {
                 view.setOnClickListener {_ ->
+                    // NOTE: workaround crashlytics: navigation destination org.macho.beforeandafter:id/action_recordFragment_to_editAddRecordFragment is unknown to this NavController
+                    if (System.currentTimeMillis() - lastClickTime < 1000) {
+                        return@setOnClickListener
+                    }
+
+                    lastClickTime = System.currentTimeMillis()
+
                     val date = this@RecordItemViewHolder.binding.item?.date ?: return@setOnClickListener
                     presenter.openEditRecord(date)
                 }
