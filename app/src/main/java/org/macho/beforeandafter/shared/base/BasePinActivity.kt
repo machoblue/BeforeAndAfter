@@ -24,7 +24,7 @@ abstract class BasePinActivity: AppCompatActivity() {
 
         hiddenEditText.addTextChangedListener { newText ->
             LogUtil.d(this, "on:${newText}")
-            updateText()
+            updateText(newText ?: "")
 
             val unwrappedNewText = newText ?: return@addTextChangedListener
             if (unwrappedNewText.length == 4) {
@@ -33,9 +33,9 @@ abstract class BasePinActivity: AppCompatActivity() {
         }
     }
 
-    private fun updateText() {
-        val filledText = "●".repeat(hiddenEditText.text.length)
-        val emptyText = "○".repeat(length - hiddenEditText.text.length)
+    private fun updateText(text: String) {
+        val filledText = "●".repeat(text.length)
+        val emptyText = "○".repeat(length - text.length)
         maskedPin.text = "${filledText}${emptyText}"
     }
 
@@ -43,6 +43,6 @@ abstract class BasePinActivity: AppCompatActivity() {
 
     fun clear() {
         hiddenEditText.setText("", TextView.BufferType.NORMAL)
-        updateText()
+        updateText("")
     }
 }
