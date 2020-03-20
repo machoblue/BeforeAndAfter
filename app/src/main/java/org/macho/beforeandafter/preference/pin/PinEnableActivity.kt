@@ -42,4 +42,14 @@ class PinEnableActivity: BasePinActivity() {
         }
     }
 
+    override fun back() {
+        if (tempPIN.isEmpty()) {
+            finish()
+        } else {
+            pinMessage.text = getString(R.string.pin_enable_message)
+            clear()
+            tempPIN = ""
+        }
+    }
+
 }

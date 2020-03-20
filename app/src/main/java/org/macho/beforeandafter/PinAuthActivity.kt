@@ -1,11 +1,19 @@
 package org.macho.beforeandafter
 
+import android.os.Bundle
+import android.view.View.INVISIBLE
 import kotlinx.android.synthetic.main.activity_pin.*
 import org.macho.beforeandafter.shared.base.BasePinActivity
 import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 
 open class PinAuthActivity: BasePinActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        backButton?.visibility = INVISIBLE
+    }
 
     override fun completeInput(text: String) {
         auth(text)
@@ -22,5 +30,9 @@ open class PinAuthActivity: BasePinActivity() {
             pinMessage.text = getString(R.string.pin_auth_message_ng)
             clear()
         }
+    }
+
+    override fun back() {
+        // do nothing
     }
 }

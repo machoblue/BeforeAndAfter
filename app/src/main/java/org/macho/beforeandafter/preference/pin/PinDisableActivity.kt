@@ -33,4 +33,8 @@ open class PinDisableActivity: BasePinActivity() {
             clear()
         }
     }
+
+    override fun back() {
+        finish()
+    }
 }
