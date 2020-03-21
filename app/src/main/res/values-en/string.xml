@@ -14,8 +14,12 @@
 
     <string name="review">How is this app?</string>
     <string name="review_message">Would you mind reviewing this app?</string>
+    <string name="review_note">* If you found a bug, Please report from</string>
+    <string name="review_note_from_here">here</string>
+    <string name="review_note_description">If you report via above link, we can get the report more quickly.</string>
     <string name="review_neutral">Never display</string>
     <string name="review_ok">OK(To Store)</string>
+    <string name="review_url">https://play.google.com/store/apps/details?id=org.macho.beforeandafter&amp;hl=en</string>
 
     <!-- Records Fragment -->
     <string name="empty_title">No records</string>
