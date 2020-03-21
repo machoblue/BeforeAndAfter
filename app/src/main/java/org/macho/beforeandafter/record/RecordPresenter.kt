@@ -2,6 +2,7 @@ package org.macho.beforeandafter.record
 
 import org.macho.beforeandafter.shared.data.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import java.util.*
 import javax.inject.Inject
 
 @ActivityScoped
@@ -20,13 +21,22 @@ class RecordPresenter @Inject constructor(val recordRepository: RecordRepository
 
 
     override fun loadRecords() {
-        recordRepository.getRecords {records ->
+        recordRepository.getRecords { records ->
             if (records.isEmpty()) {
                 view?.showEmptyView()
 
             } else {
                 view?.hideEmptyView()
-                view?.showItems(records.sortedBy { - it.date }) // sort descendant
+                val sortedRecords = records.sortedBy { - it.date }
+                view?.showItems(sortedRecords)
+
+                if (records.size > 9 // 10記録以上
+                    && Date().time - sortedRecords.first().date < 1000 * 5 // 記録直後
+                    && sortedRecords.last().weight - sortedRecords.first().weight >= 3 // 最初から3kgやせた
+                    && sortedRecords.first().weight < sortedRecords[1].weight) // 前回よりやせた
+                {
+                    view?.showReviewDialogIfNeeded()
+                }
             }
         }
     }

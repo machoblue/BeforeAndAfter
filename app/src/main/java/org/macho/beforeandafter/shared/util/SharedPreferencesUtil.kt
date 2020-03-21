@@ -10,7 +10,8 @@ object SharedPreferencesUtil {
         LATEST_WATCH_REWARDED_AD("latest_watch_rewarded_ad"),
         TIME_OF_LATEST_RECORD("time_of_latest_record"),
         PIN("pin"),
-        GRAPH_SELECTION("graph_selection")
+        GRAPH_SELECTION("graph_selection"),
+        STORE_REVIEW_PROMPT_COMPLETED("store_review_prompt_completed")
     }
 
     fun getFloat(context: Context, key: Key): Float {

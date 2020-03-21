@@ -12,9 +12,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     -->
 
-    <string name="review">Please review this app.</string>
-    <string name="review_message">Please review this app.</string>
-    <string name="review_neutral">never display</string>
+    <string name="review">How is this app?</string>
+    <string name="review_message">Would you mind reviewing this app?</string>
+    <string name="review_neutral">Never display</string>
+    <string name="review_ok">OK(To Store)</string>
 
     <!-- Records Fragment -->
     <string name="empty_title">No records</string>

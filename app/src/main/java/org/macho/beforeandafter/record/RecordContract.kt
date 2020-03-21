@@ -10,6 +10,7 @@ interface RecordContract {
         fun showEditRecordUI(date: Long)
         fun showEmptyView()
         fun hideEmptyView()
+        fun showReviewDialogIfNeeded()
     }
 
     interface Presenter: BaseContract.Presenter<View> {

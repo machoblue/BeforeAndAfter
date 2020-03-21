@@ -10,6 +10,9 @@
         <action
             android:id="@+id/action_recordFragment_to_editAddRecordFragment"
             app:destination="@id/editAddRecordFragment" />
+        <action
+            android:id="@+id/action_recordFragment_to_reviewDialog"
+            app:destination="@id/reviewDialog" />
     </fragment>
     <fragment
         android:id="@+id/editAddRecordFragment"
@@ -24,4 +27,8 @@
             app:argType="string"
             android:defaultValue="Record Detail"/>
     </fragment>
+    <dialog
+        android:id="@+id/reviewDialog"
+        android:name="org.macho.beforeandafter.record.ReviewDialog"
+        android:label="ReviewDialog" />
 </navigation>

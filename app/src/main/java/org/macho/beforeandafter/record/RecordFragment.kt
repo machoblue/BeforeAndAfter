@@ -22,6 +22,7 @@ import org.macho.beforeandafter.shared.GlideApp
 import org.macho.beforeandafter.shared.data.Record
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
+import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.io.File
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -128,6 +129,15 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     override fun showEmptyView() {
         emptyView.visibility = View.VISIBLE
         listView.visibility = View.GONE
+    }
+
+    override fun showReviewDialogIfNeeded() {
+        if (SharedPreferencesUtil.getBoolean(context!!, SharedPreferencesUtil.Key.STORE_REVIEW_PROMPT_COMPLETED)) {
+            return
+        }
+
+        val action = RecordFragmentDirections.actionRecordFragmentToReviewDialog()
+        findNavController().navigate(action)
     }
 
     inner class RecordAdapter(val context: Context, val records: List<RecordItem>, val viewHeight: Int)
