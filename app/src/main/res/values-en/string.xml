@@ -116,6 +116,11 @@
     <string name="pin_disable_message">To disable PIN you need to enter PIN.</string>
     <string name="pin_disable_message_ok">Complete</string>
 
+    <string name="preference_section_header_inquiry">Contacts</string>
+    <string name="preference_inquiry_title">Bug Report・Request For Improvement</string>
+    <string name="preference_inquiry_description">Please report bugs or request for implovement from here. This need you to sign in Google.</string>
+    <string name="bug_report_url">https://docs.google.com/forms/d/e/1FAIpQLSfrrmpn0MBa5qA9jzz23EaqbLdTP3UhVfd2AGMOIUOagbi5MA/viewform</string>
+
     <string name="dialog_select_prompt">Choose Image</string>
     <string name="dialog_select_camera">Camera</string>
     <string name="dialog_select_gallery">Gallery</string>

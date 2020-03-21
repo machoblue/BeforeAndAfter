@@ -113,6 +113,12 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             DeleteAllDialog.newInstance(activity).show(fragmentManager!!, "")
         })
 
+        items.add(SectionHeader(R.string.preference_section_header_inquiry))
+        items.add(PreferenceItem(R.string.preference_inquiry_title, R.string.preference_inquiry_description) {
+            val action = PreferenceFragmentDirections.actionPreferenceFragmentToBugReportFragment()
+            findNavController().navigate(action)
+        })
+
         // MARK: - Version
         items.add(PreferenceFooter("ver.${BuildConfig.VERSION_NAME}"))
 

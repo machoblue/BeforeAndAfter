@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_preferenceFragment_to_rewardDialog2"
             app:destination="@id/rewardDialog2" />
+        <action
+            android:id="@+id/action_preferenceFragment_to_bugReportFragment"
+            app:destination="@id/bugReportFragment" />
     </fragment>
     <fragment
         android:id="@+id/editGoalFragment"
@@ -56,4 +59,8 @@
             android:id="@+id/action_rewardDialog2_to_backupFragment"
             app:destination="@id/backupFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/bugReportFragment"
+        android:name="org.macho.beforeandafter.preference.bugreport.BugReportFragment"
+        android:label="BugReportFragment" />
 </navigation>
