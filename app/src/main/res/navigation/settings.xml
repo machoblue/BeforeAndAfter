@@ -62,5 +62,5 @@
     <fragment
         android:id="@+id/bugReportFragment"
         android:name="org.macho.beforeandafter.preference.bugreport.BugReportFragment"
-        android:label="BugReportFragment" />
+        android:label="@string/preference_inquiry_title" />
 </navigation>
