@@ -52,8 +52,17 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
             imageFileNames.forEachIndexed { index, fileName ->
                 if (isCancelled) return
                 publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_SAVING_IMAGES, index + 1, size))
-                val fileId = saveImage(fileName) ?: let { return@forEachIndexed }
-                imageFileNameToDriveFileId[fileName] = fileId
+
+                val imageFilePathStr = fileNameToFilePath(fileName) ?: let { return } // contextが開放されていたら、何もせず終了
+                val imageFile = java.io.File(imageFilePathStr)
+                if (imageFile.exists() && imageFile.length() > 0) {
+                    val fileId = saveImage(imageFile) ?: let { return }
+                    imageFileNameToDriveFileId[fileName] = fileId
+
+                } else {
+                    Log.w(TAG, "Image isn't exists or is empty.: $imageFilePathStr")
+                    // do nothing
+                }
             }
 
             // save records
@@ -137,13 +146,13 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
         return imageFileNames
     }
 
-    private fun saveImage(fileName: String): String? {
+    private fun saveImage(imageFile: java.io.File): String? {
         val fileMetadata = File().also {
-            it.setName(fileName)
-            it.setParents(Collections.singletonList(DriveUtil.DRIVE_SPACE_APPDATA))
+            it.name = imageFile.name
+            it.parents = Collections.singletonList(DriveUtil.DRIVE_SPACE_APPDATA)
         }
-        val filePathStr = fileNameToFilePath(fileName) ?: let { return null }
-        val mediaContent = FileContent("image/jpg", java.io.File(filePathStr))
+
+        val mediaContent = FileContent("image/jpg", imageFile)
         val file = driveService.files()?.create(fileMetadata, mediaContent)?.setFields("id")?.execute()
         return file?.id
     }
