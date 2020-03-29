@@ -1,6 +1,6 @@
 package org.macho.beforeandafter.record
 
-import org.macho.beforeandafter.shared.data.RecordRepository
+import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import java.util.*
 import javax.inject.Inject

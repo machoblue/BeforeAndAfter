@@ -1,4 +1,4 @@
-package org.macho.beforeandafter.shared.data
+package org.macho.beforeandafter.shared.data.record
 
 interface RecordDao {
     fun findAll(): List<Record>

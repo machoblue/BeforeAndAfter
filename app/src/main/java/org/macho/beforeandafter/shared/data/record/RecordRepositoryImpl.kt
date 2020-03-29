@@ -1,4 +1,4 @@
-package org.macho.beforeandafter.shared.data
+package org.macho.beforeandafter.shared.data.record
 
 import org.macho.beforeandafter.shared.util.AppExecutors
 import javax.inject.Inject

@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.shared.data.RecordDao
-import org.macho.beforeandafter.shared.data.RecordDaoImpl
+import org.macho.beforeandafter.shared.data.record.RecordDao
+import org.macho.beforeandafter.shared.data.record.RecordDaoImpl
 import org.macho.beforeandafter.shared.util.AdUtil
 
 

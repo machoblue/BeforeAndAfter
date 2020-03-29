@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.restore_frag.backupStatusMessageDescriptio
 import kotlinx.android.synthetic.main.restore_frag.backupStatusMessageTitle
 import kotlinx.android.synthetic.main.restore_frag.progressBar
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.shared.data.RecordRepository
+import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.showIfNeeded

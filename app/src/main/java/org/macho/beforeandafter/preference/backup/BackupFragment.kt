@@ -9,7 +9,7 @@ import com.google.android.gms.ads.InterstitialAd
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.backup_frag.*
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.shared.data.RecordRepository
+import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.showIfNeeded

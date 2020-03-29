@@ -1,4 +1,4 @@
-package org.macho.beforeandafter.shared.data
+package org.macho.beforeandafter.shared.data.record
 
 import dagger.Module
 import dagger.Provides

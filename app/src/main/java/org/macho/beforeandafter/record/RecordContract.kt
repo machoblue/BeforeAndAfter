@@ -1,7 +1,7 @@
 package org.macho.beforeandafter.record
 
 import org.macho.beforeandafter.shared.BaseContract
-import org.macho.beforeandafter.shared.data.Record
+import org.macho.beforeandafter.shared.data.record.Record
 
 interface RecordContract {
     interface View: BaseContract.View<Presenter> {

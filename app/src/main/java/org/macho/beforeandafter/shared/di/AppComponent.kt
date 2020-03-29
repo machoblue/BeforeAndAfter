@@ -6,7 +6,7 @@ import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import org.macho.beforeandafter.BeforeAndAfterApp
-import org.macho.beforeandafter.shared.data.RecordRepositoryModule
+import org.macho.beforeandafter.shared.data.record.RecordRepositoryModule
 import javax.inject.Singleton
 
 @Singleton

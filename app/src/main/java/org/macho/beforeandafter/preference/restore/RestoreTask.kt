@@ -12,7 +12,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.backup.BackupData
 import org.macho.beforeandafter.preference.backup.BackupTask
 import org.macho.beforeandafter.preference.backup.DriveUtil
-import org.macho.beforeandafter.shared.data.Record
+import org.macho.beforeandafter.shared.data.record.Record
 import java.io.*
 import java.lang.ref.WeakReference
 

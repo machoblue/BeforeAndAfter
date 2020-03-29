@@ -15,7 +15,7 @@ import com.google.android.gms.tasks.Task
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.DriveScopes
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.shared.data.RecordRepository
+import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import javax.inject.Inject
 

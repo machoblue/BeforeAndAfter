@@ -10,7 +10,7 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
 import com.google.gson.Gson
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.shared.data.Record
+import org.macho.beforeandafter.shared.data.record.Record
 import java.io.IOException
 import java.io.OutputStreamWriter
 import java.io.PrintWriter

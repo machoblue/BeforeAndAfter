@@ -4,14 +4,11 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import com.google.android.gms.ads.InterstitialAd
-import com.google.android.gms.ads.MobileAds
 import org.macho.beforeandafter.shared.util.AdUtil
-import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.shared.data.RecordDao
-import org.macho.beforeandafter.shared.data.RecordDaoImpl
+import org.macho.beforeandafter.shared.data.record.RecordDao
+import org.macho.beforeandafter.shared.data.record.RecordDaoImpl
 import org.macho.beforeandafter.shared.util.showIfNeeded
 import java.io.File
 

@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.record_frag.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.databinding.ListItemRecordBinding
 import org.macho.beforeandafter.shared.GlideApp
-import org.macho.beforeandafter.shared.data.Record
+import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
