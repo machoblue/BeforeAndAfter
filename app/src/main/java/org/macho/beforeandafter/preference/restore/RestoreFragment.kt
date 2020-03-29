@@ -25,9 +25,6 @@ class RestoreFragment @Inject constructor(): DaggerFragment(), RestoreContract.V
     @Inject
     override lateinit var presenter: RestoreContract.Presenter
 
-    @Inject
-    lateinit var recordRepository: RecordRepository
-
     private var interstitialAd: InterstitialAd? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
