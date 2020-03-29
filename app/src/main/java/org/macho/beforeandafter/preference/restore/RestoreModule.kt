@@ -15,4 +15,8 @@ abstract class RestoreModule {
     @ActivityScoped
     @Binds
     abstract fun restorePresenter(restorePresenter: RestorePresenter): RestoreContract.Presenter
+
+    @FragmentScoped
+    @ContributesAndroidInjector
+    abstract fun restoreResumeDialogFragment(): RestoreResumeDialog
 }

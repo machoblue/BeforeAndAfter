@@ -22,7 +22,7 @@ class RestoreDialog: DialogFragment() {
         interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)
 
         return AlertDialog.Builder(activity).setTitle(R.string.restore_dialog_title)
-                .setMessage(R.string.backup_dialog_message)
+                .setMessage(R.string.restore_dialog_message)
                 .setPositiveButton(R.string.ok) { dialogInterface, i ->
                     val action = RestoreDialogDirections.actionRestoreDialogToRestoreFragment()
                     findNavController().navigate(action)

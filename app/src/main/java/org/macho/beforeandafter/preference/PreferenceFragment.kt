@@ -16,6 +16,8 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.pin.PinEnableActivity
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.preference.pin.PinDisableActivity
+import org.macho.beforeandafter.shared.data.restoreimage.RestoreImage
+import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageRepository
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.util.*
 import javax.inject.Inject
@@ -26,6 +28,9 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
         const val RC_ENABLE_PIN = 4001
         const val RC_DISABLE_PIN = 4002
     }
+
+    @Inject
+    lateinit var restoreImageRepository: RestoreImageRepository
 
     private var items: MutableList<PreferenceElement> = mutableListOf()
     private lateinit var adapter: PreferenceAdapter
@@ -106,8 +111,16 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             findNavController().navigate(action)
         })
         items.add(PreferenceItem(R.string.preference_item_restore_title, R.string.preference_item_restore_description) {
-            val action = PreferenceFragmentDirections.actionPreferenceFragmentToRestoreDialog()
-            findNavController().navigate(action)
+            restoreImageRepository.getRestoreImages { restoreImages ->
+                if (restoreImages.filter { it.status == RestoreImage.Status.PROCESSING }.size > 0) {
+                    val action = PreferenceFragmentDirections.actionPreferenceFragmentToRestoreResumeDialog()
+                    findNavController().navigate(action)
+
+                } else {
+                    val action = PreferenceFragmentDirections.actionPreferenceFragmentToRestoreDialog()
+                    findNavController().navigate(action)
+                }
+            }
         })
         items.add(PreferenceItem(R.string.delete_all_title, R.string.delete_all_description) {
             DeleteAllDialog.newInstance(activity).show(fragmentManager!!, "")

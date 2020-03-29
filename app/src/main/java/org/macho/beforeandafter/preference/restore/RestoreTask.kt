@@ -13,6 +13,8 @@ import org.macho.beforeandafter.preference.backup.BackupData
 import org.macho.beforeandafter.preference.backup.BackupTask
 import org.macho.beforeandafter.preference.backup.DriveUtil
 import org.macho.beforeandafter.shared.data.record.Record
+import org.macho.beforeandafter.shared.data.restoreimage.RestoreImage
+import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageRepository
 import java.io.*
 import java.lang.ref.WeakReference
 

@@ -98,6 +98,10 @@
 
     <string name="restore_dialog_title">Restore</string>
     <string name="restore_dialog_message">Do you restore data you backup in advance?\n<small>※Note:※\n・Please use Wi-Fi.\n・Restoring needs Google Account.</small></string>
+    <string name="restore_resume_dialog_title">Resume Restoring</string>
+    <string name="restore_resume_dialog_message">Last restoring hasn\'t completed yet. Do you resume restoring?</string>
+    <string name="restore_resume_dialog_neutral">No, I restore from beginning.</string>
+    <string name="restore_resume_dialog_ok">Yes, I resume restoring.</string>
     <string name="restore_message">Restoring...</string>
     <string name="restore_message_detail">Please wait a minutes.</string>
     <string name="restore_status_message_title_format">%s(step %d of %d)</string>

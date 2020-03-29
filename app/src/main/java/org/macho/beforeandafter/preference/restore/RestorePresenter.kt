@@ -18,6 +18,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.backup.BackupPresenter
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.data.record.RecordRepository
+import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import javax.inject.Inject
 
