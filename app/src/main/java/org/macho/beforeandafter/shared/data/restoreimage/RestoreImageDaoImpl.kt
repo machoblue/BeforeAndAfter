@@ -3,10 +3,9 @@ package org.macho.beforeandafter.shared.data.restoreimage
 import io.realm.Realm
 
 class RestoreImageDaoImpl: RestoreImageDao {
-    val realm = Realm.getDefaultInstance()
     override fun findAll(): List<RestoreImage> {
         val restoreImages = mutableListOf<RestoreImage>()
-        realm.use {
+        Realm.getDefaultInstance().use {
             for (restoreImageDto in it.where(RestoreImageDto::class.java).findAll()) {
                 restoreImages.add(restoreImageDto.restoreImage)
             }
@@ -15,7 +14,7 @@ class RestoreImageDaoImpl: RestoreImageDao {
     }
 
     override fun find(imageFileName: String): RestoreImage? {
-        realm.use {
+        Realm.getDefaultInstance().use {
             return it.where(RestoreImageDto::class.java)
                     .equalTo("imageFileName", imageFileName)
                     .findFirst()?.restoreImage
@@ -23,11 +22,11 @@ class RestoreImageDaoImpl: RestoreImageDao {
     }
 
     override fun insertOrUpdate(restoreImage: RestoreImage) {
-        realm.copyToRealmOrUpdate(RestoreImageDto(restoreImage))
+        Realm.getDefaultInstance().copyToRealmOrUpdate(RestoreImageDto(restoreImage))
     }
 
     override fun delete(imageFileName: String) {
-        realm.executeTransaction {
+        Realm.getDefaultInstance().executeTransaction {
             it.where(RestoreImageDto::class.java)
                     .equalTo("imageFileName", imageFileName)
                     .findFirst()?.deleteFromRealm()
@@ -35,11 +34,9 @@ class RestoreImageDaoImpl: RestoreImageDao {
     }
 
     override fun deleteAll() {
-        realm.use {
-            realm.executeTransaction {
-                realm.where(RestoreImageDto::class.java).findAll().forEach {
-                    it.deleteFromRealm()
-                }
+        Realm.getDefaultInstance().executeTransaction {
+            it.where(RestoreImageDto::class.java).findAll().forEach { dto ->
+                dto.deleteFromRealm()
             }
         }
     }

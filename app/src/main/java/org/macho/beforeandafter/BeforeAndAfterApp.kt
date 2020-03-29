@@ -25,7 +25,7 @@ class BeforeAndAfterApp: DaggerApplication() {
     private fun configureRealm() {
         Realm.init(applicationContext)
         val config = RealmConfiguration.Builder()
-                .schemaVersion(2)
+                .schemaVersion(3)
                 .migration { realm, oldVersion, newVersion ->
                     var currentVersion = oldVersion
                     val schema = realm.schema
@@ -42,6 +42,14 @@ class BeforeAndAfterApp: DaggerApplication() {
                         currentVersion++
                     }
 
+                    if (currentVersion == 2L) {
+                        schema.create("RestoreImageDto")
+                            .addField("imageFileName", String::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                            .addField("driveFileId", String::class.java, FieldAttribute.REQUIRED)
+                            .addField("status", Int::class.java, FieldAttribute.REQUIRED)
+                        @Suppress("UNUSED_CHANGED_VALUE")
+                        currentVersion++
+                    }
                 }
                 .build()
         Realm.setDefaultConfiguration(config)
