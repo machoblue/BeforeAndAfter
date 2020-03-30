@@ -148,20 +148,6 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
         }
     }
 
-    override fun onComplete(records: List<Record>) {
-        if (records.isEmpty()) {
-            view?.showAlert(context.getString(R.string.restore_error_no_data_title), context.getString(R.string.restore_error_no_data_description))
-            return
-        }
-        records.forEach { restoredRecord ->
-            recordRepository.getRecord(restoredRecord.date) { existingRecord ->
-                if (existingRecord == null) {
-                    recordRepository.register(restoredRecord)
-
-                } else {
-                    recordRepository.update(existingRecord)
-                }
-            }
-        }
+    override fun onComplete() {
     }
 }

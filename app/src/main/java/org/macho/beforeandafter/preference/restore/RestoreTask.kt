@@ -13,11 +13,12 @@ import org.macho.beforeandafter.preference.backup.BackupData
 import org.macho.beforeandafter.preference.backup.BackupTask
 import org.macho.beforeandafter.preference.backup.DriveUtil
 import org.macho.beforeandafter.shared.data.record.Record
+import org.macho.beforeandafter.shared.data.record.RecordDaoImpl
 import java.io.*
 import java.lang.ref.WeakReference
 
 
-class RestoreTask(context: Context, val account: Account, listener: RestoreTaskListener): AsyncTask<Void, RestoreTask.RestoreStatus, List<Record>?>() {
+class RestoreTask(context: Context, val account: Account, listener: RestoreTaskListener): AsyncTask<Void, RestoreTask.RestoreStatus, Unit>() {
     companion object {
         const val TAG = "RestoreTask"
         const val TEMP_FILE = "temp_backup.json"
@@ -30,14 +31,14 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
     var recoverableAuthIOException: UserRecoverableAuthIOException? = null
 
-    override fun doInBackground(vararg p0: Void?): List<Record>? {
+    override fun doInBackground(vararg p0: Void?): Unit {
         try {
             this.driveService = contextRef.get()?.let { context ->
                 DriveUtil.buildDriveService(context, account)
             } ?: let {
                 it.cancel(true)
                 publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_ERROR_DRIVE_CONNECTION_FAILED))
-                return null
+                return
             }
 
             publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_RECORDS))
@@ -46,14 +47,18 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
                 fetchBackupData(fileId) ?: let {
                     it.cancel(true)
                     publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_ERROR_BACKUPFILE_FORMAT_INVALID))
-                    return null
+                    return
                 }
             } ?: let {
-                return emptyList() // latestFileIdがない場合、ただBackupしてないだけ。emptyListを返し、backupを促す。
+                return // latestFileIdがない場合、ただBackupしてないだけ。emptyListを返し、backupを促す。
+            }
+
+            backupData.records.forEach {
+                RecordDaoImpl().update(it)
             }
 
             backupData.imageFileNameToDriveFileId.entries.forEachIndexed { index, entry ->
-                if (isCancelled) return null
+                if (isCancelled) return
 
                 publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_IMAGES, index, backupData.imageFileNameToDriveFileId.size))
 
@@ -61,14 +66,12 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
                 fetchImage(fileName, fileId)
             }
 
-            return backupData.records
-
         } catch (e: UserRecoverableAuthIOException) {
             Log.w(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
             this.recoverableAuthIOException = e
             publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_ERROR_RECOVERABLE))
             cancel(true)
-            return null
+            return
 
         } catch (e: IOException) {
             Log.e(TAG, "doInBackground.catch IOException:${e::class.java}", e)
@@ -86,19 +89,17 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
         }
     }
 
-    override fun onPostExecute(result: List<Record>?) {
+    override fun onPostExecute(result: Unit) {
         listenerRef.get()?.onProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_COMPLETE))
-        if (result != null) {
-            listenerRef.get()?.onComplete(result)
-        }
+        listenerRef.get()?.onComplete()
     }
 
     override fun onCancelled() {
         Log.w(TAG, "RestoreTask has been cancelled.")
     }
 
-    override fun onCancelled(result: List<Record>?) {
-        Log.w(TAG, "RestoreTask has been cancelled. :${result}")
+    override fun onCancelled(result: Unit?) {
+        Log.w(TAG, "RestoreTask has been cancelled.")
     }
 
     private fun fetchBackupData(fileId: String): BackupData? {
@@ -162,6 +163,6 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
     interface RestoreTaskListener {
         fun onProgress(status: RestoreStatus)
-        fun onComplete(records: List<Record>)
+        fun onComplete()
     }
 }
