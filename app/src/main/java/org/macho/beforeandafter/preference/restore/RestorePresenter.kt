@@ -110,28 +110,42 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
     // MARK: BackupTask.BackupTaskListener
     override fun onProgress(status: RestoreTask.RestoreStatus) {
         Log.d("RestorePresetner", "*** onProgress ***")
-        var title = ""
-        var description = ""
-        var progress = 0
         when (status.statusCode) {
             RestoreTask.RestoreStatus.RESTORE_STATUS_CODE_FETCHING_RECORDS -> {
-                title = context.getString(R.string.backup_status_message_title_format).format(context.getString(R.string.restore_status_message_title_fetching_records), 1, 2)
-                progress = 10
+                val title = context.getString(R.string.backup_status_message_title_format).format(context.getString(R.string.restore_status_message_title_fetching_records), 1, 2)
+                val description = ""
+                val progress = 10
+                view?.setBackupStatusMessageTitle(title)
+                view?.setBackupStatusMessageDescription(description)
+                view?.setProgress(progress)
             }
             RestoreTask.RestoreStatus.RESTORE_STATUS_CODE_FETCHING_IMAGES -> {
-                title = context.getString(R.string.backup_status_message_title_format).format(context.getString(R.string.restore_status_message_title_fetching_images), 2, 2)
-                description = context.getString(R.string.restore_status_message_description_format).format(status.finishFilesCount, status.allFilesCount)
-                progress = 10 + ((status.finishFilesCount.toFloat() / status.allFilesCount) * 80).toInt()
+                val title = context.getString(R.string.backup_status_message_title_format).format(context.getString(R.string.restore_status_message_title_fetching_images), 2, 2)
+                val description = context.getString(R.string.restore_status_message_description_format).format(status.finishFilesCount, status.allFilesCount)
+                val progress = 10 + ((status.finishFilesCount.toFloat() / status.allFilesCount) * 80).toInt()
+                view?.setBackupStatusMessageTitle(title)
+                view?.setBackupStatusMessageDescription(description)
+                view?.setProgress(progress)
             }
             RestoreTask.RestoreStatus.RESTORE_STATUS_CODE_COMPLETE -> {
-                title = context.getString(R.string.restore_status_message_complete)
-                progress = 100
+                val title = context.getString(R.string.restore_status_message_complete)
+                val description = ""
+                val progress = 100
+                view?.setBackupStatusMessageTitle(title)
+                view?.setBackupStatusMessageDescription(description)
+                view?.setProgress(progress)
                 view?.setFinishButtonEnabled(true)
             }
+            RestoreTask.RestoreStatus.RESTORE_STATUS_CODE_ERROR_RECOVERABLE -> {
+                view?.startActivityForResult(restoreTask!!.recoverableAuthIOException!!.intent, RC_RECOVERABLE)
+            }
+            RestoreTask.RestoreStatus.RESTORE_STATUS_CODE_ERROR_DRIVE_CONNECTION_FAILED -> {
+                view?.showAlert(context.getString(R.string.restore_error_title), context.getString(R.string.backup_error_drive_connection_error))
+            }
+            RestoreTask.RestoreStatus.RESTORE_STATUS_CODE_ERROR_BACKUPFILE_FORMAT_INVALID -> {
+                view?.showAlert(context.getString(R.string.restore_error_title), context.getString(R.string.restore_error_file_format_invalid))
+            }
         }
-        view?.setBackupStatusMessageTitle(title)
-        view?.setBackupStatusMessageDescription(description)
-        view?.setProgress(progress)
     }
 
     override fun onComplete(records: List<Record>) {
@@ -150,13 +164,4 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
             }
         }
     }
-
-    override fun onFail(resourceId: Int) {
-        view?.showAlert(context.getString(R.string.restore_error_title), context.getString(resourceId))
-    }
-
-    override fun onRecoverableAuthErrorOccured(e: UserRecoverableAuthIOException) {
-        view?.startActivityForResult(e.intent, RC_RECOVERABLE)
-    }
-
 }

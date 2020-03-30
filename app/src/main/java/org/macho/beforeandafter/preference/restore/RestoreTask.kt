@@ -13,8 +13,6 @@ import org.macho.beforeandafter.preference.backup.BackupData
 import org.macho.beforeandafter.preference.backup.BackupTask
 import org.macho.beforeandafter.preference.backup.DriveUtil
 import org.macho.beforeandafter.shared.data.record.Record
-import org.macho.beforeandafter.shared.data.restoreimage.RestoreImage
-import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageRepository
 import java.io.*
 import java.lang.ref.WeakReference
 
@@ -30,13 +28,15 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
     private lateinit var driveService: Drive
 
+    var recoverableAuthIOException: UserRecoverableAuthIOException? = null
+
     override fun doInBackground(vararg p0: Void?): List<Record>? {
         try {
             this.driveService = contextRef.get()?.let { context ->
                 DriveUtil.buildDriveService(context, account)
             } ?: let {
                 it.cancel(true)
-                listenerRef.get()?.onFail(R.string.backup_error_drive_connection_error)
+                publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_ERROR_DRIVE_CONNECTION_FAILED))
                 return null
             }
 
@@ -45,7 +45,7 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
             val backupData: BackupData = fetchLatestBackupFileId()?.let { fileId ->
                 fetchBackupData(fileId) ?: let {
                     it.cancel(true)
-                    listenerRef.get()?.onFail(R.string.restore_error_file_format_invalid)
+                    publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_ERROR_BACKUPFILE_FORMAT_INVALID))
                     return null
                 }
             } ?: let {
@@ -65,7 +65,8 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
         } catch (e: UserRecoverableAuthIOException) {
             Log.w(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
-            listenerRef.get()?.onRecoverableAuthErrorOccured(e)
+            this.recoverableAuthIOException = e
+            publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_ERROR_RECOVERABLE))
             cancel(true)
             return null
 
@@ -153,13 +154,14 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
             const val RESTORE_STATUS_CODE_FETCHING_RECORDS = 0
             const val RESTORE_STATUS_CODE_FETCHING_IMAGES = 1
             const val RESTORE_STATUS_CODE_COMPLETE = 2
+            const val RESTORE_STATUS_CODE_ERROR_DRIVE_CONNECTION_FAILED = 1001
+            const val RESTORE_STATUS_CODE_ERROR_BACKUPFILE_FORMAT_INVALID = 1002
+            const val RESTORE_STATUS_CODE_ERROR_RECOVERABLE = 1003
         }
     }
 
     interface RestoreTaskListener {
         fun onProgress(status: RestoreStatus)
         fun onComplete(records: List<Record>)
-        fun onFail(resourceId: Int)
-        fun onRecoverableAuthErrorOccured(e: UserRecoverableAuthIOException)
     }
 }
