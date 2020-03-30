@@ -22,7 +22,9 @@ class RestoreImageDaoImpl: RestoreImageDao {
     }
 
     override fun insertOrUpdate(restoreImage: RestoreImage) {
-        Realm.getDefaultInstance().copyToRealmOrUpdate(RestoreImageDto(restoreImage))
+        Realm.getDefaultInstance().executeTransaction {
+            it.copyToRealmOrUpdate(RestoreImageDto(restoreImage))
+        }
     }
 
     override fun delete(imageFileName: String) {

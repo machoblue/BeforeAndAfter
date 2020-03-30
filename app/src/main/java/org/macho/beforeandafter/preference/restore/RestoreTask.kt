@@ -14,6 +14,8 @@ import org.macho.beforeandafter.preference.backup.BackupTask
 import org.macho.beforeandafter.preference.backup.DriveUtil
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.data.record.RecordDaoImpl
+import org.macho.beforeandafter.shared.data.restoreimage.RestoreImage
+import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageDaoImpl
 import java.io.*
 import java.lang.ref.WeakReference
 
@@ -30,6 +32,7 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
     private lateinit var driveService: Drive
 
     var recoverableAuthIOException: UserRecoverableAuthIOException? = null
+    var failCount = 0
 
     override fun doInBackground(vararg p0: Void?): Unit {
         try {
@@ -57,14 +60,27 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
                 RecordDaoImpl().update(it)
             }
 
-            backupData.imageFileNameToDriveFileId.entries.forEachIndexed { index, entry ->
-                if (isCancelled) return
-
-                publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_IMAGES, index, backupData.imageFileNameToDriveFileId.size))
-
-                val (fileName, fileId) = entry
-                fetchImage(fileName, fileId)
+            backupData.imageFileNameToDriveFileId.map { RestoreImage(it.key, it.value) }.forEach {
+                RestoreImageDaoImpl().insertOrUpdate(it)
             }
+
+
+            RestoreImageDaoImpl().findAll()
+                    .filter { it.status != RestoreImage.Status.COMPLETE }
+                    .sortedBy { it.status }
+                    .forEachIndexed { index, restoreImage ->
+                        if (isCancelled) return
+                        publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_IMAGES, index, backupData.imageFileNameToDriveFileId.size))
+                        RestoreImageDaoImpl().insertOrUpdate(RestoreImage(restoreImage.imageFileName, restoreImage.driveFileId, RestoreImage.Status.PROCESSING))
+                        try {
+                            fetchImage(restoreImage.imageFileName, restoreImage.driveFileId)
+                            RestoreImageDaoImpl().delete(restoreImage.imageFileName)
+
+                        } catch (e: Exception) {
+                            Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
+                            failCount++
+                        }
+                    }
 
         } catch (e: UserRecoverableAuthIOException) {
             Log.w(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
