@@ -149,5 +149,7 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
     }
 
     override fun onComplete() {
+        val failCount = restoreTask?.failCount ?: return
+        view?.showAlert(context.getString(R.string.restore_error_title), String.format(context.getString(R.string.restore_error_message_cannot_restore_all_photo), failCount))
     }
 }

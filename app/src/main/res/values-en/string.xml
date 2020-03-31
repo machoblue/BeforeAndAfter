@@ -114,6 +114,7 @@
     <string name="restore_error_file_format_invalid">Format of backup file is invalid. Please backup again.</string>
     <string name="restore_error_no_data_title">No data to restore</string>
     <string name="restore_error_no_data_description">No data to restore.</string>
+    <string name="restore_error_message_cannot_restore_all_photo">We cannot restore %d photos. To restore these photos, please retry later. If retry fails, please backup again, because the photo files may be broken for some reason.</string>
 
     <string name="pin_enable_title">Enable PIN</string>
     <string name="pin_enable_message">Please enter PIN.</string>
