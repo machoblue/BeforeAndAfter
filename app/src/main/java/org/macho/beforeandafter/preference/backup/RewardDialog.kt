@@ -64,7 +64,7 @@ class RewardDialog: DialogFragment() {
         positiveButton.setOnClickListener {
             rewardedAd.show(activity, object: RewardedAdCallback() {
                 override fun onUserEarnedReward(reward: RewardItem) {
-                    SharedPreferencesUtil.setLong(activity!!, SharedPreferencesUtil.Key.LATEST_WATCH_REWARDED_AD, Date().time)
+                    SharedPreferencesUtil.setLongImmediately(activity!!, SharedPreferencesUtil.Key.LATEST_WATCH_REWARDED_AD, Date().time)
                     haveWatchedAd = true
                 }
 
