@@ -8,22 +8,20 @@ class Analytics(val context: Context) {
         BACKUP_START,
         BACKUP_RECOVERABLE_ERROR,
         BACKUP_FINISH,
+
         RESTORE_START,
         RESTORE_RECOVERABLE_ERROR,
-        RESTORE_FINISH
+        RESTORE_FINISH,
 
-//        companion object {
-//            val BACKUP_START = "backup_start"
-//            val BACKUP_FINISH = "backup_finish"
-//            val RESTORE_START = "restore_start"
-//            val RESTORE_FINISH = "restore_finish"
-//        }
+        STORE_REVIEW_DIALOG_APPEAR,
+        STORE_REVIEW_DIALOG_CANCEL,
+        STORE_REVIEW_DIALOG_HIDE,
+        STORE_REVIEW_DIALOG_OPEN_STORE,
     }
 
     val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     fun logEvent(event: Event) {
-        LogUtil.i(this, event.name + event.name.toLowerCase())
         firebaseAnalytics.logEvent(event.name.toLowerCase(), null)
     }
 }

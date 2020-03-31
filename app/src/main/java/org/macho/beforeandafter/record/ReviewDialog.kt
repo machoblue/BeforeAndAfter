@@ -8,16 +8,16 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.util.Analytics
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 
 class ReviewDialog: androidx.fragment.app.DialogFragment() {
-    companion object {
-        fun newInstance(): androidx.fragment.app.DialogFragment {
-            return ReviewDialog()
-        }
-    }
+
+    lateinit var analytics: Analytics
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        analytics = Analytics(context!!)
+
         return AlertDialog.Builder(activity)
                 .setTitle(R.string.review)
                 .setView(R.layout.review_dialog_frag)
@@ -27,12 +27,14 @@ class ReviewDialog: androidx.fragment.app.DialogFragment() {
                             Uri.parse(getString(R.string.review_url)))
                     startActivity(intent)
                     SharedPreferencesUtil.setBoolean(context!!, SharedPreferencesUtil.Key.STORE_REVIEW_PROMPT_COMPLETED, true)
+                    analytics.logEvent(Analytics.Event.STORE_REVIEW_DIALOG_OPEN_STORE)
                 }
                 .setNegativeButton(R.string.cancel) { _, i ->
-                    // do nothing
+                    analytics.logEvent(Analytics.Event.STORE_REVIEW_DIALOG_CANCEL)
                 }
                 .setNeutralButton(R.string.review_neutral) { _, i ->
                     SharedPreferencesUtil.setBoolean(context!!, SharedPreferencesUtil.Key.STORE_REVIEW_PROMPT_COMPLETED, true)
+                    analytics.logEvent(Analytics.Event.STORE_REVIEW_DIALOG_HIDE)
                 }
                 .create()
     }
@@ -44,5 +46,7 @@ class ReviewDialog: androidx.fragment.app.DialogFragment() {
             val action = ReviewDialogDirections.actionReviewDialogToBugReportFragment2()
             findNavController().navigate(action)
         }
+
+        analytics.logEvent(Analytics.Event.STORE_REVIEW_DIALOG_APPEAR)
     }
 }
