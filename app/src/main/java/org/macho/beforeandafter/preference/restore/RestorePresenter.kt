@@ -20,6 +20,7 @@ import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.util.Analytics
 import javax.inject.Inject
 
 @ActivityScoped
@@ -39,7 +40,12 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
     lateinit var googleSignInClient: GoogleSignInClient
     var account: Account? = null
 
+    lateinit var analytics: Analytics
+
     override fun restore() {
+        analytics = Analytics(context)
+        analytics.logEvent(Analytics.Event.RESTORE_START)
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(Scope(DriveScopes.DRIVE_APPDATA))
                 .requestEmail()
@@ -138,6 +144,7 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
             }
             RestoreTask.RestoreStatus.RESTORE_STATUS_CODE_ERROR_RECOVERABLE -> {
                 view?.startActivityForResult(restoreTask!!.recoverableAuthIOException!!.intent, RC_RECOVERABLE)
+                analytics.logEvent(Analytics.Event.RESTORE_RECOVERABLE_ERROR)
             }
             RestoreTask.RestoreStatus.RESTORE_STATUS_CODE_ERROR_DRIVE_CONNECTION_FAILED -> {
                 view?.showAlert(context.getString(R.string.restore_error_title), context.getString(R.string.backup_error_drive_connection_error))
@@ -149,7 +156,10 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
     }
 
     override fun onComplete() {
-        val failCount = restoreTask?.failCount ?: return
+        val failCount = restoreTask?.failCount ?: let {
+            analytics.logEvent(Analytics.Event.RESTORE_FINISH)
+            return
+        }
         view?.showAlert(context.getString(R.string.restore_error_title), String.format(context.getString(R.string.restore_error_message_cannot_restore_all_photo), failCount))
     }
 }

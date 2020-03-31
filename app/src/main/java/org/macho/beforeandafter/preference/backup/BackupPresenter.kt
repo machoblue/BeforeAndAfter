@@ -14,9 +14,11 @@ import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.DriveScopes
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.util.Analytics
 import javax.inject.Inject
 
 @ActivityScoped
@@ -36,7 +38,12 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
 
     private var backupTask: BackupTask? = null
 
+    lateinit var analytics: Analytics
+
     override fun backup() {
+        analytics = Analytics(context)
+        analytics.logEvent(Analytics.Event.BACKUP_START)
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(Scope(DriveScopes.DRIVE_APPDATA))
                 .requestEmail()
@@ -126,6 +133,7 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
                 title = context.getString(R.string.backup_status_message_complete)
                 progress = 100
                 view?.setFinishButtonEnabled(true)
+                analytics.logEvent(Analytics.Event.BACKUP_FINISH)
             }
         }
         view?.setBackupStatusMessageTitle(title)
@@ -139,6 +147,7 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
 
     override fun onRecoverableAuthErrorOccured(e: UserRecoverableAuthIOException) {
         view?.startActivityForResult(e.intent, RC_RECOVERABLE)
+        analytics.logEvent(Analytics.Event.BACKUP_RECOVERABLE_ERROR)
     }
 
 }
