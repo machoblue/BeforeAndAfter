@@ -112,7 +112,7 @@
     <string name="restore_error_title">復元エラー</string>
     <string name="restore_error_cannot_fetch_metadata_description">GoogleDriveにバックアップデータがありません。</string>
     <string name="restore_error_file_format_invalid">GoogleDriveから取得したバックアップファイルのフォーマットが不正です。もう一度バックアップをし直してください。</string>
-    <string name="restore_error_message_cannot_restore_all_photo">%d枚の写真を復元できませんでした。これらの写真を復元するにはしばらく経ってからもう一度お試しください。もう一度試しても成功しない場合、バックアップ時になんらかの理由で写真ファイルが壊れている可能性があります。その場合、もう一度バックアップをしなおしてください。</string>
+    <string name="restore_error_message_cannot_restore_all_photo">%d枚の写真を復元できませんでした。これらの写真を復元するにはしばらく経ってからもう一度お試しください。\n<small>※もう一度試しても成功しない場合、バックアップ時になんらかの理由で写真ファイルが壊れている可能性があります。その場合、もう一度バックアップをしなおしてください。</small></string>
     <string name="restore_error_no_data_title">記録データを1件も取得できませんでした。</string>
     <string name="restore_error_no_data_description">記録データを1件も取得できませんでした。もう一度バックアップができているかご確認ください。</string>
 

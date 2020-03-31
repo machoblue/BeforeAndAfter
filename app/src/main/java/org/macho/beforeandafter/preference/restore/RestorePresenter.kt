@@ -156,10 +156,12 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
     }
 
     override fun onComplete() {
-        val failCount = restoreTask?.failCount ?: let {
+        val failCount = restoreTask?.failCount ?: 0
+        if (failCount == 0) {
             analytics.logEvent(Analytics.Event.RESTORE_FINISH)
-            return
+
+        } else {
+            view?.showAlert(context.getString(R.string.restore_error_title), String.format(context.getString(R.string.restore_error_message_cannot_restore_all_photo), failCount))
         }
-        view?.showAlert(context.getString(R.string.restore_error_title), String.format(context.getString(R.string.restore_error_message_cannot_restore_all_photo), failCount))
     }
 }
