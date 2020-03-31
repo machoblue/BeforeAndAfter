@@ -30,11 +30,13 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
 
     private lateinit var driveService: Drive
 
+    var recoverableAuthIOException: UserRecoverableAuthIOException? = null
+
     override fun doInBackground(vararg recordLists: List<Record>): Unit {
         try {
             val records = recordLists.firstOrNull() ?: let {
                 cancel(true)
-                listenerRef.get()?.onFail(R.string.backup_error_description_no_records)
+                publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_ERROR_NO_RECORDS))
                 return
             }
 
@@ -42,7 +44,7 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
                 DriveUtil.buildDriveService(context, account)
             } ?: let {
                 cancel(true)
-                listenerRef.get()?.onFail(R.string.backup_error_drive_connection_error)
+                publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_ERROR_DRIVE_CONNECTION_FAILED))
                 return
             }
 
@@ -71,20 +73,15 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
             publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_SAVING_RECORDS))
             saveData(BackupData(records, imageFileNameToDriveFileId)) ?: let {
                 cancel(true)
-                listenerRef.get()?.onFail(R.string.backup_error_description)
+                publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_ERROR_FILES_CREATE_FAILED))
                 return
             }
 
         } catch (e: UserRecoverableAuthIOException) {
             Log.w(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
-            listenerRef.get()?.onRecoverableAuthErrorOccured(e)
+            publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_ERROR_RECOVERABLE))
             cancel(true)
             return
-
-        } catch (e: IOException) {
-            Log.e(TAG, "doInBackground.catch IOException:${e::class.java}", e)
-            Crashlytics.logException(e)
-            throw e
 
         } catch (e: Exception) {
             Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
@@ -172,13 +169,15 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
             const val BACKUP_STATUS_CODE_SAVING_RECORDS = 0
             const val BACKUP_STATUS_CODE_SAVING_IMAGES = 1
             const val BACKUP_STATUS_CODE_COMPLETE = 2
+            const val BACKUP_STATUS_CODE_ERROR_NO_RECORDS = 1001
+            const val BACKUP_STATUS_CODE_ERROR_DRIVE_CONNECTION_FAILED = 1002
+            const val BACKUP_STATUS_CODE_ERROR_FILES_CREATE_FAILED = 1003
+            const val BACKUP_STATUS_CODE_ERROR_RECOVERABLE = 1004
         }
     }
 
     interface BackupTaskListener {
         fun onProgress(status: BackupStatus)
-        fun onFail(messageId: Int)
-        fun onRecoverableAuthErrorOccured(e: UserRecoverableAuthIOException)
     }
 
 }

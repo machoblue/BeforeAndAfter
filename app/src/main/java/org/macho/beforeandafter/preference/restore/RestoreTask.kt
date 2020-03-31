@@ -91,11 +91,6 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
             cancel(true)
             return
 
-        } catch (e: IOException) {
-            Log.e(TAG, "doInBackground.catch IOException:${e::class.java}", e)
-            Crashlytics.logException(e)
-            throw e
-
         } catch (e: Exception) {
             Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
             Crashlytics.logException(e)

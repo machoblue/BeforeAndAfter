@@ -124,30 +124,40 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
                 title = context.getString(R.string.backup_status_message_title_format).format(context.getString(R.string.backup_status_message_title_saving_images), 1, 2)
                 description = context.getString(R.string.backup_status_message_description_format).format(status.finishFilesCount, status.allFilesCount)
                 progress = ((status.finishFilesCount.toFloat() / status.allFilesCount) * 80).toInt()
+                view?.setBackupStatusMessageTitle(title)
+                view?.setBackupStatusMessageDescription(description)
+                view?.setProgress(progress)
             }
             BackupTask.BackupStatus.BACKUP_STATUS_CODE_SAVING_RECORDS -> {
                 title = context.getString(R.string.backup_status_message_title_format).format(context.getString(R.string.backup_status_message_title_saving_records), 2, 2)
                 progress = 90
+                view?.setBackupStatusMessageTitle(title)
+                view?.setBackupStatusMessageDescription(description)
+                view?.setProgress(progress)
             }
             BackupTask.BackupStatus.BACKUP_STATUS_CODE_COMPLETE -> {
                 title = context.getString(R.string.backup_status_message_complete)
                 progress = 100
                 view?.setFinishButtonEnabled(true)
+                view?.setBackupStatusMessageTitle(title)
+                view?.setBackupStatusMessageDescription(description)
+                view?.setProgress(progress)
                 analytics.logEvent(Analytics.Event.BACKUP_FINISH)
             }
+            BackupTask.BackupStatus.BACKUP_STATUS_CODE_ERROR_NO_RECORDS -> {
+                view?.showAlert(context.getString(R.string.backup_error_title), context.getString(R.string.backup_error_description_no_records))
+            }
+            BackupTask.BackupStatus.BACKUP_STATUS_CODE_ERROR_DRIVE_CONNECTION_FAILED -> {
+                view?.showAlert(context.getString(R.string.backup_error_title), context.getString(R.string.backup_error_description_no_records))
+            }
+            BackupTask.BackupStatus.BACKUP_STATUS_CODE_ERROR_FILES_CREATE_FAILED-> {
+                view?.showAlert(context.getString(R.string.backup_error_title), context.getString(R.string.backup_error_description_no_records))
+            }
+            BackupTask.BackupStatus.BACKUP_STATUS_CODE_ERROR_RECOVERABLE -> {
+                val intent = backupTask?.recoverableAuthIOException?.intent ?: return
+                view?.startActivityForResult(intent, RC_RECOVERABLE)
+                analytics.logEvent(Analytics.Event.BACKUP_RECOVERABLE_ERROR)
+            }
         }
-        view?.setBackupStatusMessageTitle(title)
-        view?.setBackupStatusMessageDescription(description)
-        view?.setProgress(progress)
     }
-
-    override fun onFail(resourceId: Int) {
-        view?.showAlert(context.getString(R.string.backup_error_title), context.getString(resourceId))
-    }
-
-    override fun onRecoverableAuthErrorOccured(e: UserRecoverableAuthIOException) {
-        view?.startActivityForResult(e.intent, RC_RECOVERABLE)
-        analytics.logEvent(Analytics.Event.BACKUP_RECOVERABLE_ERROR)
-    }
-
 }
