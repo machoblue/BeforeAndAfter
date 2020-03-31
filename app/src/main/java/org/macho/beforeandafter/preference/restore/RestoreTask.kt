@@ -4,6 +4,7 @@ import android.accounts.Account
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
+import com.crashlytics.android.Crashlytics
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.util.DateTime
 import com.google.api.services.drive.Drive
@@ -66,21 +67,22 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
 
             RestoreImageDaoImpl().findAll()
-                    .filter { it.status != RestoreImage.Status.COMPLETE }
-                    .sortedBy { it.status }
-                    .forEachIndexed { index, restoreImage ->
-                        if (isCancelled) return
-                        publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_IMAGES, index, backupData.imageFileNameToDriveFileId.size))
-                        RestoreImageDaoImpl().insertOrUpdate(RestoreImage(restoreImage.imageFileName, restoreImage.driveFileId, RestoreImage.Status.PROCESSING))
-                        try {
-                            fetchImage(restoreImage.imageFileName, restoreImage.driveFileId)
-                            RestoreImageDaoImpl().delete(restoreImage.imageFileName)
+                .filter { it.status != RestoreImage.Status.COMPLETE }
+                .sortedBy { it.status }
+                .forEachIndexed { index, restoreImage ->
+                    if (isCancelled) return
+                    publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_IMAGES, index, backupData.imageFileNameToDriveFileId.size))
+                    RestoreImageDaoImpl().insertOrUpdate(RestoreImage(restoreImage.imageFileName, restoreImage.driveFileId, RestoreImage.Status.PROCESSING))
+                    try {
+                        fetchImage(restoreImage.imageFileName, restoreImage.driveFileId)
+                        RestoreImageDaoImpl().delete(restoreImage.imageFileName)
 
-                        } catch (e: Exception) {
-                            Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
-                            failCount++
-                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
+                        Crashlytics.logException(e)
+                        failCount++
                     }
+                }
 
         } catch (e: UserRecoverableAuthIOException) {
             Log.w(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
@@ -91,10 +93,12 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
         } catch (e: IOException) {
             Log.e(TAG, "doInBackground.catch IOException:${e::class.java}", e)
+            Crashlytics.logException(e)
             throw e
 
         } catch (e: Exception) {
             Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
+            Crashlytics.logException(e)
             throw e
         }
     }

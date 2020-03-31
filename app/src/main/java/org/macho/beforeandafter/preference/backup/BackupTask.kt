@@ -4,6 +4,7 @@ import android.accounts.Account
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
+import com.crashlytics.android.Crashlytics
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.http.FileContent
 import com.google.api.services.drive.Drive
@@ -82,10 +83,12 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
 
         } catch (e: IOException) {
             Log.e(TAG, "doInBackground.catch IOException:${e::class.java}", e)
+            Crashlytics.logException(e)
             throw e
 
         } catch (e: Exception) {
             Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
+            Crashlytics.logException(e)
             throw e
         }
     }
