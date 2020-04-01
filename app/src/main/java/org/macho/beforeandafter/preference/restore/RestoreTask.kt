@@ -6,14 +6,12 @@ import android.os.AsyncTask
 import android.util.Log
 import com.crashlytics.android.Crashlytics
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
-import com.google.api.client.util.DateTime
 import com.google.api.services.drive.Drive
+import com.google.api.services.drive.model.File
 import com.google.gson.Gson
-import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.backup.BackupData
 import org.macho.beforeandafter.preference.backup.BackupTask
 import org.macho.beforeandafter.preference.backup.DriveUtil
-import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.data.record.RecordDaoImpl
 import org.macho.beforeandafter.shared.data.restoreimage.RestoreImage
 import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageDaoImpl
@@ -132,29 +130,21 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
     }
 
     private fun fetchLatestBackupFileId(): String? {
-        var fileIdToCreatedTime: Pair<String, DateTime>? = null
-
         val filesListRequest = driveService.files().list()
                 .setSpaces(DriveUtil.DRIVE_SPACE_APPDATA)
                 .setFields("nextPageToken, files(id, name, createdTime)")
                 .setPageSize(100)
 
+        val files = mutableListOf<File>()
         do {
             val fileList = filesListRequest.execute()
-            for (file in fileList.files) {
-                Log.i(TAG, "fileName:${file.name}, createdTime: ${file.createdTime}")
-                if (file.name.equals(BackupTask.FILE_NAME)
-                    && file.createdTime.value > fileIdToCreatedTime?.second?.value ?: 0)
-                {
-                    fileIdToCreatedTime = file.id to file.createdTime
-                }
-            }
+            files.addAll(fileList.files)
             filesListRequest.pageToken = fileList.nextPageToken
 
         } while (fileList.nextPageToken != null && !fileList.nextPageToken.isEmpty())
 
-        Log.i(TAG, "*** ${fileIdToCreatedTime}")
-        return fileIdToCreatedTime?.first
+        val latestFile = files.filter { it.name == BackupTask.FILE_NAME }.maxBy { it.createdTime.value }
+        return latestFile?.id
     }
 
     private fun fetchImage(fileName: String, fileId: String) {
