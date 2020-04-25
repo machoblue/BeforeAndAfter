@@ -116,7 +116,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
     }
 
     override fun showEditRecordUI(date: Long) {
-        val title = SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(Date(date))
+        val title = getString(R.string.action_bar_title_record_detail_edit)
         val action = RecordFragmentDirections.actionRecordFragmentToEditAddRecordFragment(date, title)
         findNavController().navigate(action)
     }
