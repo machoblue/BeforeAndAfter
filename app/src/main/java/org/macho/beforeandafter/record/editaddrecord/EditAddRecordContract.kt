@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import org.macho.beforeandafter.shared.BaseContract
 import java.io.File
+import java.util.*
 
 interface EditAddRecordContract {
     // notify event, display
@@ -13,8 +14,10 @@ interface EditAddRecordContract {
         fun setMemo(value: String)
         fun setFrontImage(file: File)
         fun setSideImage(file: File)
+        fun setDateButtonLabel(value: String)
         fun showDeleteButton()
         fun finish()
+        fun showDatePickerDialog(defaultDate: Date)
     }
 
     // call logic, pass value to view
@@ -27,5 +30,7 @@ interface EditAddRecordContract {
         fun setWeight(weight: String?)
         fun setRate(rate: String?)
         fun setMemo(memo: String?)
+        fun onDateButtonClicked()
+        fun onDateSelected(date: Date)
     }
 }

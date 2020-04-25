@@ -27,12 +27,13 @@
     <string name="interstitial_message">Please record everyday, and interstitial ad does not appear.</string>
 
     <!-- Edit Fragment -->
-    <string name="weight_label">weight(kg)</string>
-    <string name="rate_label">rate(%) (Optional)</string>
+    <string name="date_label">Date Time</string>
+    <string name="weight_label">Weight(kg)</string>
+    <string name="rate_label">Rate(%) (Optional)</string>
     <string name="save">save</string>
     <string name="cancel">cancel</string>
     <string name="delete">delete</string>
-    <string name="memo_label">memo (Optional)</string>
+    <string name="memo_label">Note (Optional)</string>
     <string name="front_image_label">Front (Optional)</string>
     <string name="side_image_label">Side (Optional)</string>
 
@@ -144,6 +145,7 @@
     <!-- ActionBar Title -->
     <string name="action_bar_title_records">Records</string>
     <string name="action_bar_title_record_detail_new">New Record</string>
+    <string name="action_bar_title_record_detail_edit">Edit Record</string>
     <string name="action_bar_title_gallery">Gallery</string>
     <string name="action_bar_title_graphe">Graph</string>
     <string name="action_bar_title_settings">Settings</string>

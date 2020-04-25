@@ -2,6 +2,8 @@ package org.macho.beforeandafter.record.editaddrecord
 
 import android.Manifest
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -36,6 +38,8 @@ import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -134,6 +138,11 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             if (weightValue >= 0) {
                 weight.setText("%.2f".format(weightValue))
             }
+        }
+
+        dateButton.setOnClickListener {
+            LogUtil.i(this, "dateButton.onClick")
+            presenter.onDateButtonClicked()
         }
 
         weight.setupClearButtonWithAction()
@@ -346,11 +355,31 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         }
     }
 
+    override fun setDateButtonLabel(value: String) {
+        dateButton.text = value
+    }
+
     override fun finish() {
         if (shouldShowInterstitialAd) {
             interstitialAd?.showIfNeeded(context!!)
         }
         findNavController().popBackStack()
+    }
+
+    override fun showDatePickerDialog(defaultDate: Date) {
+        LogUtil.i(this, "shoDatePickerDialog $defaultDate")
+        val calendar = Calendar.getInstance()
+        calendar.time = defaultDate
+        DatePickerDialog(context, { view, year, month, dayOfMonth ->
+            LogUtil.i(this, "### $year $month $dayOfMonth")
+            TimePickerDialog(context, {view, hourOfDay, minute ->
+                LogUtil.i(this, "### $hourOfDay $minute")
+                val newCalendar = Calendar.getInstance()
+                newCalendar.set(year, month, dayOfMonth, hourOfDay, minute)
+                presenter.onDateSelected(newCalendar.time)
+
+            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show()
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
     }
 
 

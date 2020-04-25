@@ -27,6 +27,7 @@
 
 
     <!-- Edit Fragment -->
+    <string name="date_label">日時</string>
     <string name="weight_label">体重(kg)</string>
     <string name="rate_label">体脂肪率(%)(任意)</string>
     <string name="save">保存</string>
@@ -144,6 +145,7 @@
     <!-- Action Bar Title -->
     <string name="action_bar_title_records">記録一覧</string>
     <string name="action_bar_title_record_detail_new">新規作成</string>
+    <string name="action_bar_title_record_detail_edit">編集</string>
     <string name="action_bar_title_gallery">ギャラリー</string>
     <string name="action_bar_title_graphe">グラフ</string>
     <string name="action_bar_title_settings">設定</string>

@@ -3,8 +3,11 @@ package org.macho.beforeandafter.record.editaddrecord
 import android.content.Context
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.data.record.RecordRepository
+import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.io.File
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.max
@@ -17,14 +20,18 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     lateinit var context: Context
 
     private lateinit var record: Record
+    private var tempDate: Long = 0
 
     // 画像選択後、途中で保存をやめた時にその画像を削除できるようにするためのフィールド
     override var tempFrontImageFileName: String? = null
     override var tempSideImageFileName: String? = null
 
+    val dateFormat = SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
+
     override fun setDate(date: Long) {
         record = Record()
         if (date != 0L) {
+            tempDate = date
             recordRepository.getRecord(date) { record ->
                 if (record == null) {
                     throw RuntimeException("record shouldn't be null.")
@@ -37,6 +44,7 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
                 view?.showDeleteButton()
             }
         } else {
+            tempDate = record.date
             record.weight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT)
             record.rate = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_RATE)
         }
@@ -66,9 +74,15 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
 
         recordRepository.getRecord(record.date) { record ->
             if (record == null) {
-                this.record.date = Date().time
-                recordRepository.register(this.record, null)
-                view?.finish()
+                recordRepository.register(this.record) {
+                    if (tempDate == this.record.date) {
+                        view?.finish()
+                        return@register
+                    }
+                    recordRepository.delete(tempDate) { // dateを編集した場合、古いのを消す。
+                        view?.finish()
+                    }
+                }
             } else {
                 recordRepository.update(this.record, null)
                 view?.finish()
@@ -113,6 +127,17 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
         record.rate = rate?.toFloatOrNull() ?: 0f
     }
 
+    override fun onDateButtonClicked() {
+        LogUtil.i(this, "dateButton.onClick")
+        view?.showDatePickerDialog(Date(record.date))
+    }
+
+    override fun onDateSelected(date: Date) {
+        LogUtil.i(this, "onDateSelected$date")
+        record.date = date.time
+        view?.setDateButtonLabel(dateFormat.format(date))
+    }
+
     private fun isFileExists(fileName: String?): Boolean {
         return fileName != null && File(context.filesDir, fileName).exists()
     }
@@ -126,6 +151,7 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
             view?.setSideImage(File(context.filesDir, record.sideImagePath))
         }
 
+        view?.setDateButtonLabel(dateFormat.format(record.date))
         view?.setWeight(if (record.weight == 0f) "" else "%.2f".format(record.weight))
         view?.setRate(if (record.rate == 0f) "" else "%.2f".format(record.rate))
         view?.setMemo(record.memo)
