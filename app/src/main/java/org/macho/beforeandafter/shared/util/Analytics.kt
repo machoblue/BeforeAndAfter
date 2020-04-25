@@ -1,6 +1,7 @@
 package org.macho.beforeandafter.shared.util
 
 import android.content.Context
+import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 
 class Analytics(val context: Context) {
@@ -11,7 +12,8 @@ class Analytics(val context: Context) {
 
         RESTORE_START,
         RESTORE_RECOVERABLE_ERROR,
-        RESTORE_FINISH,
+        RESTORE_FINISH_SUCCESS,
+        RESTORE_FINISH_PARTIAL_FAIL,
 
         STORE_REVIEW_DIALOG_APPEAR,
         STORE_REVIEW_DIALOG_CANCEL,
@@ -21,7 +23,7 @@ class Analytics(val context: Context) {
 
     val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
-    fun logEvent(event: Event) {
+    fun logEvent(event: Event, bundle: Bundle? = null) {
         firebaseAnalytics.logEvent(event.name.toLowerCase(), null)
     }
 }

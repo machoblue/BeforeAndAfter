@@ -4,6 +4,7 @@ import android.accounts.Account
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -12,13 +13,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.DriveScopes
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.backup.BackupPresenter
-import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.data.record.RecordRepository
-import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.Analytics
 import javax.inject.Inject
@@ -158,9 +156,12 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
     override fun onComplete() {
         val failCount = restoreTask?.failCount ?: 0
         if (failCount == 0) {
-            analytics.logEvent(Analytics.Event.RESTORE_FINISH)
+            analytics.logEvent(Analytics.Event.RESTORE_FINISH_SUCCESS)
 
         } else {
+            val bundle = Bundle();
+            bundle.putInt("fail_count", failCount);
+            analytics.logEvent(Analytics.Event.RESTORE_FINISH_PARTIAL_FAIL, bundle)
             view?.showAlert(context.getString(R.string.restore_error_title), String.format(context.getString(R.string.restore_error_message_cannot_restore_all_photo), failCount))
         }
     }
