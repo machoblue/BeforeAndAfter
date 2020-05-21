@@ -96,6 +96,7 @@
     <string name="backup_error_description">An error has occured. try again later.</string>
     <string name="backup_error_description_no_records">There is no records to backup.</string>
     <string name="backup_error_drive_connection_error">We cannot connect to Google Drive.</string>
+    <string name="backup_error_files_create_failed">Failed to upload image files.</string>
 
     <string name="restore_dialog_title">Restore</string>
     <string name="restore_dialog_message">Do you restore data you backup in advance?\n<small>※Note:※\n・Please use Wi-Fi.\n・Restoring needs Google Account.</small></string>
