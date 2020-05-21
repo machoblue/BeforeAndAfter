@@ -100,11 +100,11 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:2.16"
 
     // Drive API
-    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation ('com.google.http-client:google-http-client-gson:1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    implementation 'com.google.api-client:google-api-client:1.22.0'
+    implementation 'com.google.api-client:google-api-client:1.25.0'
     implementation('com.google.api-client:google-api-client-android:1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }

@@ -19,6 +19,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.Analytics
+import org.macho.beforeandafter.shared.util.LogUtil
 import javax.inject.Inject
 
 @ActivityScoped
@@ -44,6 +45,13 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
         analytics = Analytics(context)
         analytics.logEvent(Analytics.Event.BACKUP_START)
 
+        val account: Account? = GoogleSignIn.getLastSignedInAccount(context)?.account;
+        if (account != null) {
+            this.account = account
+            backupRecords()
+            return
+        }
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(Scope(DriveScopes.DRIVE_APPDATA))
                 .requestEmail()
@@ -51,7 +59,7 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
 
         googleSignInClient = GoogleSignIn.getClient(context, gso)
 
-        val signInIntent = googleSignInClient.getSignInIntent()
+        val signInIntent = googleSignInClient.signInIntent
         view?.startActivityForResult(signInIntent, BackupPresenter.RC_SIGN_IN)
     }
 

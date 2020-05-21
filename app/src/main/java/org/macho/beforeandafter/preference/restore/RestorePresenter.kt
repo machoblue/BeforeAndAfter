@@ -44,6 +44,13 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
         analytics = Analytics(context)
         analytics.logEvent(Analytics.Event.RESTORE_START)
 
+        val account: Account? = GoogleSignIn.getLastSignedInAccount(context)?.account;
+        if (account != null) {
+            this.account = account
+            restoreRecords()
+            return
+        }
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(Scope(DriveScopes.DRIVE_APPDATA))
                 .requestEmail()
