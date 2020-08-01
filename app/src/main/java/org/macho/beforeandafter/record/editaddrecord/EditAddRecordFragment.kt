@@ -248,7 +248,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                     }
                 }
 
-                frontImage.scaleType = ImageView.ScaleType.CENTER_CROP
                 frontImage.loadImage(this, uri)
 
                 presenter.tempFrontImageFileName = fileName
@@ -266,7 +265,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                     }
                 }
 
-                sideImage.scaleType = ImageView.ScaleType.CENTER_CROP
                 sideImage.loadImage(this, uri)
 
                 presenter.tempSideImageFileName = fileName
