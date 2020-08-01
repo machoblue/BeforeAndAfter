@@ -222,31 +222,19 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
             }
             FRONT_IMAGE_STANDARD_CAMERA -> {
-                val tempFile = getCameraFile(true)
-                val outputDir = context!!.filesDir
-                val fileName = FILE_NAME_TEMPLATE.format(Date())
-                val filePath = File(outputDir, fileName)
-                FileOutputStream(filePath).use {
-                    val bitmap = BitmapFactory.decodeFile(tempFile.path)
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
-                    ImageUtil.releaseBitmap(bitmap)
-                }
-                frontImage.loadImage(this, Uri.fromFile(filePath))
-                presenter.tempFrontImageFileName = fileName
+                val toFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
+                getCameraFile(true).copyTo(toFile)
+                frontImage.loadImage(this, Uri.fromFile(toFile))
+                presenter.tempFrontImageFileName = toFile.name
             }
+
             SIDE_IMAGE_STANDARD_CAMERA -> {
-                val tempFile = getCameraFile(false)
-                val outputDir = context!!.filesDir
-                val fileName = FILE_NAME_TEMPLATE.format(Date())
-                val filePath = File(outputDir, fileName)
-                FileOutputStream(filePath).use {
-                    val bitmap = BitmapFactory.decodeFile(tempFile.path)
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
-                    ImageUtil.releaseBitmap(bitmap)
-                }
-                sideImage.loadImage(this, Uri.fromFile(filePath))
-                presenter.tempSideImageFileName = fileName
+                val toFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
+                getCameraFile(false).copyTo(toFile)
+                sideImage.loadImage(this, Uri.fromFile(toFile))
+                presenter.tempSideImageFileName = toFile.name
             }
+
             FRONT_GALLERY_IMAGE_REQUEST -> {
                 val uri = data?.getData() ?: return
                 val outputDir = context!!.filesDir
