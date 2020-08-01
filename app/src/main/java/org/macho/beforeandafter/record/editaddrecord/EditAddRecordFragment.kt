@@ -4,10 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -15,8 +12,6 @@ import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import androidx.appcompat.app.AlertDialog
 import android.view.*
-import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -38,8 +33,6 @@ import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -214,13 +207,14 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                 val frontImageFileName = frontImageFilePath.replace(context!!.filesDir.toString() + "/", "")
                 presenter.tempFrontImageFileName = frontImageFileName
             }
+
             SIDE_IMAGE -> {
                 val sideImageFilePath = data?.getStringExtra("PATH") ?: return
                 sideImage.loadImage(this, Uri.fromFile(File(sideImageFilePath)))
                 val sideImageFileName = sideImageFilePath.replace(context!!.filesDir.toString() + "/", "")
                 presenter.tempSideImageFileName = sideImageFileName
-
             }
+
             FRONT_IMAGE_STANDARD_CAMERA -> {
                 val toFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
                 getCameraFile(true).copyTo(toFile)
@@ -237,37 +231,18 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
             FRONT_GALLERY_IMAGE_REQUEST -> {
                 val uri = data?.getData() ?: return
-                val outputDir = context!!.filesDir
-                val fileName = FILE_NAME_TEMPLATE.format(Date())
-
-                BufferedInputStream(activity!!.contentResolver.openInputStream(uri)).use { bis ->
-                    BufferedOutputStream(FileOutputStream(File(outputDir, fileName))).use { bos ->
-                        while(bis.available() > 0) {
-                            bos.write(bis.read())
-                        }
-                    }
-                }
-
-                frontImage.loadImage(this, uri)
-
-                presenter.tempFrontImageFileName = fileName
+                val toFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
+                saveUriToFile(uri, toFile)
+                frontImage.loadImage(this, Uri.fromFile(toFile))
+                presenter.tempFrontImageFileName = toFile.name
             }
+
             SIDE_GALLERY_IMAGE_REQUEST -> {
                 val uri = data?.getData() ?: return
-                val outputDir = context!!.filesDir
-                val fileName = FILE_NAME_TEMPLATE.format(Date())
-
-                BufferedInputStream(activity!!.contentResolver.openInputStream(uri)).use { bis ->
-                    BufferedOutputStream(FileOutputStream(File(outputDir, fileName))).use { bos ->
-                        while(bis.available() > 0) {
-                            bos.write(bis.read())
-                        }
-                    }
-                }
-
-                sideImage.loadImage(this, uri)
-
-                presenter.tempSideImageFileName = fileName
+                val toFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
+                saveUriToFile(uri, toFile)
+                sideImage.loadImage(this, Uri.fromFile(toFile))
+                presenter.tempSideImageFileName = toFile.name
             }
         }
     }
@@ -410,6 +385,16 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                 val intent = Intent(context!!, CameraActivity::class.java)
                 val requestCode2 = if (front) FRONT_IMAGE else SIDE_IMAGE
                 startActivityForResult(intent, requestCode2)
+            }
+        }
+    }
+
+    private fun saveUriToFile(uri: Uri, toFile: File) {
+        BufferedInputStream(activity!!.contentResolver.openInputStream(uri)).use { bis ->
+            BufferedOutputStream(FileOutputStream(toFile)).use { bos ->
+                while(bis.available() > 0) {
+                    bos.write(bis.read())
+                }
             }
         }
     }
