@@ -4,10 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -15,7 +12,6 @@ import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import androidx.appcompat.app.AlertDialog
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
@@ -38,8 +34,6 @@ import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -67,6 +61,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     val args: EditAddRecordFragmentArgs by navArgs()
 
     var shouldShowInterstitialAd = false
+
+    private var actionImageCaptureOutputFile: File? = null
 
     private val onFrontImageViewClickListener = object: View.OnClickListener {
         override fun onClick(view: View?) {
@@ -222,30 +218,14 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
             }
             FRONT_IMAGE_STANDARD_CAMERA -> {
-                val tempFile = getCameraFile(true)
-                val outputDir = context!!.filesDir
-                val fileName = FILE_NAME_TEMPLATE.format(Date())
-                val filePath = File(outputDir, fileName)
-                FileOutputStream(filePath).use {
-                    val bitmap = BitmapFactory.decodeFile(tempFile.path)
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
-                    ImageUtil.releaseBitmap(bitmap)
-                }
-                frontImage.loadImage(this, Uri.fromFile(filePath))
-                presenter.tempFrontImageFileName = fileName
+                frontImage.loadImage(this, Uri.fromFile(actionImageCaptureOutputFile))
+                presenter.tempFrontImageFileName = actionImageCaptureOutputFile?.name
+                actionImageCaptureOutputFile = null
             }
             SIDE_IMAGE_STANDARD_CAMERA -> {
-                val tempFile = getCameraFile(false)
-                val outputDir = context!!.filesDir
-                val fileName = FILE_NAME_TEMPLATE.format(Date())
-                val filePath = File(outputDir, fileName)
-                FileOutputStream(filePath).use {
-                    val bitmap = BitmapFactory.decodeFile(tempFile.path)
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
-                    ImageUtil.releaseBitmap(bitmap)
-                }
-                sideImage.loadImage(this, Uri.fromFile(filePath))
-                presenter.tempSideImageFileName = fileName
+                sideImage.loadImage(this, Uri.fromFile(actionImageCaptureOutputFile))
+                presenter.tempSideImageFileName = actionImageCaptureOutputFile?.name
+                actionImageCaptureOutputFile = null
             }
             FRONT_GALLERY_IMAGE_REQUEST -> {
                 val uri = data?.getData() ?: return
@@ -385,12 +365,10 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     // MARK: Private method
 
-    private fun getCameraFile(isFront: Boolean): File {
-        val dir = File(context!!.filesDir, "/temp")
-        if (!dir.exists()) {
-            dir.mkdir()
-        }
-        return File(dir, "temp_${if (isFront) "front" else "side"}.jpg")
+    private fun createImageFile(): File {
+        val outputDir = context!!.filesDir
+        val fileName = FILE_NAME_TEMPLATE.format(Date())
+        return File(outputDir, fileName)
     }
 
     private fun startGalleryChooser(front: Boolean) {
@@ -416,7 +394,9 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             val useStandardCamera = preferences.getBoolean("USE_STANDARD_CAMERA", false)
             if (useStandardCamera) {
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                val uri = FileProvider.getUriForFile(context!!, "${BuildConfig.APPLICATION_ID}.fileprovider", getCameraFile(front))
+                val imageFile = createImageFile()
+                this.actionImageCaptureOutputFile = imageFile
+                val uri = FileProvider.getUriForFile(context!!, "${BuildConfig.APPLICATION_ID}.fileprovider", imageFile)
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
                 val requestCode2 = if (front) FRONT_IMAGE_STANDARD_CAMERA else SIDE_IMAGE_STANDARD_CAMERA
                 startActivityForResult(intent, requestCode2)
