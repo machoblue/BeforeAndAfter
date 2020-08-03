@@ -144,11 +144,11 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
 
     private fun updateView() {
         if (isFileExists(record.frontImagePath)) {
-            view?.setFrontImage(File(context.filesDir, record.frontImagePath))
+            view?.setFrontImage(File(context.filesDir, tempFrontImageFileName ?: record.frontImagePath))
         }
 
         if (isFileExists(record.sideImagePath)) {
-            view?.setSideImage(File(context.filesDir, record.sideImagePath))
+            view?.setSideImage(File(context.filesDir, tempSideImageFileName ?: record.sideImagePath))
         }
 
         view?.setDateButtonLabel(dateFormat.format(record.date))
