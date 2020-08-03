@@ -5,9 +5,9 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:padding="3dp">
-    <ImageView
+    <org.macho.beforeandafter.record.editaddrecord.SquareImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
 </LinearLayout>
