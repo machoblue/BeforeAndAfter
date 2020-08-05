@@ -78,6 +78,7 @@ class TwoScaleGraphView: View {
     private val xAxisLabelPaint = Paint().also {
         it.color = Color.GRAY
         it.style = Paint.Style.FILL
+        it.isAntiAlias = true
     }
 
     private val graphPaint = Paint().also {
