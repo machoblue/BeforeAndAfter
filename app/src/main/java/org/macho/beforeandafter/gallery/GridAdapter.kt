@@ -5,24 +5,17 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.GlideApp
 import java.io.File
 
 class GridAdapter(val fragment: androidx.fragment.app.Fragment, val items: List<String>): androidx.recyclerview.widget.RecyclerView.Adapter<GridAdapter.ViewHolder>() {
-    private val layoutInflater: LayoutInflater
-    private val context: Context
-    init {
-        this.layoutInflater = LayoutInflater.from(fragment.context)
-        this.context = fragment.context!!
-    }
+    private val layoutInflater = LayoutInflater.from(fragment.context)
+    private val context = fragment.context!!
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(layoutInflater.inflate(R.layout.grid_item, parent, false))

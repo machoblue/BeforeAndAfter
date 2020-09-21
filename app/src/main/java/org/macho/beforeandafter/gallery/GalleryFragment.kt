@@ -52,10 +52,14 @@ class GalleryFragment: androidx.fragment.app.Fragment() {
 
     override fun onStart() {
         super.onStart()
-        for (record in recordDao.findAll().sortedBy { - it.date }) { // sort descendant
-            frontImagePaths.add(record.frontImagePath ?: "")
-            sideImagePaths.add(record.sideImagePath ?: "")
-        }
+        recordDao.findAll()
+            .filter { (it.frontImagePath?.isNotEmpty() ?: false) || (it.sideImagePath?.isNotEmpty() ?: false) }
+            .sortedBy { -it.date }
+            .forEach {
+                frontImagePaths.add(it.frontImagePath ?: "")
+                sideImagePaths.add(it.sideImagePath ?: "")
+            }
+
         frontGridView.adapter = GridAdapter(this, frontImagePaths)
         sideGridView.adapter = GridAdapter(this, sideImagePaths)
     }
