@@ -14,10 +14,32 @@ import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import java.text.DateFormat
+import java.util.Date
 import javax.inject.Inject
 
 @ActivityScoped
 class GraphFragment: DaggerFragment(), View.OnClickListener {
+
+    private var range: GraphRange = GraphRange.THREE_WEEKS
+        set(range) {
+            field = range
+            graphView.range = range
+            graphView.invalidate()
+            updateRangeLabel()
+
+            SharedPreferencesUtil.setInt(context!!, SharedPreferencesUtil.Key.GRAPH_SELECTION, range.ordinal)
+        }
+
+    private var to: Date = Date()
+        set(to) {
+            field = to
+            graphView.to = to
+            graphView.invalidate()
+            updateRangeLabel()
+        }
+
+    private val dateFormat: DateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM)
 
     override fun onClick(v: View?) {
         button1.isSelected = false
@@ -26,10 +48,9 @@ class GraphFragment: DaggerFragment(), View.OnClickListener {
 
         val clickedButton = v as Button
         clickedButton.isSelected = true
+
         val index = (clickedButton.tag as String).toInt()
-        graphView.range = GraphRange.values()[index]
-        graphView.invalidate()
-        SharedPreferencesUtil.setInt(context!!, SharedPreferencesUtil.Key.GRAPH_SELECTION, index)
+        this.range = GraphRange.values()[index]
     }
 
     @Inject
@@ -79,7 +100,7 @@ class GraphFragment: DaggerFragment(), View.OnClickListener {
         }
 
         val index = SharedPreferencesUtil.getInt(context!!, SharedPreferencesUtil.Key.GRAPH_SELECTION)
-        graphView.range = GraphRange.values()[index]
+        this.range = GraphRange.values()[index]
 
         val legends = mutableListOf<Legend>().also {
             it.add(Legend(getString(R.string.legend_weight), ContextCompat.getColor(context!!, R.color.colorWeight)))
@@ -95,8 +116,25 @@ class GraphFragment: DaggerFragment(), View.OnClickListener {
         button2.setOnClickListener(this)
         button3.setOnClickListener(this)
 
+        previousButton.setOnClickListener {
+            this.to = Date(this.to.time - range.time)
+        }
+
+        nextButton.setOnClickListener {
+            this.to = Date(this.to.time + range.time)
+        }
+
+        textView.setOnClickListener {
+            this.to = Date()
+        }
+
         AdUtil.initializeMobileAds(context!!)
         AdUtil.loadBannerAd(adView, context!!)
         adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
+    }
+
+    private fun updateRangeLabel() {
+        val from = Date(to.time - range.time)
+        textView.text = "${dateFormat.format(from)}\n 〜 ${dateFormat.format(to)}"
     }
 }
