@@ -24,10 +24,9 @@ import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.io.File
-import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
+import kotlin.math.round
 
 @ActivityScoped
 class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.View {
@@ -187,15 +186,15 @@ fun formatFloat(view: TextView, floatValue: Float) {
 
 @BindingAdapter("floatValueWithSign")
 fun formatFloatWithSign(view: TextView, floatValue: Float) {
-    val roundedValue = (floatValue * 10).toInt() / 10f
+    val roundedValue = round(floatValue * 10) / 10f
     if (floatValue == 0f) {
-        view.setText("±${roundedValue}", null)
+        view.setText("±$roundedValue", null)
         view.setTextColor(Color.GRAY)
     } else if (floatValue < 0f) {
-        view.setText("${roundedValue}", null)
+        view.setText("$roundedValue", null)
         view.setTextColor(Color.GREEN)
     } else if (floatValue > 0f) {
-        view.setText("+${roundedValue}", null)
+        view.setText("+$roundedValue", null)
         view.setTextColor(Color.RED)
     }
 }
