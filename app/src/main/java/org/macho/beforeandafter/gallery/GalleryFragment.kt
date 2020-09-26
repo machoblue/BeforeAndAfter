@@ -4,69 +4,36 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_gallery.*
+import androidx.recyclerview.widget.GridLayoutManager
+import kotlinx.android.synthetic.main.gallery_frag.*
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.shared.data.record.RecordDao
-import org.macho.beforeandafter.shared.data.record.RecordDaoImpl
 import org.macho.beforeandafter.shared.util.AdUtil
 
 
-class GalleryFragment: androidx.fragment.app.Fragment() {
-    companion object {
-        fun getInstance(): androidx.fragment.app.Fragment {
-            return GalleryFragment()
+class GalleryFragment(imagePaths: List<String>): androidx.fragment.app.Fragment() {
+
+    var imagePaths: List<String> = imagePaths
+        set(imagePaths) {
+            field = imagePaths
+            adapter.items = imagePaths
+            adapter.notifyDataSetChanged()
         }
-    }
 
-    private var frontImagePaths: MutableList<String> = mutableListOf()
-    private var sideImagePaths: MutableList<String> = mutableListOf()
-
-    private var recordDao: RecordDao = RecordDaoImpl() // TODO: take from Dagger
+    private lateinit var adapter: GridAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return layoutInflater.inflate(R.layout.fragment_gallery, container, false)
+        return layoutInflater.inflate(R.layout.gallery_frag, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        tabHost.setup()
+        recyclerView.layoutManager = GridLayoutManager(context, 3)
+        recyclerView.setHasFixedSize(true)
 
-        var tab1 = tabHost.newTabSpec("tab1")
-        tab1.setIndicator(resources.getString(R.string.front))
-        tab1.setContent(R.id.tab1)
-        tabHost.addTab(tab1)
-
-        var tab2 = tabHost.newTabSpec("tab2")
-        tab2.setIndicator(resources.getString(R.string.side))
-        tab2.setContent(R.id.tab2)
-        tabHost.addTab(tab2)
-
-        frontGridView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 3)
-        frontGridView.setHasFixedSize(true)
-
-        sideGridView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 3)
-        sideGridView.setHasFixedSize(true)
+        this.adapter = GridAdapter(this)
+        this.adapter.items = imagePaths
+        recyclerView.adapter = this.adapter
 
         AdUtil.loadBannerAd(adView, context!!)
         adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
-    }
-
-    override fun onStart() {
-        super.onStart()
-        recordDao.findAll()
-            .filter { (it.frontImagePath?.isNotEmpty() ?: false) || (it.sideImagePath?.isNotEmpty() ?: false) }
-            .sortedBy { -it.date }
-            .forEach {
-                frontImagePaths.add(it.frontImagePath ?: "")
-                sideImagePaths.add(it.sideImagePath ?: "")
-            }
-
-        frontGridView.adapter = GridAdapter(this, frontImagePaths)
-        sideGridView.adapter = GridAdapter(this, sideImagePaths)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        frontImagePaths.clear()
-        sideImagePaths.clear()
     }
 }

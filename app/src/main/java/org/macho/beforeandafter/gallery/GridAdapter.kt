@@ -1,6 +1,5 @@
 package org.macho.beforeandafter.gallery
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -13,9 +12,10 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.GlideApp
 import java.io.File
 
-class GridAdapter(val fragment: androidx.fragment.app.Fragment, val items: List<String>): androidx.recyclerview.widget.RecyclerView.Adapter<GridAdapter.ViewHolder>() {
+class GridAdapter(val fragment: androidx.fragment.app.Fragment): androidx.recyclerview.widget.RecyclerView.Adapter<GridAdapter.ViewHolder>() {
     private val layoutInflater = LayoutInflater.from(fragment.context)
     private val context = fragment.context!!
+    var items: List<String> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(layoutInflater.inflate(R.layout.grid_item, parent, false))
@@ -23,6 +23,11 @@ class GridAdapter(val fragment: androidx.fragment.app.Fragment, val items: List<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val path = items.get(position)
+        if (path.isEmpty()) {
+            holder.imageView.setImageDrawable(ColorDrawable(Color.GRAY))
+            return
+        }
+
         GlideApp.with(fragment)
                 .load(Uri.fromFile(File(context.filesDir, path ?: "")))
                 .thumbnail(.1f)
