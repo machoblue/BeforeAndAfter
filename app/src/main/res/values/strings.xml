@@ -36,6 +36,10 @@
     <string name="memo_label">メモ (任意)</string>
     <string name="front_image_label">正面の写真 (任意)</string>
     <string name="side_image_label">側面の写真 (任意)</string>
+    <string name="add_images_button_label">さらに写真を追加する</string>
+    <string name="other_image1">その他の写真1</string>
+    <string name="other_image2">その他の写真2</string>
+    <string name="other_image3">その他の写真3</string>
 
     <!-- Camera Activity -->
     <string name="camera_in_preparation">カメラは準備中です。</string>

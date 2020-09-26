@@ -36,6 +36,10 @@
     <string name="memo_label">Note (Optional)</string>
     <string name="front_image_label">Front (Optional)</string>
     <string name="side_image_label">Side (Optional)</string>
+    <string name="add_images_button_label">Add More Images</string>
+    <string name="other_image1">Additional Image 1</string>
+    <string name="other_image2">Additional Image 2</string>
+    <string name="other_image3">Additional Image 3</string>
 
     <!-- Camera Activity -->
     <string name="camera_in_preparation">The camera is in preparation.</string>
