@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import androidx.appcompat.app.AlertDialog
 import android.view.*
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -39,16 +40,11 @@ import javax.inject.Inject
 @ActivityScoped
 class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRecordContract.View {
     companion object {
-        const val FRONT_IMAGE = 1
-        const val SIDE_IMAGE = 2
-        const val FRONT_IMAGE_STANDARD_CAMERA = 3
-        const val SIDE_IMAGE_STANDARD_CAMERA = 4
-        const val FRONT_GALLERY_IMAGE_REQUEST = 6
-        const val SIDE_GALLERY_IMAGE_REQUEST = 9
-        const val GALLERY_PERMISSIONS_REQUEST = 5
-        const val CAMERA_PERMISSIONS_REQUEST = 7
-        const val GALLERY_PERMISSIONS_REQUEST_SIDE = 10
-        const val CAMERA_PERMISSIONS_REQUEST_SIDE = 11
+        const val GALLERY_PERMISSION_RC = 1
+        const val CAMERA_PERMISSION_RC = 2
+        const val CUSTOM_CAMERA_RC = 3
+        const val OS_CAMERA_RC = 4
+        const val GALLERY_RC = 5
         const val FILE_NAME_TEMPLATE = "image-%1\$tF-%1\$tH-%1\$tM-%1\$tS-%1\$tL.jpg"
     }
 
@@ -61,36 +57,23 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     var shouldShowInterstitialAd = false
 
-    private val onFrontImageViewClickListener = object: View.OnClickListener {
+    private val onImageViewClickListener = object: View.OnClickListener {
         override fun onClick(view: View?) {
+            currentImageView = view as ImageView
             AlertDialog.Builder(context!!)
                     .setMessage(R.string.dialog_select_prompt)
                     .setPositiveButton(R.string.dialog_select_gallery) { dialog, which ->
-                        startGalleryChooser(true)
+                        startGalleryChooser()
                     }
                     .setNegativeButton(R.string.dialog_select_camera) { dialog, which ->
-                        startCamera(true)
+                        startCamera()
                     }
                     .create()
                     .show()
         }
     }
 
-    private val onSideImageViewClickListener = object: View.OnClickListener {
-        override fun onClick(view: View?) {
-            AlertDialog.Builder(context!!)
-                    .setMessage(R.string.dialog_select_prompt)
-                    .setPositiveButton(R.string.dialog_select_gallery) { dialog, which ->
-                        startGalleryChooser(false)
-                    }
-                    .setNegativeButton(R.string.dialog_select_camera) { dialog, which ->
-                        startCamera(false)
-                    }
-                    .create()
-                    .show()
-        }
-    }
-
+    private var currentImageView: ImageView? = null
 
     // MARK: Lifecycle
 
@@ -101,8 +84,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        frontImage.setOnClickListener(onFrontImageViewClickListener)
-        sideImage.setOnClickListener(onSideImageViewClickListener)
+        frontImage.setOnClickListener(onImageViewClickListener)
+        sideImage.setOnClickListener(onImageViewClickListener)
 
         rateUpButton.setOnClickListener {
             val rateText = rate.text.toString()
@@ -200,49 +183,40 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             return
         }
 
+        val imageView = currentImageView ?: return
+
+        var newImageFileName: String? = null
+
         when (requestCode) {
-            FRONT_IMAGE -> {
-                val frontImageFilePath = data?.getStringExtra("PATH") ?: return
-                frontImage.loadImage(this, Uri.fromFile(File(frontImageFilePath)))
-                val frontImageFileName = frontImageFilePath.replace(context!!.filesDir.toString() + "/", "")
-                presenter.tempFrontImageFileName = frontImageFileName
+            CUSTOM_CAMERA_RC -> {
+                val imageFilePath = data?.getStringExtra("PATH") ?: return
+                imageView.loadImage(this, Uri.fromFile(File(imageFilePath)))
+                newImageFileName  = imageFilePath.replace(context!!.filesDir.toString() + "/", "")
             }
 
-            SIDE_IMAGE -> {
-                val sideImageFilePath = data?.getStringExtra("PATH") ?: return
-                sideImage.loadImage(this, Uri.fromFile(File(sideImageFilePath)))
-                val sideImageFileName = sideImageFilePath.replace(context!!.filesDir.toString() + "/", "")
-                presenter.tempSideImageFileName = sideImageFileName
-            }
-
-            FRONT_IMAGE_STANDARD_CAMERA -> {
+            OS_CAMERA_RC -> {
                 val toFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
-                getCameraFile(true).copyTo(toFile)
-                frontImage.loadImage(this, Uri.fromFile(toFile))
-                presenter.tempFrontImageFileName = toFile.name
+                getCameraFile().copyTo(toFile)
+                imageView.loadImage(this, Uri.fromFile(toFile))
+                newImageFileName = toFile.name
             }
 
-            SIDE_IMAGE_STANDARD_CAMERA -> {
-                val toFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
-                getCameraFile(false).copyTo(toFile)
-                sideImage.loadImage(this, Uri.fromFile(toFile))
-                presenter.tempSideImageFileName = toFile.name
-            }
-
-            FRONT_GALLERY_IMAGE_REQUEST -> {
-                val uri = data?.getData() ?: return
+            GALLERY_RC -> {
+                val uri = data?.data ?: return
                 val toFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
                 saveUriToFile(uri, toFile)
-                frontImage.loadImage(this, Uri.fromFile(toFile))
-                presenter.tempFrontImageFileName = toFile.name
+                imageView.loadImage(this, Uri.fromFile(toFile))
+                newImageFileName = toFile.name
+            }
+        }
+
+        when (currentImageView) {
+            frontImage -> {
+                presenter.tempFrontImageFileName = newImageFileName
             }
 
-            SIDE_GALLERY_IMAGE_REQUEST -> {
-                val uri = data?.getData() ?: return
-                val toFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
-                saveUriToFile(uri, toFile)
-                sideImage.loadImage(this, Uri.fromFile(toFile))
-                presenter.tempSideImageFileName = toFile.name
+            sideImage -> {
+                presenter.tempSideImageFileName = newImageFileName
             }
         }
     }
@@ -250,24 +224,14 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            CAMERA_PERMISSIONS_REQUEST -> {
-                if (PermissionUtils.permissionGranted(requestCode, CAMERA_PERMISSIONS_REQUEST, grantResults)) {
-                    startCamera(true)
+            CAMERA_PERMISSION_RC -> {
+                if (PermissionUtils.permissionGranted(requestCode, CAMERA_PERMISSION_RC, grantResults)) {
+                    startCamera()
                 }
             }
-            CAMERA_PERMISSIONS_REQUEST_SIDE -> {
-                if (PermissionUtils.permissionGranted(requestCode, CAMERA_PERMISSIONS_REQUEST_SIDE, grantResults)) {
-                    startCamera(false)
-                }
-            }
-            GALLERY_PERMISSIONS_REQUEST -> {
-                if (PermissionUtils.permissionGranted(requestCode, GALLERY_PERMISSIONS_REQUEST, grantResults)) {
-                    startGalleryChooser(true)
-                }
-            }
-            GALLERY_PERMISSIONS_REQUEST_SIDE -> {
-                if (PermissionUtils.permissionGranted(requestCode, GALLERY_PERMISSIONS_REQUEST_SIDE, grantResults)) {
-                    startGalleryChooser(false)
+            GALLERY_PERMISSION_RC -> {
+                if (PermissionUtils.permissionGranted(requestCode, GALLERY_PERMISSION_RC, grantResults)) {
+                    startGalleryChooser()
                 }
             }
         }
@@ -332,9 +296,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         val calendar = Calendar.getInstance()
         calendar.time = defaultDate
         DatePickerDialog(context, { view, year, month, dayOfMonth ->
-            LogUtil.i(this, "### $year $month $dayOfMonth")
             TimePickerDialog(context, {view, hourOfDay, minute ->
-                LogUtil.i(this, "### $hourOfDay $minute")
                 val newCalendar = Calendar.getInstance()
                 newCalendar.set(year, month, dayOfMonth, hourOfDay, minute)
                 presenter.onDateSelected(newCalendar.time)
@@ -346,30 +308,27 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     // MARK: Private method
 
-    private fun getCameraFile(isFront: Boolean): File {
+    private fun getCameraFile(): File {
         val dir = File(context!!.filesDir, "/temp")
         if (!dir.exists()) {
             dir.mkdir()
         }
-        return File(dir, "temp_${if (isFront) "front" else "side"}.jpg")
+        return File(dir, "temp_${currentImageView!!.id}.jpg")
     }
 
-    private fun startGalleryChooser(front: Boolean) {
-        val requestCode = if (front) GALLERY_PERMISSIONS_REQUEST else GALLERY_PERMISSIONS_REQUEST_SIDE
-        if (PermissionUtils.requestPermission(this, requestCode, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+    private fun startGalleryChooser() {
+        if (PermissionUtils.requestPermission(this, GALLERY_PERMISSION_RC, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             val intent = Intent()
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
 
             val createChooserIntent = Intent.createChooser(intent, "写真を選択してください。")
-            val requestCode2 = if (front) FRONT_GALLERY_IMAGE_REQUEST else SIDE_GALLERY_IMAGE_REQUEST
-            startActivityForResult(createChooserIntent, requestCode2)
+            startActivityForResult(createChooserIntent, GALLERY_RC)
         }
     }
 
-    private fun startCamera(front: Boolean) {
-        val requestCode = if (front) CAMERA_PERMISSIONS_REQUEST else CAMERA_PERMISSIONS_REQUEST_SIDE
-        if (PermissionUtils.requestPermission(this, requestCode,
+    private fun startCamera() {
+        if (PermissionUtils.requestPermission(this, CAMERA_PERMISSION_RC,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.CAMERA)) {
 
@@ -377,14 +336,12 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             val useStandardCamera = preferences.getBoolean("USE_STANDARD_CAMERA", false)
             if (useStandardCamera) {
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                val uri = FileProvider.getUriForFile(context!!, "${BuildConfig.APPLICATION_ID}.fileprovider", getCameraFile(front))
+                val uri = FileProvider.getUriForFile(context!!, "${BuildConfig.APPLICATION_ID}.fileprovider", getCameraFile())
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-                val requestCode2 = if (front) FRONT_IMAGE_STANDARD_CAMERA else SIDE_IMAGE_STANDARD_CAMERA
-                startActivityForResult(intent, requestCode2)
+                startActivityForResult(intent, OS_CAMERA_RC)
             } else {
                 val intent = Intent(context!!, CameraActivity::class.java)
-                val requestCode2 = if (front) FRONT_IMAGE else SIDE_IMAGE
-                startActivityForResult(intent, requestCode2)
+                startActivityForResult(intent, CUSTOM_CAMERA_RC)
             }
         }
     }
