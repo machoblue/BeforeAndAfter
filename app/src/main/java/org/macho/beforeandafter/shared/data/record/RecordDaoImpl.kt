@@ -17,6 +17,9 @@ class RecordDaoImpl: RecordDao {
                         result.rate,
                         result.frontImagePath,
                         result.sideImagePath,
+                        result.otherImagePath1,
+                        result.otherImagePath2,
+                        result.otherImagePath3,
                         result.memo))
             }
         }
@@ -35,6 +38,9 @@ class RecordDaoImpl: RecordDao {
                     result.rate,
                     result.frontImagePath,
                     result.sideImagePath,
+                    result.otherImagePath1,
+                    result.otherImagePath2,
+                    result.otherImagePath3,
                     result.memo)
         }
     }
@@ -47,6 +53,9 @@ class RecordDaoImpl: RecordDao {
                 registered.rate = record.rate
                 registered.frontImagePath = record.frontImagePath
                 registered.sideImagePath = record.sideImagePath
+                registered.otherImagePath1 = record.otherImagePath1
+                registered.otherImagePath2 = record.otherImagePath2
+                registered.otherImagePath3 = record.otherImagePath3
                 registered.memo = record.memo
             }
         }
@@ -61,6 +70,9 @@ class RecordDaoImpl: RecordDao {
                         record.rate,
                         record.frontImagePath,
                         record.sideImagePath,
+                        record.otherImagePath1,
+                        record.otherImagePath2,
+                        record.otherImagePath3,
                         record.memo))
             }
         }
