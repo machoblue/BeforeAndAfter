@@ -5,7 +5,6 @@ import dagger.android.DaggerApplication
 import io.realm.FieldAttribute
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.RealmList
 import org.macho.beforeandafter.shared.di.DaggerAppComponent
 
 
@@ -26,13 +25,14 @@ class BeforeAndAfterApp: DaggerApplication() {
     private fun configureRealm() {
         Realm.init(applicationContext)
         val config = RealmConfiguration.Builder()
-                .schemaVersion(4)
+                .schemaVersion(3)
                 .migration { realm, oldVersion, newVersion ->
                     var currentVersion = oldVersion
                     val schema = realm.schema
                     if (currentVersion == 0L) {
                         schema.get("RecordDto")?.addField("memo", String::class.java)
                         currentVersion++
+
                     }
 
                     if (currentVersion == 1L) {
@@ -47,12 +47,6 @@ class BeforeAndAfterApp: DaggerApplication() {
                             .addField("imageFileName", String::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
                             .addField("driveFileId", String::class.java, FieldAttribute.REQUIRED)
                             .addField("status", Int::class.java, FieldAttribute.REQUIRED)
-                        currentVersion++
-                    }
-
-                    if (currentVersion == 3L) {
-                        schema.create("RealmString").addField("value", String::class.java, FieldAttribute.REQUIRED)
-                        schema.get("RecordDto")?.addRealmListField("otherImagePaths", schema.get("RealmString"))
                         @Suppress("UNUSED_CHANGED_VALUE")
                         currentVersion++
                     }

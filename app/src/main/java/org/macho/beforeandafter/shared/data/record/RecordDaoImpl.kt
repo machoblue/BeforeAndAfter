@@ -1,7 +1,6 @@
 package org.macho.beforeandafter.shared.data.record
 
 import io.realm.Realm
-import io.realm.RealmList
 
 class RecordDaoImpl: RecordDao {
     override fun findAll(): List<Record> {
@@ -18,8 +17,7 @@ class RecordDaoImpl: RecordDao {
                         result.rate,
                         result.frontImagePath,
                         result.sideImagePath,
-                        result.memo,
-                        result.otherImagePaths.map { it.value }.toMutableList()))
+                        result.memo))
             }
         }
         return records
@@ -37,8 +35,7 @@ class RecordDaoImpl: RecordDao {
                     result.rate,
                     result.frontImagePath,
                     result.sideImagePath,
-                    result.memo,
-                    result.otherImagePaths.map { it.value }.toMutableList())
+                    result.memo)
         }
     }
 
@@ -51,9 +48,6 @@ class RecordDaoImpl: RecordDao {
                 registered.frontImagePath = record.frontImagePath
                 registered.sideImagePath = record.sideImagePath
                 registered.memo = record.memo
-                record.otherImagePaths.forEach {
-                    registered.otherImagePaths.add(RealmString(it))
-                }
             }
         }
     }
@@ -67,12 +61,7 @@ class RecordDaoImpl: RecordDao {
                         record.rate,
                         record.frontImagePath,
                         record.sideImagePath,
-                        record.memo,
-                        RealmList<RealmString>().also {
-                            record.otherImagePaths.forEach { otherImagePath ->
-                                it.add(RealmString(otherImagePath))
-                            }
-                        }))
+                        record.memo))
             }
         }
     }
