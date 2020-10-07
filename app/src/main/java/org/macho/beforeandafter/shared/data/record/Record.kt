@@ -1,5 +1,7 @@
 package org.macho.beforeandafter.shared.data.record
 
+import android.content.Context
+import java.io.File
 import java.util.*
 
 data class Record(var date: Long = Date().time,
@@ -12,4 +14,33 @@ data class Record(var date: Long = Date().time,
              var otherImagePath3: String? = null,
              var memo: String = "") {
 
+    fun frontImageFile(context: Context): File? {
+        return frontImagePath?.let {
+            File(context.filesDir, it)
+        }
+    }
+
+    fun sideImageFile(context: Context): File? {
+        return sideImagePath?.let {
+            File(context.filesDir, it)
+        }
+    }
+
+    fun otherImageFile1(context: Context): File? {
+        return otherImagePath1?.let {
+            File(context.filesDir, it)
+        }
+    }
+
+    fun otherImageFile2(context: Context): File? {
+        return otherImagePath2?.let {
+            File(context.filesDir, it)
+        }
+    }
+
+    fun otherImageFile3(context: Context): File? {
+        return otherImagePath3?.let {
+            File(context.filesDir, it)
+        }
+    }
 }

@@ -203,7 +203,7 @@
                 app:layout_constraintTop_toTopOf="@id/frontImage" />
 
             <CheckBox
-                android:id="@+id/addImagesButton"
+                android:id="@+id/addImagesCheckBox"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -226,7 +226,7 @@
                 android:textSize="11sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/otherImage2Label"
-                app:layout_constraintTop_toBottomOf="@id/addImagesButton" />
+                app:layout_constraintTop_toBottomOf="@id/addImagesCheckBox" />
 
             <TextView
                 android:id="@+id/otherImage2Label"
@@ -308,6 +308,7 @@
                 android:id="@+id/otherImagesGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:constraint_referenced_ids="otherImage3,otherImage1,otherImage3Label,otherImage2,otherImage2Label,otherImage1Label"
                 tools:layout_editor_absoluteX="20dp"
                 tools:layout_editor_absoluteY="30dp" />

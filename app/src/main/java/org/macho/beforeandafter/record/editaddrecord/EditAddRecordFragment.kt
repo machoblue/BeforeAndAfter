@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import androidx.appcompat.app.AlertDialog
 import android.view.*
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
@@ -24,8 +25,8 @@ import org.macho.beforeandafter.BuildConfig
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.record.camera.CameraActivity
 import org.macho.beforeandafter.record.camera.PermissionUtils
+import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.di.ActivityScoped
-import org.macho.beforeandafter.shared.extensions.addTextChangedListener
 import org.macho.beforeandafter.shared.extensions.hideKeyboardIfNeeded
 import org.macho.beforeandafter.shared.extensions.loadImage
 import org.macho.beforeandafter.shared.extensions.setupClearButtonWithAction
@@ -34,6 +35,8 @@ import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -48,6 +51,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         const val FILE_NAME_TEMPLATE = "image-%1\$tF-%1\$tH-%1\$tM-%1\$tS-%1\$tL.jpg"
     }
 
+    val dateFormat = SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
+
     @Inject
     override lateinit var presenter: EditAddRecordContract.Presenter
 
@@ -56,22 +61,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     val args: EditAddRecordFragmentArgs by navArgs()
 
     var shouldShowInterstitialAd = false
-
-    private val onImageViewClickListener = object: View.OnClickListener {
-        override fun onClick(view: View?) {
-            currentImageView = view as ImageView
-            AlertDialog.Builder(context!!)
-                    .setMessage(R.string.dialog_select_prompt)
-                    .setPositiveButton(R.string.dialog_select_gallery) { dialog, which ->
-                        startGalleryChooser()
-                    }
-                    .setNegativeButton(R.string.dialog_select_camera) { dialog, which ->
-                        startCamera()
-                    }
-                    .create()
-                    .show()
-        }
-    }
 
     private var currentImageView: ImageView? = null
 
@@ -84,8 +73,10 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        frontImage.setOnClickListener(onImageViewClickListener)
-        sideImage.setOnClickListener(onImageViewClickListener)
+        frontImage.setOnClickListener { view -> onImageViewClick(view as ImageView) }
+        sideImage.setOnClickListener { view -> onImageViewClick(view as ImageView) }
+
+        addImagesCheckBox.setOnClickListener { view -> onCheckBoxClick(view as CheckBox) }
 
         rateUpButton.setOnClickListener {
             val rateText = rate.text.toString()
@@ -117,8 +108,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         }
 
         dateButton.setOnClickListener {
-            LogUtil.i(this, "dateButton.onClick")
-            presenter.onDateButtonClicked()
+            val date = dateFormat.parse(dateButton.text.toString())
+            showDatePickerDialog(date)
         }
 
         weight.setupClearButtonWithAction()
@@ -126,16 +117,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
         setHasOptionsMenu(true); // for save button on navBar
 
-        weight.addTextChangedListener { newText ->
-            presenter.setWeight(newText)
-        }
-
-        rate.addTextChangedListener { newText ->
-            presenter.setRate(newText)
-        }
-
-        memo.addTextChangedListener { newText ->
-            presenter.setMemo(newText)
+        deleteButton.setOnClickListener {
+            presenter.deleteRecord()
         }
 
         AdUtil.initializeMobileAds(context!!)
@@ -159,7 +142,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         val recordEveryday = cal1.get(Calendar.DATE) - cal2.get(Calendar.DATE) < 2
         shouldShowInterstitialAd = !isFirstRecord && !recordEveryday
 
-        presenter.setDate(args.date)
+        presenter.start(args.date)
     }
 
     override fun onResume() {
@@ -183,40 +166,38 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             return
         }
 
-        val imageView = currentImageView ?: return
-
-        var newImageFileName: String? = null
-
-        when (requestCode) {
-            CUSTOM_CAMERA_RC -> {
-                val imageFilePath = data?.getStringExtra("PATH") ?: return
-                imageView.loadImage(this, Uri.fromFile(File(imageFilePath)))
-                newImageFileName  = imageFilePath.replace(context!!.filesDir.toString() + "/", "")
-            }
-
+        val newImageFile: File? = when (requestCode) {
+            CUSTOM_CAMERA_RC -> data?.getStringExtra("PATH")?.let { File(it) }
             OS_CAMERA_RC -> {
-                val toFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
-                getCameraFile().copyTo(toFile)
-                imageView.loadImage(this, Uri.fromFile(toFile))
-                newImageFileName = toFile.name
+                getCameraFile()
             }
-
-            GALLERY_RC -> {
-                val uri = data?.data ?: return
-                val toFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
-                saveUriToFile(uri, toFile)
-                imageView.loadImage(this, Uri.fromFile(toFile))
-                newImageFileName = toFile.name
+            GALLERY_RC -> data?.data?.let { uri ->
+                File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date())).also { file ->
+                    saveUriToFile(uri, file)
+                }
             }
+            else -> null
         }
 
-        when (currentImageView) {
-            frontImage -> {
-                presenter.tempFrontImageFileName = newImageFileName
-            }
+        LogUtil.i(this, "newImageFile: $newImageFile")
 
-            sideImage -> {
-                presenter.tempSideImageFileName = newImageFileName
+        currentImageView?.let { imageView ->
+            when (imageView) {
+                frontImage -> {
+                    presenter.modifyFrontImage(newImageFile)
+                }
+                sideImage -> {
+                    presenter.modifySideImage(newImageFile)
+                }
+                otherImage1 -> {
+                    presenter.modifyOtherImage1(newImageFile)
+                }
+                otherImage2 -> {
+                    presenter.modifyOtherImage2(newImageFile)
+                }
+                otherImage3 -> {
+                    presenter.modifyOtherImage3(newImageFile)
+                }
             }
         }
     }
@@ -245,61 +226,75 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                presenter.saveRecord(weight.text.toString(), rate.text.toString(), memo.text.toString())
+                presenter.saveRecord(
+                        weight.text.toString(),
+                        rate.text.toString(),
+                        memo.text.toString()
+                )
                 SharedPreferencesUtil.setLong(activity!!, SharedPreferencesUtil.Key.TIME_OF_LATEST_RECORD, Date().time)
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
+    // MARK: Event Listener
+    private fun onImageViewClick(imageView: ImageView) {
+        currentImageView = imageView
+        AlertDialog.Builder(context!!)
+                .setMessage(R.string.dialog_select_prompt)
+                .setPositiveButton(R.string.dialog_select_gallery) { dialog, which ->
+                    startGalleryChooser()
+                }
+                .setNegativeButton(R.string.dialog_select_camera) { dialog, which ->
+                    startCamera()
+                }
+                .create()
+                .show()
+    }
+
+    private fun onCheckBoxClick(checkBox: CheckBox) {
+        otherImagesGroup.visibility = if (checkBox.isChecked) View.VISIBLE else View.GONE
+    }
+
     // MARK: EditAddRecordContract.View
-    override fun setWeight(value: String) {
-        weight.setText(value)
-    }
-
-    override fun setRate(value: String) {
-        rate.setText(value)
-    }
-
-    override fun setMemo(value: String) {
-        memo.setText(value)
-    }
-
-    override fun setFrontImage(file: File) {
-        frontImage.loadImage(this, Uri.fromFile(file))
-    }
-
-    override fun setSideImage(file: File) {
-        sideImage.loadImage(this, Uri.fromFile(file))
-    }
-
-    override fun showDeleteButton() {
-        deleteButton.visibility = View.VISIBLE
-        deleteButton.setOnClickListener {
-            presenter.deleteRecord()
+    override fun showRecord(record: Record?) {
+        LogUtil.i(this, "showRecord: ${record?.frontImagePath}")
+        record?.date?.let {
+            dateButton.text = dateFormat.format(Date(it))
+            dateButton.tag = Date(it)
         }
+
+        weight.setText(record?.weight.toString())
+        rate.setText(record?.rate.toString())
+        memo.setText(record?.memo)
+
+        record?.frontImagePath?.let {
+            frontImage.loadImage(this, Uri.fromFile(File(context!!.filesDir, it)))
+            frontImage.setTag(R.id.tagKeyImageFile, File(context!!.filesDir, it))
+        }
+        record?.sideImagePath?.let {
+            sideImage.loadImage(this, Uri.fromFile(File(context!!.filesDir, it)))
+            sideImage.setTag(R.id.tagKeyImageFile, File(context!!.filesDir, it))
+        }
+
+        deleteButton.visibility = if (args.date == 0L) View.GONE else View.VISIBLE
     }
 
-    override fun setDateButtonLabel(value: String) {
-        dateButton.text = value
-    }
-
-    override fun finish() {
+    override fun close() {
         if (shouldShowInterstitialAd) {
             interstitialAd?.showIfNeeded(context!!)
         }
         findNavController().popBackStack()
     }
 
-    override fun showDatePickerDialog(defaultDate: Date) {
-        LogUtil.i(this, "shoDatePickerDialog $defaultDate")
+    private fun showDatePickerDialog(defaultDate: Date) {
         val calendar = Calendar.getInstance()
         calendar.time = defaultDate
         DatePickerDialog(context, { view, year, month, dayOfMonth ->
             TimePickerDialog(context, {view, hourOfDay, minute ->
                 val newCalendar = Calendar.getInstance()
                 newCalendar.set(year, month, dayOfMonth, hourOfDay, minute)
-                presenter.onDateSelected(newCalendar.time)
+                presenter.modifyDate(newCalendar.time)
 
             }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show()
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
@@ -309,11 +304,13 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     // MARK: Private method
 
     private fun getCameraFile(): File {
-        val dir = File(context!!.filesDir, "/temp")
-        if (!dir.exists()) {
-            dir.mkdir()
+        val tempDir = File(context!!.filesDir, "temp")
+        if (!tempDir.exists()) {
+            tempDir.mkdir()
         }
-        return File(dir, "temp_${currentImageView!!.id}.jpg")
+
+//        return File(context!!.filesDir, "temp.jpg") // これだとだめ。
+        return File(tempDir, "temp.jpg")
     }
 
     private fun startGalleryChooser() {

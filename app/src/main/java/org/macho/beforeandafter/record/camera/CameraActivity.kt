@@ -21,6 +21,7 @@ import android.view.TextureView
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_camera.*
+import org.macho.beforeandafter.BuildConfig
 import org.macho.beforeandafter.R
 
 class CameraActivity: AppCompatActivity() {
@@ -241,7 +242,9 @@ class CameraActivity: AppCompatActivity() {
             }
         }
 
-        mediaActionSound.play(MediaActionSound.SHUTTER_CLICK)
+        if (!BuildConfig.DEBUG) {
+            mediaActionSound.play(MediaActionSound.SHUTTER_CLICK)
+        }
 
         cameraCaptureSession.stopRepeating()
         cameraCaptureSession.capture(captureBuilder.build(), captureCallback, null)

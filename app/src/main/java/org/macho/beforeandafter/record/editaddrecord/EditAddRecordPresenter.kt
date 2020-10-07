@@ -3,175 +3,179 @@ package org.macho.beforeandafter.record.editaddrecord
 import android.content.Context
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.data.record.RecordRepository
-import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.io.File
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.max
 
 class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRepository): EditAddRecordContract.Presenter {
+    companion object {
+        const val FILE_NAME_TEMPLATE = "image-%1\$tF-%1\$tH-%1\$tM-%1\$tS-%1\$tL.jpg"
+    }
 
     var view: EditAddRecordContract.View? = null
 
     @Inject
     lateinit var context: Context
 
-    private lateinit var record: Record
-    private var tempDate: Long = 0
+    private var originalRecord: Record? = null
+    private lateinit var tempRecord: Record
 
-    // 画像選択後、途中で保存をやめた時にその画像を削除できるようにするためのフィールド
-    override var tempFrontImageFileName: String? = null
-    override var tempSideImageFileName: String? = null
-
-    val dateFormat = SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
-
-    override fun setDate(date: Long) {
-        record = Record()
+    override fun start(date: Long) {
+        tempRecord = Record()
         if (date != 0L) {
-            tempDate = date
             recordRepository.getRecord(date) { record ->
                 if (record == null) {
                     throw RuntimeException("record shouldn't be null.")
                 }
 
-                this.record = record
-
-                updateView()
-
-                view?.showDeleteButton()
+                this.originalRecord = record
+                this.tempRecord = record
+                view?.showRecord(this.tempRecord)
             }
-        } else {
-            tempDate = record.date
-            record.weight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT)
-            record.rate = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_RATE)
-        }
 
-        tempFrontImageFileName = null
-        tempSideImageFileName = null
+        } else {
+            tempRecord.weight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT)
+            tempRecord.rate = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_RATE)
+        }
     }
 
-    override fun saveRecord(weight: String?, rate: String?, memo: String?) {
-        record.weight = returnZeroIfEmptyOrMinus(weight)
-        record.rate = returnZeroIfEmptyOrMinus(rate)
-        record.memo = memo ?: ""
+    override fun modifyDate(date: Date) {
+        tempRecord.date = date.time
+        view?.showRecord(tempRecord)
+    }
 
-        if (tempFrontImageFileName != null) {
-            val oldName = record.frontImagePath
-            deleteIfExists(oldName)
-            record.frontImagePath = tempFrontImageFileName
-            tempFrontImageFileName = null /* destroy時にファイルを削除するので、その時に消さないようにnullにする */
-        }
+    override fun modifyFrontImage(frontImageFile: File?) {
+        tempRecord.frontImagePath = persistFile(frontImageFile)?.name
+        view?.showRecord(tempRecord)
+    }
 
-        if (tempSideImageFileName != null) {
-            val oldName = record.sideImagePath
-            deleteIfExists(oldName)
-            record.sideImagePath = tempSideImageFileName
-            tempSideImageFileName = null /* destroy時にファイルを削除するので、その時に消さないようにnullにする */
-        }
+    override fun modifySideImage(sideImageFile: File?) {
+        tempRecord.sideImagePath = persistFile(sideImageFile)?.name
+        view?.showRecord(tempRecord)
+    }
 
-        recordRepository.getRecord(record.date) { record ->
-            if (record == null) {
-                recordRepository.register(this.record) {
-                    if (tempDate == this.record.date) {
-                        view?.finish()
-                        return@register
-                    }
-                    recordRepository.delete(tempDate) { // dateを編集した場合、古いのを消す。
-                        view?.finish()
-                    }
-                }
-            } else {
-                recordRepository.update(this.record, null)
-                view?.finish()
+    override fun modifyOtherImage1(other1ImageFile: File?) {
+        tempRecord.otherImagePath1 = persistFile(other1ImageFile)?.name
+        view?.showRecord(tempRecord)
+    }
+
+    override fun modifyOtherImage2(other2ImageFile: File?) {
+        tempRecord.otherImagePath2 = persistFile(other2ImageFile)?.name
+        view?.showRecord(tempRecord)
+    }
+
+    override fun modifyOtherImage3(other3ImageFile: File?) {
+        tempRecord.otherImagePath3 = persistFile(other3ImageFile)?.name
+        view?.showRecord(tempRecord)
+    }
+
+    override fun saveRecord(
+            weight: String?,
+            rate: String?,
+            memo: String?
+    ) {
+        tempRecord.weight = max(weight?.toFloat() ?: 0f, 0f)
+        tempRecord.rate = max(rate?.toFloat() ?: 0f, 0f)
+        tempRecord.memo = memo ?: ""
+
+        val originalRecord = this.originalRecord
+        if (originalRecord == null) {
+            recordRepository.register(tempRecord) {
+                view?.close()
+            }
+
+        } else if (originalRecord.date != tempRecord.date) {
+            recordRepository.register(tempRecord) {
+                deleteAndClose(originalRecord)
+            }
+
+        } else {
+            recordRepository.update(tempRecord) {
+                deleteOldFileIfNeed(originalRecord.frontImagePath, tempRecord.frontImagePath)
+                deleteOldFileIfNeed(originalRecord.sideImagePath, tempRecord.sideImagePath)
+                deleteOldFileIfNeed(originalRecord.otherImagePath1, tempRecord.otherImagePath1)
+                deleteOldFileIfNeed(originalRecord.otherImagePath2, tempRecord.otherImagePath2)
+                deleteOldFileIfNeed(originalRecord.otherImagePath3, tempRecord.otherImagePath3)
+                view?.close()
             }
         }
 
-        SharedPreferencesUtil.setFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT, record.weight)
-        SharedPreferencesUtil.setFloat(context, SharedPreferencesUtil.Key.LATEST_RATE, record.rate)
+        SharedPreferencesUtil.setFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT, tempRecord.weight)
+        SharedPreferencesUtil.setFloat(context, SharedPreferencesUtil.Key.LATEST_RATE, tempRecord.rate)
+    }
+
+    private fun persistFile(file: File?): File? {
+//        if (file == null || !file.exists()) {
+        if (file == null) {
+            return null
+        }
+
+        val newFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
+        file.renameTo(newFile)
+        return newFile
+    }
+
+    private fun cleanUpOldRecordIfNeeded(oldRecord: Record, newRecord: Record) {
+        deleteOldFileIfNeed(oldRecord.frontImagePath, newRecord.frontImagePath)
+        deleteOldFileIfNeed(oldRecord.sideImagePath, newRecord.sideImagePath)
+        deleteOldFileIfNeed(oldRecord.otherImagePath1, newRecord.otherImagePath1)
+        deleteOldFileIfNeed(oldRecord.otherImagePath2, newRecord.otherImagePath2)
+        deleteOldFileIfNeed(oldRecord.otherImagePath3, newRecord.otherImagePath3)
+
+        if (oldRecord.date != newRecord.date) {
+            recordRepository.delete(oldRecord.date) {}
+        }
+    }
+
+    private fun deleteOldFileIfNeed(oldFileName: String?, newFileName: String?) {
+        if (oldFileName == null || oldFileName.equals(newFileName)) {
+            return
+        }
+
+        deleteFileIfNeeded(oldFileName)
+    }
+
+    private fun deleteFileIfNeeded(fileName: String?) {
+        if (fileName == null) {
+            return
+        }
+
+        val file = File(context!!.filesDir, fileName)
+        if (!file.exists()) {
+            return
+        }
+
+        file.delete()
     }
 
     override fun deleteRecord() {
-        recordRepository.delete(record.date, null)
+        originalRecord?.let {
+            deleteAndClose(it)
+        }
+    }
 
-        view?.finish()
+    private fun deleteAndClose(record: Record) {
+        recordRepository.delete(record.date) {
+            deleteFileIfNeeded(record.frontImagePath)
+            deleteFileIfNeeded(record.sideImagePath)
+            deleteFileIfNeeded(record.otherImagePath1)
+            deleteFileIfNeeded(record.otherImagePath2)
+            deleteFileIfNeeded(record.otherImagePath3)
+
+            view?.close()
+        }
     }
 
     // NOTE: this method will be called Fragment.onResume()
     override fun takeView(view: EditAddRecordContract.View) {
         this.view = view
-        updateView()
+        view.showRecord(tempRecord)
     }
 
     // NOTE: this method will be called Fragment.onDestoryView()
     override fun dropView() {
-        deleteIfExists(tempFrontImageFileName)
-        deleteIfExists(tempSideImageFileName)
         view = null
-    }
-
-    override fun setMemo(memo: String?) {
-        if (memo == null) {
-            return
-        }
-        record.memo = memo
-    }
-
-    override fun setWeight(weight: String?) {
-        record.weight = weight?.toFloatOrNull() ?: 0f
-    }
-
-    override fun setRate(rate: String?) {
-        record.rate = rate?.toFloatOrNull() ?: 0f
-    }
-
-    override fun onDateButtonClicked() {
-        LogUtil.i(this, "dateButton.onClick")
-        view?.showDatePickerDialog(Date(record.date))
-    }
-
-    override fun onDateSelected(date: Date) {
-        LogUtil.i(this, "onDateSelected$date")
-        record.date = date.time
-        view?.setDateButtonLabel(dateFormat.format(date))
-    }
-
-    private fun isFileExists(fileName: String?): Boolean {
-        return fileName != null && File(context.filesDir, fileName).exists()
-    }
-
-    private fun updateView() {
-        if (isFileExists(record.frontImagePath)) {
-            view?.setFrontImage(File(context.filesDir, tempFrontImageFileName ?: record.frontImagePath))
-        }
-
-        if (isFileExists(record.sideImagePath)) {
-            view?.setSideImage(File(context.filesDir, tempSideImageFileName ?: record.sideImagePath))
-        }
-
-        view?.setDateButtonLabel(dateFormat.format(record.date))
-        view?.setWeight(if (record.weight == 0f) "" else "%.2f".format(record.weight))
-        view?.setRate(if (record.rate == 0f) "" else "%.2f".format(record.rate))
-        view?.setMemo(record.memo)
-    }
-
-    private fun returnZeroIfEmptyOrMinus(value: String?): Float {
-        return max(value?.toFloatOrNull() ?: 0f, 0f)
-    }
-
-    private fun deleteIfExists(fileName: String?) {
-        if (fileName == null) {
-            return
-        }
-        if (fileName.isEmpty()) {
-            return
-        }
-        val target = File(context.filesDir, fileName)
-        if (!target.exists()) {
-            return
-        }
-        target.delete()
     }
 }
