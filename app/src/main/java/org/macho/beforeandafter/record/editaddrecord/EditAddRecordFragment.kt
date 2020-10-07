@@ -73,10 +73,17 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        frontImage.setOnClickListener { view -> onImageViewClick(view as ImageView) }
-        sideImage.setOnClickListener { view -> onImageViewClick(view as ImageView) }
+        frontImage.setOnClickListener { onImageViewClick(it as ImageView) }
+        sideImage.setOnClickListener { onImageViewClick(it as ImageView) }
+        otherImage1.setOnClickListener { onImageViewClick(it as ImageView) }
+        otherImage2.setOnClickListener { onImageViewClick(it as ImageView) }
+        otherImage3.setOnClickListener { onImageViewClick(it as ImageView) }
 
-        addImagesCheckBox.setOnClickListener { view -> onCheckBoxClick(view as CheckBox) }
+        addImagesCheckBox.setOnClickListener { onCheckBoxClick(it as CheckBox) }
+
+        val showOtherImages = PreferenceManager.getDefaultSharedPreferences(context!!).getBoolean("SHOW_OTHER_IMAGES", false)
+        addImagesCheckBox.isChecked = showOtherImages
+        otherImagesGroup.visibility = if (showOtherImages) View.VISIBLE else View.GONE
 
         rateUpButton.setOnClickListener {
             val rateText = rate.text.toString()
@@ -253,6 +260,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     }
 
     private fun onCheckBoxClick(checkBox: CheckBox) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("SHOW_OTHER_IMAGES", checkBox.isChecked).apply()
         otherImagesGroup.visibility = if (checkBox.isChecked) View.VISIBLE else View.GONE
     }
 
@@ -268,13 +276,20 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         rate.setText(record?.rate.toString())
         memo.setText(record?.memo)
 
-        record?.frontImagePath?.let {
-            frontImage.loadImage(this, Uri.fromFile(File(context!!.filesDir, it)))
-            frontImage.setTag(R.id.tagKeyImageFile, File(context!!.filesDir, it))
+        record?.frontImageFile(context!!)?.let {
+            frontImage.loadImage(this, Uri.fromFile(it))
         }
-        record?.sideImagePath?.let {
-            sideImage.loadImage(this, Uri.fromFile(File(context!!.filesDir, it)))
-            sideImage.setTag(R.id.tagKeyImageFile, File(context!!.filesDir, it))
+        record?.sideImageFile(context!!)?.let {
+            sideImage.loadImage(this, Uri.fromFile(it))
+        }
+        record?.otherImageFile1(context!!)?.let {
+            otherImage1.loadImage(this, Uri.fromFile(it))
+        }
+        record?.otherImageFile2(context!!)?.let {
+            otherImage2.loadImage(this, Uri.fromFile(it))
+        }
+        record?.otherImageFile3(context!!)?.let {
+            otherImage3.loadImage(this, Uri.fromFile(it))
         }
 
         deleteButton.visibility = if (args.date == 0L) View.GONE else View.VISIBLE
