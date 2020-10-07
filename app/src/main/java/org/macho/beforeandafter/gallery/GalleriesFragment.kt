@@ -20,7 +20,10 @@ class GalleriesFragment: Fragment() {
 
     private val titles = arrayOf(
         R.string.front,
-        R.string.side
+        R.string.side,
+        R.string.other1,
+        R.string.other2,
+        R.string.other3
     )
 
     private var recordDao: RecordDao = RecordDaoImpl() // TODO: take from Dagger
@@ -59,7 +62,7 @@ class GalleryPagerAdapter(val fragmentManager: FragmentManager, lifecycle: Lifec
 
     var records: List<Record> = mutableListOf()
 
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = 5
 
     override fun createFragment(position: Int): Fragment {
         return GalleryFragment(getImagePaths(position))
@@ -79,8 +82,11 @@ class GalleryPagerAdapter(val fragmentManager: FragmentManager, lifecycle: Lifec
 
     private fun getImagePaths(position: Int): List<String> {
         return when(position) {
-            0 -> records.map { it.frontImagePath ?: "" }
-            1 -> records.map { it.sideImagePath ?: "" }
+            0 -> records.map { it.frontImagePath ?: "" }.filter { it.isNotEmpty() }
+            1 -> records.map { it.sideImagePath ?: "" }.filter { it.isNotEmpty() }
+            2 -> records.map { it.otherImagePath1 ?: "" }.filter { it.isNotEmpty() }
+            3 -> records.map { it.otherImagePath2 ?: "" }.filter { it.isNotEmpty() }
+            4 -> records.map { it.otherImagePath3 ?: "" }.filter { it.isNotEmpty() }
             else -> throw RuntimeException("This line shouldn't be reached.")
         }
     }

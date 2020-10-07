@@ -47,6 +47,9 @@
     <!-- Gallery Fragment -->
     <string name="front">正面</string>
     <string name="side">横</string>
+    <string name="other1">その他1</string>
+    <string name="other2">その他2</string>
+    <string name="other3">その他3</string>
 
     <!-- Graphe Fragment -->
     <string name="three_weeks">3週間</string>
