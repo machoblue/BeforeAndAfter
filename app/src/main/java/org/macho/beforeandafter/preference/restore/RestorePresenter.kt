@@ -123,17 +123,25 @@ class RestorePresenter @Inject constructor(val recordRepository: RecordRepositor
         Log.d("RestorePresetner", "*** onProgress ***")
         when (status.statusCode) {
             RestoreTask.RestoreStatus.RESTORE_STATUS_CODE_FETCHING_RECORDS -> {
-                val title = context.getString(R.string.backup_status_message_title_format).format(context.getString(R.string.restore_status_message_title_fetching_records), 1, 2)
+                val title = context.getString(R.string.backup_status_message_title_format).format(context.getString(R.string.restore_status_message_title_searching_file), 1, 3)
                 val description = ""
                 val progress = 10
                 view?.setBackupStatusMessageTitle(title)
                 view?.setBackupStatusMessageDescription(description)
                 view?.setProgress(progress)
             }
+            RestoreTask.RestoreStatus.RESTORE_STATUS_CODE_FETCHING_RECORDS -> {
+                val title = context.getString(R.string.backup_status_message_title_format).format(context.getString(R.string.restore_status_message_title_fetching_records), 2, 3)
+                val description = ""
+                val progress = 20
+                view?.setBackupStatusMessageTitle(title)
+                view?.setBackupStatusMessageDescription(description)
+                view?.setProgress(progress)
+            }
             RestoreTask.RestoreStatus.RESTORE_STATUS_CODE_FETCHING_IMAGES -> {
-                val title = context.getString(R.string.backup_status_message_title_format).format(context.getString(R.string.restore_status_message_title_fetching_images), 2, 2)
+                val title = context.getString(R.string.backup_status_message_title_format).format(context.getString(R.string.restore_status_message_title_fetching_images), 3, 3)
                 val description = context.getString(R.string.restore_status_message_description_format).format(status.finishFilesCount, status.allFilesCount)
-                val progress = 10 + ((status.finishFilesCount.toFloat() / status.allFilesCount) * 80).toInt()
+                val progress = 20 + ((status.finishFilesCount.toFloat() / status.allFilesCount) * 70).toInt()
                 view?.setBackupStatusMessageTitle(title)
                 view?.setBackupStatusMessageDescription(description)
                 view?.setProgress(progress)
