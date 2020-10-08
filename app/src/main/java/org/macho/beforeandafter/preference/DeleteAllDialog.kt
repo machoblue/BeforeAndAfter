@@ -31,11 +31,8 @@ class DeleteAllDialog: androidx.fragment.app.DialogFragment() {
                 .setMessage(R.string.delete_all_confirmation_message)
                 .setPositiveButton(R.string.ok) { dialogInterface, i ->
                     recordDao.deleteAll()
-                    val fileArray = File(context!!.filesDir.toString()).listFiles()
-                    if (fileArray != null) {
-                        for (file in fileArray) {
-                            file.delete()
-                        }
+                    context!!.filesDir.listFiles().forEach {
+                        it.delete()
                     }
                     interstitialAd?.showIfNeeded(context!!)
                 }
