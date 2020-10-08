@@ -60,8 +60,11 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
                 RecordDaoImpl().update(it)
             }
 
+            val existingRestoreImages = RestoreImageDaoImpl().findAll()
             backupData.imageFileNameToDriveFileId.map { RestoreImage(it.key, it.value) }.forEach {
-                RestoreImageDaoImpl().insertOrUpdate(it)
+                if (!existingRestoreImages.contains(it)) {
+                    RestoreImageDaoImpl().insertOrUpdate(it)
+                }
             }
 
 

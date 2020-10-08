@@ -112,7 +112,7 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
         })
         items.add(PreferenceItem(R.string.preference_item_restore_title, R.string.preference_item_restore_description) {
             restoreImageRepository.getRestoreImages { restoreImages ->
-                if (restoreImages.filter { it.status == RestoreImage.Status.PROCESSING }.size > 0) {
+                if (restoreImages.filter { it.status != RestoreImage.Status.COMPLETE }.isNotEmpty()) {
                     val action = PreferenceFragmentDirections.actionPreferenceFragmentToRestoreResumeDialog()
                     findNavController().navigate(action)
 
