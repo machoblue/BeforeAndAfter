@@ -4,8 +4,11 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.InterstitialAd
+import dagger.android.DaggerDialogFragment
+import dagger.android.support.DaggerAppCompatDialogFragment
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageRepository
@@ -14,7 +17,7 @@ import org.macho.beforeandafter.shared.util.showIfNeeded
 import javax.inject.Inject
 
 @ActivityScoped
-class RestoreResumeDialog @Inject constructor(): DialogFragment() {
+class RestoreResumeDialog @Inject constructor(): DaggerAppCompatDialogFragment() {
 
     @Inject
     lateinit var restoreImageRepository: RestoreImageRepository
