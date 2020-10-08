@@ -107,6 +107,7 @@
     <string name="restore_message">復元中です。</string>
     <string name="restore_message_detail">バックアップデータの復元には時間がかかります。しばらくお待ちください。</string>
     <string name="restore_status_message_title_format">%s(ステップ %d / %d)</string>
+    <string name="restore_status_message_title_searching_file">バックアップファイルを検索中</string>
     <string name="restore_status_message_title_fetching_records">記録データを復元中</string>
     <string name="restore_status_message_title_fetching_images">画像データを復元中</string>
     <string name="restore_status_message_description_format">写真ファイルを復元中(%d/%d)</string>

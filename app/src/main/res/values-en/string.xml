@@ -107,6 +107,7 @@
     <string name="restore_message">Restoring...</string>
     <string name="restore_message_detail">Please wait a minutes.</string>
     <string name="restore_status_message_title_format">%s(step %d of %d)</string>
+    <string name="restore_status_message_title_searching_file">Searching Backup File.</string>
     <string name="restore_status_message_title_fetching_records">Restoring records.</string>
     <string name="restore_status_message_title_fetching_images">Restoring images</string>
     <string name="restore_status_message_description_format">Restoreing files(%d/%d)</string>

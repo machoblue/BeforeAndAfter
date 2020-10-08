@@ -43,9 +43,10 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
                 return
             }
 
-            publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_RECORDS))
+            publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FINDING_FILE))
 
             val backupData: BackupData = fetchLatestBackupFileId()?.let { fileId ->
+                publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_FETCHING_RECORDS))
                 fetchBackupData(fileId) ?: let {
                     it.cancel(true)
                     publishProgress(RestoreStatus(RestoreStatus.RESTORE_STATUS_CODE_ERROR_BACKUPFILE_FORMAT_INVALID))
@@ -137,7 +138,7 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
         val files = mutableListOf<File>()
         do {
-            val fileList = filesListRequest.execute()
+            val fileList = filesListRequest.execute() ?: return null
             files.addAll(fileList.files)
             filesListRequest.pageToken = fileList.nextPageToken
 
@@ -157,9 +158,10 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
     class RestoreStatus(val statusCode: Int, val finishFilesCount: Int = 0, val allFilesCount: Int = 0) {
         companion object {
-            const val RESTORE_STATUS_CODE_FETCHING_RECORDS = 0
-            const val RESTORE_STATUS_CODE_FETCHING_IMAGES = 1
-            const val RESTORE_STATUS_CODE_COMPLETE = 2
+            const val RESTORE_STATUS_CODE_FINDING_FILE = 0
+            const val RESTORE_STATUS_CODE_FETCHING_RECORDS = 1
+            const val RESTORE_STATUS_CODE_FETCHING_IMAGES = 2
+            const val RESTORE_STATUS_CODE_COMPLETE = 3
             const val RESTORE_STATUS_CODE_ERROR_DRIVE_CONNECTION_FAILED = 1001
             const val RESTORE_STATUS_CODE_ERROR_BACKUPFILE_FORMAT_INVALID = 1002
             const val RESTORE_STATUS_CODE_ERROR_RECOVERABLE = 1003
