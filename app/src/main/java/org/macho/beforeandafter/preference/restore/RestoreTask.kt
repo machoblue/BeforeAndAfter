@@ -141,8 +141,8 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
         val files = mutableListOf<File>()
         do {
-            val fileList = filesListRequest.execute() ?: return null
-            files.addAll(fileList.files)
+            val fileList = filesListRequest.execute() ?: break
+            files.addAll(fileList.files ?: mutableListOf())
             filesListRequest.pageToken = fileList.nextPageToken
 
         } while (fileList.nextPageToken != null && !fileList.nextPageToken.isEmpty())
