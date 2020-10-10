@@ -1,11 +1,12 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'com.android.application' // analytics
-apply plugin: 'io.fabric' // crashlytics
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion  28
@@ -22,10 +23,16 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            firebaseCrashlytics {
+                mappingFileUploadEnabled true
+            }
         }
         debug {
             applicationIdSuffix ".debug"
             debuggable true
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
         }
     }
     dexOptions {
@@ -123,7 +130,17 @@ dependencies {
 
     // Analytics
     implementation 'com.google.firebase:firebase-analytics:17.2.1'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+
+    // Crashlytics
+
+    // By using the Firebase Android BoM, your app will always use compatible versions of the Firebase Android libraries.
+    // https://firebase.google.com/docs/crashlytics/get-started?platform=android#initialize-crashlytics
+    implementation platform('com.google.firebase:firebase-bom:25.12.0')
+
+    // Declare the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }
 
 repositories {

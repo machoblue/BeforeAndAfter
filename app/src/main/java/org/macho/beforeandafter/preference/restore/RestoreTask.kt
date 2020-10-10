@@ -4,10 +4,10 @@ import android.accounts.Account
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
-import com.crashlytics.android.Crashlytics
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import org.macho.beforeandafter.preference.backup.BackupData
 import org.macho.beforeandafter.preference.backup.BackupTask
@@ -81,7 +81,7 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
                     } catch (e: Exception) {
                         Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
-                        Crashlytics.logException(e)
+                        FirebaseCrashlytics.getInstance().recordException(e)
                         failCount++
                     }
                 }
@@ -95,7 +95,7 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
 
         } catch (e: Exception) {
             Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
-            Crashlytics.logException(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             throw e
         }
     }

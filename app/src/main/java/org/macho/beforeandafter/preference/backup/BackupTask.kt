@@ -4,15 +4,13 @@ import android.accounts.Account
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
-import com.crashlytics.android.Crashlytics
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.http.FileContent
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
-import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.record.Record
-import java.io.IOException
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
 import java.lang.ref.WeakReference
@@ -85,7 +83,7 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
 
         } catch (e: Exception) {
             Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
-            Crashlytics.logException(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             throw e
         }
     }
