@@ -130,18 +130,11 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
     }
 
     private fun extractImageFileNames(records: List<Record>): List<String> {
-        var imageFileNames = mutableListOf<String>()
-        for (record in records) {
-            val frontImageFileName = record.frontImagePath
-            if (frontImageFileName != null && java.io.File(fileNameToFilePath(frontImageFileName)).exists()) {
-                imageFileNames.add(frontImageFileName)
-            }
-            val sideImageFileName = record.sideImagePath
-            if (sideImageFileName != null && java.io.File(fileNameToFilePath(sideImageFileName)).exists()) {
-                imageFileNames.add(sideImageFileName)
-            }
-        }
-        return imageFileNames
+        return records
+            .flatMap { mutableListOf(it.frontImagePath, it.sideImagePath, it.otherImagePath1, it.otherImagePath2, it.otherImagePath3) }
+            .filter { !it.isNullOrEmpty() && java.io.File(fileNameToFilePath(it)).exists() }
+            .filterNotNull()
+            .toList()
     }
 
     private fun saveImage(imageFile: java.io.File): String? {

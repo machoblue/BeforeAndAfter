@@ -17,7 +17,6 @@ class PictureSaver(val context: Context, val data: ByteArray): Runnable {
 
     override fun run() {
         val fileName = FILE_NAME_TEMPLATE.format(Date())
-        println("*** fileName: $fileName ***")
         val outputFile = File(outputDir, fileName)
         BufferedOutputStream(FileOutputStream(outputFile)).use {
             it.write(data)

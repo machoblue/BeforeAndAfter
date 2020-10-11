@@ -1,211 +1,328 @@
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/scrollView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/adLayout"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp">
-        <LinearLayout
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp"
-            android:orientation="vertical"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingTop="30dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="30dp">
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="@string/date_label"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <Button
-                    android:id="@+id/dateButton"
-                    android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/dateLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/date_label"
+                android:textColor="@color/colorText"
+                android:textSize="12sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/dateButton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="yyyy/MM/dd hh:mm:ss"
+                android:textColor="@color/light_blue"
+                android:textSize="20sp"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dateLabel" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/weightTextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/weightUpButton"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dateButton">
+
+                <EditText
+                    android:id="@+id/weight"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="yyyy/MM/dd hh:mm:ss"
-                    android:textColor="@color/light_blue"
-                    android:textSize="20sp"
-                    style="?android:attr/borderlessButtonStyle"
-                    />
+                    android:hint="@string/weight_label"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            </LinearLayout>
+            <org.macho.beforeandafter.shared.view.PressButton
+                android:id="@+id/weightUpButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/ripple_green"
+                android:src="@drawable/baseline_add_24"
+                android:tint="@color/dark_gray"
+                app:layout_constraintBottom_toBottomOf="@id/weightTextInputLayout"
+                app:layout_constraintEnd_toStartOf="@+id/weightDownButton"
+                app:layout_constraintStart_toEndOf="@+id/weightTextInputLayout"
+                app:layout_constraintTop_toTopOf="@id/weightTextInputLayout" />
 
-            <LinearLayout
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_weight="0.7"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:hint="@string/weight_label"
-                        android:inputType="numberDecimal"
-                        android:id="@+id/weight"
-                        android:imeOptions="actionDone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
-                <org.macho.beforeandafter.shared.view.PressButton
-                    android:layout_marginStart="20dp"
-                    android:id="@+id/weightUpButton"
-                    android:layout_weight="0.15"
-                    android:src="@drawable/baseline_add_24"
-                    android:tint="@color/dark_gray"
-                    android:background="@drawable/ripple_green"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent" />
-                <org.macho.beforeandafter.shared.view.PressButton
-                    android:id="@+id/weightDownButton"
-                    android:layout_weight="0.15"
-                    android:src="@drawable/baseline_remove_24"
-                    android:tint="@color/dark_gray"
-                    android:background="@drawable/ripple_green"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_weight="0.7"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:inputType="numberDecimal"
-                        android:hint="@string/rate_label"
-                        android:id="@+id/rate"
-                        android:imeOptions="actionDone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
-                <org.macho.beforeandafter.shared.view.PressButton
-                    android:layout_marginStart="20dp"
-                    android:id="@+id/rateUpButton"
-                    android:layout_weight="0.15"
-                    android:src="@drawable/baseline_add_24"
-                    android:tint="@color/dark_gray"
-                    android:background="@drawable/ripple_green"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent" />
-                <org.macho.beforeandafter.shared.view.PressButton
-                    android:id="@+id/rateDownButton"
-                    android:layout_weight="0.15"
-                    android:src="@drawable/baseline_remove_24"
-                    android:tint="@color/dark_gray"
-                    android:background="@drawable/ripple_green"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.google.android.material.textfield.TextInputLayout
+            <org.macho.beforeandafter.shared.view.PressButton
+                android:id="@+id/weightDownButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/ripple_green"
+                android:src="@drawable/baseline_remove_24"
+                android:tint="@color/dark_gray"
+                app:layout_constraintBottom_toBottomOf="@id/weightTextInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/weightUpButton"
+                app:layout_constraintTop_toTopOf="@id/weightTextInputLayout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/rateTextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/rateUpButton"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weightTextInputLayout">
+
+                <EditText
+                    android:id="@+id/rate"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:hint="@string/memo_label"
-                        android:id="@+id/memo"
-                        android:imeOptions="actionDone"
-                        android:singleLine="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="@string/front_image_label"
-                    android:textColor="@color/colorGrayText"
-                    android:paddingLeft="5dp"
-                    android:textSize="11sp"
-                    android:layout_width="0dp"
-                    android:layout_weight=".5"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:text="@string/side_image_label"
-                    android:textColor="@color/colorGrayText"
-                    android:textSize="11sp"
-                    android:paddingLeft="5dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="0dp"
-                    android:layout_weight=".5"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:src="@drawable/image4463"
-                    android:id="@+id/frontImage"
-                    android:scaleType="centerCrop"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="225dp" />
-                <ImageView
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/image4467"
-                    android:id="@+id/sideImage"
-                    android:scaleType="centerCrop"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="225dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/buttonLayout"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <Button
-                    android:textColor="#ff0000"
-                    android:background="@drawable/ripple_red"
-                    android:text="@string/delete"
-                    android:id="@+id/deleteButton"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rate_label"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
+            <org.macho.beforeandafter.shared.view.PressButton
+                android:id="@+id/rateUpButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/ripple_green"
+                android:src="@drawable/baseline_add_24"
+                android:tint="@color/dark_gray"
+                app:layout_constraintBottom_toBottomOf="@id/rateTextInputLayout"
+                app:layout_constraintEnd_toStartOf="@+id/rateDownButton"
+                app:layout_constraintStart_toEndOf="@+id/rateTextInputLayout"
+                app:layout_constraintTop_toTopOf="@id/rateTextInputLayout" />
+
+            <org.macho.beforeandafter.shared.view.PressButton
+                android:id="@+id/rateDownButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/ripple_green"
+                android:src="@drawable/baseline_remove_24"
+                android:tint="@color/dark_gray"
+                app:layout_constraintBottom_toBottomOf="@id/rateTextInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/rateUpButton"
+                app:layout_constraintTop_toTopOf="@id/rateTextInputLayout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/memoTextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rateTextInputLayout">
+
+                <EditText
+                    android:id="@+id/memo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/memo_label"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/frontImageLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:paddingLeft="5dp"
+                android:text="@string/front_image_label"
+                android:textColor="@color/colorGrayText"
+                android:textSize="11sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/sideImageLabel"
+                app:layout_constraintTop_toBottomOf="@id/memoTextInputLayout" />
+
+            <TextView
+                android:id="@+id/sideImageLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:paddingLeft="5dp"
+                android:text="@string/side_image_label"
+                android:textColor="@color/colorGrayText"
+                android:textSize="11sp"
+                app:layout_constraintLeft_toRightOf="@id/frontImageLabel"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/frontImageLabel" />
+
+            <ImageView
+                android:id="@+id/frontImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="4dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image4463"
+                app:layout_constraintDimensionRatio="w,5:4"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/sideImage"
+                app:layout_constraintTop_toBottomOf="@id/frontImageLabel" />
+
+            <ImageView
+                android:id="@+id/sideImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image4467"
+                app:layout_constraintDimensionRatio="w,5:4"
+                app:layout_constraintLeft_toRightOf="@id/frontImage"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/frontImage" />
+
+            <CheckBox
+                android:id="@+id/addImagesCheckBox"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/add_images_button_label"
+                android:textColor="@color/dark_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/frontImage" />
+
+            <TextView
+                android:id="@+id/otherImage1Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:paddingLeft="5dp"
+                android:text="@string/other_image1"
+                android:textColor="@color/colorGrayText"
+                android:textSize="11sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/otherImage2Label"
+                app:layout_constraintTop_toBottomOf="@id/addImagesCheckBox" />
+
+            <TextView
+                android:id="@+id/otherImage2Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:paddingLeft="5dp"
+                android:text="@string/other_image2"
+                android:textColor="@color/colorGrayText"
+                android:textSize="11sp"
+                app:layout_constraintLeft_toRightOf="@id/otherImage1Label"
+                app:layout_constraintRight_toRightOf="@id/otherImage3Label"
+                app:layout_constraintTop_toTopOf="@id/otherImage1Label" />
+
+            <TextView
+                android:id="@+id/otherImage3Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:paddingLeft="5dp"
+                android:text="@string/other_image3"
+                android:textColor="@color/colorGrayText"
+                android:textSize="11sp"
+                app:layout_constraintLeft_toRightOf="@id/otherImage2Label"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/otherImage1Label" />
+
+            <ImageView
+                android:id="@+id/otherImage1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="4dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_beforeandafter_blank_image"
+                app:layout_constraintDimensionRatio="w,5:4"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/otherImage2"
+                app:layout_constraintTop_toBottomOf="@id/otherImage1Label" />
+
+            <ImageView
+                android:id="@+id/otherImage2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_beforeandafter_blank_image"
+                app:layout_constraintDimensionRatio="w,5:4"
+                app:layout_constraintLeft_toRightOf="@id/otherImage1"
+                app:layout_constraintRight_toRightOf="@+id/otherImage3"
+                app:layout_constraintTop_toTopOf="@id/otherImage1" />
+
+            <ImageView
+                android:id="@+id/otherImage3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_beforeandafter_blank_image"
+                app:layout_constraintDimensionRatio="w,5:4"
+                app:layout_constraintLeft_toRightOf="@id/otherImage2"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/otherImage1" />
+
+            <Button
+                android:id="@+id/deleteButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/ripple_red"
+                android:text="@string/delete"
+                android:textColor="#ff0000"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/otherImage1" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/otherImagesGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="otherImage3,otherImage1,otherImage3Label,otherImage2,otherImage2Label,otherImage1Label"
+                tools:layout_editor_absoluteX="20dp"
+                tools:layout_editor_absoluteY="30dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
 
     <LinearLayout
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/light_gray"
         android:orientation="vertical"
         android:id="@+id/adLayout"
         android:gravity="center"
+        android:layout_weight="0"
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <com.google.android.gms.ads.AdView
@@ -218,4 +335,4 @@
         </com.google.android.gms.ads.AdView>
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

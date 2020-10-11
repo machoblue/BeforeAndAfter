@@ -206,8 +206,14 @@ fun loadImage(view: ImageView, path: String?) {
         return
     }
 
+    val file = File(view.context.filesDir, path)
+    if (!(file.exists() && file.isFile)) {
+        view.setImageResource(android.R.color.transparent)
+        return
+    }
+
     GlideApp.with(view.context)
-            .load(Uri.fromFile(File(view.context.filesDir, path)))
+            .load(Uri.fromFile(file))
             .sizeMultiplier(.4f)
             .thumbnail(.1f)
             .error(ColorDrawable(Color.LTGRAY))
