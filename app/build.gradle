@@ -9,12 +9,12 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion  28
+    compileSdkVersion  29
 //    buildToolsVersion "27.0.3" // below the minimum supported version (28.0.3) for Android Gradle Plugin 3.3.0.
     defaultConfig {
         applicationId "org.macho.beforeandafter"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 52
         versionName "2.3.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

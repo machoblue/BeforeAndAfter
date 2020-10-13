@@ -305,7 +305,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     private fun showDatePickerDialog(defaultDate: Date) {
         val calendar = Calendar.getInstance()
         calendar.time = defaultDate
-        DatePickerDialog(context, { view, year, month, dayOfMonth ->
+        DatePickerDialog(context!!, { view, year, month, dayOfMonth ->
             TimePickerDialog(context, {view, hourOfDay, minute ->
                 val newCalendar = Calendar.getInstance()
                 newCalendar.set(year, month, dayOfMonth, hourOfDay, minute)

@@ -112,17 +112,17 @@ class CameraActivity: AppCompatActivity() {
     }
 
     private val stateCallback = object: CameraDevice.StateCallback() {
-        override fun onOpened(cameraDevice: CameraDevice?) {
+        override fun onOpened(cameraDevice: CameraDevice) {
             this@CameraActivity.cameraDevice = cameraDevice
             createCameraPreviewSession()
         }
 
-        override fun onDisconnected(p0: CameraDevice?) {
+        override fun onDisconnected(p0: CameraDevice) {
             cameraDevice?.close()
             this@CameraActivity.cameraDevice = null
         }
 
-        override fun onError(cameraDevice: CameraDevice?, i: Int) {
+        override fun onError(cameraDevice: CameraDevice, i: Int) {
             cameraDevice?.close()
             this@CameraActivity.cameraDevice = null
             val activity = this@CameraActivity
@@ -142,7 +142,7 @@ class CameraActivity: AppCompatActivity() {
     }
 
     private val sessionStateCallback = object: CameraCaptureSession.StateCallback() {
-        override fun onConfigured(cameraCaptureSession: CameraCaptureSession?) {
+        override fun onConfigured(cameraCaptureSession: CameraCaptureSession) {
             if (cameraDevice == null) {
                 return
             }
@@ -154,7 +154,7 @@ class CameraActivity: AppCompatActivity() {
             this@CameraActivity.cameraCaptureSession.setRepeatingRequest(captureRequest, null, backgroundHandler)
         }
 
-        override fun onConfigureFailed(cameraCaptureSession: CameraCaptureSession?) {
+        override fun onConfigureFailed(cameraCaptureSession: CameraCaptureSession) {
         }
     }
 
@@ -212,7 +212,7 @@ class CameraActivity: AppCompatActivity() {
         captureRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_START)
 
         cameraCaptureSession.capture(captureRequestBuilder.build(), object: CameraCaptureSession.CaptureCallback() {
-            override fun onCaptureCompleted(session: CameraCaptureSession?, request: CaptureRequest?, result: TotalCaptureResult?) {
+            override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
                 captureStillPicture()
             }
         }, backgroundHandler)
@@ -237,7 +237,7 @@ class CameraActivity: AppCompatActivity() {
         captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, jpegRotation)
 
         val captureCallback = object: CameraCaptureSession.CaptureCallback() {
-            override fun onCaptureCompleted(session: CameraCaptureSession?, request: CaptureRequest?, result: TotalCaptureResult?) {
+            override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
                 unlockFocus()
             }
         }
@@ -339,7 +339,7 @@ class CameraActivity: AppCompatActivity() {
             return
         }
 
-        val activeArraySize = characteristics.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)
+        val activeArraySize = characteristics.get(CameraCharacteristics.SENSOR_INFO_ACTIVE_ARRAY_SIZE)!!
         if (level == 1f) {
             cropRegion = activeArraySize
         } else {
