@@ -65,7 +65,7 @@ class GalleryPagerAdapter(val fragmentManager: FragmentManager, lifecycle: Lifec
     override fun getItemCount(): Int = 5
 
     override fun createFragment(position: Int): Fragment {
-        return GalleryFragment(getImagePaths(position))
+        return GalleryFragment.newInstance(getImagePaths(position))
     }
 
     // Workaround: notifyDataSetChanged doesn't refresh fragment.

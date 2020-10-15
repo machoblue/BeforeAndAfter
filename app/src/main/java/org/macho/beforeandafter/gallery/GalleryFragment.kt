@@ -10,9 +10,17 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.util.AdUtil
 
 
-class GalleryFragment(imagePaths: List<String>): androidx.fragment.app.Fragment() {
+class GalleryFragment(): androidx.fragment.app.Fragment() {
 
-    var imagePaths: List<String> = imagePaths
+    companion object {
+        fun newInstance(imagePaths: List<String>): GalleryFragment {
+            var galleryFragment = GalleryFragment()
+            galleryFragment.imagePaths = imagePaths
+            return galleryFragment
+        }
+    }
+
+    var imagePaths: List<String> = mutableListOf()
         set(imagePaths) {
             field = imagePaths
             adapter.items = imagePaths
