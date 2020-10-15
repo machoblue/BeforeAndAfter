@@ -14,23 +14,23 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:hint="@string/goal_weight_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
                     android:inputType="numberDecimal"
-                    android:hint="@string/goal_weight_label"
                     android:id="@+id/goalWeight"
                     android:imeOptions="actionDone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
+                android:hint="@string/goal_rate_label"
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
                     android:inputType="numberDecimal"
-                    android:hint="@string/goal_rate_label"
                     android:id="@+id/goalRate"
                     android:imeOptions="actionDone"
                     android:layout_width="match_parent"
