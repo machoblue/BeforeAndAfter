@@ -76,8 +76,8 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
             rate: String?,
             memo: String?
     ) {
-        tempRecord.weight = max(weight?.toFloat() ?: 0f, 0f)
-        tempRecord.rate = max(rate?.toFloat() ?: 0f, 0f)
+        tempRecord.weight = max(if (weight.isNullOrEmpty()) 0f else weight.toFloat(), 0f)
+        tempRecord.rate = max(if (rate.isNullOrEmpty()) 0f else rate.toFloat(), 0f)
         tempRecord.memo = memo ?: ""
 
         val originalRecord = this.originalRecord
