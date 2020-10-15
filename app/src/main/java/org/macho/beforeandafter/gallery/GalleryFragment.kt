@@ -13,9 +13,14 @@ import org.macho.beforeandafter.shared.util.AdUtil
 class GalleryFragment(): androidx.fragment.app.Fragment() {
 
     companion object {
+        val IMAGE_PATHS = "IMAGE_PATHS"
+
         fun newInstance(imagePaths: List<String>): GalleryFragment {
             var galleryFragment = GalleryFragment()
             galleryFragment.imagePaths = imagePaths
+            galleryFragment.arguments = Bundle().also {
+                it.putStringArray(IMAGE_PATHS, imagePaths.toTypedArray())
+            }
             return galleryFragment
         }
     }
@@ -23,11 +28,16 @@ class GalleryFragment(): androidx.fragment.app.Fragment() {
     var imagePaths: List<String> = mutableListOf()
         set(imagePaths) {
             field = imagePaths
-            adapter.items = imagePaths
-            adapter.notifyDataSetChanged()
+            adapter?.items = imagePaths
+            adapter?.notifyDataSetChanged()
         }
 
-    private lateinit var adapter: GridAdapter
+    private var adapter: GridAdapter? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        this.imagePaths = arguments?.getStringArray(IMAGE_PATHS)?.toList() ?: mutableListOf()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return layoutInflater.inflate(R.layout.gallery_frag, container, false)
@@ -38,7 +48,7 @@ class GalleryFragment(): androidx.fragment.app.Fragment() {
         recyclerView.setHasFixedSize(true)
 
         this.adapter = GridAdapter(this)
-        this.adapter.items = imagePaths
+        this.adapter?.items = imagePaths
         recyclerView.adapter = this.adapter
 
         AdUtil.loadBannerAd(adView, context!!)
