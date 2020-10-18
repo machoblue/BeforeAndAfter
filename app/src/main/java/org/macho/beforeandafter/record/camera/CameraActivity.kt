@@ -47,9 +47,7 @@ class CameraActivity: AppCompatActivity() {
         setContentView(R.layout.activity_camera)
 
         shutterButton.setOnClickListener { _ -> takePicture() }
-        val squaresView = SquaresView(this)
-        squaresView.setOnTouchListener(onTouchListener)
-        frame.addView(squaresView)
+        textureView.setOnTouchListener(onTouchListener)
 
         mediaActionSound = MediaActionSound()
         mediaActionSound.load(MediaActionSound.SHUTTER_CLICK)
