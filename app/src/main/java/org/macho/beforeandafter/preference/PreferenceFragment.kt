@@ -76,9 +76,6 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             val action = PreferenceFragmentDirections.actionPreferenceFragmentToEditGoalFragment()
             findNavController().navigate(action)
         })
-        items.add(PreferenceItem(R.string.use_standard_camera, R.string.use_standard_camera_description) {
-            UseStandardCameraDialog.newInstance(activity).show(fragmentManager!!, "")
-        })
 
         // MARK: - Privacy Settings
         items.add(SectionHeader(R.string.preference_section_header_privacy))

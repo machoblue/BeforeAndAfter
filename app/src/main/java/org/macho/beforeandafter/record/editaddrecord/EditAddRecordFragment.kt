@@ -252,6 +252,9 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                 .setPositiveButton(R.string.dialog_select_gallery) { dialog, which ->
                     startGalleryChooser()
                 }
+                .setNeutralButton(R.string.dialog_select_other_camera_app) { dialog, which ->
+                    startOtherCameraApp()
+                }
                 .setNegativeButton(R.string.dialog_select_camera) { dialog, which ->
                     startCamera()
                 }
@@ -344,18 +347,16 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.CAMERA)) {
 
-            val preferences = PreferenceManager.getDefaultSharedPreferences(context!!)
-            val useStandardCamera = preferences.getBoolean("USE_STANDARD_CAMERA", false)
-            if (useStandardCamera) {
-                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                val uri = FileProvider.getUriForFile(context!!, "${BuildConfig.APPLICATION_ID}.fileprovider", getCameraFile())
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-                startActivityForResult(intent, OS_CAMERA_RC)
-            } else {
-                val intent = Intent(context!!, CameraActivity::class.java)
-                startActivityForResult(intent, CUSTOM_CAMERA_RC)
-            }
+            val intent = Intent(context!!, CameraActivity::class.java)
+            startActivityForResult(intent, CUSTOM_CAMERA_RC)
         }
+    }
+
+    private fun startOtherCameraApp() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val uri = FileProvider.getUriForFile(context!!, "${BuildConfig.APPLICATION_ID}.fileprovider", getCameraFile())
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+        startActivityForResult(intent, OS_CAMERA_RC)
     }
 
     private fun saveUriToFile(uri: Uri, toFile: File) {
