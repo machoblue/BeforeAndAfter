@@ -218,9 +218,9 @@ class TwoScaleGraphView: View {
         val format = SimpleDateFormat(range.labelFormat)
 
         val widthPerStep = (maxX - oX) / (range.time / range.step)
-        val calculatedTextSize = widthPerStep / range.maxCharCount * 1.5f // 文字の幅:高さ=1:1.5という想定。
-        val maxTextSize = (height - oY) - 10
-        xAxisLabelPaint.textSize = min(calculatedTextSize, maxTextSize)
+        val textSizeConstraintedBySpaceWidth = widthPerStep / range.maxCharCount * 1.5f // 文字の幅:高さ=1:1.5という想定。
+        val textSizeConstraintedBySpaceHeight = (height - oY) - 10
+        xAxisLabelPaint.textSize = min(min(textSizeConstraintedBySpaceWidth, textSizeConstraintedBySpaceHeight), 40.0f)
         val y = (height - oY) / 2 + xAxisLabelPaint.textSize / 2 + oY
         for (i in firstDate.time..to.time step range.step) {
             val x = oX + (maxX - oX) * (i - from!!.time) / (to.time - from!!.time)
