@@ -15,17 +15,19 @@ class GalleryFragment(): androidx.fragment.app.Fragment() {
     companion object {
         val IMAGE_PATHS = "IMAGE_PATHS"
 
-        fun newInstance(imagePaths: List<String>): GalleryFragment {
+        fun newInstance(imagePaths: List<GalleryPhoto>): GalleryFragment {
             var galleryFragment = GalleryFragment()
-            galleryFragment.imagePaths = imagePaths
+//            galleryFragment.imagePaths = imagePaths
             galleryFragment.arguments = Bundle().also {
-                it.putStringArray(IMAGE_PATHS, imagePaths.toTypedArray())
+//                it.putStringArray(IMAGE_PATHS, imagePaths.toTypedArray())
+//                val list = mutableListOf<String>()
+                it.putSerializable(IMAGE_PATHS, imagePaths.toTypedArray())
             }
             return galleryFragment
         }
     }
 
-    var imagePaths: List<String> = mutableListOf()
+    var imagePaths: List<GalleryPhoto> = mutableListOf()
         set(imagePaths) {
             field = imagePaths
             adapter?.items = imagePaths
@@ -36,7 +38,7 @@ class GalleryFragment(): androidx.fragment.app.Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.imagePaths = arguments?.getStringArray(IMAGE_PATHS)?.toList() ?: mutableListOf()
+        this.imagePaths = (arguments?.getSerializable(IMAGE_PATHS) as Array<GalleryPhoto>).toList()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

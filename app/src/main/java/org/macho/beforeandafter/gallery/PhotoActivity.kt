@@ -24,7 +24,7 @@ class PhotoActivity: AppCompatActivity() {
         private const val TAG = "PhotoActivity"
     }
 
-    private var items: MutableList<String> = mutableListOf()
+    private var items: MutableList<GalleryPhoto> = mutableListOf()
     private var index = 0
 
     private lateinit var gestureDetector: GestureDetector
@@ -89,7 +89,7 @@ class PhotoActivity: AppCompatActivity() {
         setContentView(R.layout.activity_photo)
 
         index = intent.getIntExtra("INDEX", 0)
-        items = mutableListOf(*intent.getStringArrayExtra("PATHS"))
+        items = (intent.getSerializableExtra("PATHS") as Array<GalleryPhoto>).toMutableList()
 
         seekBar.progress = index
         seekBar.max = items.lastIndex
@@ -132,7 +132,7 @@ class PhotoActivity: AppCompatActivity() {
     }
 
     fun showImage() {
-        val path = items.get(index)
+        val path = items.get(index).fileName
         GlideApp.with(this)
                 .load(Uri.fromFile(File(filesDir, path ?: "")))
                 .thumbnail(.1f)

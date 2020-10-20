@@ -18,4 +18,54 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <FrameLayout
+        android:id="@+id/dateBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/black_gradient_background_270"
+        app:layout_constraintLeft_toLeftOf="@id/imageView"
+        app:layout_constraintRight_toRightOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="@id/imageView"
+        app:layout_constraintBottom_toBottomOf="@id/dateText"
+        />
+
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="1970/01/01 10:30"
+        android:textAlignment="textStart"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@id/imageView"
+        app:layout_constraintRight_toRightOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="@id/imageView"
+        />
+
+    <FrameLayout
+        android:id="@+id/weightAndRateBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/black_gradient_background_90"
+        app:layout_constraintTop_toTopOf="@id/weightAndRateText"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        app:layout_constraintLeft_toLeftOf="@id/imageView"
+        app:layout_constraintRight_toRightOf="@id/imageView"
+        />
+
+    <TextView
+        android:id="@+id/weightAndRateText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:text="999.9kg/99.9%"
+        android:textAlignment="textEnd"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        app:layout_constraintLeft_toLeftOf="@id/imageView"
+        app:layout_constraintRight_toRightOf="@id/imageView"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

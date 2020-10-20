@@ -15,6 +15,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.data.record.RecordDao
 import org.macho.beforeandafter.shared.data.record.RecordDaoImpl
+import java.util.*
 
 class GalleriesFragment: Fragment() {
 
@@ -80,13 +81,13 @@ class GalleryPagerAdapter(val fragmentManager: FragmentManager, lifecycle: Lifec
         }
     }
 
-    private fun getImagePaths(position: Int): List<String> {
+    private fun getImagePaths(position: Int): List<GalleryPhoto> {
         return when(position) {
-            0 -> records.map { it.frontImagePath ?: "" }.filter { it.isNotEmpty() }
-            1 -> records.map { it.sideImagePath ?: "" }.filter { it.isNotEmpty() }
-            2 -> records.map { it.otherImagePath1 ?: "" }.filter { it.isNotEmpty() }
-            3 -> records.map { it.otherImagePath2 ?: "" }.filter { it.isNotEmpty() }
-            4 -> records.map { it.otherImagePath3 ?: "" }.filter { it.isNotEmpty() }
+            0 -> records.map { GalleryPhoto(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }.filter { it.fileName.isNotEmpty() }
+            1 -> records.map { GalleryPhoto(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }.filter { it.fileName.isNotEmpty() }
+            2 -> records.map { GalleryPhoto(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }.filter { it.fileName.isNotEmpty() }
+            3 -> records.map { GalleryPhoto(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }.filter { it.fileName.isNotEmpty() }
+            4 -> records.map { GalleryPhoto(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }.filter { it.fileName.isNotEmpty() }
             else -> throw RuntimeException("This line shouldn't be reached.")
         }
     }
