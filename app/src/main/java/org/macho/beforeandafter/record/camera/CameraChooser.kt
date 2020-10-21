@@ -10,7 +10,7 @@ import android.util.Size
 import org.macho.beforeandafter.shared.util.LogUtil
 import kotlin.math.abs
 
-class CameraChooser(val context: Context, val width: Int, val height: Int) {
+class CameraChooser(val context: Context, val width: Int, val height: Int, val isBackCamera: Boolean) {
     fun chooseCamera(): CameraInfo? {
         val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
@@ -19,7 +19,7 @@ class CameraChooser(val context: Context, val width: Int, val height: Int) {
         for (cameraId in cameraIds) {
             val characteristics = cameraManager.getCameraCharacteristics(cameraId)
 
-            if (!isBackFacing(characteristics)) continue
+            if (!(isBackCamera == isBackFacing(characteristics))) continue
 
             val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: continue
             val pictureSize = chooseImageSize(map) ?: continue

@@ -41,13 +41,15 @@ class CameraActivity: AppCompatActivity() {
     private lateinit var captureRequest: CaptureRequest
     private lateinit var mediaActionSound: MediaActionSound
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
         shutterButton.setOnClickListener { _ -> takePicture() }
         textureView.setOnTouchListener(onTouchListener)
+        turnCameraButton.setOnClickListener {
+            turnCamera()
+        }
 
         mediaActionSound = MediaActionSound()
         mediaActionSound.load(MediaActionSound.SHUTTER_CLICK)
@@ -98,7 +100,7 @@ class CameraActivity: AppCompatActivity() {
             return
         }
 
-        cameraInfo = CameraChooser(this, width, height).chooseCamera() ?: return
+        cameraInfo = CameraChooser(this, width, height, isBackCamera).chooseCamera() ?: return
 
         imageReader = ImageReader.newInstance(cameraInfo.pictureSize.width, cameraInfo.pictureSize.height, ImageFormat.JPEG, 2)
         imageReader.setOnImageAvailableListener(onImageAvailableListener, backgroundHandler)
@@ -265,6 +267,8 @@ class CameraActivity: AppCompatActivity() {
 //        cameraCaptureSession.setRepeatingRequest(captureRequest, null, backgroundHandler) // previewにもどる
     }
 
+    // MARK: - Zoom
+
     private var currentFingerSpace = 0f
 
     private val onTouchListener = object: View.OnTouchListener {
@@ -313,9 +317,6 @@ class CameraActivity: AppCompatActivity() {
         }
     }
 
-
-    // MARK: - Zoom
-
     private var currentZoomLevel = 1f
     private var cropRegion: Rect? = null
 
@@ -357,6 +358,18 @@ class CameraActivity: AppCompatActivity() {
 
         captureRequestBuilder.set(CaptureRequest.SCALER_CROP_REGION, cropRegion);
         cameraCaptureSession.setRepeatingRequest(captureRequestBuilder.build(), null, null);
+    }
+
+    // MARK: - Switch back to front, vice versa
+
+    private var isBackCamera = true
+
+    private fun turnCamera() {
+        cameraDevice?.close()
+        cameraDevice = null
+
+        isBackCamera = !isBackCamera
+        startCamera()
     }
 }
 
