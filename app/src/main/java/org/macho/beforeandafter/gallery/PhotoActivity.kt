@@ -4,24 +4,22 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_photo.*
-import org.macho.beforeandafter.shared.BeforeAndAfterConst
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.GlideApp
 import java.io.File
+import java.text.DateFormat
 
 class PhotoActivity: AppCompatActivity() {
     companion object {
         private const val SWIPE_MIN_DISTANCE = 50  // X軸最低スワイプ距離
         private const val SWIPE_THRESHOLD_VELOCITY = 200 // X軸最低スワイプスピード
         private const val SWIPE_MAX_OFF_PATH = 250 // Y軸の移動距離　これ以上なら横移動を判定しない
-        private const val TAG = "PhotoActivity"
     }
 
     private var items: MutableList<GalleryPhoto> = mutableListOf()
@@ -29,12 +27,11 @@ class PhotoActivity: AppCompatActivity() {
 
     private lateinit var gestureDetector: GestureDetector
 
-    private var showViews = true
+    private var dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
 
     private val onGestureListener = object: GestureDetector.SimpleOnGestureListener() {
         override fun onSingleTapUp(e: MotionEvent?): Boolean {
-            Log.d(TAG, "onSingleTapUp")
-            toggleViews()
+            group.visibility = if (group.visibility == View.VISIBLE) View.GONE else View.VISIBLE
             return false
         }
 
@@ -72,7 +69,7 @@ class PhotoActivity: AppCompatActivity() {
     private val onSeekBarChangeListener = object: SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
             index = p1
-            showImage()
+            updateView()
         }
 
         override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -97,7 +94,7 @@ class PhotoActivity: AppCompatActivity() {
 
         gestureDetector = GestureDetector(this, onGestureListener)
 
-        showImage()
+        updateView()
 
         closeButton.setOnClickListener {
             finish()
@@ -119,24 +116,21 @@ class PhotoActivity: AppCompatActivity() {
 
     }
 
-    private fun toggleViews() {
-        showViews = !showViews
-        closeButton.visibility = if (showViews) View.VISIBLE else View.GONE
-        previousButton.visibility = if (showViews) View.VISIBLE else View.GONE
-        nextButton.visibility = if (showViews) View.VISIBLE else View.GONE
-        seekBar.visibility = if (showViews) View.VISIBLE else View.GONE
-    }
-
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return gestureDetector.onTouchEvent(event)
     }
 
-    fun showImage() {
-        val path = items.get(index).fileName
+    fun updateView() {
+        val galleryPhoto = items.get(index)
+
+        val path = galleryPhoto.fileName
         GlideApp.with(this)
                 .load(Uri.fromFile(File(filesDir, path ?: "")))
                 .thumbnail(.1f)
                 .error(ColorDrawable(Color.GRAY))
                 .into(imageView)
+
+        dateText.text = dateFormat.format(galleryPhoto.dateTime)
+        weightAndRateText.text = "${galleryPhoto.weight ?: "-"}kg/${galleryPhoto.rate ?: "-"}%"
     }
 }
