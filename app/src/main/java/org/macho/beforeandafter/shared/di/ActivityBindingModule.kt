@@ -15,6 +15,8 @@ import org.macho.beforeandafter.record.editaddrecord.EditAddRecordModule
 
 @Module
 abstract class ActivityBindingModule {
+    // メモ: @ContributesAndroidInjectorにより、MainActivityに対応するComponentが自動生成される。いちいちSubComponentを作らなくてよくなる。
+    //　　　　そのComponentにmodulesが設定される。
     @ActivityScoped
     @ContributesAndroidInjector(modules = [
         RecordModule::class,
