@@ -76,6 +76,10 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             val action = PreferenceFragmentDirections.actionPreferenceFragmentToEditGoalFragment()
             findNavController().navigate(action)
         })
+        items.add(PreferenceItem(R.string.alarm_title, R.string.alarm_description) {
+            val action = PreferenceFragmentDirections.actionPreferenceFragmentToAlarmFragment()
+            findNavController().navigate(action)
+        })
 
         // MARK: - Privacy Settings
         items.add(SectionHeader(R.string.preference_section_header_privacy))

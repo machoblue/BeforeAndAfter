@@ -63,6 +63,10 @@
     <string name="goal_description">目標体重・目標体脂肪率を設定します。</string>
     <string name="goal_weight_label">目標体重(kg)</string>
     <string name="goal_rate_label">目標体脂肪率(%)</string>
+    <string name="alarm_title">アラーム</string>
+    <string name="alarm_description">決まった時間に通知して、記録し忘れを防ぎます。</string>
+    <string name="alarm_switch_label">通知を有効にする</string>
+    <string name="alarm_time_label">通知する時間</string>
     <string name="delete_all_title">全データ削除</string>
     <string name="delete_all_description">全データを削除します。</string>
     <string name="delete_all_confirmation_message">全データを削除します。削除すると元に戻せませんがよろしいですか？</string>

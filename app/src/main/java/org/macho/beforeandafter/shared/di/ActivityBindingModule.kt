@@ -5,6 +5,7 @@ import dagger.android.ContributesAndroidInjector
 import org.macho.beforeandafter.MainActivity
 import org.macho.beforeandafter.graph.GraphModule
 import org.macho.beforeandafter.preference.PreferenceModule
+import org.macho.beforeandafter.preference.alarm.AlarmModule
 import org.macho.beforeandafter.preference.backup.BackupModule
 import org.macho.beforeandafter.preference.bugreport.BugReportModule
 import org.macho.beforeandafter.preference.editgoal.EditGoalModule
@@ -23,7 +24,8 @@ abstract class ActivityBindingModule {
         EditGoalModule::class,
         BackupModule::class,
         RestoreModule::class,
-        BugReportModule::class
+        BugReportModule::class,
+        AlarmModule::class
     ])
     abstract fun mainActivity(): MainActivity
 }
