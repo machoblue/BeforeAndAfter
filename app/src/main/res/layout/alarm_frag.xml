@@ -6,51 +6,52 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/alarmSwitchLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="@string/alarm_switch_label"
-        app:layout_constraintBottom_toBottomOf="@+id/switch1"
-        app:layout_constraintEnd_toStartOf="@+id/switch1"
+        app:layout_constraintBottom_toBottomOf="@+id/alarmSwitch"
+        app:layout_constraintEnd_toStartOf="@+id/alarmSwitch"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/switch1" />
+        app:layout_constraintTop_toTopOf="@+id/alarmSwitch" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/alarmSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toEndOf="@+id/alarmSwitchLabel"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/alarmTimeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/alarm_time_label"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTime"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTime"
+        app:layout_constraintBottom_toBottomOf="@+id/alarmTimeButton"
+        app:layout_constraintEnd_toStartOf="@+id/alarmTimeButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/editTextTime" />
+        app:layout_constraintStart_toStartOf="@+id/alarmSwitchLabel"
+        app:layout_constraintTop_toTopOf="@+id/alarmTimeButton" />
 
-    <EditText
-        android:id="@+id/editTextTime"
+    <Button
+        android:id="@+id/alarmTimeButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:text="hh:mm"
+        android:textColor="@color/light_blue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:ems="10"
-        android:inputType="time"
-        app:layout_constraintEnd_toEndOf="@+id/switch1"
+        app:layout_constraintEnd_toEndOf="@+id/alarmSwitch"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/switch1" />
+        app:layout_constraintStart_toEndOf="@+id/alarmTimeLabel"
+        app:layout_constraintTop_toBottomOf="@+id/alarmSwitch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
