@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dagger.android.support.DaggerFragment
+import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import javax.inject.Inject
 
@@ -14,11 +15,12 @@ class AlarmFragment @Inject constructor(): DaggerFragment(), AlarmContract.View 
     override lateinit var presenter: AlarmContract.Presenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(R.layout.alarm_frag, container, false)
     }
 
     // MARK: - AlarmContract.View
     override fun updateView() {
+
     }
 
     override fun back() {
