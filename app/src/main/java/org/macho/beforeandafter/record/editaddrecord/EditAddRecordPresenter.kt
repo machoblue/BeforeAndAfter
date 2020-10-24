@@ -45,6 +45,20 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
         tempRecord.date = date.time
         view?.showRecord(tempRecord)
     }
+    override fun modifyWeight(weight: String?) {
+        tempRecord.weight = max(if (weight.isNullOrEmpty()) 0f else weight.toFloat(), 0f)
+        // 無限ループになるので、showRecordは呼ばない。
+    }
+
+    override fun modifyRate(rate: String?) {
+        tempRecord.rate = max(if (rate.isNullOrEmpty()) 0f else rate.toFloat(), 0f)
+        // 無限ループになるので、showRecordは呼ばない。
+    }
+
+    override fun modifyMemo(memo: String?) {
+        tempRecord.memo = memo ?: ""
+        // 無限ループになるので、showRecordは呼ばない。
+    }
 
     override fun modifyFrontImage(frontImageFile: File?) {
         tempRecord.frontImagePath = persistFile(frontImageFile)?.name
@@ -71,15 +85,7 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
         view?.showRecord(tempRecord)
     }
 
-    override fun saveRecord(
-            weight: String?,
-            rate: String?,
-            memo: String?
-    ) {
-        tempRecord.weight = max(if (weight.isNullOrEmpty()) 0f else weight.toFloat(), 0f)
-        tempRecord.rate = max(if (rate.isNullOrEmpty()) 0f else rate.toFloat(), 0f)
-        tempRecord.memo = memo ?: ""
-
+    override fun saveRecord() {
         val originalRecord = this.originalRecord
         if (originalRecord == null) {
             recordRepository.register(tempRecord) {
@@ -115,18 +121,6 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
         val newFile = File(context!!.filesDir, FILE_NAME_TEMPLATE.format(Date()))
         file.renameTo(newFile)
         return newFile
-    }
-
-    private fun cleanUpOldRecordIfNeeded(oldRecord: Record, newRecord: Record) {
-        deleteOldFileIfNeed(oldRecord.frontImagePath, newRecord.frontImagePath)
-        deleteOldFileIfNeed(oldRecord.sideImagePath, newRecord.sideImagePath)
-        deleteOldFileIfNeed(oldRecord.otherImagePath1, newRecord.otherImagePath1)
-        deleteOldFileIfNeed(oldRecord.otherImagePath2, newRecord.otherImagePath2)
-        deleteOldFileIfNeed(oldRecord.otherImagePath3, newRecord.otherImagePath3)
-
-        if (oldRecord.date != newRecord.date) {
-            recordRepository.delete(oldRecord.date) {}
-        }
     }
 
     private fun deleteOldFileIfNeed(oldFileName: String?, newFileName: String?) {

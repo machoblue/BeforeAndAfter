@@ -19,17 +19,16 @@ interface EditAddRecordContract {
         fun start(date: Long)
 
         fun modifyDate(date: Date)
+        fun modifyWeight(weight: String?)
+        fun modifyRate(rate: String?)
+        fun modifyMemo(memo: String?)
         fun modifyFrontImage(frontImageFile: File?)
         fun modifySideImage(sideImageFile: File?)
         fun modifyOtherImage1(other1ImageFile: File?)
         fun modifyOtherImage2(other2ImageFile: File?)
         fun modifyOtherImage3(other3ImageFile: File?)
 
-        fun saveRecord(
-                weight: String?,
-                rate: String?,
-                memo: String?
-        )
+        fun saveRecord()
         fun deleteRecord()
     }
 }

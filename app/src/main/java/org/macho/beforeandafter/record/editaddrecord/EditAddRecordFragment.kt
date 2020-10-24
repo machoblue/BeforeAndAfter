@@ -27,9 +27,7 @@ import org.macho.beforeandafter.record.camera.CameraActivity
 import org.macho.beforeandafter.record.camera.PermissionUtils
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.di.ActivityScoped
-import org.macho.beforeandafter.shared.extensions.hideKeyboardIfNeeded
-import org.macho.beforeandafter.shared.extensions.loadImage
-import org.macho.beforeandafter.shared.extensions.setupClearButtonWithAction
+import org.macho.beforeandafter.shared.extensions.*
 import org.macho.beforeandafter.shared.util.*
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
@@ -120,7 +118,12 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         }
 
         weight.setupClearButtonWithAction()
+        weight.addTextChangedListener { newText -> presenter.modifyWeight(newText) }
+
         rate.setupClearButtonWithAction()
+        rate.addTextChangedListener { newText -> presenter.modifyRate(newText) }
+
+        memo.addTextChangedListener { newText -> presenter.modifyMemo(newText) }
 
         setHasOptionsMenu(true); // for save button on navBar
 
@@ -233,11 +236,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                presenter.saveRecord(
-                        weight.text.toString(),
-                        rate.text.toString(),
-                        memo.text.toString()
-                )
+                presenter.saveRecord()
                 SharedPreferencesUtil.setLong(activity!!, SharedPreferencesUtil.Key.TIME_OF_LATEST_RECORD, Date().time)
             }
         }
