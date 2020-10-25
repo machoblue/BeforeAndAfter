@@ -168,4 +168,7 @@
     <string name="pin_auth_message">Please input PIN</string>
     <string name="pin_auth_message_ok">OK!</string>
     <string name="pin_auth_message_ng">ERROR!</string>
+
+    <string name="notification_title">Record your today\'s weight.</string>
+    <string name="notification_text">It is time to record your weight.</string>
 </resources>

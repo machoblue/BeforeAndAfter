@@ -168,4 +168,11 @@
     <string name="pin_auth_message">暗証番号を入力してください。</string>
     <string name="pin_auth_message_ok">OK!</string>
     <string name="pin_auth_message_ng">暗証番号をが不正です。</string>
+
+    <string name="channel_id" translatable="false">channel_id</string>
+    <string name="channel_name" translatable="false">channel_name</string>
+    <string name="channel_description" translatable="false">channel_description</string>
+    <string name="notification_id" translatable="false">notification_id</string>
+    <string name="notification_title">記録の時間が来ました。</string>
+    <string name="notification_text">記録しましょう。</string>
 </resources>

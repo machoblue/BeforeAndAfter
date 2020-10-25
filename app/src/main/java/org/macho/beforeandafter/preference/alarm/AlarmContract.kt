@@ -10,6 +10,8 @@ interface AlarmContract {
     }
 
     interface Presenter: BaseContract.Presenter<View> {
-        fun save(isAlarmEnabled: Boolean, hour: Int, minute: Int)
+        fun udpateIsAlarmEnabled(isAlarmEnabled: Boolean)
+        fun updateAlarmTime(hourOfDay: Int, minute: Int)
+        fun save()
     }
 }

@@ -11,7 +11,11 @@ object SharedPreferencesUtil {
         TIME_OF_LATEST_RECORD("time_of_latest_record"),
         PIN("pin"),
         GRAPH_SELECTION("graph_selection"),
-        STORE_REVIEW_PROMPT_COMPLETED("store_review_prompt_completed")
+        STORE_REVIEW_PROMPT_COMPLETED("store_review_prompt_completed"),
+
+        ALARM_ENABLED("alarm_enabled"),
+        ALARM_HOUR_OF_DAY("alarm_hour_of_day"),
+        ALARM_MINUTE("alarm_minute")
     }
 
     fun getFloat(context: Context, key: Key): Float {

@@ -1,18 +1,16 @@
 package org.macho.beforeandafter.preference.alarm
 
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.alarm_frag.*
-import kotlinx.android.synthetic.main.edit_goal_fragment.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.extensions.setTextColor
 import java.text.DateFormat
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.*
 import javax.inject.Inject
 
@@ -25,6 +23,22 @@ class AlarmFragment @Inject constructor(): DaggerFragment(), AlarmContract.View 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.alarm_frag, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        alarmSwitch.setOnCheckedChangeListener { button, isChecked ->
+            presenter.udpateIsAlarmEnabled(isChecked)
+        }
+
+        alarmTimeButton.setOnClickListener {
+            val alarmTimeButton = it as? Button ?: return@setOnClickListener
+            val time = dateFormat.parse(alarmTimeButton.text.toString()) ?: return@setOnClickListener
+            showTimePickerDialog(time)
+        }
+
+        setHasOptionsMenu(true); // for save button on navBar
     }
 
     override fun onResume() {
@@ -45,11 +59,7 @@ class AlarmFragment @Inject constructor(): DaggerFragment(), AlarmContract.View 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                val time = dateFormat.parse(alarmTimeButton.text.toString()) ?: return false
-                val calendar = Calendar.getInstance().also {
-                    it.time = time
-                }
-                presenter.save(alarmSwitch.isChecked, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
+                presenter.save()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -62,9 +72,19 @@ class AlarmFragment @Inject constructor(): DaggerFragment(), AlarmContract.View 
             it.set(Calendar.HOUR_OF_DAY, hour)
             it.set(Calendar.MINUTE, minute)
         }.time)
+        alarmTimeButton.isEnabled = isAlarmEnabled
+        alarmTimeButton.setTextColor(context!!, if (isAlarmEnabled) R.color.light_blue else R.color.light_gray_text)
     }
 
     override fun back() {
         findNavController().popBackStack()
+    }
+
+    private fun showTimePickerDialog(defaultDate: Date) {
+        val calendar = Calendar.getInstance()
+        calendar.time = defaultDate
+        TimePickerDialog(context, {view, hourOfDay, minute ->
+            presenter.updateAlarmTime(hourOfDay, minute)
+        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show()
     }
 }

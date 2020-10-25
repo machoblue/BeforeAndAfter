@@ -80,5 +80,5 @@
     <fragment
         android:id="@+id/alarmFragment"
         android:name="org.macho.beforeandafter.preference.alarm.AlarmFragment"
-        android:label="AlarmFragment" />
+        android:label="@string/alarm_title" />
 </navigation>
