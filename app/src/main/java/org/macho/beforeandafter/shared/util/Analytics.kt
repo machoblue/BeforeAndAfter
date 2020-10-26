@@ -19,11 +19,14 @@ class Analytics(val context: Context) {
         STORE_REVIEW_DIALOG_CANCEL,
         STORE_REVIEW_DIALOG_HIDE,
         STORE_REVIEW_DIALOG_OPEN_STORE,
+
+        ALARM_ENABLE,
+        ALARM_FIRED
     }
 
     val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     fun logEvent(event: Event, bundle: Bundle? = null) {
-        firebaseAnalytics.logEvent(event.name.toLowerCase(), null)
+        firebaseAnalytics.logEvent(event.name.toLowerCase(), bundle)
     }
 }

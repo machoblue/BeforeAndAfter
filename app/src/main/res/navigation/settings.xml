@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_preferenceFragment_to_restoreResumeDialog"
             app:destination="@id/restoreResumeDialog" />
+        <action
+            android:id="@+id/action_preferenceFragment_to_alarmFragment"
+            app:destination="@id/alarmFragment" />
     </fragment>
     <fragment
         android:id="@+id/editGoalFragment"
@@ -74,4 +77,8 @@
             android:id="@+id/action_restoreResumeDialog_to_restoreFragment"
             app:destination="@id/restoreFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/alarmFragment"
+        android:name="org.macho.beforeandafter.preference.alarm.AlarmFragment"
+        android:label="@string/alarm_title" />
 </navigation>

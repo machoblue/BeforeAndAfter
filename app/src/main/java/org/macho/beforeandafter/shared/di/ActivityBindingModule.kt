@@ -5,6 +5,7 @@ import dagger.android.ContributesAndroidInjector
 import org.macho.beforeandafter.MainActivity
 import org.macho.beforeandafter.graph.GraphModule
 import org.macho.beforeandafter.preference.PreferenceModule
+import org.macho.beforeandafter.preference.alarm.AlarmModule
 import org.macho.beforeandafter.preference.backup.BackupModule
 import org.macho.beforeandafter.preference.bugreport.BugReportModule
 import org.macho.beforeandafter.preference.editgoal.EditGoalModule
@@ -14,6 +15,8 @@ import org.macho.beforeandafter.record.editaddrecord.EditAddRecordModule
 
 @Module
 abstract class ActivityBindingModule {
+    // メモ: @ContributesAndroidInjectorにより、MainActivityに対応するComponentが自動生成される。いちいちSubComponentを作らなくてよくなる。
+    //　　　　そのComponentにmodulesが設定される。
     @ActivityScoped
     @ContributesAndroidInjector(modules = [
         RecordModule::class,
@@ -23,7 +26,8 @@ abstract class ActivityBindingModule {
         EditGoalModule::class,
         BackupModule::class,
         RestoreModule::class,
-        BugReportModule::class
+        BugReportModule::class,
+        AlarmModule::class
     ])
     abstract fun mainActivity(): MainActivity
 }
