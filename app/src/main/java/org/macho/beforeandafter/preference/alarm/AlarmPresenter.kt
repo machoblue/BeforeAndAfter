@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.util.Analytics
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.util.*
 import javax.inject.Inject
@@ -83,6 +84,8 @@ class AlarmPresenter @Inject constructor(): AlarmContract.Presenter {
             AlarmManager.INTERVAL_DAY,
             alarmIntent
         )
+
+        Analytics(context).logEvent(Analytics.Event.ALARM_ENABLE)
     }
 
     private fun configureBootReceiver(enabled: Boolean) {

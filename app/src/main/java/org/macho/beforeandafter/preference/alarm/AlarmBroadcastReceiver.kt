@@ -8,6 +8,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import org.macho.beforeandafter.MainActivity
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.util.Analytics
 
 class AlarmBroadcastReceiver(): BroadcastReceiver() {
 
@@ -29,5 +30,7 @@ class AlarmBroadcastReceiver(): BroadcastReceiver() {
         with(NotificationManagerCompat.from(context)) {
             notify(R.string.notification_id, builder.build())
         }
+
+        Analytics(context).logEvent(Analytics.Event.ALARM_FIRED)
     }
 }

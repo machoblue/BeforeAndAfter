@@ -174,5 +174,5 @@
     <string name="channel_description" translatable="false">channel_description</string>
     <string name="notification_id" translatable="false">notification_id</string>
     <string name="notification_title">記録の時間が来ました。</string>
-    <string name="notification_text">記録しましょう。</string>
+    <string name="notification_text">体重を記録しましょう。</string>
 </resources>
