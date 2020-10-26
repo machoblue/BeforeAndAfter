@@ -171,4 +171,6 @@
 
     <string name="notification_title">Record your today\'s weight.</string>
     <string name="notification_text">It is time to record your weight.</string>
+
+    <string name="toast_saved">Saved</string>
 </resources>
