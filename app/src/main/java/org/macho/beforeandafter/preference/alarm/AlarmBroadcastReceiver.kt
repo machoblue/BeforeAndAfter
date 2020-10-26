@@ -12,15 +12,16 @@ import org.macho.beforeandafter.R
 class AlarmBroadcastReceiver(): BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
+        context ?: return
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
-        val builder = NotificationCompat.Builder(context!!, context!!.getString(R.string.channel_id))
-//                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(context!!.getString(R.string.notification_title))
-                .setContentText(context!!.getString(R.string.notification_text))
+        val builder = NotificationCompat.Builder(context, context.getString(R.string.channel_id))
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(context.getString(R.string.notification_title))
+                .setContentText(context.getString(R.string.notification_text))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)

@@ -37,36 +37,7 @@ class AlarmPresenter @Inject constructor(): AlarmContract.Presenter {
         SharedPreferencesUtil.setInt(context, SharedPreferencesUtil.Key.ALARM_HOUR_OF_DAY, alarmHourOfDay)
         SharedPreferencesUtil.setInt(context, SharedPreferencesUtil.Key.ALARM_MINUTE, alarmMinute)
 
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
-        val alarmIntent = Intent(context, AlarmBroadcastReceiver::class.java).let { intent ->
-            PendingIntent.getBroadcast(context, 0, intent, 0)
-        }
-
-        if (!isAlarmEnabled) {
-            if (alarmIntent != null && alarmManager != null) {
-                alarmManager.cancel(alarmIntent)
-            }
-
-            view?.back()
-            return
-        }
-
-        // Set the alarm to start at approximately 2:00 p.m.
-        val calendar: Calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, alarmHourOfDay)
-            set(Calendar.MINUTE, alarmMinute)
-        }
-
-        // With setInexactRepeating(), you have to use one of the AlarmManager interval
-        // constants--in this case, AlarmManager.INTERVAL_DAY.
-        alarmManager?.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            alarmIntent
-        )
-
+        configureAlarm()
         view?.back()
     }
 
@@ -81,5 +52,33 @@ class AlarmPresenter @Inject constructor(): AlarmContract.Presenter {
 
     override fun dropView() {
         view = null
+    }
+
+    private fun configureAlarm() {
+        val requestCode = 0
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager ?: return
+        val alarmIntent = Intent(context, AlarmBroadcastReceiver::class.java).let { intent ->
+            PendingIntent.getBroadcast(context, requestCode, intent, 0)
+        } ?: return
+
+        alarmManager.cancel(alarmIntent)
+
+        if (!isAlarmEnabled) {
+            view?.back()
+            return
+        }
+
+        val calendar: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, alarmHourOfDay)
+            set(Calendar.MINUTE, alarmMinute)
+        }
+
+        alarmManager.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            alarmIntent
+        )
     }
 }
