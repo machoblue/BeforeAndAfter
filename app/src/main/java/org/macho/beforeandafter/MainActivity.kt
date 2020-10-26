@@ -9,12 +9,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.macho.beforeandafter.record.RecordFragment
+import org.macho.beforeandafter.record.editaddrecord.OnRecordSavedListener
 import org.macho.beforeandafter.shared.extensions.setupWithNavController
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
 import javax.inject.Inject
 
-class MainActivity: DaggerAppCompatActivity() {
+class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener {
     companion object {
         const val TAG = "MainActivity"
     }
@@ -72,4 +73,8 @@ class MainActivity: DaggerAppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    override fun onRecordSaved() {
+//        val intent = Intent(this, CameraActivity::class.java)
+//        startActivity(intent)
+    }
 }
