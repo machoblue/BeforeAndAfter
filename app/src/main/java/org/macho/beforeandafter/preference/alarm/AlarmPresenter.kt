@@ -2,8 +2,10 @@ package org.macho.beforeandafter.preference.alarm
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.util.*
@@ -38,6 +40,7 @@ class AlarmPresenter @Inject constructor(): AlarmContract.Presenter {
         SharedPreferencesUtil.setInt(context, SharedPreferencesUtil.Key.ALARM_MINUTE, alarmMinute)
 
         configureAlarm()
+        configureBootReceiver(isAlarmEnabled)
         view?.back()
     }
 
@@ -79,6 +82,16 @@ class AlarmPresenter @Inject constructor(): AlarmContract.Presenter {
             calendar.timeInMillis,
             AlarmManager.INTERVAL_DAY,
             alarmIntent
+        )
+    }
+
+    private fun configureBootReceiver(enabled: Boolean) {
+        val receiver = ComponentName(context, BootReceiver::class.java)
+
+        context.packageManager.setComponentEnabledSetting(
+            receiver,
+            if (enabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
         )
     }
 }
