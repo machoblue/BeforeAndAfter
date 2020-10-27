@@ -8,25 +8,20 @@ import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import org.macho.beforeandafter.record.RecordFragment
+import org.macho.beforeandafter.alarmsettingdialog.AlarmSettingDialog
 import org.macho.beforeandafter.record.editaddrecord.OnRecordSavedListener
 import org.macho.beforeandafter.shared.extensions.setupWithNavController
 import org.macho.beforeandafter.shared.util.AdUtil
-import org.macho.beforeandafter.shared.util.LogUtil
+import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import javax.inject.Inject
 
 class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener {
-    companion object {
-        const val TAG = "MainActivity"
-    }
-
-    @Inject
-    lateinit var recordFragment: RecordFragment
-
     private var currentNavController: LiveData<NavController>? = null
 
+    @Inject
+    lateinit var alarmSettingDialog: AlarmSettingDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        LogUtil.i(this, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -73,8 +68,13 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    // MARK: - OnRecordSavedListener
     override fun onRecordSaved() {
-//        val intent = Intent(this, CameraActivity::class.java)
-//        startActivity(intent)
+        val isAlarmEnabled = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.ALARM_ENABLED)
+        val neverDisplayAlarmSettingDialog = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.NEVER_DISPLAY_ALARM_SETTING_DIALOG)
+        if (isAlarmEnabled || neverDisplayAlarmSettingDialog) {
+//            return
+        }
+        alarmSettingDialog.show(supportFragmentManager, null)
     }
 }

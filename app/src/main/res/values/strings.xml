@@ -177,4 +177,11 @@
     <string name="notification_text">体重を記録しましょう。</string>
 
     <string name="toast_saved">保存しました。</string>
+    <string name="common_save">保存</string>
+    <string name="common_skip">スキップ</string>
+    <string name="common_never_display">二度と表示しない</string>
+
+    <string name="alarm_setting_dialog_message">毎日、記録を継続するためにアラームを設定しましょう。</string>
+    <string name="alarm_setting_dialog_note">※設定画面から変更できます。</string>
+
 </resources>
