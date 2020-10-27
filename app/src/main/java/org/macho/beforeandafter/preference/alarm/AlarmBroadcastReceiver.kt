@@ -8,13 +8,14 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import org.macho.beforeandafter.MainActivity
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.SplashActivity
 import org.macho.beforeandafter.shared.util.Analytics
 
 class AlarmBroadcastReceiver(): BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
-        val intent = Intent(context, MainActivity::class.java).apply {
+        val intent = Intent(context, SplashActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
