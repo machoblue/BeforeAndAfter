@@ -21,8 +21,12 @@ import android.view.TextureView
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_camera.*
+import kotlinx.android.synthetic.main.activity_camera.adLayout
+import kotlinx.android.synthetic.main.activity_camera.adView
+import kotlinx.android.synthetic.main.record_frag.*
 import org.macho.beforeandafter.BuildConfig
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.util.AdUtil
 
 class CameraActivity: AppCompatActivity() {
 
@@ -53,6 +57,10 @@ class CameraActivity: AppCompatActivity() {
 
         mediaActionSound = MediaActionSound()
         mediaActionSound.load(MediaActionSound.SHUTTER_CLICK)
+
+        AdUtil.initializeMobileAds(this)
+        AdUtil.loadBannerAd(adView, this)
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(this)) View.GONE else View.VISIBLE
     }
 
     override fun onDestroy() {
