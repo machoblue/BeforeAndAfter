@@ -15,7 +15,9 @@ object SharedPreferencesUtil {
 
         ALARM_ENABLED("alarm_enabled"),
         ALARM_HOUR_OF_DAY("alarm_hour_of_day"),
-        ALARM_MINUTE("alarm_minute")
+        ALARM_MINUTE("alarm_minute"),
+
+        NEVER_DISPLAY_ALARM_SETTING_DIALOG("never_display_alarm_setting_dialog")
     }
 
     fun getFloat(context: Context, key: Key): Float {

@@ -171,4 +171,12 @@
 
     <string name="notification_title">Record your today\'s weight.</string>
     <string name="notification_text">It is time to record your weight.</string>
+
+    <string name="toast_saved">Saved</string>
+    <string name="common_save">Save</string>
+    <string name="common_skip">Skip</string>
+    <string name="common_never_display">Never Display</string>
+
+    <string name="alarm_setting_dialog_message">Set alarm to remind you to record every day.</string>
+    <string name="alarm_setting_dialog_note">NOTE: You can change alarm setting on setting screen.</string>
 </resources>

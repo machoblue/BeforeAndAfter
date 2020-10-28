@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -38,6 +39,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
+interface OnRecordSavedListener {
+    fun onRecordSaved()
+}
+
 @ActivityScoped
 class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRecordContract.View {
     companion object {
@@ -62,6 +67,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     private var currentImageView: ImageView? = null
 
+    private var onRecordSavedListener: OnRecordSavedListener? = null
+
     // MARK: Lifecycle
 
     override fun onCreateView(layoutInflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -71,88 +78,14 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        frontImage.setOnClickListener { onImageViewClick(it as ImageView) }
-        sideImage.setOnClickListener { onImageViewClick(it as ImageView) }
-        otherImage1.setOnClickListener { onImageViewClick(it as ImageView) }
-        otherImage2.setOnClickListener { onImageViewClick(it as ImageView) }
-        otherImage3.setOnClickListener { onImageViewClick(it as ImageView) }
-
-        addImagesCheckBox.setOnClickListener { onCheckBoxClick(it as CheckBox) }
-
-        val showOtherImages = PreferenceManager.getDefaultSharedPreferences(context!!).getBoolean("SHOW_OTHER_IMAGES", false)
-        addImagesCheckBox.isChecked = showOtherImages
-        otherImagesGroup.visibility = if (showOtherImages) View.VISIBLE else View.GONE
-
-        rateUpButton.setOnClickListener {
-            val rateText = rate.text.toString()
-            var rateValue = if (rateText.isEmpty()) 0.0f else rateText.toFloat()
-            rateValue += 0.1f
-            rate.setText("%.2f".format(rateValue))
-        }
-        rateDownButton.setOnClickListener {
-            val rateText = rate.text.toString()
-            var rateValue = if (rateText.isEmpty()) 0.0f else rateText.toFloat()
-            rateValue -= 0.1f
-            if (rateValue >= 0) {
-                rate.setText("%.2f".format(rateValue))
-            }
-        }
-        weightUpButton.setOnClickListener {
-            val weightText = weight.text.toString()
-            var weightValue = if (weightText.isEmpty()) 0.0f else weightText.toFloat()
-            weightValue = (weightValue * 10 + 1) / 10
-            weight.setText("%.2f".format(weightValue))
-        }
-        weightDownButton.setOnClickListener {
-            val weightText = weight.text.toString()
-            var weightValue = if (weightText.isEmpty()) 0.0f else weightText.toFloat()
-            weightValue = (weightValue * 10 - 1) / 10
-            if (weightValue >= 0) {
-                weight.setText("%.2f".format(weightValue))
-            }
-        }
-
-        dateButton.setOnClickListener {
-            val date = dateFormat.parse(dateButton.text.toString())
-            showDatePickerDialog(date)
-        }
-
-        weight.setupClearButtonWithAction()
-        weight.addTextChangedListener { newText -> presenter.modifyWeight(newText) }
-
-        rate.setupClearButtonWithAction()
-        rate.addTextChangedListener { newText -> presenter.modifyRate(newText) }
-
-        memo.addTextChangedListener { newText -> presenter.modifyMemo(newText) }
-
-        setHasOptionsMenu(true); // for save button on navBar
-
-        deleteButton.setOnClickListener {
-            presenter.deleteRecord()
-        }
-
-        AdUtil.initializeMobileAds(context!!)
-
-        AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
-
-        val contextRef = activity!!
-
-        interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)
-        interstitialAd?.adListener = object: AdListener() {
-            override fun onAdClosed() {
-                Toast.makeText(contextRef, R.string.interstitial_message, Toast.LENGTH_LONG).show()
-            }
-        }
-
-        val timeOfLastRecord = SharedPreferencesUtil.getLong(activity!!, SharedPreferencesUtil.Key.TIME_OF_LATEST_RECORD)
-        val isFirstRecord = timeOfLastRecord == 0L
-        val cal1 = Calendar.getInstance().also { it.time = Date() }
-        val cal2 = Calendar.getInstance().also{ it.time = Date(timeOfLastRecord)}
-        val recordEveryday = cal1.get(Calendar.DATE) - cal2.get(Calendar.DATE) < 2
-        shouldShowInterstitialAd = !isFirstRecord && !recordEveryday
+        initViews()
 
         presenter.start(args.date)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        onRecordSavedListener = context as? OnRecordSavedListener
     }
 
     override fun onResume() {
@@ -302,6 +235,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             interstitialAd?.showIfNeeded(context!!)
         }
         findNavController().popBackStack()
+        onRecordSavedListener?.onRecordSaved()
     }
 
     private fun showDatePickerDialog(defaultDate: Date) {
@@ -366,5 +300,88 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                 }
             }
         }
+    }
+
+    private fun initViews() {
+        frontImage.setOnClickListener { onImageViewClick(it as ImageView) }
+        sideImage.setOnClickListener { onImageViewClick(it as ImageView) }
+        otherImage1.setOnClickListener { onImageViewClick(it as ImageView) }
+        otherImage2.setOnClickListener { onImageViewClick(it as ImageView) }
+        otherImage3.setOnClickListener { onImageViewClick(it as ImageView) }
+
+        addImagesCheckBox.setOnClickListener { onCheckBoxClick(it as CheckBox) }
+
+        val showOtherImages = PreferenceManager.getDefaultSharedPreferences(context!!).getBoolean("SHOW_OTHER_IMAGES", false)
+        addImagesCheckBox.isChecked = showOtherImages
+        otherImagesGroup.visibility = if (showOtherImages) View.VISIBLE else View.GONE
+
+        rateUpButton.setOnClickListener {
+            val rateText = rate.text.toString()
+            var rateValue = if (rateText.isEmpty()) 0.0f else rateText.toFloat()
+            rateValue += 0.1f
+            rate.setText("%.2f".format(rateValue))
+        }
+        rateDownButton.setOnClickListener {
+            val rateText = rate.text.toString()
+            var rateValue = if (rateText.isEmpty()) 0.0f else rateText.toFloat()
+            rateValue -= 0.1f
+            if (rateValue >= 0) {
+                rate.setText("%.2f".format(rateValue))
+            }
+        }
+        weightUpButton.setOnClickListener {
+            val weightText = weight.text.toString()
+            var weightValue = if (weightText.isEmpty()) 0.0f else weightText.toFloat()
+            weightValue = (weightValue * 10 + 1) / 10
+            weight.setText("%.2f".format(weightValue))
+        }
+        weightDownButton.setOnClickListener {
+            val weightText = weight.text.toString()
+            var weightValue = if (weightText.isEmpty()) 0.0f else weightText.toFloat()
+            weightValue = (weightValue * 10 - 1) / 10
+            if (weightValue >= 0) {
+                weight.setText("%.2f".format(weightValue))
+            }
+        }
+
+        dateButton.setOnClickListener {
+            val date = dateFormat.parse(dateButton.text.toString())
+            showDatePickerDialog(date)
+        }
+
+        weight.setupClearButtonWithAction()
+        weight.addTextChangedListener { newText -> presenter.modifyWeight(newText) }
+
+        rate.setupClearButtonWithAction()
+        rate.addTextChangedListener { newText -> presenter.modifyRate(newText) }
+
+        memo.addTextChangedListener { newText -> presenter.modifyMemo(newText) }
+
+        setHasOptionsMenu(true); // for save button on navBar
+
+        deleteButton.setOnClickListener {
+            presenter.deleteRecord()
+        }
+
+        AdUtil.initializeMobileAds(context!!)
+
+        AdUtil.loadBannerAd(adView, context!!)
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
+
+        val contextRef = activity!!
+
+        interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)
+        interstitialAd?.adListener = object: AdListener() {
+            override fun onAdClosed() {
+                Toast.makeText(contextRef, R.string.interstitial_message, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        val timeOfLastRecord = SharedPreferencesUtil.getLong(activity!!, SharedPreferencesUtil.Key.TIME_OF_LATEST_RECORD)
+        val isFirstRecord = timeOfLastRecord == 0L
+        val cal1 = Calendar.getInstance().also { it.time = Date() }
+        val cal2 = Calendar.getInstance().also{ it.time = Date(timeOfLastRecord)}
+        val recordEveryday = cal1.get(Calendar.DATE) - cal2.get(Calendar.DATE) < 2
+        shouldShowInterstitialAd = !isFirstRecord && !recordEveryday
     }
 }

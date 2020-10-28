@@ -3,6 +3,7 @@ package org.macho.beforeandafter.shared.di
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import org.macho.beforeandafter.MainActivity
+import org.macho.beforeandafter.alarmsettingdialog.AlarmSettingModule
 import org.macho.beforeandafter.graph.GraphModule
 import org.macho.beforeandafter.preference.PreferenceModule
 import org.macho.beforeandafter.preference.alarm.AlarmModule
@@ -27,7 +28,8 @@ abstract class ActivityBindingModule {
         BackupModule::class,
         RestoreModule::class,
         BugReportModule::class,
-        AlarmModule::class
+        AlarmModule::class,
+        AlarmSettingModule::class
     ])
     abstract fun mainActivity(): MainActivity
 }

@@ -6,6 +6,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.widget.Toast
+import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.Analytics
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
@@ -43,6 +45,7 @@ class AlarmPresenter @Inject constructor(): AlarmContract.Presenter {
         configureAlarm()
         configureBootReceiver(isAlarmEnabled)
         view?.back()
+        Toast.makeText(context, context.getString(R.string.toast_saved), Toast.LENGTH_LONG).show()
     }
 
     override fun takeView(view: AlarmContract.View) {
@@ -68,7 +71,6 @@ class AlarmPresenter @Inject constructor(): AlarmContract.Presenter {
         alarmManager.cancel(alarmIntent)
 
         if (!isAlarmEnabled) {
-            view?.back()
             return
         }
 
@@ -76,6 +78,10 @@ class AlarmPresenter @Inject constructor(): AlarmContract.Presenter {
             timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, alarmHourOfDay)
             set(Calendar.MINUTE, alarmMinute)
+
+            if (timeInMillis < System.currentTimeMillis()) {
+                timeInMillis += 1000 * 60 * 60 * 24
+            }
         }
 
         alarmManager.setInexactRepeating(

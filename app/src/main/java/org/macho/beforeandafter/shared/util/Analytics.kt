@@ -21,7 +21,8 @@ class Analytics(val context: Context) {
         STORE_REVIEW_DIALOG_OPEN_STORE,
 
         ALARM_ENABLE,
-        ALARM_FIRED
+        ALARM_FIRED,
+        ALARM_DIALOG_APPEAR,
     }
 
     val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
