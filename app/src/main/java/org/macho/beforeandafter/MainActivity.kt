@@ -2,6 +2,8 @@ package org.macho.beforeandafter
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -70,11 +72,16 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener {
 
     // MARK: - OnRecordSavedListener
     override fun onRecordSaved() {
+        Toast.makeText(this, R.string.toast_saved, Toast.LENGTH_SHORT).show()
+
         val isAlarmEnabled = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.ALARM_ENABLED)
         val neverDisplayAlarmSettingDialog = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.NEVER_DISPLAY_ALARM_SETTING_DIALOG)
         if (isAlarmEnabled || neverDisplayAlarmSettingDialog) {
-//            return
+            return
         }
-        alarmSettingDialog.show(supportFragmentManager, null)
+
+        Handler().postDelayed({
+            alarmSettingDialog.show(supportFragmentManager, null)
+        }, 1000)
     }
 }
