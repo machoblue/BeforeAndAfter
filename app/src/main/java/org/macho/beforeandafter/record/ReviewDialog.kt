@@ -9,6 +9,7 @@ import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.util.Analytics
+import org.macho.beforeandafter.shared.util.MailAppLauncher
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 
 class ReviewDialog: androidx.fragment.app.DialogFragment() {
@@ -43,8 +44,7 @@ class ReviewDialog: androidx.fragment.app.DialogFragment() {
         super.onStart()
 
         dialog?.findViewById<Button>(R.id.bugReportButton)?.setOnClickListener {
-            val action = ReviewDialogDirections.actionReviewDialogToBugReportFragment2()
-            findNavController().navigate(action)
+            MailAppLauncher().launchMailApp(context!!)
         }
 
         analytics.logEvent(Analytics.Event.STORE_REVIEW_DIALOG_APPEAR)

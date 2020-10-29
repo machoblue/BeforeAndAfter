@@ -138,7 +138,7 @@
 
     <string name="preference_section_header_inquiry">お問い合わせ</string>
     <string name="preference_inquiry_title">不具合の報告・改善のご要望</string>
-    <string name="preference_inquiry_description">不具合の報告・改善のご要望はこちらからお願いします。Googleサインインが必要です。</string>
+    <string name="preference_inquiry_description">不具合の報告・改善のご要望はこちらからお願いします。</string>
     <string name="bug_report_url">https://docs.google.com/forms/d/e/1FAIpQLSflpnIfA943207fbpfY6dCM505FAu8Yd9MPsu-mbsEXGQs7iw/viewform</string>
 
     <string name="dialog_select_prompt">画像を選択してください</string>
@@ -184,4 +184,7 @@
     <string name="alarm_setting_dialog_message">毎日、記録を継続するためにアラームを設定しましょう。</string>
     <string name="alarm_setting_dialog_note">※設定画面から変更できます。</string>
 
+    <string name="developer_mail_address" translatable="false">macho.macho.dev@gmail.com</string>
+    <string name="bug_report_mail_title">不具合報告・改善要望</string>
+    <string name="bug_report_mail_template">開発者(%s)宛\n\n\n\n以下の情報はサポートに利用するため、消さないでください。\nAndroid Version: %s\nApp Version: %s\nModel: %sx</string>
 </resources>

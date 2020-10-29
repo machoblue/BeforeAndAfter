@@ -1,10 +1,11 @@
-package org.macho.beforeandafter.shared.di;
+package org.macho.beforeandafter.shared.di
 
-import android.app.Application;
-import android.content.Context;
-
-import dagger.Binds;
-import dagger.Module;
+import android.app.Application
+import android.content.Context
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import org.macho.beforeandafter.shared.util.MailAppLauncher
 
 /**
  * This is a Dagger module. We use this to bind our Application class as a Context in the AppComponent
@@ -12,13 +13,11 @@ import dagger.Module;
  * we simply need to expose our Application as Context.
  * One of the advantages of Dagger.Android is that your
  * Application & Activities are provided into your graph for you.
- * {@link
- * AppComponent}.
+ * [ ].
  */
 @Module
-public abstract class ApplicationModule {
+abstract class ApplicationModule {
     //expose Application as an injectable context
     @Binds
-    abstract Context bindContext(Application application);
+    abstract fun bindContext(application: Application): Context
 }
-

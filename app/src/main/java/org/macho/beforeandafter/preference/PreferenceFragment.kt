@@ -18,6 +18,7 @@ import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.preference.pin.PinDisableActivity
 import org.macho.beforeandafter.shared.data.restoreimage.RestoreImage
 import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageRepository
+import org.macho.beforeandafter.shared.util.MailAppLauncher
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.util.*
 import javax.inject.Inject
@@ -31,6 +32,9 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
     @Inject
     lateinit var restoreImageRepository: RestoreImageRepository
+
+    @Inject
+    lateinit var mailAppLaucher: MailAppLauncher
 
     private var items: MutableList<PreferenceElement> = mutableListOf()
     private lateinit var adapter: PreferenceAdapter
@@ -129,8 +133,7 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
         items.add(SectionHeader(R.string.preference_section_header_inquiry))
         items.add(PreferenceItem(R.string.preference_inquiry_title, R.string.preference_inquiry_description) {
-            val action = PreferenceFragmentDirections.actionPreferenceFragmentToBugReportFragment()
-            findNavController().navigate(action)
+            mailAppLaucher.launchMailApp(context!!)
         })
 
         // MARK: - Version

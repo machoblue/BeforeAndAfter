@@ -179,4 +179,7 @@
 
     <string name="alarm_setting_dialog_message">Set alarm to remind you to record every day.</string>
     <string name="alarm_setting_dialog_note">NOTE: You can change alarm setting on setting screen.</string>
+
+    <string name="bug_report_mail_title">Bug Report/Improvement Request</string>
+    <string name="bug_report_mail_template">To Developer(%s)\n\n\n\nPlease don\'t remove following information for support.\nAndroid Version: %s\nApp Version: %s\nModel: %s</string>
 </resources>
