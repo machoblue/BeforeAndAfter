@@ -30,9 +30,11 @@ class CommonDialog @Inject constructor(): DaggerAppCompatDialogFragment() {
         return AlertDialog.Builder(activity)
                 .setMessage(arguments.get(MESSAGE) as String)
                 .setPositiveButton(arguments.get(POSITIVE_BUTTON_TITLE) as String) { _, i ->
+                    dismiss()
                     commonDialogListener?.onPositiveButtonClick(requestCode)
                 }
                 .setNegativeButton(arguments.get(NEGATIVE_BUTTON_TITLE) as String) { _, i ->
+                    dismiss()
                     commonDialogListener?.onNegativeButtonClick(requestCode)
                 }
                 .create()

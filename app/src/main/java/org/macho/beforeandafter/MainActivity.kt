@@ -1,6 +1,7 @@
 package org.macho.beforeandafter
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
@@ -14,6 +15,8 @@ import org.macho.beforeandafter.alarmsettingdialog.AlarmSettingDialog
 import org.macho.beforeandafter.record.editaddrecord.OnRecordSavedListener
 import org.macho.beforeandafter.shared.extensions.setupWithNavController
 import org.macho.beforeandafter.shared.util.AdUtil
+import org.macho.beforeandafter.shared.util.Analytics
+import org.macho.beforeandafter.shared.util.MailAppLauncher
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import org.macho.beforeandafter.shared.view.commondialog.CommonDialog
 import javax.inject.Inject
@@ -22,6 +25,8 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener, CommonDial
 
     companion object {
         const val SURVEY_DIALOG_RC = 1000
+        const val STORE_REVIEW_DIALOG_RC = 1001
+        const val BUG_REPORT_DIALOG_RC = 1002
     }
 
     private var currentNavController: LiveData<NavController>? = null
@@ -32,6 +37,8 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener, CommonDial
     @Inject
     lateinit var commonDialog: CommonDialog
 
+    lateinit var analytics: Analytics
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,6 +48,8 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener, CommonDial
         }
 
         configureAd()
+
+        analytics = Analytics(this)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -106,8 +115,42 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener, CommonDial
 
     // MAKR: - CommonDialogListener
     override fun onPositiveButtonClick(requestCode: Int) {
+        when (requestCode) {
+            SURVEY_DIALOG_RC -> {
+                commonDialog.show(
+                        supportFragmentManager,
+                        STORE_REVIEW_DIALOG_RC,
+                        getString(R.string.store_review_dialog_message),
+                        getString(R.string.common_yes),
+                        getString(R.string.common_no))
+            }
+            STORE_REVIEW_DIALOG_RC -> {
+                val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(getString(R.string.review_url)))
+                startActivity(intent)
+                SharedPreferencesUtil.setBoolean(this, SharedPreferencesUtil.Key.STORE_REVIEW_PROMPT_COMPLETED, true)
+            }
+            BUG_REPORT_DIALOG_RC -> {
+                MailAppLauncher().launchMailApp(this)
+            }
+            else -> {
+            }
+        }
     }
 
     override fun onNegativeButtonClick(requestCode: Int) {
+        when (requestCode) {
+            SURVEY_DIALOG_RC -> {
+                commonDialog.show(
+                        supportFragmentManager,
+                        BUG_REPORT_DIALOG_RC,
+                        getString(R.string.bug_report_dialog_message),
+                        getString(R.string.common_yes),
+                        getString(R.string.common_no))
+            }
+            else -> {
+            }
+        }
     }
 }
