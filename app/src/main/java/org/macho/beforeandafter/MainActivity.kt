@@ -15,13 +15,22 @@ import org.macho.beforeandafter.record.editaddrecord.OnRecordSavedListener
 import org.macho.beforeandafter.shared.extensions.setupWithNavController
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import org.macho.beforeandafter.shared.view.commondialog.CommonDialog
 import javax.inject.Inject
 
-class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener {
+class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener, CommonDialog.CommonDialogListener {
+
+    companion object {
+        const val SURVEY_DIALOG_RC = 1000
+    }
+
     private var currentNavController: LiveData<NavController>? = null
 
     @Inject
     lateinit var alarmSettingDialog: AlarmSettingDialog
+
+    @Inject
+    lateinit var commonDialog: CommonDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +83,7 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener {
     override fun onRecordSaved() {
         Toast.makeText(this, R.string.toast_saved, Toast.LENGTH_SHORT).show()
 
+        /*
         val isAlarmEnabled = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.ALARM_ENABLED)
         val neverDisplayAlarmSettingDialog = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.NEVER_DISPLAY_ALARM_SETTING_DIALOG)
         if (isAlarmEnabled || neverDisplayAlarmSettingDialog) {
@@ -83,5 +93,21 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener {
         Handler().postDelayed({
             alarmSettingDialog.show(supportFragmentManager, null)
         }, 1000)
+         */
+        Handler().postDelayed({
+            commonDialog.show(
+                    supportFragmentManager,
+                    SURVEY_DIALOG_RC,
+                    getString(R.string.survey_dialog_message),
+                    getString(R.string.common_yes),
+                    getString(R.string.common_no))
+        }, 1000)
+    }
+
+    // MAKR: - CommonDialogListener
+    override fun onPositiveButtonClick(requestCode: Int) {
+    }
+
+    override fun onNegativeButtonClick(requestCode: Int) {
     }
 }

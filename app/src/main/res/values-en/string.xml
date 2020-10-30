@@ -182,4 +182,10 @@
 
     <string name="bug_report_mail_title">Bug Report/Improvement Request</string>
     <string name="bug_report_mail_template">To Developer(%s)\n\n\n\nPlease don\'t remove following information for support.\nAndroid Version: %s\nApp Version: %s\nModel: %s</string>
+
+    <string name="survey_dialog_message">Thank you for using this app. Did this app help you?</string>
+    <string name="common_yes">Yes.</string>
+    <string name="common_no">No.</string>
+    <string name="bug_report_dialog_message">Sorry for the inconvenience. Could you give us feedback mail?</string>
+    <string name="store_review_dialog_message">Thank you. Could you rate this app in store?</string>
 </resources>
