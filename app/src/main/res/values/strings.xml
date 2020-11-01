@@ -6,18 +6,6 @@
     <string name="graphe">グラフ</string>
     <string name="setting">設定</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <!--
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    -->
-    <string name="review">このアプリはいかがでしょうか？</string>
-    <string name="review_message">　よろしければ、当アプリの評価をお願いいたします。\n　あなたの評価が他のダイエッターの参考になります。また、運営チームにとって開発の
-    励みとなります。</string>
-    <string name="review_note">※不具合の報告は</string>
-    <string name="review_note_from_here">こちら(要Googleログイン)</string>
-    <string name="review_note_description">上記リンクから報告いただくと、よりはやく確実に運営チームに通知が届きます。</string>
-    <string name="review_neutral">今後表示しない</string>
-    <string name="review_ok">評価する(ストアへ)</string>
     <string name="review_url">https://play.google.com/store/apps/details?id=org.macho.beforeandafter&amp;hl=ja</string>
 
     <!-- Records Fragment -->
