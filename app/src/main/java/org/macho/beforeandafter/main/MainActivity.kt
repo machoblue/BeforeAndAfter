@@ -13,6 +13,7 @@ import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.alarmsettingdialog.AlarmSettingDialog
+import org.macho.beforeandafter.preference.PreferenceFragmentListener
 import org.macho.beforeandafter.record.editaddrecord.OnRecordSavedListener
 import org.macho.beforeandafter.shared.extensions.setupWithNavController
 import org.macho.beforeandafter.shared.util.AdUtil
@@ -23,12 +24,13 @@ import org.macho.beforeandafter.shared.view.commondialog.CommonDialog
 import java.util.*
 import javax.inject.Inject
 
-class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSavedListener, CommonDialog.CommonDialogListener, MainContract.View {
+class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSavedListener, CommonDialog.CommonDialogListener, MainContract.View, PreferenceFragmentListener {
 
     companion object {
         const val SURVEY_DIALOG_RC = 1000
         const val STORE_REVIEW_DIALOG_RC = 1001
         const val BUG_REPORT_DIALOG_RC = 1002
+        const val STORE_REVIEW_CONFIRM_DIALOG_RC = 1003
     }
 
     private var currentNavController: LiveData<NavController>? = null
@@ -146,6 +148,9 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
             BUG_REPORT_DIALOG_RC -> {
                 MailAppLauncher().launchMailApp(this)
             }
+            STORE_REVIEW_CONFIRM_DIALOG_RC -> {
+                MailAppLauncher().launchMailApp(this)
+            }
             else -> {
             }
         }
@@ -162,8 +167,26 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
                         getString(R.string.common_no))
                 analytics.logEvent(Analytics.Event.SURVEY_DIALOG_NOT_HELP)
             }
+            STORE_REVIEW_CONFIRM_DIALOG_RC -> {
+                val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(getString(R.string.review_url)))
+                startActivity(intent)
+                analytics.logEvent(Analytics.Event.STORE_REVIEW_FRON_SETTING)
+            }
             else -> {
             }
         }
+    }
+
+
+    override fun onStoreReviewClicked() {
+        commonDialog.show(
+                supportFragmentManager,
+                STORE_REVIEW_CONFIRM_DIALOG_RC,
+                getString(R.string.confirm_store_review_message),
+                getString(R.string.mail_bug_report),
+                getString(R.string.store_review))
+        SharedPreferencesUtil.setLong(this, SharedPreferencesUtil.Key.LAST_SURVEY_DIALOG_TIME, Date().time)
     }
 }

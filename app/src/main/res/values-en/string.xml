@@ -129,6 +129,10 @@
     <string name="preference_inquiry_description">Please report bugs or request for implovement from here. This need you to sign in Google.</string>
     <string name="bug_report_url">https://docs.google.com/forms/d/e/1FAIpQLSfrrmpn0MBa5qA9jzz23EaqbLdTP3UhVfd2AGMOIUOagbi5MA/viewform</string>
 
+    <string name="preference_section_header_store_review">Other Settings</string>
+    <string name="preference_store_review_title">Review</string>
+    <string name="preference_store_review_description">Review on store.</string>
+
     <string name="dialog_select_prompt">Choose Image</string>
     <string name="dialog_select_camera">Camera</string>
     <string name="dialog_select_other_camera_app">Other Camera App</string>
@@ -176,4 +180,8 @@
     <string name="common_no">No.</string>
     <string name="bug_report_dialog_message">Sorry for the inconvenience. Could you give us feedback mail?</string>
     <string name="store_review_dialog_message">Thank you. Could you rate this app in store?</string>
+
+    <string name="confirm_store_review_message">If you want to report bug or request improvement, Please send mail.</string>
+    <string name="mail_bug_report">Send mail</string>
+    <string name="store_review">Review on store</string>
 </resources>

@@ -20,6 +20,8 @@ class Analytics(val context: Context) {
         SURVEY_DIALOG_NOT_HELP,
         STORE_REVIEW_DIALOG_OPEN_STORE,
 
+        STORE_REVIEW_FRON_SETTING,
+
         ALARM_ENABLE,
         ALARM_FIRED,
         ALARM_DIALOG_APPEAR,
