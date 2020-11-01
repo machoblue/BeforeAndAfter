@@ -11,7 +11,8 @@ object SharedPreferencesUtil {
         TIME_OF_LATEST_RECORD("time_of_latest_record"),
         PIN("pin"),
         GRAPH_SELECTION("graph_selection"),
-        STORE_REVIEW_PROMPT_COMPLETED("store_review_prompt_completed"),
+
+        LAST_SURVEY_DIALOG_TIME("last_survey_dialog_time"),
 
         ALARM_ENABLED("alarm_enabled"),
         ALARM_HOUR_OF_DAY("alarm_hour_of_day"),

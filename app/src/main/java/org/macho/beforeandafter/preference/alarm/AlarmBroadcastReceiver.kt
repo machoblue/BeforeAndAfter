@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import org.macho.beforeandafter.MainActivity
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.SplashActivity
 import org.macho.beforeandafter.shared.util.Analytics

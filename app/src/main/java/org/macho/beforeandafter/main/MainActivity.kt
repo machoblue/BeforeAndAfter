@@ -1,4 +1,4 @@
-package org.macho.beforeandafter
+package org.macho.beforeandafter.main
 
 import android.content.Intent
 import android.net.Uri
@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import org.macho.beforeandafter.R
 import org.macho.beforeandafter.alarmsettingdialog.AlarmSettingDialog
 import org.macho.beforeandafter.record.editaddrecord.OnRecordSavedListener
 import org.macho.beforeandafter.shared.extensions.setupWithNavController
@@ -19,9 +20,10 @@ import org.macho.beforeandafter.shared.util.Analytics
 import org.macho.beforeandafter.shared.util.MailAppLauncher
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import org.macho.beforeandafter.shared.view.commondialog.CommonDialog
+import java.util.*
 import javax.inject.Inject
 
-class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener, CommonDialog.CommonDialogListener {
+class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSavedListener, CommonDialog.CommonDialogListener, MainContract.View {
 
     companion object {
         const val SURVEY_DIALOG_RC = 1000
@@ -39,6 +41,9 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener, CommonDial
 
     lateinit var analytics: Analytics
 
+    @Inject
+    override lateinit var presenter: MainContract.Presenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -50,6 +55,12 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener, CommonDial
         configureAd()
 
         analytics = Analytics(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        presenter.takeView(this)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -91,18 +102,17 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener, CommonDial
     // MARK: - OnRecordSavedListener
     override fun onRecordSaved() {
         Toast.makeText(this, R.string.toast_saved, Toast.LENGTH_SHORT).show()
+        presenter.handleRecordSavedEvent()
+    }
 
-        /*
-        val isAlarmEnabled = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.ALARM_ENABLED)
-        val neverDisplayAlarmSettingDialog = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.NEVER_DISPLAY_ALARM_SETTING_DIALOG)
-        if (isAlarmEnabled || neverDisplayAlarmSettingDialog) {
-            return
-        }
-
+    // MARK: - MainContract.View
+    override fun showAlarmSettingDialog() {
         Handler().postDelayed({
             alarmSettingDialog.show(supportFragmentManager, null)
-        }, 1000)
-         */
+        }, 750)
+    }
+
+    override fun showSurveyDialog() {
         Handler().postDelayed({
             commonDialog.show(
                     supportFragmentManager,
@@ -110,7 +120,8 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener, CommonDial
                     getString(R.string.survey_dialog_message),
                     getString(R.string.common_yes),
                     getString(R.string.common_no))
-        }, 1000)
+            SharedPreferencesUtil.setLong(this, SharedPreferencesUtil.Key.LAST_SURVEY_DIALOG_TIME, Date().time)
+        }, 750)
     }
 
     // MAKR: - CommonDialogListener
@@ -123,13 +134,14 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener, CommonDial
                         getString(R.string.store_review_dialog_message),
                         getString(R.string.common_yes),
                         getString(R.string.common_no))
+                analytics.logEvent(Analytics.Event.SURVEY_DIALOG_HELP)
             }
             STORE_REVIEW_DIALOG_RC -> {
                 val intent = Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse(getString(R.string.review_url)))
                 startActivity(intent)
-                SharedPreferencesUtil.setBoolean(this, SharedPreferencesUtil.Key.STORE_REVIEW_PROMPT_COMPLETED, true)
+                analytics.logEvent(Analytics.Event.STORE_REVIEW_DIALOG_OPEN_STORE)
             }
             BUG_REPORT_DIALOG_RC -> {
                 MailAppLauncher().launchMailApp(this)
@@ -148,6 +160,7 @@ class MainActivity: DaggerAppCompatActivity(), OnRecordSavedListener, CommonDial
                         getString(R.string.bug_report_dialog_message),
                         getString(R.string.common_yes),
                         getString(R.string.common_no))
+                analytics.logEvent(Analytics.Event.SURVEY_DIALOG_NOT_HELP)
             }
             else -> {
             }

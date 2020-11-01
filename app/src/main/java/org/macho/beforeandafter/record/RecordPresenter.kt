@@ -29,14 +29,6 @@ class RecordPresenter @Inject constructor(val recordRepository: RecordRepository
                 view?.hideEmptyView()
                 val sortedRecords = records.sortedBy { - it.date }
                 view?.showItems(sortedRecords)
-
-                if (records.size > 9 // 10記録以上
-                    && Date().time - sortedRecords.first().date < 1000 * 5 // 記録直後
-                    && sortedRecords.last().weight - sortedRecords.first().weight >= 3 // 最初から3kgやせた
-                    && sortedRecords.first().weight < sortedRecords[1].weight) // 前回よりやせた
-                {
-                    view?.showReviewDialogIfNeeded()
-                }
             }
         }
     }
