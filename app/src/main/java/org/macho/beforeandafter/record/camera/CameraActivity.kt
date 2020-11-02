@@ -7,6 +7,7 @@ import android.graphics.*
 import android.hardware.camera2.*
 import android.media.ImageReader
 import android.media.MediaActionSound
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -23,16 +24,19 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_camera.*
 import kotlinx.android.synthetic.main.activity_camera.adLayout
 import kotlinx.android.synthetic.main.activity_camera.adView
-import kotlinx.android.synthetic.main.record_frag.*
 import org.macho.beforeandafter.BuildConfig
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.extensions.loadImage
 import org.macho.beforeandafter.shared.util.AdUtil
+import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import java.io.File
 
 class CameraActivity: AppCompatActivity() {
 
     companion object {
         private const val TAG = "CameraActivity"
         private const val REQUEST_CAMERA_PERMISSION = 1
+        const val SHADOW_IMAGE_FILE_NAME = "SHADOW_IMAGE_FILE_NAME"
     }
 
     private lateinit var backgroundThread: HandlerThread
@@ -45,6 +49,13 @@ class CameraActivity: AppCompatActivity() {
     private lateinit var captureRequest: CaptureRequest
     private lateinit var mediaActionSound: MediaActionSound
 
+    private var isShadowVisible = false
+        set(value) {
+            field = value
+            showShadowButton.colorFilter = if (isShadowVisible) PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.SRC_IN) else null
+            shadowImage.visibility = if (isShadowVisible) View.VISIBLE else View.INVISIBLE
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
@@ -53,6 +64,17 @@ class CameraActivity: AppCompatActivity() {
         textureView.setOnTouchListener(onTouchListener)
         turnCameraButton.setOnClickListener {
             turnCamera()
+        }
+
+        isShadowVisible = !SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.HIDE_SHADOW_PHOTO)
+
+        shadowImage.visibility = if (isShadowVisible) View.VISIBLE else View.INVISIBLE
+        intent.extras?.getString(SHADOW_IMAGE_FILE_NAME)?.let {
+            shadowImage.loadImage(this, Uri.fromFile(File(this.filesDir, it)))
+        }
+
+        showShadowButton.setOnClickListener {
+            isShadowVisible = !isShadowVisible
         }
 
         mediaActionSound = MediaActionSound()
@@ -66,6 +88,7 @@ class CameraActivity: AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaActionSound.release()
+        SharedPreferencesUtil.setBoolean(this, SharedPreferencesUtil.Key.HIDE_SHADOW_PHOTO, !isShadowVisible)
     }
 
     override fun onResume() {

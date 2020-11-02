@@ -17,7 +17,9 @@ object SharedPreferencesUtil {
         ALARM_HOUR_OF_DAY("alarm_hour_of_day"),
         ALARM_MINUTE("alarm_minute"),
 
-        NEVER_DISPLAY_ALARM_SETTING_DIALOG("never_display_alarm_setting_dialog")
+        NEVER_DISPLAY_ALARM_SETTING_DIALOG("never_display_alarm_setting_dialog"),
+
+        HIDE_SHADOW_PHOTO("hide_shadow_photo")
     }
 
     fun getFloat(context: Context, key: Key): Float {

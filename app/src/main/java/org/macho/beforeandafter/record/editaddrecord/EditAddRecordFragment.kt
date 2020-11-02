@@ -65,7 +65,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     var shouldShowInterstitialAd = false
 
-    private var currentImageView: ImageView? = null
+    private var currentImageIndex: Int? = null
+    private lateinit var imageViews: List<ImageView>
 
     private var onRecordSavedListener: OnRecordSavedListener? = null
 
@@ -124,21 +125,21 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
         LogUtil.i(this, "newImageFile: $newImageFile")
 
-        currentImageView?.let { imageView ->
-            when (imageView) {
-                frontImage -> {
+        currentImageIndex?.let {
+            when (it) {
+                0 -> {
                     presenter.modifyFrontImage(newImageFile)
                 }
-                sideImage -> {
+                1 -> {
                     presenter.modifySideImage(newImageFile)
                 }
-                otherImage1 -> {
+                2 -> {
                     presenter.modifyOtherImage1(newImageFile)
                 }
-                otherImage2 -> {
+                3 -> {
                     presenter.modifyOtherImage2(newImageFile)
                 }
-                otherImage3 -> {
+                4 -> {
                     presenter.modifyOtherImage3(newImageFile)
                 }
             }
@@ -150,7 +151,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         when (requestCode) {
             CAMERA_PERMISSION_RC -> {
                 if (PermissionUtils.permissionGranted(requestCode, CAMERA_PERMISSION_RC, grantResults)) {
-                    startCamera()
+                    presenter.onCameraButtonClicked(currentImageIndex ?: throw RuntimeException("currentImageIndex must not be null."))
                 }
             }
             GALLERY_PERMISSION_RC -> {
@@ -178,7 +179,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     // MARK: Event Listener
     private fun onImageViewClick(imageView: ImageView) {
-        currentImageView = imageView
+        currentImageIndex = imageViews.indexOf(imageView)
         AlertDialog.Builder(context!!)
                 .setMessage(R.string.dialog_select_prompt)
                 .setPositiveButton(R.string.dialog_select_gallery) { dialog, which ->
@@ -188,7 +189,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                     startOtherCameraApp()
                 }
                 .setNegativeButton(R.string.dialog_select_camera) { dialog, which ->
-                    startCamera()
+                    presenter.onCameraButtonClicked(currentImageIndex ?: throw RuntimeException("currentImageIndex must not be null."))
                 }
                 .create()
                 .show()
@@ -201,7 +202,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     // MARK: EditAddRecordContract.View
     override fun showRecord(record: Record?) {
-        LogUtil.i(this, "showRecord: ${record?.frontImagePath}")
         record?.date?.let {
             dateButton.text = dateFormat.format(Date(it))
             dateButton.tag = Date(it)
@@ -275,12 +275,18 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         }
     }
 
-    private fun startCamera() {
+    override fun openCamera(shadowImageFileName: String?) {
         if (PermissionUtils.requestPermission(this, CAMERA_PERMISSION_RC,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.CAMERA)) {
 
-            val intent = Intent(context!!, CameraActivity::class.java)
+            val intent = Intent(context!!, CameraActivity::class.java).also {
+                val shadowImageFileName = shadowImageFileName ?: return@also
+                it.putExtras(Bundle().also { bundle ->
+                    bundle.putString(CameraActivity.SHADOW_IMAGE_FILE_NAME, shadowImageFileName)
+                })
+            }
+
             startActivityForResult(intent, CUSTOM_CAMERA_RC)
         }
     }
@@ -303,11 +309,10 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     }
 
     private fun initViews() {
-        frontImage.setOnClickListener { onImageViewClick(it as ImageView) }
-        sideImage.setOnClickListener { onImageViewClick(it as ImageView) }
-        otherImage1.setOnClickListener { onImageViewClick(it as ImageView) }
-        otherImage2.setOnClickListener { onImageViewClick(it as ImageView) }
-        otherImage3.setOnClickListener { onImageViewClick(it as ImageView) }
+        imageViews = listOf(frontImage, sideImage, otherImage1, otherImage2, otherImage3)
+        imageViews.forEach { imageView ->
+            imageView.setOnClickListener { onImageViewClick(imageView) }
+        }
 
         addImagesCheckBox.setOnClickListener { onCheckBoxClick(it as CheckBox) }
 
