@@ -16,6 +16,17 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@mipmap/ic_launcher"
+        android:alpha="0.25"
+        app:layout_constraintTop_toTopOf="@id/textureView"
+        app:layout_constraintLeft_toLeftOf="@id/textureView"
+        app:layout_constraintRight_toRightOf="@id/textureView"
+        app:layout_constraintBottom_toBottomOf="@id/textureView"
+        />
+
     <org.macho.beforeandafter.record.camera.SquaresView
         android:layout_width="0dp"
         android:layout_height="0dp"
