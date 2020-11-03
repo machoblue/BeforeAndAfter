@@ -5,7 +5,7 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.widget.Button
-import androidx.fragment.app.DialogFragment
+import dagger.android.support.DaggerAppCompatDialogFragment
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.di.FragmentScoped
 import java.text.DateFormat
@@ -13,7 +13,7 @@ import java.util.*
 import javax.inject.Inject
 
 @FragmentScoped
-class AlarmSettingDialog @Inject constructor(): DialogFragment(), AlarmSettingContract.View {
+class AlarmSettingDialog @Inject constructor(): DaggerAppCompatDialogFragment(), AlarmSettingContract.View {
 
     @Inject
     override lateinit var presenter: AlarmSettingContract.Presenter
