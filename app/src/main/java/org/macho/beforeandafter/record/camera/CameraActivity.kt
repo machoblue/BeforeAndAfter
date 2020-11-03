@@ -52,8 +52,8 @@ class CameraActivity: AppCompatActivity() {
     private var isShadowVisible = false
         set(value) {
             field = value
-            showShadowButton.colorFilter = if (isShadowVisible) PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.SRC_IN) else null
-            shadowImage.visibility = if (isShadowVisible) View.VISIBLE else View.INVISIBLE
+            showShadowButton.colorFilter = if (value) PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.SRC_IN) else null
+            shadowImage.visibility = if (value) View.VISIBLE else View.INVISIBLE
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,13 +68,15 @@ class CameraActivity: AppCompatActivity() {
 
         isShadowVisible = !SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.HIDE_SHADOW_PHOTO)
 
-        shadowImage.visibility = if (isShadowVisible) View.VISIBLE else View.INVISIBLE
         intent.extras?.getString(SHADOW_IMAGE_FILE_NAME)?.let {
             shadowImage.loadImage(this, Uri.fromFile(File(this.filesDir, it)))
-        }
-
-        showShadowButton.setOnClickListener {
-            isShadowVisible = !isShadowVisible
+            showShadowButton.setOnClickListener {
+                isShadowVisible = !isShadowVisible
+                SharedPreferencesUtil.setBoolean(this, SharedPreferencesUtil.Key.HIDE_SHADOW_PHOTO, !isShadowVisible)
+            }
+        } ?: let {
+            shadowImage.visibility = View.GONE
+            showShadowButton.visibility = View.GONE
         }
 
         mediaActionSound = MediaActionSound()
@@ -88,7 +90,6 @@ class CameraActivity: AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaActionSound.release()
-        SharedPreferencesUtil.setBoolean(this, SharedPreferencesUtil.Key.HIDE_SHADOW_PHOTO, !isShadowVisible)
     }
 
     override fun onResume() {
