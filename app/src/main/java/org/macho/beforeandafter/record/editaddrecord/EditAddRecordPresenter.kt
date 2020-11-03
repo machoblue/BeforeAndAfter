@@ -22,6 +22,15 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     private var originalRecord: Record? = null
     private lateinit var tempRecord: Record
 
+    private var latestFrontImageFileName: String? = null
+    private var latestSideImageFileName: String? = null
+    private var latestOtherImageFileName1: String? = null
+    private var latestOtherImageFileName2: String? = null
+    private var latestOtherImageFileName3: String? = null
+
+    private var latestImageFileNames: List<String?> = listOf()
+        get() = listOf(latestFrontImageFileName, latestSideImageFileName, latestOtherImageFileName1, latestOtherImageFileName2, latestOtherImageFileName3)
+
     override fun start(date: Long) {
         tempRecord = Record()
         if (date != 0L) {
@@ -39,12 +48,22 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
             tempRecord.weight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT)
             tempRecord.rate = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_RATE)
         }
+
+        recordRepository.getRecords { records ->
+            val sortedRecords = records.filter { it.date != date }.sortedBy { -it.date }
+            latestFrontImageFileName = sortedRecords.firstOrNull { !it.frontImagePath.isNullOrEmpty() }?.frontImagePath
+            latestSideImageFileName = sortedRecords.firstOrNull { !it.sideImagePath.isNullOrEmpty() }?.sideImagePath
+            latestOtherImageFileName1 = sortedRecords.firstOrNull { !it.otherImagePath1.isNullOrEmpty() }?.otherImagePath1
+            latestOtherImageFileName2 = sortedRecords.firstOrNull { !it.otherImagePath2.isNullOrEmpty() }?.otherImagePath2
+            latestOtherImageFileName3 = sortedRecords.firstOrNull { !it.otherImagePath3.isNullOrEmpty() }?.otherImagePath3
+        }
     }
 
     override fun modifyDate(date: Date) {
         tempRecord.date = date.time
         view?.showRecord(tempRecord)
     }
+
     override fun modifyWeight(weight: String?) {
         tempRecord.weight = max(if (weight.isNullOrEmpty()) 0f else weight.toFloat(), 0f)
         // 無限ループになるので、showRecordは呼ばない。
@@ -83,6 +102,11 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     override fun modifyOtherImage3(other3ImageFile: File?) {
         tempRecord.otherImagePath3 = persistFile(other3ImageFile)?.name
         view?.showRecord(tempRecord)
+    }
+
+    override fun onCameraButtonClicked(index: Int) {
+        val latestImageFileName = latestImageFileNames[index]
+        view?.openCamera(latestImageFileName)
     }
 
     override fun saveRecord() {

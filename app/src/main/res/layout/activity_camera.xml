@@ -16,6 +16,17 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/shadowImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.5"
+        app:layout_constraintTop_toTopOf="@id/textureView"
+        app:layout_constraintLeft_toLeftOf="@id/textureView"
+        app:layout_constraintRight_toRightOf="@id/textureView"
+        app:layout_constraintBottom_toBottomOf="@id/textureView"
+        />
+
     <org.macho.beforeandafter.record.camera.SquaresView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -35,6 +46,18 @@
         android:layout_margin="18dp"
         app:layout_constraintTop_toTopOf="@id/textureView"
         app:layout_constraintRight_toRightOf="@id/textureView"
+        />
+
+    <ImageButton
+        android:id="@+id/showShadowButton"
+        android:src="@drawable/ic_people_alt_white_24dp"
+        android:scaleType="fitCenter"
+        android:background="#00000000"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="18dp"
+        app:layout_constraintTop_toTopOf="@id/textureView"
+        app:layout_constraintRight_toLeftOf="@id/turnCameraButton"
         />
 
     <Button

@@ -12,6 +12,7 @@ interface EditAddRecordContract {
     interface View: BaseContract.View<Presenter> {
         fun showRecord(record: Record?)
         fun close()
+        fun openCamera(shadowImageFileName: String?)
     }
 
     // call logic, pass value to view
@@ -27,6 +28,8 @@ interface EditAddRecordContract {
         fun modifyOtherImage1(other1ImageFile: File?)
         fun modifyOtherImage2(other2ImageFile: File?)
         fun modifyOtherImage3(other3ImageFile: File?)
+
+        fun onCameraButtonClicked(index: Int)
 
         fun saveRecord()
         fun deleteRecord()
