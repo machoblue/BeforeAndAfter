@@ -2,17 +2,18 @@ package org.macho.beforeandafter.shared.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import org.macho.beforeandafter.MainActivity
+import org.macho.beforeandafter.main.MainActivity
 import org.macho.beforeandafter.alarmsettingdialog.AlarmSettingModule
 import org.macho.beforeandafter.graph.GraphModule
+import org.macho.beforeandafter.main.MainActivityModule
 import org.macho.beforeandafter.preference.PreferenceModule
 import org.macho.beforeandafter.preference.alarm.AlarmModule
 import org.macho.beforeandafter.preference.backup.BackupModule
-import org.macho.beforeandafter.preference.bugreport.BugReportModule
 import org.macho.beforeandafter.preference.editgoal.EditGoalModule
 import org.macho.beforeandafter.preference.restore.RestoreModule
 import org.macho.beforeandafter.record.RecordModule
 import org.macho.beforeandafter.record.editaddrecord.EditAddRecordModule
+import org.macho.beforeandafter.shared.view.commondialog.CommonDialogModule
 
 @Module
 abstract class ActivityBindingModule {
@@ -27,9 +28,10 @@ abstract class ActivityBindingModule {
         EditGoalModule::class,
         BackupModule::class,
         RestoreModule::class,
-        BugReportModule::class,
         AlarmModule::class,
-        AlarmSettingModule::class
+        AlarmSettingModule::class,
+        CommonDialogModule::class,
+        MainActivityModule::class
     ])
     abstract fun mainActivity(): MainActivity
 }

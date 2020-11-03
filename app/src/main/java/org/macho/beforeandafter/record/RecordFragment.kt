@@ -130,15 +130,6 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         listView.visibility = View.GONE
     }
 
-    override fun showReviewDialogIfNeeded() {
-        if (SharedPreferencesUtil.getBoolean(context!!, SharedPreferencesUtil.Key.STORE_REVIEW_PROMPT_COMPLETED)) {
-            return
-        }
-
-        val action = RecordFragmentDirections.actionRecordFragmentToReviewDialog()
-        findNavController().navigate(action)
-    }
-
     inner class RecordAdapter(val context: Context, val records: List<RecordItem>, val viewHeight: Int)
         : RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
         private val layoutInflater: LayoutInflater = LayoutInflater.from(context)

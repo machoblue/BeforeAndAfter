@@ -8,13 +8,14 @@ import dagger.android.support.AndroidSupportInjectionModule
 import org.macho.beforeandafter.BeforeAndAfterApp
 import org.macho.beforeandafter.shared.data.record.RecordRepositoryModule
 import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageRepositoryModule
-import org.macho.beforeandafter.shared.util.AppExecutors
+import org.macho.beforeandafter.shared.util.UtilityModule
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [
     RecordRepositoryModule::class,
     RestoreImageRepositoryModule::class,
+    UtilityModule::class,
     ApplicationModule::class,
     ActivityBindingModule::class,
     AndroidSupportInjectionModule::class])

@@ -3,6 +3,7 @@ package org.macho.beforeandafter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
+import org.macho.beforeandafter.main.MainActivity
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 
 

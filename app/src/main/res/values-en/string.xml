@@ -7,18 +7,6 @@
     <string name="graphe">graphe</string>
     <string name="setting">setting</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <!--
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    -->
-
-    <string name="review">How is this app?</string>
-    <string name="review_message">Would you mind reviewing this app?</string>
-    <string name="review_note">* If you found a bug, Please report from</string>
-    <string name="review_note_from_here">here</string>
-    <string name="review_note_description">If you report via above link, we can get the report more quickly.</string>
-    <string name="review_neutral">Never display</string>
-    <string name="review_ok">OK(To Store)</string>
     <string name="review_url">https://play.google.com/store/apps/details?id=org.macho.beforeandafter&amp;hl=en</string>
 
     <!-- Records Fragment -->
@@ -141,6 +129,10 @@
     <string name="preference_inquiry_description">Please report bugs or request for implovement from here. This need you to sign in Google.</string>
     <string name="bug_report_url">https://docs.google.com/forms/d/e/1FAIpQLSfrrmpn0MBa5qA9jzz23EaqbLdTP3UhVfd2AGMOIUOagbi5MA/viewform</string>
 
+    <string name="preference_section_header_store_review">Other Settings</string>
+    <string name="preference_store_review_title">Review</string>
+    <string name="preference_store_review_description">Review on store.</string>
+
     <string name="dialog_select_prompt">Choose Image</string>
     <string name="dialog_select_camera">Camera</string>
     <string name="dialog_select_other_camera_app">Other Camera App</string>
@@ -179,4 +171,17 @@
 
     <string name="alarm_setting_dialog_message">Set alarm to remind you to record every day.</string>
     <string name="alarm_setting_dialog_note">NOTE: You can change alarm setting on setting screen.</string>
+
+    <string name="bug_report_mail_title">Bug Report/Improvement Request</string>
+    <string name="bug_report_mail_template">To Developer(%s)\n\n\n\nPlease don\'t remove following information for support.\nAndroid Version: %s\nApp Version: %s\nModel: %s</string>
+
+    <string name="survey_dialog_message">Thank you for using this app. Did this app help you?</string>
+    <string name="common_yes">Yes.</string>
+    <string name="common_no">No.</string>
+    <string name="bug_report_dialog_message">Sorry for the inconvenience. Could you give us feedback mail?</string>
+    <string name="store_review_dialog_message">Thank you. Could you rate this app in store?</string>
+
+    <string name="confirm_store_review_message">If you want to report bug or request improvement, Please send mail.</string>
+    <string name="mail_bug_report">Send mail</string>
+    <string name="store_review">Review on store</string>
 </resources>

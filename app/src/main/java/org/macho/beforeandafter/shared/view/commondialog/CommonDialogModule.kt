@@ -1,12 +1,13 @@
-package org.macho.beforeandafter.preference.bugreport
+package org.macho.beforeandafter.shared.view.commondialog
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import org.macho.beforeandafter.shared.di.FragmentScoped
 
+
 @Module
-abstract class BugReportModule {
+abstract class CommonDialogModule {
     @FragmentScoped
     @ContributesAndroidInjector
-    abstract fun bugReportFragment(): BugReportFragment
+    abstract fun commonDialog(): CommonDialog
 }

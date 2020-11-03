@@ -1,6 +1,7 @@
 package org.macho.beforeandafter.preference
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,9 +19,14 @@ import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.preference.pin.PinDisableActivity
 import org.macho.beforeandafter.shared.data.restoreimage.RestoreImage
 import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageRepository
+import org.macho.beforeandafter.shared.util.MailAppLauncher
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.util.*
 import javax.inject.Inject
+
+interface PreferenceFragmentListener {
+    fun onStoreReviewClicked()
+}
 
 @ActivityScoped
 class PreferenceFragment @Inject constructor(): DaggerFragment() {
@@ -32,9 +38,14 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
     @Inject
     lateinit var restoreImageRepository: RestoreImageRepository
 
+    @Inject
+    lateinit var mailAppLaucher: MailAppLauncher
+
     private var items: MutableList<PreferenceElement> = mutableListOf()
     private lateinit var adapter: PreferenceAdapter
     private var pinItem: CheckboxPreferenceItem? = null
+
+    private var preferenceFragmentListener: PreferenceFragmentListener? = null
 
     private var haveWatchedAdRecently: Boolean = false
         get() {
@@ -58,6 +69,11 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
         AdUtil.loadBannerAd(adView, context!!)
         adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        this.preferenceFragmentListener = (context as? PreferenceFragmentListener)
     }
 
     override fun onStart() {
@@ -129,8 +145,12 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
         items.add(SectionHeader(R.string.preference_section_header_inquiry))
         items.add(PreferenceItem(R.string.preference_inquiry_title, R.string.preference_inquiry_description) {
-            val action = PreferenceFragmentDirections.actionPreferenceFragmentToBugReportFragment()
-            findNavController().navigate(action)
+            mailAppLaucher.launchMailApp(context!!)
+        })
+
+        items.add(SectionHeader(R.string.preference_section_header_store_review))
+        items.add(PreferenceItem(R.string.preference_store_review_title, R.string.preference_store_review_description) {
+            preferenceFragmentListener?.onStoreReviewClicked()
         })
 
         // MARK: - Version

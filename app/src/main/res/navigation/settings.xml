@@ -20,9 +20,6 @@
             android:id="@+id/action_preferenceFragment_to_rewardDialog2"
             app:destination="@id/rewardDialog2" />
         <action
-            android:id="@+id/action_preferenceFragment_to_bugReportFragment"
-            app:destination="@id/bugReportFragment" />
-        <action
             android:id="@+id/action_preferenceFragment_to_restoreResumeDialog"
             app:destination="@id/restoreResumeDialog" />
         <action
@@ -65,10 +62,6 @@
             android:id="@+id/action_rewardDialog2_to_backupFragment"
             app:destination="@id/backupFragment" />
     </dialog>
-    <fragment
-        android:id="@+id/bugReportFragment"
-        android:name="org.macho.beforeandafter.preference.bugreport.BugReportFragment"
-        android:label="@string/preference_inquiry_title" />
     <dialog
         android:id="@+id/restoreResumeDialog"
         android:name="org.macho.beforeandafter.preference.restore.RestoreResumeDialog"
