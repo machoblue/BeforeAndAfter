@@ -43,6 +43,8 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
 
     lateinit var analytics: Analytics
 
+    private var isPause = false
+
     @Inject
     override lateinit var presenter: MainContract.Presenter
 
@@ -63,6 +65,14 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
         super.onResume()
 
         presenter.takeView(this)
+
+        this.isPause = false
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        this.isPause = true
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -110,12 +120,14 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
     // MARK: - MainContract.View
     override fun showAlarmSettingDialog() {
         Handler().postDelayed({
+            if (isPause) return@postDelayed
             alarmSettingDialog.show(supportFragmentManager, null)
         }, 750)
     }
 
     override fun showSurveyDialog() {
         Handler().postDelayed({
+            if (isPause) return@postDelayed
             commonDialog.show(
                     supportFragmentManager,
                     SURVEY_DIALOG_RC,
