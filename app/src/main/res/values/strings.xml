@@ -1,12 +1,15 @@
 <resources>
     <string name="app_name">写真記録ダイエット日記</string>
     <!-- main activity -->
+    <string name="home">ホーム</string>
     <string name="record">記録</string>
     <string name="gallery">ギャラリー</string>
     <string name="graphe">グラフ</string>
     <string name="setting">設定</string>
 
     <string name="review_url">https://play.google.com/store/apps/details?id=org.macho.beforeandafter&amp;hl=ja</string>
+
+    <!-- Dashboard Fragment -->
 
     <!-- Records Fragment -->
     <string name="empty_title">記録がありません。</string>

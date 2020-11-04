@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Weight Loss Tracker</string>
     <!-- main activity -->
+    <string name="home">Home</string>
     <string name="record">record</string>
     <string name="gallery">gallery</string>
     <string name="graphe">graphe</string>

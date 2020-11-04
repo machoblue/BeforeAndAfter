@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import org.macho.beforeandafter.main.MainActivity
 import org.macho.beforeandafter.alarmsettingdialog.AlarmSettingModule
+import org.macho.beforeandafter.dashboard.DashboardModule
 import org.macho.beforeandafter.graph.GraphModule
 import org.macho.beforeandafter.main.MainActivityModule
 import org.macho.beforeandafter.preference.PreferenceModule
@@ -31,7 +32,8 @@ abstract class ActivityBindingModule {
         AlarmModule::class,
         AlarmSettingModule::class,
         CommonDialogModule::class,
-        MainActivityModule::class
+        MainActivityModule::class,
+        DashboardModule::class
     ])
     abstract fun mainActivity(): MainActivity
 }
