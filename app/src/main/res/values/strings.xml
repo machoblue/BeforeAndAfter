@@ -141,11 +141,13 @@
     <string name="dialog_select_other_camera_app">他のカメラアプリ</string>
     <string name="dialog_select_gallery">ギャラリー</string>
 
-    <string name="admob_app_id">ca-app-pub-2062076007725970~3676986758</string>
-    <string name="admob_unit_id">ca-app-pub-2062076007725970/4292543358</string>
-    <string name="admob_unit_id_interstitial">ca-app-pub-2062076007725970/5738923755</string>
-    <string name="admob_unit_id_rewarded">ca-app-pub-2062076007725970/6878707656</string>
-    <string name="publisher_id">pub-2062076007725970</string>
+    <string name="admob_app_id" translatable="false">ca-app-pub-2062076007725970~3676986758</string>
+    <string name="admob_unit_id" translatable="false">ca-app-pub-2062076007725970/4292543358</string>
+    <string name="admob_unit_id_interstitial" translatable="false">ca-app-pub-2062076007725970/5738923755</string>
+    <string name="admob_unit_id_rewarded" translatable="false">ca-app-pub-2062076007725970/6878707656</string>
+    <string name="admob_unit_id_native" translatable="false">ca-app-pub-2062076007725970/6178358989</string>
+    <string name="publisher_id" translatable="false">pub-2062076007725970</string>
+    <string name="ad_attribution" translatable="false">Ad</string>
 
     <!-- Action Bar Title -->
     <string name="action_bar_title_records">記録一覧</string>

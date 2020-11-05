@@ -19,8 +19,8 @@ object LogUtil {
         Log.d(createTag(obj), "*** $message")
     }
 
-    public fun e(obj: Any? = null, message: String, t: Throwable) {
-        Log.e(createTag(obj), "*** $message", t)
+    public fun e(obj: Any? = null, message: String) {
+        Log.e(createTag(obj), "*** $message")
     }
 
     private fun createTag(obj: Any?): String {
