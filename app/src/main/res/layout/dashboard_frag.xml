@@ -95,7 +95,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/ad_frame"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="0dp"
+                android:layout_marginBottom="88dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:layout_width="match_parent"
