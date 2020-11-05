@@ -12,9 +12,13 @@ import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.dashboard_frag.*
+import kotlinx.android.synthetic.main.dashboard_frag.adLayout
+import kotlinx.android.synthetic.main.dashboard_frag.adView
+import kotlinx.android.synthetic.main.record_frag.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.di.FragmentScoped
+import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
 import javax.inject.Inject
 
@@ -35,6 +39,10 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         super.onViewCreated(view, savedInstanceState)
 
         refreshAd()
+
+        AdUtil.initializeMobileAds(context!!)
+        AdUtil.loadBannerAd(adView, context!!)
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
     }
 
     override fun onDestroyView() {
