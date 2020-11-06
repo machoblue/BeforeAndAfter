@@ -65,19 +65,17 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         presenter.dropView()
     }
 
-    // MARK: - DashboardContract.View
-    override fun updateDashboard(firstRecord: Record?, bestRecord: Record?, latestRecord: Record?, goalWeight: Float, currentBMI: Float) {
-        if (firstRecord == null) {
-            emptyView.visibility = View.VISIBLE
-            return
-        }
+    override fun toggleEmptyView(show: Boolean) {
+        emptyView.visibility = if (show) View.VISIBLE else View.INVISIBLE
+    }
 
-        emptyView.visibility = View.GONE
+    override fun updateWeightSummary(show: Boolean, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
+        weightSummaryCard.visibility = if (show) View.VISIBLE else View.INVISIBLE
 
-        setWeight(firstRecord.weight, firstWeightTextView)
-        setWeight(bestRecord?.weight ?: 0f, bestWeightTextView)
-        setWeight(latestRecord?.weight ?: 0f, currentWeightTextView)
-        setWeight(goalWeight, goalWeightTextView)
+        setWeight(firstWeight ?: 0f, firstWeightTextView)
+        setWeight(bestWeight ?: 0f, bestWeightTextView)
+        setWeight(latestWeight ?: 0f, currentWeightTextView)
+        setWeight(goalWeight ?: 0f, goalWeightTextView)
 
         setGoalButton.visibility = if (goalWeight == 0f) View.VISIBLE else View.GONE
     }

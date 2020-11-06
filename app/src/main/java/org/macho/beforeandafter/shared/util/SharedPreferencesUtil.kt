@@ -22,7 +22,9 @@ object SharedPreferencesUtil {
 
         HIDE_SHADOW_PHOTO("hide_shadow_photo"),
 
-        GOAL_WEIGHT("GOAL_WEIGHT")
+        GOAL_WEIGHT("GOAL_WEIGHT"),
+
+        HIDE_WEIGHT_SUMMARY("hide_weight_summary")
     }
 
     fun getFloat(context: Context, key: Key): Float {

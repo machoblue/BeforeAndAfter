@@ -34,13 +34,15 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
     // MARK: - Private
     private fun reloadRecords() {
         recordRepository.getRecords { records ->
+            view?.toggleEmptyView(records.isEmpty())
+
             val recordsSortedByDate = records.filterNot { it.weight == 0f }.sortedBy { it.date }
             val firstRecord = recordsSortedByDate.firstOrNull()
             val latestRecord = recordsSortedByDate.lastOrNull()
             val bestRecord = records.filterNot { it.weight == 0f }.minBy { it.weight }
             val goalWeight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.GOAL_WEIGHT)
-            val currentBmi = 0f
-            view?.updateDashboard(firstRecord, bestRecord, latestRecord, goalWeight, currentBmi)
+            val showWeightSummary = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_WEIGHT_SUMMARY)
+            view?.updateWeightSummary(showWeightSummary, firstRecord?.weight, bestRecord?.weight, latestRecord?.weight, goalWeight)
         }
     }
 }

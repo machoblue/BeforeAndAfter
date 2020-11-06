@@ -5,7 +5,8 @@ import org.macho.beforeandafter.shared.data.record.Record
 
 interface DashboardContract: BaseContract {
     interface View: BaseContract.View<Presenter> {
-        fun updateDashboard(firstRecord: Record?, bestRecord: Record?, latestRecord: Record?, goalWeight: Float, currentBMI: Float)
+        fun toggleEmptyView(show: Boolean)
+        fun updateWeightSummary(show: Boolean, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?)
     }
     interface Presenter: BaseContract.Presenter<View> {
         fun reloadDashboard()
