@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.formats.MediaView
 import com.google.android.gms.ads.formats.NativeAdOptions
@@ -17,6 +18,7 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.dashboard_frag.*
 import kotlinx.android.synthetic.main.dashboard_frag.emptyView
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.preference.PreferenceFragmentDirections
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.di.FragmentScoped
 import org.macho.beforeandafter.shared.util.AdUtil
@@ -45,6 +47,11 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         AdUtil.initializeMobileAds(context!!)
         AdUtil.loadBannerAd(adView, context!!)
         adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
+
+        setGoalButton.setOnClickListener {
+            val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
+            findNavController().navigate(action)
+        }
     }
 
     override fun onResume() {

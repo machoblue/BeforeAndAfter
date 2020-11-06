@@ -6,5 +6,13 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="org.macho.beforeandafter.dashboard.DashboardFragment"
-        android:label="@string/home" />
+        android:label="@string/home" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_editGoalFragment2"
+            app:destination="@id/editGoalFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/editGoalFragment2"
+        android:name="org.macho.beforeandafter.preference.editgoal.EditGoalFragment"
+        android:label="@string/action_bar_title_edit_goal" />
 </navigation>
