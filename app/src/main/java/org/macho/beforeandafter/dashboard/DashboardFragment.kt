@@ -1,6 +1,9 @@
 package org.macho.beforeandafter.dashboard
 
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,15 +15,14 @@ import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.dashboard_frag.*
-import kotlinx.android.synthetic.main.dashboard_frag.adLayout
-import kotlinx.android.synthetic.main.dashboard_frag.adView
-import kotlinx.android.synthetic.main.record_frag.*
+import kotlinx.android.synthetic.main.dashboard_frag.emptyView
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.di.FragmentScoped
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.dashboard_frag.emptyView as emptyView1
 
 @FragmentScoped
 class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContract.View {
@@ -45,16 +47,64 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.takeView(this)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         currentNativeAd?.destroy()
+        presenter.dropView()
     }
 
     // MARK: - DashboardContract.View
-    override fun updateDashboard(firstRecord: Record, bestRecord: Record, latestRecord: Record, goalWeight: Float, currentBMI: Float) {
+    override fun updateDashboard(firstRecord: Record?, bestRecord: Record?, latestRecord: Record?, goalWeight: Float, currentBMI: Float) {
+        if (firstRecord == null) {
+            emptyView.visibility = View.VISIBLE
+            return
+        }
+
+        emptyView.visibility = View.GONE
+//        currentWeightTextView.text =
+
+//        val firstWeightValueText = firstRecord.weight.toString()
+//        val firstWeightText = String.format(weightTemplate, firstWeightValueText)
+//        val numberIndex = firstWeightText.indexOf(firstWeightValueText)
+//        firstWeightTextView.text = SpannableString(firstWeightText).also {
+//            it.setSpan(
+//                RelativeSizeSpan(0.5f),
+//                numberIndex,
+//                numberIndex + firstWeightValueText.length,
+//                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+//            )
+//        }
+        setWeight(firstRecord.weight, firstWeightTextView)
+        setWeight(bestRecord?.weight ?: 0f, bestWeightTextView)
+        setWeight(latestRecord?.weight ?: 0f, currentWeightTextView)
+        setWeight(goalWeight, goalWeightTextView)
+
+        setGoalButton.visibility = if (goalWeight == 0f) View.VISIBLE else View.INVISIBLE
     }
 
     // MARK: Private
+    private fun setWeight(weight: Float, textView: TextView) {
+        val weightUnit = "kg"
+        val weightTemplate = "%s $weightUnit"
+
+        val numberText = if (weight == 0f) "--.--" else weight.toString()
+        val formattedText = String.format(weightTemplate, numberText)
+        val numberIndex = formattedText.indexOf(numberText)
+        textView.text = SpannableString(formattedText).also {
+            it.setSpan(
+                    RelativeSizeSpan(0.66f),
+                    numberIndex + numberText.length,
+                    formattedText.length,
+                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+        }
+    }
+
     private fun refreshAd() {
         val builder = AdLoader.Builder(requireContext(), getString(R.string.admob_unit_id_native))
 
