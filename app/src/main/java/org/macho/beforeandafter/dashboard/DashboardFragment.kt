@@ -66,25 +66,13 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         }
 
         emptyView.visibility = View.GONE
-//        currentWeightTextView.text =
 
-//        val firstWeightValueText = firstRecord.weight.toString()
-//        val firstWeightText = String.format(weightTemplate, firstWeightValueText)
-//        val numberIndex = firstWeightText.indexOf(firstWeightValueText)
-//        firstWeightTextView.text = SpannableString(firstWeightText).also {
-//            it.setSpan(
-//                RelativeSizeSpan(0.5f),
-//                numberIndex,
-//                numberIndex + firstWeightValueText.length,
-//                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-//            )
-//        }
         setWeight(firstRecord.weight, firstWeightTextView)
         setWeight(bestRecord?.weight ?: 0f, bestWeightTextView)
         setWeight(latestRecord?.weight ?: 0f, currentWeightTextView)
         setWeight(goalWeight, goalWeightTextView)
 
-        setGoalButton.visibility = if (goalWeight == 0f) View.VISIBLE else View.INVISIBLE
+        setGoalButton.visibility = if (goalWeight == 0f) View.VISIBLE else View.GONE
     }
 
     // MARK: Private
