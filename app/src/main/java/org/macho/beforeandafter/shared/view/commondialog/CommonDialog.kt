@@ -26,18 +26,22 @@ class CommonDialog @Inject constructor(): DaggerAppCompatDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val arguments = arguments ?: throw RuntimeException("arguments shouldn't be null.")
-        val requestCode = arguments.get(REQUEST_CODE) as Int
-        return AlertDialog.Builder(activity)
-                .setMessage(arguments.get(MESSAGE) as String)
-                .setPositiveButton(arguments.get(POSITIVE_BUTTON_TITLE) as String) { _, i ->
+        val requestCode = arguments.getInt(REQUEST_CODE)
+        val builder = AlertDialog.Builder(activity)
+                .setMessage(arguments.getString(MESSAGE))
+                .setPositiveButton(arguments.getString(POSITIVE_BUTTON_TITLE)) { _, i ->
                     dismiss()
                     commonDialogListener?.onPositiveButtonClick(requestCode)
                 }
-                .setNegativeButton(arguments.get(NEGATIVE_BUTTON_TITLE) as String) { _, i ->
-                    dismiss()
-                    commonDialogListener?.onNegativeButtonClick(requestCode)
-                }
-                .create()
+
+        arguments.getString(NEGATIVE_BUTTON_TITLE)?.let {
+            builder.setNegativeButton(it) { _, i ->
+                dismiss()
+                commonDialogListener?.onNegativeButtonClick(requestCode)
+            }
+        }
+
+        return builder.create()
     }
 
     override fun onAttach(context: Context) {
@@ -56,7 +60,9 @@ class CommonDialog @Inject constructor(): DaggerAppCompatDialogFragment() {
             it.putInt(REQUEST_CODE, requestCode)
             it.putString(MESSAGE, message ?: "")
             it.putString(POSITIVE_BUTTON_TITLE, positiveButtonTitle ?: requireContext().getString(R.string.ok))
-            it.putString(NEGATIVE_BUTTON_TITLE, negativeButtonTitle ?: requireContext().getString(R.string.cancel))
+            if (negativeButtonTitle != null) {
+                it.putString(NEGATIVE_BUTTON_TITLE, negativeButtonTitle)
+            }
         }
         this.show(fragmentManager, null)
     }
