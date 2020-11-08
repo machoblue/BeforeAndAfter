@@ -19,8 +19,8 @@
 
     <string name="weight_progress_title">目標達成度</string>
     <string name="weight_progress_day_template">%d 日目</string>
-    <string name="weight_progress_template">%d %達成</string>
-    <string name="weight_progress_achieve_expect">%d 日後達成見込み</string>
+    <string name="weight_progress_template">%s %%達成</string>
+    <string name="weight_progress_achieve_expect">%s 日後達成見込み</string>
 
     <!-- Records Fragment -->
     <string name="empty_title">記録がありません。</string>

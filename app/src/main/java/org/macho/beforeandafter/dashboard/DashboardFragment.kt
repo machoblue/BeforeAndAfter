@@ -21,9 +21,11 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.preference.PreferenceFragmentDirections
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.di.FragmentScoped
+import org.macho.beforeandafter.shared.extensions.setText
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
 import javax.inject.Inject
+import kotlin.math.ceil
 import kotlinx.android.synthetic.main.dashboard_frag.emptyView as emptyView1
 
 @FragmentScoped
@@ -70,7 +72,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
     }
 
     override fun updateWeightSummary(show: Boolean, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
-        weightSummaryCard.visibility = if (show) View.VISIBLE else View.INVISIBLE
+        weightSummaryCard.visibility = if (show) View.VISIBLE else View.GONE
 
         setWeight(firstWeight ?: 0f, firstWeightTextView)
         setWeight(bestWeight ?: 0f, bestWeightTextView)
@@ -78,6 +80,21 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         setWeight(goalWeight ?: 0f, goalWeightTextView)
 
         setGoalButton.visibility = if (goalWeight == 0f) View.VISIBLE else View.GONE
+    }
+
+    override fun updateWeightProgress(show: Boolean, elapsedDay: Int, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
+        weightProgressCardView.visibility = if (show) View.VISIBLE else View.GONE
+        elapsedDayTextView.text = String.format(getString(R.string.weight_progress_day_template), elapsedDay)
+        val firstWeight = firstWeight ?: 0f
+        val bestWeight = bestWeight ?: 0f
+        val latestWeight = latestWeight ?: 0f
+        val goalWeight = goalWeight ?: 0f
+        val progressInPercent = ((latestWeight - firstWeight) / (goalWeight - firstWeight + 0.001) * 100).toInt()
+        weightProgressTextView.setText(getString(R.string.weight_progress_template), progressInPercent.toString(), 1.5f)
+        val achieveExpectDays = ceil(elapsedDay * ((goalWeight - latestWeight) / (latestWeight - firstWeight + 0.001))).toInt()
+        weightAchieveExpectTextView.text = String.format(getString(R.string.weight_progress_achieve_expect), achieveExpectDays)
+        weightProgressView.update(firstWeight ?: 0.0f, latestWeight ?: 0.0f, bestWeight ?: 0.0f, goalWeight ?: 0.0f)
+        setGoalButton2.visibility = if (goalWeight == 0f) View.VISIBLE else View.GONE
     }
 
     // MARK: Private

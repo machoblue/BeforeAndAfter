@@ -196,6 +196,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/weightProgressCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
@@ -251,6 +252,23 @@
                         app:layout_constraintStart_toEndOf="@id/elapsedDayHelpButton"
                         app:layout_constraintTop_toBottomOf="@+id/weightProgressTitle" />
 
+                    <Button
+                        android:id="@+id/setGoalButton2"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:padding="0dp"
+                        android:text="@string/set_goal"
+                        android:textColor="@color/light_blue"
+                        android:textSize="10sp"
+                        app:layout_constraintBottom_toBottomOf="@id/weightProgressTextView"
+                        app:layout_constraintStart_toEndOf="@id/weightProgressTextView"
+                        />
+
                     <TextView
                         android:id="@+id/weightAchieveExpectTextView"
                         android:layout_width="wrap_content"
@@ -273,6 +291,7 @@
                         app:layout_constraintTop_toTopOf="@id/weightAchieveExpectTextView" />
 
                     <org.macho.beforeandafter.dashboard.ProgressView
+                        android:id="@+id/weightProgressView"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_margin="16dp"

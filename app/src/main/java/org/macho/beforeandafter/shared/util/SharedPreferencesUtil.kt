@@ -24,7 +24,8 @@ object SharedPreferencesUtil {
 
         GOAL_WEIGHT("GOAL_WEIGHT"),
 
-        HIDE_WEIGHT_SUMMARY("hide_weight_summary")
+        HIDE_WEIGHT_SUMMARY("hide_weight_summary"),
+        HIDE_WEIGHT_PROGRESS("hide_weight_progress")
     }
 
     fun getFloat(context: Context, key: Key): Float {

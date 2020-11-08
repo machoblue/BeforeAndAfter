@@ -20,8 +20,8 @@
 
     <string name="weight_progress_title">Progress to Goal</string>
     <string name="weight_progress_day_template">Day %d</string>
-    <string name="weight_progress_template">%d % Achieved</string>
-    <string name="weight_progress_achieve_expect">Expect: in %d days</string>
+    <string name="weight_progress_template">%s %% Achieved</string>
+    <string name="weight_progress_achieve_expect">Expect: in %s days</string>
 
     <!-- Records Fragment -->
     <string name="empty_title">No records</string>

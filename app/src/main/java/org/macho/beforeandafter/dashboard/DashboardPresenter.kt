@@ -4,6 +4,8 @@ import android.content.Context
 import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import java.time.ZonedDateTime
+import java.util.*
 import javax.inject.Inject
 
 @ActivityScoped
@@ -41,8 +43,24 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
             val latestRecord = recordsSortedByDate.lastOrNull()
             val bestRecord = records.filterNot { it.weight == 0f }.minBy { it.weight }
             val goalWeight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.GOAL_WEIGHT)
+
             val showWeightSummary = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_WEIGHT_SUMMARY)
             view?.updateWeightSummary(showWeightSummary, firstRecord?.weight, bestRecord?.weight, latestRecord?.weight, goalWeight)
+
+            val showWeightProgress = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_WEIGHT_PROGRESS)
+            val elapsedDay: Int = if (firstRecord == null) {
+                1
+            } else {
+                val firstCalendar = Calendar.getInstance().also {
+                    it.time = Date(firstRecord.date)
+                    it.set(Calendar.HOUR_OF_DAY, 0)
+                    it.set(Calendar.MINUTE, 0)
+                    it.set(Calendar.SECOND, 0)
+                    it.set(Calendar.MILLISECOND, 0)
+                }
+                ((Date().time - firstCalendar.time.time) / (1000 * 60 * 60 * 24) + 1).toInt()
+            }
+            view?.updateWeightProgress(showWeightProgress, elapsedDay, firstRecord?.weight, bestRecord?.weight, latestRecord?.weight, goalWeight)
         }
     }
 }
