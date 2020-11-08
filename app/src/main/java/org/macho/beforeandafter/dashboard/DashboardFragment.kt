@@ -89,11 +89,16 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         val bestWeight = bestWeight ?: 0f
         val latestWeight = latestWeight ?: 0f
         val goalWeight = goalWeight ?: 0f
-        val progressInPercent = ((latestWeight - firstWeight) / (goalWeight - firstWeight + 0.001) * 100).toInt()
-        weightProgressTextView.setText(getString(R.string.weight_progress_template), progressInPercent.toString(), 1.5f)
-        val achieveExpectDays = ceil(elapsedDay * ((goalWeight - latestWeight) / (latestWeight - firstWeight + 0.001))).toInt()
+
+        val progressInPercent = if (goalWeight == 0f) "--" else ((latestWeight - firstWeight) / (goalWeight - firstWeight + 0.001) * 100).toInt().toString()
+        weightProgressTextView.setText(getString(R.string.weight_progress_template), progressInPercent, 1.5f)
+
+        val isRecordCountOneOrisWorseThanFirst = (goalWeight - firstWeight) * (latestWeight - firstWeight) <= 0
+        val achieveExpectDays = if (goalWeight == 0f || isRecordCountOneOrisWorseThanFirst) "--" else ceil(elapsedDay * ((goalWeight - latestWeight) / (latestWeight - firstWeight + 0.001))).toInt().toString()
         weightAchieveExpectTextView.text = String.format(getString(R.string.weight_progress_achieve_expect), achieveExpectDays)
+
         weightProgressView.update(firstWeight ?: 0.0f, latestWeight ?: 0.0f, bestWeight ?: 0.0f, goalWeight ?: 0.0f)
+
         setGoalButton2.visibility = if (goalWeight == 0f) View.VISIBLE else View.GONE
     }
 
