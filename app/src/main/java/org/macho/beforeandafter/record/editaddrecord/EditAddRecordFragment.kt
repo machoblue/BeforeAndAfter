@@ -48,6 +48,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     companion object {
         const val GALLERY_PERMISSION_RC = 1
         const val CAMERA_PERMISSION_RC = 2
+        const val OTHER_CAMERA_PERMISSION_RC = 6
         const val CUSTOM_CAMERA_RC = 3
         const val OS_CAMERA_RC = 4
         const val GALLERY_RC = 5
@@ -152,6 +153,11 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             CAMERA_PERMISSION_RC -> {
                 if (PermissionUtils.permissionGranted(requestCode, CAMERA_PERMISSION_RC, grantResults)) {
                     presenter.onCameraButtonClicked(currentImageIndex ?: throw RuntimeException("currentImageIndex must not be null."))
+                }
+            }
+            OTHER_CAMERA_PERMISSION_RC -> {
+                if (PermissionUtils.permissionGranted(requestCode, OTHER_CAMERA_PERMISSION_RC, grantResults)) {
+                    startOtherCameraApp()
                 }
             }
             GALLERY_PERMISSION_RC -> {
@@ -292,10 +298,15 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     }
 
     private fun startOtherCameraApp() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val uri = FileProvider.getUriForFile(context!!, "${BuildConfig.APPLICATION_ID}.fileprovider", getCameraFile())
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-        startActivityForResult(intent, OS_CAMERA_RC)
+        if (PermissionUtils.requestPermission(this, OTHER_CAMERA_PERMISSION_RC,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA)) {
+
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val uri = FileProvider.getUriForFile(context!!, "${BuildConfig.APPLICATION_ID}.fileprovider", getCameraFile())
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+            startActivityForResult(intent, OS_CAMERA_RC)
+        }
     }
 
     private fun saveUriToFile(uri: Uri, toFile: File) {
