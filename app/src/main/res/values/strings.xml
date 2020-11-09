@@ -22,6 +22,9 @@
     <string name="weight_progress_template">%s %%達成</string>
     <string name="weight_progress_achieve_expect">%s 日後達成見込み</string>
 
+    <string name="elapsed_days_help_message">最初に記録した時からの経過日数です。</string>
+    <string name="archive_expect_days_help_message">今のペースだと何日後に目標を達成できるかを表しています。あくまで目安です。</string>
+
     <!-- Records Fragment -->
     <string name="empty_title">記録がありません。</string>
     <string name="empty_description">右下のえんぴつボタンで\n記録を追加してください。</string>

@@ -55,11 +55,11 @@ class CommonDialog @Inject constructor(): DaggerAppCompatDialogFragment() {
         }
     }
 
-    fun show(fragmentManager: FragmentManager, requestCode: Int, message: String?, positiveButtonTitle: String? = null, negativeButtonTitle: String? = null) {
+    fun show(fragmentManager: FragmentManager, requestCode: Int, message: String, positiveButtonTitle: String? = null, negativeButtonTitle: String? = null) {
         this.arguments = Bundle().also {
             it.putInt(REQUEST_CODE, requestCode)
             it.putString(MESSAGE, message ?: "")
-            it.putString(POSITIVE_BUTTON_TITLE, positiveButtonTitle ?: requireContext().getString(R.string.ok))
+            it.putString(POSITIVE_BUTTON_TITLE, positiveButtonTitle)
             if (negativeButtonTitle != null) {
                 it.putString(NEGATIVE_BUTTON_TITLE, negativeButtonTitle)
             }

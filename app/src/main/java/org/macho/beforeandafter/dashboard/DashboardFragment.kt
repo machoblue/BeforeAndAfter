@@ -24,6 +24,7 @@ import org.macho.beforeandafter.shared.di.FragmentScoped
 import org.macho.beforeandafter.shared.extensions.setText
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
+import org.macho.beforeandafter.shared.view.commondialog.CommonDialog
 import javax.inject.Inject
 import kotlin.math.ceil
 import kotlinx.android.synthetic.main.dashboard_frag.emptyView as emptyView1
@@ -33,6 +34,9 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
 
     @Inject
     override lateinit var presenter: DashboardContract.Presenter
+
+    @Inject
+    lateinit var dialog: CommonDialog
 
     private var currentNativeAd: UnifiedNativeAd? = null
 
@@ -53,6 +57,19 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         setGoalButton.setOnClickListener {
             val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
             findNavController().navigate(action)
+        }
+
+        setGoalButton2.setOnClickListener {
+            val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
+            findNavController().navigate(action)
+        }
+
+        elapsedDayHelpButton.setOnClickListener {
+            dialog.show(parentFragmentManager, 0, getString(R.string.elapsed_days_help_message), getString(R.string.ok))
+        }
+
+        weightArchiveExpectHelpButton.setOnClickListener {
+            dialog.show(parentFragmentManager, 0, getString(R.string.archive_expect_days_help_message), getString(R.string.ok))
         }
     }
 
