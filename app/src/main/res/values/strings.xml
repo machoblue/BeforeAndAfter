@@ -31,6 +31,7 @@
     <string name="bmi_class_over_weight">太り気味</string>
     <string name="bmi_class_obese">肥満</string>
     <string name="ideal_weight_label">あなたの標準体重</string>
+    <string name="set_height">身長を設定する</string>
 
     <!-- Records Fragment -->
     <string name="empty_title">記録がありません。</string>
