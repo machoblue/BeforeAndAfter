@@ -8,6 +8,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.extensions.drawText
+import kotlin.math.max
+import kotlin.math.min
 
 enum class BMIClass(val labelRes: Int, val colorRes: Int, val from: Float, val toExclusive: Float) {
     UNDER_WEIGHT(R.string.bmi_class_under_weight, R.color.material_color_blue_a400, 15f, 18.5f),
@@ -23,29 +25,38 @@ class BMIView @JvmOverloads constructor(
         const val bmiBarMarginLeft = 36f
         const val bmiBarMarginRight = 36f
         const val classLabelFontSize = 30f
+        const val arrowWidth = 36f
+        const val arrowHeightWidthRatio = 1.25f
     }
 
     private val classLabelPaint = TextPaint().also {
         it.color = Color.WHITE
         it.isAntiAlias = true
-        it.isAntiAlias = true
         it.textSize = classLabelFontSize
     }
 
-    private val arrowPaint = Paint().also {
+    private val arrowFillPaint = Paint().also {
         it.color = Color.RED
+        it.isAntiAlias = true
         it.style = Paint.Style.FILL
     }
 
-    private var bmi: Float = 24f
+    private val arrowStrokePaint = Paint().also {
+        it.color = Color.WHITE
+        it.isAntiAlias = true
+        it.style = Paint.Style.STROKE
+        it.strokeWidth = 5f
+    }
+
+    private var bmi: Float = 0f
 
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
 
         val bmiBarMinX = bmiBarMarginLeft
         val bmiBarMaxX = width - bmiBarMarginRight
-        val bmiBarMinY = 0f
-        val bmiBarMaxY = height / 2f
+        val bmiBarMinY = height / 3f
+        val bmiBarMaxY = height.toFloat()
 
         val bmiBarWidth = width - (bmiBarMarginLeft + bmiBarMarginRight)
 
@@ -67,6 +78,25 @@ class BMIView @JvmOverloads constructor(
 
             bmiClassMinX = bmiClassMaxX
         }
+
+        if (bmi <= 0f) {
+            return
+        }
+
+        val cappedBmi = max(min(bmi, bmiBarMaxValue), bmiBarMinValue)
+        val arrowCenterX = bmiBarMinX + bmiBarWidth * ((cappedBmi - bmiBarMinValue) / (bmiBarMaxValue - bmiBarMinValue))
+        val arrowMinX = arrowCenterX - (arrowWidth / 2)
+        val arrowMaxX = arrowCenterX + (arrowWidth / 2)
+        val arrowMinY = 0f
+        val arrowMaxY = arrowMinY + arrowWidth * arrowHeightWidthRatio
+        val arrowPath = Path().also {
+            it.moveTo(arrowMinX, arrowMinY)
+            it.lineTo(arrowCenterX, arrowMaxY)
+            it.lineTo(arrowMaxX, arrowMinY)
+            it.lineTo(arrowMinX, arrowMinY)
+        }
+        canvas?.drawPath(arrowPath, arrowFillPaint)
+        canvas?.drawPath(arrowPath, arrowStrokePaint)
     }
 
     fun update(bmi: Float) {
