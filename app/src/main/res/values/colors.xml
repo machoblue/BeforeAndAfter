@@ -27,7 +27,7 @@
     <color name="material_color_red_a200">#ff8a80</color>
     <color name="material_color_blue_a200">#82B1FF</color>
     <color name="material_color_green_a200">#69F0AE</color>
-    <color name="material_color_yellow_a200">#FFFF00</color>
+    <color name="material_color_yellow_a200">#FFD740</color>
 
     <color name="blue_gray">#ECEFF1</color>
 </resources>

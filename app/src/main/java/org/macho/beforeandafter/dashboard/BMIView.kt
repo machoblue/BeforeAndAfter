@@ -4,16 +4,18 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.shared.extensions.drawText
 
 enum class BMIClass(val labelRes: Int, val colorRes: Int, val from: Float, val toExclusive: Float) {
     UNDER_WEIGHT(R.string.bmi_class_under_weight, R.color.material_color_blue_a200, 15f, 18.5f),
-    NORMAL(R.string.bmi_class_under_weight, R.color.material_color_green_a200, 18.5f, 25f),
-    OVER_WEIGHT(R.string.bmi_class_under_weight, R.color.material_color_yellow_a200, 25f, 30f),
-    OBESE(R.string.bmi_class_under_weight, R.color.material_color_red_a200, 30f, 45f),
+    NORMAL(R.string.bmi_class_normal, R.color.material_color_green_a200, 18.5f, 25f),
+    OVER_WEIGHT(R.string.bmi_class_over_weight, R.color.material_color_yellow_a200, 25f, 30f),
+    OBESE(R.string.bmi_class_obese, R.color.material_color_red_a200, 30f, 45f),
 }
 
 class BMIView @JvmOverloads constructor(
@@ -22,34 +24,14 @@ class BMIView @JvmOverloads constructor(
     companion object {
         const val bmiBarMarginLeft = 36f
         const val bmiBarMarginRight = 36f
-        const val classLabelFontSize = 24f
+        const val classLabelFontSize = 30f
     }
 
-    private val classLabelPaint = Paint().also {
+    private val classLabelPaint = TextPaint().also {
         it.color = Color.WHITE
-        it.style = Paint.Style.FILL
+        it.isAntiAlias = true
         it.isAntiAlias = true
         it.textSize = classLabelFontSize
-    }
-
-    private val underWeightBarPaint = Paint().also {
-        it.color = ContextCompat.getColor(context, BMIClass.UNDER_WEIGHT.colorRes)
-        it.style = Paint.Style.FILL
-    }
-
-    private val normalBarPaint = Paint().also {
-        it.color = ContextCompat.getColor(context, BMIClass.NORMAL.colorRes)
-        it.style = Paint.Style.FILL
-    }
-
-    private val overWeightBarPaint = Paint().also {
-        it.color = ContextCompat.getColor(context, BMIClass.OVER_WEIGHT.colorRes)
-        it.style = Paint.Style.FILL
-    }
-
-    private val obeseBarPaint = Paint().also {
-        it.color = ContextCompat.getColor(context, BMIClass.OBESE.colorRes)
-        it.style = Paint.Style.FILL
     }
 
     private val arrowPaint = Paint().also {
@@ -57,7 +39,7 @@ class BMIView @JvmOverloads constructor(
         it.style = Paint.Style.FILL
     }
 
-    private var bmi: Float = 0f
+    private var bmi: Float = 24f
 
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
@@ -81,6 +63,9 @@ class BMIView @JvmOverloads constructor(
                 it.color = ContextCompat.getColor(context, bmiClass.colorRes)
             }
             canvas?.drawRect(bmiClassMinX, bmiBarMinY, bmiClassMaxX, bmiBarMaxY, paint)
+
+            val text = context.getString(bmiClass.labelRes)
+            canvas?.drawText(text, bmiClassMinX, bmiBarMinY, bmiClassMaxX - bmiClassMinX, classLabelPaint)
 
             bmiClassMinX = bmiClassMaxX
         }
