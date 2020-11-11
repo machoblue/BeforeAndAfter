@@ -15,7 +15,13 @@ enum class BMIClass(val labelRes: Int, val colorRes: Int, val from: Float, val t
     UNDER_WEIGHT(R.string.bmi_class_under_weight, R.color.material_color_blue_a400, 15f, 18.5f),
     NORMAL(R.string.bmi_class_normal, R.color.material_color_green_a400, 18.5f, 25f),
     OVER_WEIGHT(R.string.bmi_class_over_weight, R.color.material_color_yellow_a400, 25f, 30f),
-    OBESE(R.string.bmi_class_obese, R.color.material_color_red_a400, 30f, 45f),
+    OBESE(R.string.bmi_class_obese, R.color.material_color_red_a400, 30f, 45f);
+    companion object {
+        fun getBMIClass(bmi: Float): BMIClass {
+            val cappedBMI = max(min(bmi, OBESE.toExclusive), UNDER_WEIGHT.from)
+            return values().firstOrNull { cappedBMI >= it.from && cappedBMI < it.toExclusive } ?: OBESE
+        }
+    }
 }
 
 class BMIView @JvmOverloads constructor(

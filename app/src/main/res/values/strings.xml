@@ -25,12 +25,12 @@
     <string name="elapsed_days_help_message">最初に記録した時からの経過日数です。</string>
     <string name="archive_expect_days_help_message">今のペースだと何日後に目標を達成できるかを表しています。あくまで目安です。</string>
 
-    <string name="bmi_title">BMI(ボディマス指数)</string>
+    <string name="bmi_title">BMI (ボディマス指数)</string>
     <string name="bmi_class_under_weight">低体重</string>
     <string name="bmi_class_normal">標準</string>
     <string name="bmi_class_over_weight">太り気味</string>
     <string name="bmi_class_obese">肥満</string>
-    <string name="ideal_weight_label">あなたの標準体重</string>
+    <string name="ideal_weight_label">あなたの標準体重:</string>
     <string name="set_height">身長を設定する</string>
 
     <!-- Records Fragment -->

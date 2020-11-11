@@ -119,6 +119,16 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         setGoalButton2.visibility = if (goalWeight == 0f) View.VISIBLE else View.GONE
     }
 
+    override fun updateBMI(show: Boolean, showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?) {
+        bmiCardView.visibility = if (show) View.VISIBLE else View.GONE
+        setHeightButton.visibility = if (showSetHeightButton) View.VISIBLE else View.GONE
+        bmiTextView.text = bmi?.let { String.format("%.1f", it) } ?: "--.-"
+        bmiView.update(bmi ?: 0f)
+        bmiClassTextView.text = String.format("( %s )", bmiClass ?: "--")
+        val idealWeightString = idealWeight?.let { String.format("%.1f", it) } ?: "--.--"
+        idealWeightTextView.text = String.format("%s kg", idealWeightString)
+    }
+
     // MARK: Private
     private fun setWeight(weight: Float, textView: TextView) {
         val weightUnit = "kg"

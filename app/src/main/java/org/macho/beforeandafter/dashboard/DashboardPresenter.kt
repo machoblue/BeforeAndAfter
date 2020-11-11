@@ -7,6 +7,7 @@ import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.time.ZonedDateTime
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.pow
 
 @ActivityScoped
 class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
@@ -61,6 +62,21 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 ((Date().time - firstCalendar.time.time) / (1000 * 60 * 60 * 24) + 1).toInt()
             }
             view?.updateWeightProgress(showWeightProgress, elapsedDay, firstRecord?.weight, bestRecord?.weight, latestRecord?.weight, goalWeight)
+
+            val showBMI = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BMI)
+            val height = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.HEIGHT)
+            val showSetHeightButton = height == 0f
+            val isLatestWeightBlank = (latestRecord == null) || latestRecord.weight == 0f
+
+            if (showSetHeightButton || isLatestWeightBlank) {
+                view?.updateBMI(showBMI, showSetHeightButton, null, null, null)
+
+            } else {
+                val bmi = (latestRecord!!.weight / (height / 100.0).pow(2.0)).toFloat()
+                val bmiClass = context.getString(BMIClass.getBMIClass(bmi).labelRes)
+                val idealWeight = ((height / 100.0).pow(2.0) * 22).toFloat()
+                view?.updateBMI(showBMI, showSetHeightButton, bmi, bmiClass, idealWeight)
+            }
         }
     }
 }

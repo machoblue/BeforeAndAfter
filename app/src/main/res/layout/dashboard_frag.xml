@@ -343,13 +343,12 @@
                         android:id="@+id/bmiClassTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginStart="6dp"
                         android:layout_marginBottom="6dp"
                         android:text="(標準)"
                         android:textSize="18sp"
-                        app:layout_constraintStart_toEndOf="@id/bmiTextView"
                         app:layout_constraintBottom_toBottomOf="@+id/bmiTextView"
-                        />
+                        app:layout_constraintStart_toEndOf="@id/bmiTextView" />
 
                     <Button
                         android:id="@+id/setHeightButton"
@@ -372,8 +371,6 @@
                         android:id="@+id/bmiView"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
-
-                        android:layout_marginTop="8dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -381,18 +378,30 @@
                         app:layout_constraintTop_toBottomOf="@+id/bmiTextView" />
 
                     <TextView
-                        android:id="@+id/idealWeightTextView"
+                        android:id="@+id/idealWeightLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
-                        android:text="あなたの標準体重: 60kg"
+                        android:text="@string/ideal_weight_label"
                         android:textSize="16sp"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/bmiTextView"
                         app:layout_constraintTop_toBottomOf="@+id/bmiView"
                         app:layout_constraintBottom_toBottomOf="parent"
                         />
+
+                    <TextView
+                        android:id="@+id/idealWeightTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="16kg"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@id/idealWeightLabel"
+                        app:layout_constraintStart_toEndOf="@id/idealWeightLabel"
+                        app:layout_constraintTop_toTopOf="@id/idealWeightLabel" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>

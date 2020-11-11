@@ -26,12 +26,12 @@
     <string name="elapsed_days_help_message">This is elapsed days from when you recorded weight for the first time.</string>
     <string name="archive_expect_days_help_message">This is calculated considering your weight loss speed so far. Please note this is only a guide.</string>
 
-    <string name="bmi_title">BMI(Body Mass Index)</string>
+    <string name="bmi_title">BMI (Body Mass Index)</string>
     <string name="bmi_class_under_weight">Under Weight</string>
     <string name="bmi_class_normal">Normal</string>
     <string name="bmi_class_over_weight">Over Weight</string>
     <string name="bmi_class_obese">Obese</string>
-    <string name="ideal_weight_label">Your Ideal Weight</string>
+    <string name="ideal_weight_label">Your Ideal Weight:</string>
     <string name="set_height">Set Your Height</string>
 
     <!-- Records Fragment -->
