@@ -1,9 +1,7 @@
 package org.macho.beforeandafter.dashboard
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -12,10 +10,10 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.extensions.drawText
 
 enum class BMIClass(val labelRes: Int, val colorRes: Int, val from: Float, val toExclusive: Float) {
-    UNDER_WEIGHT(R.string.bmi_class_under_weight, R.color.material_color_blue_a200, 15f, 18.5f),
-    NORMAL(R.string.bmi_class_normal, R.color.material_color_green_a200, 18.5f, 25f),
-    OVER_WEIGHT(R.string.bmi_class_over_weight, R.color.material_color_yellow_a200, 25f, 30f),
-    OBESE(R.string.bmi_class_obese, R.color.material_color_red_a200, 30f, 45f),
+    UNDER_WEIGHT(R.string.bmi_class_under_weight, R.color.material_color_blue_a400, 15f, 18.5f),
+    NORMAL(R.string.bmi_class_normal, R.color.material_color_green_a400, 18.5f, 25f),
+    OVER_WEIGHT(R.string.bmi_class_over_weight, R.color.material_color_yellow_a400, 25f, 30f),
+    OBESE(R.string.bmi_class_obese, R.color.material_color_red_a400, 30f, 45f),
 }
 
 class BMIView @JvmOverloads constructor(
@@ -65,7 +63,7 @@ class BMIView @JvmOverloads constructor(
             canvas?.drawRect(bmiClassMinX, bmiBarMinY, bmiClassMaxX, bmiBarMaxY, paint)
 
             val text = context.getString(bmiClass.labelRes)
-            canvas?.drawText(text, bmiClassMinX, bmiBarMinY, bmiClassMaxX - bmiClassMinX, classLabelPaint)
+            canvas?.drawText(text, RectF(bmiClassMinX, bmiBarMinY, bmiClassMaxX, bmiBarMaxY), classLabelPaint)
 
             bmiClassMinX = bmiClassMaxX
         }
