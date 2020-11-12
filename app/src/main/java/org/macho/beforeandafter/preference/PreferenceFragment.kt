@@ -92,6 +92,10 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             val action = PreferenceFragmentDirections.actionPreferenceFragmentToEditGoalFragment()
             findNavController().navigate(action)
         })
+        items.add(PreferenceItem(R.string.edit_height_title, R.string.edit_height_description) {
+            val action = PreferenceFragmentDirections.actionPreferenceFragmentToEditHeightFragment2()
+            findNavController().navigate(action)
+        })
         items.add(PreferenceItem(R.string.alarm_title, R.string.alarm_description) {
             val action = PreferenceFragmentDirections.actionPreferenceFragmentToAlarmFragment()
             findNavController().navigate(action)

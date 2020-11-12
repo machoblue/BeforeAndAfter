@@ -10,9 +10,16 @@
         <action
             android:id="@+id/action_dashboardFragment_to_editGoalFragment2"
             app:destination="@id/editGoalFragment2" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_editHeightFragment"
+            app:destination="@id/editHeightFragment" />
     </fragment>
     <fragment
         android:id="@+id/editGoalFragment2"
         android:name="org.macho.beforeandafter.preference.editgoal.EditGoalFragment"
         android:label="@string/action_bar_title_edit_goal" />
+    <fragment
+        android:id="@+id/editHeightFragment"
+        android:name="org.macho.beforeandafter.preference.height.EditHeightFragment"
+        android:label="@string/edit_height_title" />
 </navigation>

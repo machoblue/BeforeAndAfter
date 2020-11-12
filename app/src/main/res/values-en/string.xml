@@ -76,6 +76,12 @@
     <string name="goal_description">set target weight and target rate</string>
     <string name="goal_weight_label">target weight(kg)</string>
     <string name="goal_rate_label">target rate(%)</string>
+
+    <string name="edit_height_title">Height</string>
+    <string name="edit_height_description">Set height to calculate BMI.</string>
+    <string name="edit_height_message">To calculate BMI, Please set your height.(Optional)</string>
+    <string name="edit_height_label">Height(cm)</string>
+
     <string name="alarm_title">Alarm</string>
     <string name="alarm_description">Schedule notification, and remind you to record.</string>
     <string name="alarm_switch_label">Enable notification</string>
@@ -84,10 +90,6 @@
     <string name="delete_all_description">delete all data</string>
     <string name="delete_all_confirmation_message">You cannot recovery your data once you delete all data.Do you delete all data?</string>
     <string name="ok">OK</string>
-    <string name="use_old_graphe_ui">use old graphe view</string>
-    <string name="use_old_graphe_ui_description">use not new graphe view but old one</string>
-    <string name="use_old_graphe_ui_message">Do you use old graphe view?</string>
-    <string name="use_old_graphe_ui_yes">Yes.</string>
     <string name="preference_item_change_or_revoke_consent_title">Change or revoke consent</string>
     <string name="preference_item_change_or_revoke_consent_description">Change or revoke consent you have made.</string>
     <string name="preference_item_backup_title">Backup</string>

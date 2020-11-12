@@ -73,6 +73,11 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         weightArchiveExpectHelpButton.setOnClickListener {
             dialog.show(parentFragmentManager, 0, getString(R.string.archive_expect_days_help_message), getString(R.string.ok))
         }
+
+        setHeightButton.setOnClickListener {
+            val action = DashboardFragmentDirections.actionDashboardFragmentToEditHeightFragment()
+            findNavController().navigate(action)
+        }
     }
 
     override fun onResume() {
