@@ -27,6 +27,8 @@ import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.view.commondialog.CommonDialog
 import javax.inject.Inject
 import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.math.min
 import kotlinx.android.synthetic.main.dashboard_frag.emptyView as emptyView1
 
 @FragmentScoped
@@ -107,11 +109,11 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         val latestWeight = latestWeight ?: 0f
         val goalWeight = goalWeight ?: 0f
 
-        val progressInPercent = if (goalWeight == 0f) "--" else ((latestWeight - firstWeight) / (goalWeight - firstWeight + 0.001) * 100).toInt().toString()
+        val progressInPercent = if (goalWeight == 0f) "--" else max(0f, min(100f, ((latestWeight - firstWeight) / (goalWeight - firstWeight + 0.001f) * 100))).toInt().toString()
         weightProgressTextView.setText(getString(R.string.weight_progress_template), progressInPercent, 1.5f)
 
-        val isRecordCountOneOrisWorseThanFirst = (goalWeight - firstWeight) * (latestWeight - firstWeight) <= 0
-        val achieveExpectDays = if (goalWeight == 0f || isRecordCountOneOrisWorseThanFirst) "--" else ceil(elapsedDay * ((goalWeight - latestWeight) / (latestWeight - firstWeight + 0.001))).toInt().toString()
+        val isRecordCountOneOrIsWorseThanFirst = (goalWeight - firstWeight) * (latestWeight - firstWeight) <= 0
+        val achieveExpectDays = if (goalWeight == 0f || isRecordCountOneOrIsWorseThanFirst) "--" else ceil(elapsedDay * ((goalWeight - latestWeight) / (latestWeight - firstWeight + 0.001))).toInt().toString()
         weightAchieveExpectTextView.text = String.format(getString(R.string.weight_progress_achieve_expect), achieveExpectDays)
 
         weightProgressView.update(firstWeight ?: 0.0f, latestWeight ?: 0.0f, bestWeight ?: 0.0f, goalWeight ?: 0.0f)
