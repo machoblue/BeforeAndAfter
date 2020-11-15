@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import kotlinx.android.synthetic.main.dashboard_summary_view.view.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.extensions.setText
 
@@ -23,11 +24,10 @@ class DashboardSummaryView @JvmOverloads constructor(
     fun update(latestValue: Float?, firstValue: Float?, bestValue: Float?, goalValue: Float?, showSetGoalButton: Boolean, onSetGoalButtonClick: (() -> Unit)? = null) {
         val blankText = "--.--"
         val weightTemplate = "%s kg"
-        findViewById<TextView>(R.id.currentWeightTextView).setText(weightTemplate, latestValue?.toString() ?: blankText, 1.5f)
-        findViewById<TextView>(R.id.firstWeightTextView).setText(weightTemplate, firstValue?.toString() ?: blankText, 1.5f)
-        findViewById<TextView>(R.id.bestWeightTextView).setText(weightTemplate, bestValue?.toString() ?: blankText, 1.5f)
-        findViewById<TextView>(R.id.goalWeightTextView).setText(weightTemplate, goalValue?.toString() ?: blankText, 1.5f)
-        val setGoalButton = findViewById<Button>(R.id.setGoalButton)
+        currentWeightTextView.setText(weightTemplate, latestValue?.toString() ?: blankText, 1.5f)
+        firstWeightTextView.setText(weightTemplate, firstValue?.toString() ?: blankText, 1.5f)
+        bestWeightTextView.setText(weightTemplate, bestValue?.toString() ?: blankText, 1.5f)
+        goalWeightTextView.setText(weightTemplate, goalValue?.toString() ?: blankText, 1.5f)
         setGoalButton.visibility = if (showSetGoalButton) View.VISIBLE else View.INVISIBLE
         setGoalButton.setOnClickListener {
             onSetGoalButtonClick?.invoke()

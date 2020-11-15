@@ -20,6 +20,7 @@ import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.dashboard_frag.*
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.dashboard.view.DashboardBMIView
 import org.macho.beforeandafter.dashboard.view.DashboardProgressView
 import org.macho.beforeandafter.dashboard.view.DashboardProgressViewListener
 import org.macho.beforeandafter.dashboard.view.DashboardSummaryView
@@ -57,11 +58,6 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         AdUtil.initializeMobileAds(context!!)
         AdUtil.loadBannerAd(adView, context!!)
         adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
-
-        setHeightButton.setOnClickListener {
-            val action = DashboardFragmentDirections.actionDashboardFragmentToEditHeightFragment()
-            findNavController().navigate(action)
-        }
     }
 
     override fun onResume() {
@@ -126,13 +122,21 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
     }
 
     override fun updateBMI(show: Boolean, showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?) {
-        bmiCardView.visibility = if (show) View.VISIBLE else View.GONE
-        setHeightButton.visibility = if (showSetHeightButton) View.VISIBLE else View.GONE
-        bmiTextView.text = bmi?.let { String.format("%.1f", it) } ?: "--.-"
-        bmiView.update(bmi ?: 0f)
-        bmiClassTextView.text = String.format("( %s )", bmiClass ?: "--")
-        val idealWeightString = idealWeight?.let { String.format("%.1f", it) } ?: "--.--"
-        idealWeightTextView.text = String.format("%s kg", idealWeightString)
+        if (!show) {
+            linearLayout.findViewById<CardView>(R.id.bmi_card_id)?.let {
+                linearLayout.removeView(it)
+            }
+            return
+        }
+
+        val bmiView = linearLayout.findViewById<DashboardBMIView>(R.id.bmi_view_id) ?: DashboardBMIView(context!!).also {
+            addCardView(it, R.id.bmi_view_id, R.id.bmi_card_id)
+        }
+
+        bmiView.update(showSetHeightButton, bmi, bmiClass, idealWeight) {
+            val action = DashboardFragmentDirections.actionDashboardFragmentToEditHeightFragment()
+            findNavController().navigate(action)
+        }
     }
 
     private fun addCardView(cardContentView: View, contentViewId: Int, cardId: Int) {
