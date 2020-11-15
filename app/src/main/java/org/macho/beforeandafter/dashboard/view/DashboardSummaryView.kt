@@ -1,4 +1,4 @@
-package org.macho.beforeandafter.dashboard
+package org.macho.beforeandafter.dashboard.view
 
 import android.content.Context
 import android.util.AttributeSet

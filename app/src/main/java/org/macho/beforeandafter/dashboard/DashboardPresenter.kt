@@ -1,10 +1,10 @@
 package org.macho.beforeandafter.dashboard
 
 import android.content.Context
+import org.macho.beforeandafter.dashboard.view.BMIClass
 import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
-import java.time.ZonedDateTime
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.pow

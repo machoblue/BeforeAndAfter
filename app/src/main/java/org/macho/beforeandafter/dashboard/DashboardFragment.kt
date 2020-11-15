@@ -23,6 +23,7 @@ import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.dashboard_frag.*
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.dashboard.view.DashboardSummaryView
 import org.macho.beforeandafter.shared.di.FragmentScoped
 import org.macho.beforeandafter.shared.extensions.setText
 import org.macho.beforeandafter.shared.util.AdUtil

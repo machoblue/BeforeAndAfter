@@ -137,7 +137,7 @@
                         app:layout_constraintStart_toEndOf="@id/weightAchieveExpectTextView"
                         app:layout_constraintTop_toTopOf="@id/weightAchieveExpectTextView" />
 
-                    <org.macho.beforeandafter.dashboard.ProgressView
+                    <org.macho.beforeandafter.dashboard.view.ProgressView
                         android:id="@+id/weightProgressView"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
@@ -214,7 +214,7 @@
                         app:layout_constraintStart_toEndOf="@id/bmiClassTextView"
                         />
 
-                    <org.macho.beforeandafter.dashboard.BMIView
+                    <org.macho.beforeandafter.dashboard.view.BMIView
                         android:id="@+id/bmiView"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
