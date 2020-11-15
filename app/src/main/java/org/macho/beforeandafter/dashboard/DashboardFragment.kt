@@ -1,5 +1,6 @@
 package org.macho.beforeandafter.dashboard
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -7,19 +8,21 @@ import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.formats.MediaView
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.dashboard_frag.*
-import kotlinx.android.synthetic.main.dashboard_frag.emptyView
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.preference.PreferenceFragmentDirections
-import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.di.FragmentScoped
 import org.macho.beforeandafter.shared.extensions.setText
 import org.macho.beforeandafter.shared.util.AdUtil
@@ -29,7 +32,6 @@ import javax.inject.Inject
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
-import kotlinx.android.synthetic.main.dashboard_frag.emptyView as emptyView1
 
 @FragmentScoped
 class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContract.View {
@@ -55,11 +57,6 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         AdUtil.initializeMobileAds(context!!)
         AdUtil.loadBannerAd(adView, context!!)
         adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
-
-        setGoalButton.setOnClickListener {
-            val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
-            findNavController().navigate(action)
-        }
 
         setGoalButton2.setOnClickListener {
             val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
@@ -96,14 +93,28 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
     }
 
     override fun updateWeightSummary(show: Boolean, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
-        weightSummaryCard.visibility = if (show) View.VISIBLE else View.GONE
+        if (!show) {
+            linearLayout.findViewById<CardView>(R.id.weight_summary_card_id)?.let {
+                linearLayout.removeView(it)
+            }
+            return
+        }
 
-        setWeight(firstWeight ?: 0f, firstWeightTextView)
-        setWeight(bestWeight ?: 0f, bestWeightTextView)
-        setWeight(latestWeight ?: 0f, currentWeightTextView)
-        setWeight(goalWeight ?: 0f, goalWeightTextView)
+        val weightSummaryView = linearLayout.findViewById<DashboardSummaryView>(R.id.weight_summary_view_id) ?: DashboardSummaryView(context!!).also {
+            it.id = R.id.weight_summary_view_id
+            val cardView = CardView(context!!)
+            cardView.id = R.id.weight_summary_card_id
+            cardView.addView(it, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+            linearLayout.addView(cardView, 0, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).also {
+                val marginInPx = convertDpToPx(context!!, 12)
+                it.setMargins(marginInPx, marginInPx, marginInPx, 0)
+            })
+        }
 
-        setGoalButton.visibility = if (goalWeight == 0f) View.VISIBLE else View.GONE
+        weightSummaryView.update(latestWeight, firstWeight, bestWeight, goalWeight, (goalWeight ?: 0f) == 0f) {
+            val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
+            findNavController().navigate(action)
+        }
     }
 
     override fun updateWeightProgress(show: Boolean, elapsedDay: Int, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
@@ -152,6 +163,11 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE
             )
         }
+    }
+
+    private fun convertDpToPx(context: Context, dp: Int): Int {
+        val d: Float = context.resources.displayMetrics.density
+        return (dp * d + 0.5).toInt()
     }
 
     private fun refreshAd() {
