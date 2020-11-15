@@ -17,10 +17,10 @@
     <string name="goal_label">目標</string>
     <string name="set_goal">目標を設定する</string>
 
-    <string name="weight_progress_title">目標達成度</string>
-    <string name="weight_progress_day_template">%d 日目</string>
-    <string name="weight_progress_template">%s %%達成</string>
-    <string name="weight_progress_achieve_expect">%s 日後達成見込み</string>
+    <string name="progress_title">目標達成度</string>
+    <string name="progress_day_template">%d 日目</string>
+    <string name="progress_template">%s %%達成</string>
+    <string name="progress_achieve_expect">%s 日後達成見込み</string>
 
     <string name="elapsed_days_help_message">最初に記録した時からの経過日数です。</string>
     <string name="archive_expect_days_help_message">今のペースだと何日後に目標を達成できるかを表しています。あくまで目安です。</string>

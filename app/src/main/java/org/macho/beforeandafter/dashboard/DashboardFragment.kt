@@ -2,9 +2,6 @@ package org.macho.beforeandafter.dashboard
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +20,8 @@ import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.dashboard_frag.*
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.dashboard.view.DashboardProgressView
+import org.macho.beforeandafter.dashboard.view.DashboardProgressViewListener
 import org.macho.beforeandafter.dashboard.view.DashboardSummaryView
 import org.macho.beforeandafter.shared.di.FragmentScoped
 import org.macho.beforeandafter.shared.extensions.setText
@@ -59,19 +58,6 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         AdUtil.loadBannerAd(adView, context!!)
         adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
 
-        setGoalButton2.setOnClickListener {
-            val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
-            findNavController().navigate(action)
-        }
-
-        elapsedDayHelpButton.setOnClickListener {
-            dialog.show(parentFragmentManager, 0, getString(R.string.elapsed_days_help_message), getString(R.string.ok))
-        }
-
-        weightArchiveExpectHelpButton.setOnClickListener {
-            dialog.show(parentFragmentManager, 0, getString(R.string.archive_expect_days_help_message), getString(R.string.ok))
-        }
-
         setHeightButton.setOnClickListener {
             val action = DashboardFragmentDirections.actionDashboardFragmentToEditHeightFragment()
             findNavController().navigate(action)
@@ -102,14 +88,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         }
 
         val weightSummaryView = linearLayout.findViewById<DashboardSummaryView>(R.id.weight_summary_view_id) ?: DashboardSummaryView(context!!).also {
-            it.id = R.id.weight_summary_view_id
-            val cardView = CardView(context!!)
-            cardView.id = R.id.weight_summary_card_id
-            cardView.addView(it, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
-            linearLayout.addView(cardView, 0, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).also {
-                val marginInPx = convertDpToPx(context!!, 12)
-                it.setMargins(marginInPx, marginInPx, marginInPx, 0)
-            })
+            addCardView(it, R.id.weight_summary_view_id, R.id.weight_summary_card_id)
         }
 
         weightSummaryView.update(latestWeight, firstWeight, bestWeight, goalWeight, (goalWeight ?: 0f) == 0f) {
@@ -119,23 +98,31 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
     }
 
     override fun updateWeightProgress(show: Boolean, elapsedDay: Int, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
-        weightProgressCardView.visibility = if (show) View.VISIBLE else View.GONE
-        elapsedDayTextView.text = String.format(getString(R.string.weight_progress_day_template), elapsedDay)
-        val firstWeight = firstWeight ?: 0f
-        val bestWeight = bestWeight ?: 0f
-        val latestWeight = latestWeight ?: 0f
-        val goalWeight = goalWeight ?: 0f
+        if (!show) {
+            linearLayout.findViewById<CardView>(R.id.weight_progress_card_id)?.let {
+                linearLayout.removeView(it)
+            }
+            return
+        }
 
-        val progressInPercent = if (goalWeight == 0f) "--" else max(0f, min(100f, ((latestWeight - firstWeight) / (goalWeight - firstWeight + 0.001f) * 100))).toInt().toString()
-        weightProgressTextView.setText(getString(R.string.weight_progress_template), progressInPercent, 1.5f)
+        val weightProgressView = linearLayout.findViewById<DashboardProgressView>(R.id.weight_progress_view_id) ?: DashboardProgressView(context!!).also {
+            addCardView(it, R.id.weight_progress_view_id, R.id.weight_progress_card_id)
+        }
 
-        val isRecordCountOneOrIsWorseThanFirst = (goalWeight - firstWeight) * (latestWeight - firstWeight) <= 0
-        val achieveExpectDays = if (goalWeight == 0f || isRecordCountOneOrIsWorseThanFirst) "--" else ceil(elapsedDay * ((goalWeight - latestWeight) / (latestWeight - firstWeight + 0.001))).toInt().toString()
-        weightAchieveExpectTextView.text = String.format(getString(R.string.weight_progress_achieve_expect), achieveExpectDays)
+        weightProgressView.update(elapsedDay, firstWeight, bestWeight, latestWeight, goalWeight, goalWeight == 0f, object: DashboardProgressViewListener {
+            override fun onSetGoalButtonClicked() {
+                val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
+                findNavController().navigate(action)
+            }
 
-        weightProgressView.update(firstWeight ?: 0.0f, latestWeight ?: 0.0f, bestWeight ?: 0.0f, goalWeight ?: 0.0f)
+            override fun onElapsedDayHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.elapsed_days_help_message), getString(R.string.ok))
+            }
 
-        setGoalButton2.visibility = if (goalWeight == 0f) View.VISIBLE else View.GONE
+            override fun onAchieveExpectHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.archive_expect_days_help_message), getString(R.string.ok))
+            }
+        })
     }
 
     override fun updateBMI(show: Boolean, showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?) {
@@ -148,22 +135,16 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         idealWeightTextView.text = String.format("%s kg", idealWeightString)
     }
 
-    // MARK: Private
-    private fun setWeight(weight: Float, textView: TextView) {
-        val weightUnit = "kg"
-        val weightTemplate = "%s $weightUnit"
-
-        val numberText = if (weight == 0f) "--.--" else weight.toString()
-        val formattedText = String.format(weightTemplate, numberText)
-        val numberIndex = formattedText.indexOf(numberText)
-        textView.text = SpannableString(formattedText).also {
-            it.setSpan(
-                    RelativeSizeSpan(0.66f),
-                    numberIndex + numberText.length,
-                    formattedText.length,
-                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-            )
-        }
+    private fun addCardView(cardContentView: View, contentViewId: Int, cardId: Int) {
+        cardContentView.id = contentViewId
+        val cardView = CardView(context!!)
+        cardView.id = cardId
+        cardView.addView(cardContentView, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        val childCount = linearLayout.childCount
+        linearLayout.addView(cardView, max(0, childCount - 1), LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).also {
+            val marginInPx = convertDpToPx(context!!, 12)
+            it.setMargins(marginInPx, marginInPx, marginInPx, 0)
+        })
     }
 
     private fun convertDpToPx(context: Context, dp: Int): Int {

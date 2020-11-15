@@ -18,10 +18,10 @@
     <string name="goal_label">Goal</string>
     <string name="set_goal">Set Goal</string>
 
-    <string name="weight_progress_title">Progress to Goal</string>
-    <string name="weight_progress_day_template">Day %d</string>
-    <string name="weight_progress_template">%s %% Achieved</string>
-    <string name="weight_progress_achieve_expect">Expect: in %s days</string>
+    <string name="progress_title">Progress to Goal</string>
+    <string name="progress_day_template">Day %d</string>
+    <string name="progress_template">%s %% Achieved</string>
+    <string name="progress_achieve_expect">Expect: in %s days</string>
 
     <string name="elapsed_days_help_message">This is elapsed days from when you recorded weight for the first time.</string>
     <string name="archive_expect_days_help_message">This is calculated considering your weight loss speed so far. Please note this is only a guide.</string>
