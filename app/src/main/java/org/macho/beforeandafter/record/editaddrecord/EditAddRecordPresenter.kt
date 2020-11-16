@@ -65,12 +65,12 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     }
 
     override fun modifyWeight(weight: String?) {
-        tempRecord.weight = max(if (weight.isNullOrEmpty()) 0f else weight.toFloat(), 0f)
+        tempRecord.weight = max(weight?.toFloatOrNull() ?: 0f, 0f)
         // 無限ループになるので、showRecordは呼ばない。
     }
 
     override fun modifyRate(rate: String?) {
-        tempRecord.rate = max(if (rate.isNullOrEmpty()) 0f else rate.toFloat(), 0f)
+        tempRecord.rate = max(rate?.toFloatOrNull() ?: 0f, 0f)
         // 無限ループになるので、showRecordは呼ばない。
     }
 
