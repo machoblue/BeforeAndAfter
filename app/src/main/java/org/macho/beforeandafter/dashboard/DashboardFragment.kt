@@ -9,6 +9,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.*
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
@@ -52,6 +53,11 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorPrimary))
+        swipeRefreshLayout.setOnRefreshListener {
+            presenter.reloadDashboard()
+        }
 
         refreshAd()
 
@@ -137,6 +143,10 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             val action = DashboardFragmentDirections.actionDashboardFragmentToEditHeightFragment()
             findNavController().navigate(action)
         }
+    }
+
+    override fun stopRefreshingIfNeeded() {
+        swipeRefreshLayout.isRefreshing = false
     }
 
     private fun addCardView(cardContentView: View, contentViewId: Int, cardId: Int) {

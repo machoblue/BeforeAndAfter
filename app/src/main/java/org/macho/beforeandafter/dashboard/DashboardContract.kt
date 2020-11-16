@@ -8,6 +8,7 @@ interface DashboardContract: BaseContract {
         fun updateWeightSummary(show: Boolean, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?)
         fun updateWeightProgress(show: Boolean, elapsedDay: Int, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?)
         fun updateBMI(show: Boolean, showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?)
+        fun stopRefreshingIfNeeded()
     }
     interface Presenter: BaseContract.Presenter<View> {
         fun reloadDashboard()

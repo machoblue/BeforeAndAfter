@@ -77,6 +77,8 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 val idealWeight = ((height / 100.0).pow(2.0) * 22).toFloat()
                 view?.updateBMI(showBMI, showSetHeightButton, bmi, bmiClass, idealWeight)
             }
+
+            view?.stopRefreshingIfNeeded()
         }
     }
 }
