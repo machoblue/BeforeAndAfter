@@ -28,6 +28,7 @@ import org.macho.beforeandafter.BuildConfig
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.extensions.loadImage
 import org.macho.beforeandafter.shared.util.AdUtil
+import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.io.File
 
@@ -85,6 +86,14 @@ class CameraActivity: AppCompatActivity() {
         AdUtil.initializeMobileAds(this)
         AdUtil.loadBannerAd(adView, this)
         adLayout.visibility = if (AdUtil.isBannerAdHidden(this)) View.GONE else View.VISIBLE
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        // E/Camera3-Device: Camera 0: initialize: Could not open camera session: Too many users (-87)
+        cameraDevice?.close()
+        cameraDevice = null
     }
 
     override fun onDestroy() {
@@ -159,6 +168,7 @@ class CameraActivity: AppCompatActivity() {
             this@CameraActivity.cameraDevice = null
             val activity = this@CameraActivity
             if (null != activity) {
+                LogUtil.w(this, "CameraDevice.StateCallback.onError: $i")
                 activity.finish()
             }
         }
