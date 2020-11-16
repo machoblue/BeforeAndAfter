@@ -405,6 +405,10 @@ class CameraActivity: AppCompatActivity() {
     // MARK: - Switch back to front, vice versa
 
     private var isBackCamera = true
+        set(value) {
+            field = value
+            shadowImage.rotationY = if (value) 0f else 180f
+        }
 
     private fun turnCamera() {
         cameraDevice?.close()
