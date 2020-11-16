@@ -208,6 +208,10 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     // MARK: EditAddRecordContract.View
     override fun showRecord(record: Record?) {
+        if (!isAdded) {
+            return // Workaround: IllegalStateException dateButton must not be null https://www.vvzixun.com/index.php/code/35ff970b286785750654dd580d0d491a
+        }
+
         record?.date?.let {
             dateButton.text = dateFormat.format(Date(it))
             dateButton.tag = Date(it)
