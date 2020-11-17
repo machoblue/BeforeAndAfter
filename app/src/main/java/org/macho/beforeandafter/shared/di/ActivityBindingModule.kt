@@ -10,6 +10,7 @@ import org.macho.beforeandafter.main.MainActivityModule
 import org.macho.beforeandafter.preference.PreferenceModule
 import org.macho.beforeandafter.preference.alarm.AlarmModule
 import org.macho.beforeandafter.preference.backup.BackupModule
+import org.macho.beforeandafter.preference.dashboard.DashboardSettingModule
 import org.macho.beforeandafter.preference.editgoal.EditGoalModule
 import org.macho.beforeandafter.preference.height.EditHeightModule
 import org.macho.beforeandafter.preference.restore.RestoreModule
@@ -29,6 +30,7 @@ abstract class ActivityBindingModule {
         PreferenceModule::class,
         EditGoalModule::class,
         EditHeightModule::class,
+        DashboardSettingModule::class,
         BackupModule::class,
         RestoreModule::class,
         AlarmModule::class,

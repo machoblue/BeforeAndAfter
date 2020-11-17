@@ -2,9 +2,7 @@ package org.macho.beforeandafter.dashboard
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.*
@@ -59,6 +57,8 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             presenter.reloadDashboard()
         }
 
+        setHasOptionsMenu(true)
+
         refreshAd()
 
         AdUtil.initializeMobileAds(context!!)
@@ -77,6 +77,22 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         presenter.dropView()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.dashboard_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.setting -> {
+                val action = DashboardFragmentDirections.actionDashboardFragmentToDashboardSettingFragment2()
+                findNavController().navigate(action)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    // MARK: - DashboardContract.View
     override fun toggleEmptyView(show: Boolean) {
         emptyView.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }

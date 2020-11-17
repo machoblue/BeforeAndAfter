@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_editHeightFragment"
             app:destination="@id/editHeightFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_dashboardSettingFragment2"
+            app:destination="@id/dashboardSettingFragment2" />
     </fragment>
     <fragment
         android:id="@+id/editGoalFragment2"
@@ -22,4 +25,8 @@
         android:id="@+id/editHeightFragment"
         android:name="org.macho.beforeandafter.preference.height.EditHeightFragment"
         android:label="@string/edit_height_title" />
+    <fragment
+        android:id="@+id/dashboardSettingFragment2"
+        android:name="org.macho.beforeandafter.preference.dashboard.DashboardSettingFragment"
+        android:label="@string/dashboard_setting_title" />
 </navigation>

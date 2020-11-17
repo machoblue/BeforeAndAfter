@@ -86,6 +86,10 @@
     <string name="alarm_description">Schedule notification, and remind you to record.</string>
     <string name="alarm_switch_label">Enable notification</string>
     <string name="alarm_time_label">Schedule</string>
+
+    <string name="dashboard_setting_title">Home Contents Setting</string>
+    <string name="dashboard_setting_description">Customize Home Contents.</string>
+
     <string name="delete_all_title">delete all data</string>
     <string name="delete_all_description">delete all data</string>
     <string name="delete_all_confirmation_message">You cannot recovery your data once you delete all data.Do you delete all data?</string>
