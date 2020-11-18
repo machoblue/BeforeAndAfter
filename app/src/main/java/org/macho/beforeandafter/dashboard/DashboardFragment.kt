@@ -23,6 +23,7 @@ import org.macho.beforeandafter.dashboard.view.DashboardBMIView
 import org.macho.beforeandafter.dashboard.view.DashboardProgressView
 import org.macho.beforeandafter.dashboard.view.DashboardProgressViewListener
 import org.macho.beforeandafter.dashboard.view.DashboardSummaryView
+import org.macho.beforeandafter.record.RecordFragmentDirections
 import org.macho.beforeandafter.shared.di.FragmentScoped
 import org.macho.beforeandafter.shared.extensions.setText
 import org.macho.beforeandafter.shared.util.AdUtil
@@ -55,6 +56,10 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorPrimary))
         swipeRefreshLayout.setOnRefreshListener {
             presenter.reloadDashboard()
+        }
+
+        fab.setOnClickListener {
+            presentAddRecord()
         }
 
         setHasOptionsMenu(true)
@@ -165,6 +170,8 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         swipeRefreshLayout.isRefreshing = false
     }
 
+    // MARK: - Private
+
     private fun addCardView(cardContentView: View, contentViewId: Int, cardId: Int) {
         cardContentView.id = contentViewId
         val cardView = CardView(context!!)
@@ -180,6 +187,12 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
     private fun convertDpToPx(context: Context, dp: Int): Int {
         val d: Float = context.resources.displayMetrics.density
         return (dp * d + 0.5).toInt()
+    }
+
+    private fun presentAddRecord() {
+        val title = getString(R.string.action_bar_title_record_detail_new)
+        val action = DashboardFragmentDirections.actionDashboardFragmentToEditAddRecordFragment2(0L, title)
+        findNavController().navigate(action)
     }
 
     private fun refreshAd() {

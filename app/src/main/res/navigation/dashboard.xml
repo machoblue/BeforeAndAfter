@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_dashboardSettingFragment2"
             app:destination="@id/dashboardSettingFragment2" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_editAddRecordFragment2"
+            app:destination="@id/editAddRecordFragment2" />
     </fragment>
     <fragment
         android:id="@+id/editGoalFragment2"
@@ -29,4 +32,17 @@
         android:id="@+id/dashboardSettingFragment2"
         android:name="org.macho.beforeandafter.preference.dashboard.DashboardSettingFragment"
         android:label="@string/dashboard_setting_title" />
+    <fragment
+        android:id="@+id/editAddRecordFragment2"
+        android:name="org.macho.beforeandafter.record.editaddrecord.EditAddRecordFragment"
+        android:label="{title}" >
+        <argument
+            android:name="date"
+            app:argType="long"
+            android:defaultValue="0L" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue="Record Detail"/>
+    </fragment>
 </navigation>
