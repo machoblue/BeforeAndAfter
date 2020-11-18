@@ -146,6 +146,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     implementation "androidx.cardview:cardview:1.0.0"
+
+    implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
 }
 
 repositories {
