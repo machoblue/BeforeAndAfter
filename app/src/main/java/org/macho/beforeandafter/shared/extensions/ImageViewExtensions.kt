@@ -7,6 +7,7 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.GlideApp
 import org.macho.beforeandafter.shared.util.LogUtil
 
@@ -17,7 +18,7 @@ fun ImageView.loadImage(fragment: Fragment, uri: Uri, useCache: Boolean = true) 
                 .load(uri)
                 .sizeMultiplier(.4f)
                 .thumbnail(.1f)
-                .error(ColorDrawable(Color.LTGRAY))
+                .error(R.drawable.no_image)
                 .into(this)
 
     } else {
@@ -27,7 +28,7 @@ fun ImageView.loadImage(fragment: Fragment, uri: Uri, useCache: Boolean = true) 
                 .skipMemoryCache(true)
                 .sizeMultiplier(.4f)
                 .thumbnail(.1f)
-                .error(ColorDrawable(Color.LTGRAY))
+                .error(R.drawable.no_image)
                 .into(this)
     }
 }
@@ -39,7 +40,7 @@ fun ImageView.loadImage(context: Context, uri: Uri, useCache: Boolean = true) {
                 .load(uri)
                 .sizeMultiplier(.4f)
                 .thumbnail(.1f)
-                .error(ColorDrawable(Color.LTGRAY))
+                .error(R.drawable.no_image)
                 .into(this)
 
     } else {
@@ -49,7 +50,7 @@ fun ImageView.loadImage(context: Context, uri: Uri, useCache: Boolean = true) {
                 .skipMemoryCache(true)
                 .sizeMultiplier(.4f)
                 .thumbnail(.1f)
-                .error(ColorDrawable(Color.LTGRAY))
+                .error(R.drawable.no_image)
                 .into(this)
     }
 }

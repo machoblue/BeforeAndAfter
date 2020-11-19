@@ -34,6 +34,8 @@
     <string name="ideal_weight_label">Your Ideal Weight:</string>
     <string name="set_height">Set Your Height</string>
 
+    <string name="front_photo_summary_by_weight_title">Front Photo Summary by Weight</string>
+
     <!-- Records Fragment -->
     <string name="empty_title">No records</string>
     <string name="empty_description">Please add a record \nby the right bottom button.</string>

@@ -27,6 +27,7 @@ object SharedPreferencesUtil {
         HIDE_WEIGHT_SUMMARY("hide_weight_summary"),
         HIDE_WEIGHT_PROGRESS("hide_weight_progress"),
         HIDE_BMI("hide_bmi"),
+        HIDE_FRONT_PHOTO_SUMMARY_BY_WEIGHT("hide_front_photo_summary_by_weight"),
 
         HEIGHT("height")
     }

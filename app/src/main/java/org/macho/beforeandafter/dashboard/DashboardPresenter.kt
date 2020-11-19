@@ -2,6 +2,7 @@ package org.macho.beforeandafter.dashboard
 
 import android.content.Context
 import org.macho.beforeandafter.dashboard.view.BMIClass
+import org.macho.beforeandafter.dashboard.view.PhotoData
 import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
@@ -77,6 +78,12 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 val idealWeight = ((height / 100.0).pow(2.0) * 22).toFloat()
                 view?.updateBMI(showBMI, showSetHeightButton, bmi, bmiClass, idealWeight)
             }
+
+            val showFrontPhotoSummaryByWeight = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_WEIGHT)
+            val firstPhotoData: PhotoData? = firstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
+            val bestPhotoData: PhotoData? = bestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
+            val latestPhotoData: PhotoData? = latestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
+            view?.updateFrontPhotoSummaryByWeight(showFrontPhotoSummaryByWeight, firstPhotoData, bestPhotoData, latestPhotoData)
 
             view?.stopRefreshingIfNeeded()
         }

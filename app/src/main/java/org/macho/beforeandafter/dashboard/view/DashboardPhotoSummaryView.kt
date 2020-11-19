@@ -21,7 +21,7 @@ class DashboardPhotoSummaryView @JvmOverloads constructor(
     private var dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.dashboard_progress_view, this, true)
+        LayoutInflater.from(context).inflate(R.layout.dashboard_photo_summary_view, this, true)
     }
 
     fun update(title: String, firstPhotoData: PhotoData?, bestPhotoData: PhotoData?, latestPhotoData: PhotoData?) {

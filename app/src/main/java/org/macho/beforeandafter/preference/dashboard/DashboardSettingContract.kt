@@ -7,7 +7,8 @@ import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 enum class DashboardCardType(val sharedPreferencesKey: SharedPreferencesUtil.Key, val labelStringKey: Int) {
     WEIGHT_SUMMARY(SharedPreferencesUtil.Key.HIDE_WEIGHT_SUMMARY, R.string.weight_summary_title),
     WEIGHT_PROGRESS(SharedPreferencesUtil.Key.HIDE_WEIGHT_PROGRESS, R.string.progress_title),
-    BMI(SharedPreferencesUtil.Key.HIDE_BMI, R.string.bmi_title);
+    BMI(SharedPreferencesUtil.Key.HIDE_BMI, R.string.bmi_title),
+    FRONT_PHOTO_SUMMARY_BY_WEIGHT(SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_WEIGHT,R.string.front_photo_summary_by_weight_title);
 }
 
 interface DashboardSettingContract: BaseContract {
