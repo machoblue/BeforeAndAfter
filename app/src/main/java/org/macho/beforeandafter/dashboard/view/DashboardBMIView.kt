@@ -22,5 +22,8 @@ class DashboardBMIView @JvmOverloads constructor(
         bmiClassTextView.text = String.format("( %s )", bmiClass ?: "--")
         val idealWeightString = idealWeight?.let { String.format("%.1f", it) } ?: "--.--"
         idealWeightTextView.text = String.format("%s kg", idealWeightString)
+        setHeightButton.setOnClickListener {
+            onSetHeightButtonClicked()
+        }
     }
 }
