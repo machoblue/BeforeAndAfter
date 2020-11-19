@@ -280,7 +280,9 @@ class CameraActivity: AppCompatActivity() {
 
         val captureCallback = object: CameraCaptureSession.CaptureCallback() {
             override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
-                unlockFocus()
+//                unlockFocus() // 1枚撮影したら、閉じるので、不要。以下のエラー対応。
+                // IllegalStateException: CameraDevice was already closed
+                // unLockFocus()→capture()で発生。
             }
         }
 
@@ -306,7 +308,7 @@ class CameraActivity: AppCompatActivity() {
         captureRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_CANCEL)
         cameraCaptureSession.capture(captureRequestBuilder.build(), null, backgroundHandler)
 
-//        cameraCaptureSession.setRepeatingRequest(captureRequest, null, backgroundHandler) // previewにもどる
+        cameraCaptureSession.setRepeatingRequest(captureRequest, null, backgroundHandler) // previewにもどる
     }
 
     // MARK: - Zoom
