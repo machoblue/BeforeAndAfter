@@ -6,4 +6,6 @@
     <item type="id" name="weight_progress_view_id" />
     <item type="id" name="bmi_card_id" />
     <item type="id" name="bmi_view_id" />
+    <item type="id" name="front_photo_summary_by_weight_card" />
+    <item type="id" name="front_photo_summary_by_weight_view" />
 </resources>

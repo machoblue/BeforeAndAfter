@@ -19,10 +19,7 @@ import com.google.android.gms.ads.formats.UnifiedNativeAdView
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.dashboard_frag.*
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.dashboard.view.DashboardBMIView
-import org.macho.beforeandafter.dashboard.view.DashboardProgressView
-import org.macho.beforeandafter.dashboard.view.DashboardProgressViewListener
-import org.macho.beforeandafter.dashboard.view.DashboardSummaryView
+import org.macho.beforeandafter.dashboard.view.*
 import org.macho.beforeandafter.record.RecordFragmentDirections
 import org.macho.beforeandafter.shared.di.FragmentScoped
 import org.macho.beforeandafter.shared.extensions.setText
@@ -164,6 +161,21 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             val action = DashboardFragmentDirections.actionDashboardFragmentToEditHeightFragment()
             findNavController().navigate(action)
         }
+    }
+
+    override fun updateFrontPhotoSummaryByWeight(show: Boolean, firstPhotoData: PhotoData?, bestPhotoData: PhotoData?, latestPhotoData: PhotoData?) {
+        if (!show) {
+            linearLayout.findViewById<CardView>(R.id.front_photo_summary_by_weight_card)?.let {
+                linearLayout.removeView(it)
+            }
+            return
+        }
+
+        val photoSummaryView = linearLayout.findViewById<DashboardPhotoSummaryView>(R.id.front_photo_summary_by_weight_view) ?: DashboardPhotoSummaryView(context!!).also {
+            addCardView(it, R.id.front_photo_summary_by_weight_view, R.id.front_photo_summary_by_weight_card)
+        }
+
+        photoSummaryView.update(getString(R.string.front_photo_summary_by_weight_title), firstPhotoData, bestPhotoData, latestPhotoData)
     }
 
     override fun stopRefreshingIfNeeded() {

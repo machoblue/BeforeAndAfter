@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/photoSummaryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:text="正面の写真のサマリー(体重)"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/firstPhoto"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="8dp"
+        app:layout_constraintDimensionRatio="4:5"
+        app:layout_constraintEnd_toStartOf="@+id/bestPhoto"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/photoSummaryTitle"
+        tools:srcCompat="@drawable/ic_beforeandafter_blank_image"
+        />
+
+    <FrameLayout
+        android:id="@+id/dateBackground1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/black_gradient_background_270"
+        app:layout_constraintLeft_toLeftOf="@id/firstPhoto"
+        app:layout_constraintRight_toRightOf="@id/firstPhoto"
+        app:layout_constraintTop_toTopOf="@id/firstPhoto"
+        app:layout_constraintBottom_toBottomOf="@id/dateText1"
+        />
+
+    <TextView
+        android:id="@+id/dateText1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="2dp"
+        android:text="1970/01/01 10:30"
+        android:textAlignment="textStart"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintLeft_toLeftOf="@id/firstPhoto"
+        app:layout_constraintRight_toRightOf="@id/firstPhoto"
+        app:layout_constraintTop_toTopOf="@id/firstPhoto"
+        />
+
+    <FrameLayout
+        android:id="@+id/weightAndRateBackground1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/black_gradient_background_90"
+        app:layout_constraintTop_toTopOf="@id/weightAndRateText1"
+        app:layout_constraintBottom_toBottomOf="@id/firstPhoto"
+        app:layout_constraintLeft_toLeftOf="@id/firstPhoto"
+        app:layout_constraintRight_toRightOf="@id/firstPhoto"
+        />
+
+    <TextView
+        android:id="@+id/weightAndRateText1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="2dp"
+        android:text="999.9kg/99.9%"
+        android:textAlignment="textEnd"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/firstPhoto"
+        app:layout_constraintLeft_toLeftOf="@id/firstPhoto"
+        app:layout_constraintRight_toRightOf="@id/firstPhoto"
+        />
+
+    <ImageView
+        android:id="@+id/bestPhoto"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="4:5"
+        app:layout_constraintEnd_toStartOf="@+id/latestPhoto"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/firstPhoto"
+        app:layout_constraintTop_toTopOf="@+id/firstPhoto"
+        tools:srcCompat="@drawable/ic_beforeandafter_blank_image"
+        />
+
+    <FrameLayout
+        android:id="@+id/dateBackground2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/black_gradient_background_270"
+        app:layout_constraintLeft_toLeftOf="@id/bestPhoto"
+        app:layout_constraintRight_toRightOf="@id/bestPhoto"
+        app:layout_constraintTop_toTopOf="@id/bestPhoto"
+        app:layout_constraintBottom_toBottomOf="@id/dateText2"
+        />
+
+    <TextView
+        android:id="@+id/dateText2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="2dp"
+        android:text="1970/01/01 10:30"
+        android:textAlignment="textStart"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintLeft_toLeftOf="@id/bestPhoto"
+        app:layout_constraintRight_toRightOf="@id/bestPhoto"
+        app:layout_constraintTop_toTopOf="@id/bestPhoto"
+        />
+
+    <FrameLayout
+        android:id="@+id/weightAndRateBackground2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/black_gradient_background_90"
+        app:layout_constraintTop_toTopOf="@id/weightAndRateText2"
+        app:layout_constraintBottom_toBottomOf="@id/bestPhoto"
+        app:layout_constraintLeft_toLeftOf="@id/bestPhoto"
+        app:layout_constraintRight_toRightOf="@id/bestPhoto"
+        />
+
+    <TextView
+        android:id="@+id/weightAndRateText2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="2dp"
+        android:text="999.9kg/99.9%"
+        android:textAlignment="textEnd"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/bestPhoto"
+        app:layout_constraintLeft_toLeftOf="@id/bestPhoto"
+        app:layout_constraintRight_toRightOf="@id/bestPhoto"
+        />
+
+    <ImageView
+        android:id="@+id/latestPhoto"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="4:5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/bestPhoto"
+        app:layout_constraintTop_toTopOf="@+id/firstPhoto"
+        tools:srcCompat="@drawable/ic_beforeandafter_blank_image"
+        />
+
+    <FrameLayout
+        android:id="@+id/dateBackground3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/black_gradient_background_270"
+        app:layout_constraintLeft_toLeftOf="@id/latestPhoto"
+        app:layout_constraintRight_toRightOf="@id/latestPhoto"
+        app:layout_constraintTop_toTopOf="@id/latestPhoto"
+        app:layout_constraintBottom_toBottomOf="@id/dateText3"
+        />
+
+    <TextView
+        android:id="@+id/dateText3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="2dp"
+        android:text="1970/01/01 10:30"
+        android:textAlignment="textStart"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintLeft_toLeftOf="@id/latestPhoto"
+        app:layout_constraintRight_toRightOf="@id/latestPhoto"
+        app:layout_constraintTop_toTopOf="@id/latestPhoto"
+        />
+
+    <FrameLayout
+        android:id="@+id/weightAndRateBackground3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/black_gradient_background_90"
+        app:layout_constraintTop_toTopOf="@id/weightAndRateText3"
+        app:layout_constraintBottom_toBottomOf="@id/latestPhoto"
+        app:layout_constraintLeft_toLeftOf="@id/latestPhoto"
+        app:layout_constraintRight_toRightOf="@id/latestPhoto"
+        />
+
+    <TextView
+        android:id="@+id/weightAndRateText3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="2dp"
+        android:text="999.9kg/99.9%"
+        android:textAlignment="textEnd"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/latestPhoto"
+        app:layout_constraintLeft_toLeftOf="@id/latestPhoto"
+        app:layout_constraintRight_toRightOf="@id/latestPhoto"
+        />
+
+    <TextView
+        android:id="@+id/firstPhotoLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/best_weight_label"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/firstPhoto"
+        app:layout_constraintStart_toStartOf="@id/firstPhoto"
+        app:layout_constraintEnd_toEndOf="@id/firstPhoto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/bestPhotoLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/best_weight_label"
+        app:layout_constraintTop_toTopOf="@id/firstPhotoLabel"
+        app:layout_constraintStart_toStartOf="@id/bestPhoto"
+        app:layout_constraintEnd_toEndOf="@id/bestPhoto"
+        app:layout_constraintBottom_toBottomOf="@id/firstPhotoLabel"
+        />
+
+    <TextView
+        android:id="@+id/latestPhotoLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/current_weight_label"
+        app:layout_constraintTop_toTopOf="@id/firstPhotoLabel"
+        app:layout_constraintStart_toStartOf="@id/latestPhoto"
+        app:layout_constraintEnd_toEndOf="@id/latestPhoto"
+        app:layout_constraintBottom_toBottomOf="@id/firstPhotoLabel"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

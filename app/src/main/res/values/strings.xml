@@ -33,6 +33,8 @@
     <string name="ideal_weight_label">あなたの標準体重:</string>
     <string name="set_height">身長を設定する</string>
 
+    <string name="front_photo_summary_by_weight_title">正面の写真のサマリー(体重)</string>
+
     <!-- Records Fragment -->
     <string name="empty_title">記録がありません。</string>
     <string name="empty_description">右下のえんぴつボタンで\n記録を追加してください。</string>
