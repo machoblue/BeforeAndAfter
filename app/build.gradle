@@ -15,8 +15,8 @@ android {
         applicationId "org.macho.beforeandafter"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 66
-        versionName "2.3.16"
+        versionCode 67
+        versionName "2.3.17"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
