@@ -1,6 +1,7 @@
 package org.macho.beforeandafter.dashboard.view
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -8,9 +9,11 @@ import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.dashboard_photo_summary_view.view.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.gallery.GalleryPhoto
+import org.macho.beforeandafter.gallery.PhotoActivity
 import org.macho.beforeandafter.shared.extensions.loadImage
 import java.io.File
 import java.text.DateFormat
+import java.util.*
 
 typealias PhotoData = GalleryPhoto
 
@@ -27,22 +30,29 @@ class DashboardPhotoSummaryView @JvmOverloads constructor(
     fun update(title: String, firstPhotoData: PhotoData?, bestPhotoData: PhotoData?, latestPhotoData: PhotoData?) {
         photoSummaryTitle.text = title
 
-        firstPhoto.loadImage(context, Uri.fromFile(File(context.filesDir, firstPhotoData?.fileName ?: "")))
-        dateText1.text = firstPhotoData?.dateTime?.let {
-            dateFormat.format(it)
-        } ?: "----/--/-- --:--"
-        weightAndRateText1.text = "${firstPhotoData?.weight ?: "-"}kg/${firstPhotoData?.rate ?: "-"}%"
+        val photoDataList = listOf(firstPhotoData, bestPhotoData, latestPhotoData)
+        val imageViews = listOf(firstPhoto, bestPhoto, latestPhoto)
+        val dateTexts = listOf(dateText1, dateText2, dateText3)
+        val weightAndRateTexts = listOf(weightAndRateText1, weightAndRateText2, weightAndRateText3)
 
-        bestPhoto.loadImage(context, Uri.fromFile(File(context.filesDir, bestPhotoData?.fileName ?: "")))
-        dateText2.text = bestPhotoData?.dateTime?.let {
-            dateFormat.format(it)
-        } ?: "----/--/-- --:--"
-        weightAndRateText2.text = "${bestPhotoData?.weight ?: "-"}kg/${bestPhotoData?.rate ?: "-"}%"
+        for ((i, photoData) in photoDataList.withIndex()) {
+            imageViews[i].loadImage(context, Uri.fromFile(File(context.filesDir, photoData?.fileName ?: "")))
+            imageViews[i].setOnClickListener {
+                openPhotoActivity(i, photoDataList.map { it ?: PhotoData("", Date(0L), 0f, 0f) })
+            }
 
-        latestPhoto.loadImage(context, Uri.fromFile(File(context.filesDir, latestPhotoData?.fileName ?: "")))
-        dateText3.text = latestPhotoData?.dateTime?.let {
-            dateFormat.format(it)
-        } ?: "----/--/-- --:--"
-        weightAndRateText3.text = "${latestPhotoData?.weight ?: "-"}kg/${latestPhotoData?.rate ?: "-"}%"
+            dateTexts[i].text = photoData?.dateTime?.let {
+                dateFormat.format(it)
+            } ?: "----/--/-- --:--"
+
+            weightAndRateTexts[i].text = "${photoData?.weight ?: "-"}kg/${photoData?.rate ?: "-"}%"
+        }
+    }
+
+    private fun openPhotoActivity(index: Int, photoDataList: List<PhotoData>) {
+        val intent = Intent(context, PhotoActivity::class.java)
+        intent.putExtra(PhotoActivity.INDEX, index)
+        intent.putExtra(PhotoActivity.PATHS, photoDataList.toTypedArray())
+        context.startActivity(intent)
     }
 }

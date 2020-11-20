@@ -53,8 +53,8 @@ class GridAdapter(val fragment: androidx.fragment.app.Fragment): androidx.recycl
         init {
             parent.setOnClickListener { view ->
                 val intent = Intent(context, PhotoActivity::class.java)
-                intent.putExtra("INDEX", adapterPosition)
-                intent.putExtra("PATHS", items.toTypedArray())
+                intent.putExtra(PhotoActivity.INDEX, adapterPosition)
+                intent.putExtra(PhotoActivity.PATHS, items.toTypedArray())
                 fragment.startActivity(intent)
             }
             imageView = parent.findViewById(R.id.imageView)
