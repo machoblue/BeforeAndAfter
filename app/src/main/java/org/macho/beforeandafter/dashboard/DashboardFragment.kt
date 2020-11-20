@@ -211,7 +211,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         val builder = AdLoader.Builder(requireContext(), getString(R.string.admob_unit_id_native))
 
         builder.forUnifiedNativeAd { unifiedNativeAd ->
-            if (isDetached) {
+            if (this.view == null) {
                 unifiedNativeAd.destroy()
                 return@forUnifiedNativeAd
             }
