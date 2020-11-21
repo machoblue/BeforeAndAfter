@@ -18,7 +18,7 @@
     <string name="goal_label">Goal</string>
     <string name="set_goal">Set Goal</string>
 
-    <string name="progress_title">Progress to Goal</string>
+    <string name="progress_title">Progress to Weight Goal</string>
     <string name="progress_day_template">Day %d</string>
     <string name="progress_template">%s %% Achieved</string>
     <string name="progress_achieve_expect">Expect: in %s days</string>
@@ -33,6 +33,10 @@
     <string name="bmi_class_obese">Obese</string>
     <string name="ideal_weight_label">Your Ideal Weight:</string>
     <string name="set_height">Set Your Height</string>
+
+    <string name="body_fat_summary_title">Body Fat Summary</string>
+
+    <string name="body_fat_progress_title">Progress to Body Fat Goal</string>
 
     <string name="front_photo_summary_by_weight_title">Front Photo Summary by Weight</string>
     <string name="side_photo_summary_by_weight_title">Side Photo Summary by Weight</string>

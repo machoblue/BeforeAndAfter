@@ -21,9 +21,11 @@ class DashboardSummaryView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.dashboard_summary_view, this, true)
     }
 
-    fun update(latestValue: Float?, firstValue: Float?, bestValue: Float?, goalValue: Float?, showSetGoalButton: Boolean, onSetGoalButtonClick: (() -> Unit)? = null) {
+    fun update(title: String, unit: String, drawableResourceId: Int, latestValue: Float?, firstValue: Float?, bestValue: Float?, goalValue: Float?, showSetGoalButton: Boolean, onSetGoalButtonClick: (() -> Unit)? = null) {
+        summaryTitle.text = title
         val blankText = "--.--"
-        val weightTemplate = "%s kg"
+        val weightTemplate = "%s $unit"
+        currentWeightLabel.setBackground(context.getDrawable(drawableResourceId))
         currentWeightTextView.setText(weightTemplate, latestValue?.toString() ?: blankText, 1.5f)
         firstWeightTextView.setText(weightTemplate, firstValue?.toString() ?: blankText, 1.5f)
         bestWeightTextView.setText(weightTemplate, bestValue?.toString() ?: blankText, 1.5f)

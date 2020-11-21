@@ -111,7 +111,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             addCardView(it, R.id.weight_summary_view_id, R.id.weight_summary_card_id)
         }
 
-        weightSummaryView.update(latestWeight, firstWeight, bestWeight, goalWeight, (goalWeight ?: 0f) == 0f) {
+        weightSummaryView.update(getString(R.string.weight_summary_title), "kg", R.drawable.background_current_weight_label, latestWeight, firstWeight, bestWeight, goalWeight, (goalWeight ?: 0f) == 0f) {
             val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
             findNavController().navigate(action)
         }
@@ -129,7 +129,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             addCardView(it, R.id.weight_progress_view_id, R.id.weight_progress_card_id)
         }
 
-        weightProgressView.update(elapsedDay, firstWeight, bestWeight, latestWeight, goalWeight, goalWeight == 0f, object: DashboardProgressViewListener {
+        weightProgressView.update(getString(R.string.progress_title), ContextCompat.getColor(context!!, R.color.colorPrimaryLight), elapsedDay, firstWeight, bestWeight, latestWeight, goalWeight, goalWeight == 0f, object: DashboardProgressViewListener {
             override fun onSetGoalButtonClicked() {
                 val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
                 findNavController().navigate(action)
@@ -161,6 +161,52 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             val action = DashboardFragmentDirections.actionDashboardFragmentToEditHeightFragment()
             findNavController().navigate(action)
         }
+    }
+
+    override fun updateBodyFatSummary(show: Boolean, firstBodyFat: Float?, bestBodyFat: Float?, latestBodyFat: Float?, goalBodyFat: Float?) {
+        if (!show) {
+            linearLayout.findViewById<CardView>(R.id.body_fat_summary_card_id)?.let {
+                linearLayout.removeView(it)
+            }
+            return
+        }
+
+        val bodyFatSummaryView = linearLayout.findViewById<DashboardSummaryView>(R.id.body_fat_summary_view_id) ?: DashboardSummaryView(context!!).also {
+            addCardView(it, R.id.body_fat_summary_view_id, R.id.body_fat_summary_card_id)
+        }
+
+        bodyFatSummaryView.update(getString(R.string.body_fat_summary_title), "%%", R.drawable.background_current_body_fat_label, latestBodyFat, firstBodyFat, bestBodyFat, goalBodyFat, (goalBodyFat ?: 0f) == 0f) {
+            val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
+            findNavController().navigate(action)
+        }
+    }
+
+    override fun updateBodyFatProgress(show: Boolean, elapsedDay: Int, firstBodyFat: Float?, bestBodyFat: Float?, latestBodyFat: Float?, goalBodyFat: Float?) {
+        if (!show) {
+            linearLayout.findViewById<CardView>(R.id.body_fat_progress_card_id)?.let {
+                linearLayout.removeView(it)
+            }
+            return
+        }
+
+        val bodyFatProgressView = linearLayout.findViewById<DashboardProgressView>(R.id.body_fat_progress_view_id) ?: DashboardProgressView(context!!).also {
+            addCardView(it, R.id.body_fat_progress_view_id, R.id.body_fat_progress_card_id)
+        }
+
+        bodyFatProgressView.update(getString(R.string.body_fat_progress_title), ContextCompat.getColor(context!!, R.color.colorAccent), elapsedDay, firstBodyFat, bestBodyFat, latestBodyFat, goalBodyFat, goalBodyFat == 0f, object: DashboardProgressViewListener {
+            override fun onSetGoalButtonClicked() {
+                val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
+                findNavController().navigate(action)
+            }
+
+            override fun onElapsedDayHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.elapsed_days_help_message), getString(R.string.ok))
+            }
+
+            override fun onAchieveExpectHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.archive_expect_days_help_message), getString(R.string.ok))
+            }
+        })
     }
 
     override fun updatePhotoSummaries(photoSummaries: List<PhotoSummary>) {

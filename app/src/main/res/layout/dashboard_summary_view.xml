@@ -7,12 +7,12 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/weightSummaryTitle"
+        android:id="@+id/summaryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="12dp"
-        android:text="@string/weight_summary_title"
+        android:text="体重サマリー"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -64,7 +64,7 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/bestWeightTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightSummaryTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/summaryTitle" />
 
     <TextView
         android:id="@+id/bestWeightLabel"

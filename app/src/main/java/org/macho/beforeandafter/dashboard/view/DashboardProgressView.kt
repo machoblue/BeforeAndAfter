@@ -26,7 +26,8 @@ class DashboardProgressView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.dashboard_progress_view, this, true)
     }
 
-    fun update(elapsedDay: Int, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?, showSetGoalButton: Boolean, listener: DashboardProgressViewListener) {
+    fun update(title: String, color: Int, elapsedDay: Int, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?, showSetGoalButton: Boolean, listener: DashboardProgressViewListener) {
+        progressTitle.text = title
         elapsedDayTextView.text = String.format(context.getString(R.string.progress_day_template), elapsedDay)
         val firstWeight = firstWeight ?: 0f
         val bestWeight = bestWeight ?: 0f
@@ -40,7 +41,7 @@ class DashboardProgressView @JvmOverloads constructor(
         val achieveExpectDays = if (goalWeight == 0f || isRecordCountOneOrIsWorseThanFirst) "--" else ceil(elapsedDay * ((goalWeight - latestWeight) / (latestWeight - firstWeight + 0.001))).toInt().toString()
         weightAchieveExpectTextView.text = String.format(context.getString(R.string.progress_achieve_expect), achieveExpectDays)
 
-        progressView.update(firstWeight ?: 0.0f, latestWeight ?: 0.0f, bestWeight ?: 0.0f, goalWeight ?: 0.0f)
+        progressView.update(color, firstWeight ?: 0.0f, latestWeight ?: 0.0f, bestWeight ?: 0.0f, goalWeight ?: 0.0f)
 
         setGoalButton.visibility = if (showSetGoalButton) View.VISIBLE else View.GONE
         setGoalButton.setOnClickListener {

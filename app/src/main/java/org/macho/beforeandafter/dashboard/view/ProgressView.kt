@@ -90,7 +90,8 @@ class ProgressView @JvmOverloads constructor(
         }
     }
 
-    fun update(firstValue: Float, currentValue: Float, bestValue: Float, goalValue: Float) {
+    fun update(color: Int, firstValue: Float, currentValue: Float, bestValue: Float, goalValue: Float) {
+        this.currentPaint.color = color
         this.firstValue = firstValue
         this.currentValue = currentValue
         this.bestValue = bestValue
