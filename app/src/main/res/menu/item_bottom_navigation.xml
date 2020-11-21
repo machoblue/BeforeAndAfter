@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item
+        android:id="@+id/dashboard"
+        android:icon="@drawable/ic_home_white_24dp"
+        android:title="@string/home" />
 
     <item
-        android:id="@+id/records"
-        android:icon="@mipmap/ic_import_contacts_white_24dp"
-        android:title="@string/record" />
+        android:id="@+id/graphe"
+        android:icon="@mipmap/ic_timeline_white_24dp"
+        android:title="@string/graphe" />
 
     <item
         android:id="@+id/gallery"
@@ -13,9 +17,9 @@
         android:title="@string/gallery" />
 
     <item
-        android:id="@+id/graphe"
-        android:icon="@mipmap/ic_timeline_white_24dp"
-        android:title="@string/graphe" />
+        android:id="@+id/records"
+        android:icon="@mipmap/ic_import_contacts_white_24dp"
+        android:title="@string/record" />
 
     <item
         android:id="@+id/settings"

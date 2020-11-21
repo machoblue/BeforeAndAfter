@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">DEV_写真記録ダイエット日記</string>
-    <string name="admob_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="admob_unit_id_interstitial">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="admob_unit_id_rewarded">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="admob_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_unit_id_interstitial" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="admob_unit_id_rewarded" translatable="false">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="admob_unit_id_native" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
 </resources>

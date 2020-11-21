@@ -82,7 +82,13 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
     }
 
     private fun setUpBottomNavigationBar() {
-        val navGraphIds = listOf(R.navigation.records, R.navigation.gallery, R.navigation.graphe, R.navigation.settings)
+        val navGraphIds = listOf(
+                R.navigation.dashboard,
+                R.navigation.graphe,
+                R.navigation.gallery,
+                R.navigation.records,
+                R.navigation.settings
+        )
 
         // Setup the bottom navigation view with a list of navigation graphs
         val controller = bottom_nav.setupWithNavController(

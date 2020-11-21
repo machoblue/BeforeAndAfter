@@ -25,6 +25,12 @@
         <action
             android:id="@+id/action_preferenceFragment_to_alarmFragment"
             app:destination="@id/alarmFragment" />
+        <action
+            android:id="@+id/action_preferenceFragment_to_editHeightFragment2"
+            app:destination="@id/editHeightFragment2" />
+        <action
+            android:id="@+id/action_preferenceFragment_to_dashboardSettingFragment"
+            app:destination="@id/dashboardSettingFragment" />
     </fragment>
     <fragment
         android:id="@+id/editGoalFragment"
@@ -74,4 +80,12 @@
         android:id="@+id/alarmFragment"
         android:name="org.macho.beforeandafter.preference.alarm.AlarmFragment"
         android:label="@string/alarm_title" />
+    <fragment
+        android:id="@+id/editHeightFragment2"
+        android:name="org.macho.beforeandafter.preference.height.EditHeightFragment"
+        android:label="@string/edit_height_title" />
+    <fragment
+        android:id="@+id/dashboardSettingFragment"
+        android:name="org.macho.beforeandafter.preference.dashboard.DashboardSettingFragment"
+        android:label="@string/dashboard_setting_title" />
 </navigation>

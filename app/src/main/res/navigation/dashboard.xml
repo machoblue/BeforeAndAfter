@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/dashboard"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="org.macho.beforeandafter.dashboard.DashboardFragment"
+        android:label="@string/home" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_editGoalFragment2"
+            app:destination="@id/editGoalFragment2" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_editHeightFragment"
+            app:destination="@id/editHeightFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_dashboardSettingFragment2"
+            app:destination="@id/dashboardSettingFragment2" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_editAddRecordFragment2"
+            app:destination="@id/editAddRecordFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/editGoalFragment2"
+        android:name="org.macho.beforeandafter.preference.editgoal.EditGoalFragment"
+        android:label="@string/action_bar_title_edit_goal" />
+    <fragment
+        android:id="@+id/editHeightFragment"
+        android:name="org.macho.beforeandafter.preference.height.EditHeightFragment"
+        android:label="@string/edit_height_title" />
+    <fragment
+        android:id="@+id/dashboardSettingFragment2"
+        android:name="org.macho.beforeandafter.preference.dashboard.DashboardSettingFragment"
+        android:label="@string/dashboard_setting_title" />
+    <fragment
+        android:id="@+id/editAddRecordFragment2"
+        android:name="org.macho.beforeandafter.record.editaddrecord.EditAddRecordFragment"
+        android:label="{title}" >
+        <argument
+            android:name="date"
+            app:argType="long"
+            android:defaultValue="0L" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue="Record Detail"/>
+    </fragment>
+</navigation>
