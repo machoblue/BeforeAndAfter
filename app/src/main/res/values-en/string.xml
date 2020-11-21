@@ -35,6 +35,15 @@
     <string name="set_height">Set Your Height</string>
 
     <string name="front_photo_summary_by_weight_title">Front Photo Summary by Weight</string>
+    <string name="side_photo_summary_by_weight_title">Side Photo Summary by Weight</string>
+    <string name="other1_photo_summary_by_weight_title">Other1 Photo Summary by Weight</string>
+    <string name="other2_photo_summary_by_weight_title">Other2 Photo Summary by Weight</string>
+    <string name="other3_photo_summary_by_weight_title">Other3 Photo Summary by Weight</string>
+    <string name="front_photo_summary_by_rate_title">Front Photo Summary by Body Fat</string>
+    <string name="side_photo_summary_by_rate_title">Side Photo Summary by Body Fat</string>
+    <string name="other1_photo_summary_by_rate_title">Other1 Photo Summary by Body Fat</string>
+    <string name="other2_photo_summary_by_rate_title">Other2 Photo Summary by Body Fat</string>
+    <string name="other3_photo_summary_by_rate_title">Other3 Photo Summary by Body Fat</string>
 
     <!-- Records Fragment -->
     <string name="empty_title">No records</string>

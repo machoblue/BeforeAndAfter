@@ -32,7 +32,7 @@ class DashboardSettingPresenter @Inject constructor(): DashboardSettingContract.
         val selectedIndices = DashboardCardType.values()
                 .withIndex()
                 .filter { (index, type) ->
-                    val isHidden = SharedPreferencesUtil.getBoolean(context, type.sharedPreferencesKey)
+                    val isHidden = SharedPreferencesUtil.getBoolean(context, type.sharedPreferencesKey, type.defaultIsHidden)
                     return@filter !isHidden
                 }
                 .map { (index, type) -> index }

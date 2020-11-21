@@ -163,20 +163,39 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         }
     }
 
-    override fun updateFrontPhotoSummaryByWeight(show: Boolean, firstPhotoData: PhotoData?, bestPhotoData: PhotoData?, latestPhotoData: PhotoData?) {
-        if (!show) {
-            linearLayout.findViewById<CardView>(R.id.front_photo_summary_by_weight_card)?.let {
-                linearLayout.removeView(it)
+    override fun updatePhotoSummaries(photoSummaries: List<PhotoSummary>) {
+        val idTupleList: List<Pair<Int, Int>> = listOf(
+            Pair(R.id.front_photo_summary_by_weight_card, R.id.front_photo_summary_by_weight_view),
+            Pair(R.id.side_photo_summary_by_weight_card, R.id.side_photo_summary_by_weight_view),
+            Pair(R.id.other1_photo_summary_by_weight_card, R.id.other1_photo_summary_by_weight_view),
+            Pair(R.id.other2_photo_summary_by_weight_card, R.id.other2_photo_summary_by_weight_view),
+            Pair(R.id.other3_photo_summary_by_weight_card, R.id.other3_photo_summary_by_weight_view),
+            Pair(R.id.front_photo_summary_by_rate_card, R.id.front_photo_summary_by_rate_view),
+            Pair(R.id.side_photo_summary_by_rate_card, R.id.side_photo_summary_by_rate_view),
+            Pair(R.id.other1_photo_summary_by_rate_card, R.id.other1_photo_summary_by_rate_view),
+            Pair(R.id.other2_photo_summary_by_rate_card, R.id.other2_photo_summary_by_rate_view),
+            Pair(R.id.other3_photo_summary_by_rate_card, R.id.other3_photo_summary_by_rate_view)
+        )
+
+        for ((i, photoSummary) in photoSummaries.withIndex()) {
+            val cardId = idTupleList[i].first
+            val viewId = idTupleList[i].second
+
+            if (!photoSummary.isVisible) {
+                linearLayout.findViewById<CardView>(cardId)?.let {
+                    linearLayout.removeView(it)
+                }
+                return
             }
-            return
-        }
 
-        val photoSummaryView = linearLayout.findViewById<DashboardPhotoSummaryView>(R.id.front_photo_summary_by_weight_view) ?: DashboardPhotoSummaryView(context!!).also {
-            addCardView(it, R.id.front_photo_summary_by_weight_view, R.id.front_photo_summary_by_weight_card)
-        }
+            val photoSummaryView = linearLayout.findViewById<DashboardPhotoSummaryView>(viewId) ?: DashboardPhotoSummaryView(context!!).also {
+                addCardView(it, viewId, cardId)
+            }
 
-        photoSummaryView.update(getString(R.string.front_photo_summary_by_weight_title), firstPhotoData, bestPhotoData, latestPhotoData)
+            photoSummaryView.update(getString(photoSummary.titleStringResource), photoSummary.firstPhotoData, photoSummary.bestPhotoData, photoSummary.latestPhotoData)
+        }
     }
+
 
     override fun stopRefreshingIfNeeded() {
         swipeRefreshLayout.isRefreshing = false

@@ -8,4 +8,22 @@
     <item type="id" name="bmi_view_id" />
     <item type="id" name="front_photo_summary_by_weight_card" />
     <item type="id" name="front_photo_summary_by_weight_view" />
+    <item type="id" name="side_photo_summary_by_weight_card" />
+    <item type="id" name="side_photo_summary_by_weight_view" />
+    <item type="id" name="other1_photo_summary_by_weight_card" />
+    <item type="id" name="other1_photo_summary_by_weight_view" />
+    <item type="id" name="other2_photo_summary_by_weight_card" />
+    <item type="id" name="other2_photo_summary_by_weight_view" />
+    <item type="id" name="other3_photo_summary_by_weight_card" />
+    <item type="id" name="other3_photo_summary_by_weight_view" />
+    <item type="id" name="front_photo_summary_by_rate_card" />
+    <item type="id" name="front_photo_summary_by_rate_view" />
+    <item type="id" name="side_photo_summary_by_rate_card" />
+    <item type="id" name="side_photo_summary_by_rate_view" />
+    <item type="id" name="other1_photo_summary_by_rate_card" />
+    <item type="id" name="other1_photo_summary_by_rate_view" />
+    <item type="id" name="other2_photo_summary_by_rate_card" />
+    <item type="id" name="other2_photo_summary_by_rate_view" />
+    <item type="id" name="other3_photo_summary_by_rate_card" />
+    <item type="id" name="other3_photo_summary_by_rate_view" />
 </resources>

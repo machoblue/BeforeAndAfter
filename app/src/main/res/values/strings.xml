@@ -34,6 +34,15 @@
     <string name="set_height">身長を設定する</string>
 
     <string name="front_photo_summary_by_weight_title">正面の写真のサマリー(体重)</string>
+    <string name="side_photo_summary_by_weight_title">側面の写真のサマリー(体重)</string>
+    <string name="other1_photo_summary_by_weight_title">その他1の写真のサマリー(体重)</string>
+    <string name="other2_photo_summary_by_weight_title">その他2の写真のサマリー(体重)</string>
+    <string name="other3_photo_summary_by_weight_title">その他3の写真のサマリー(体重)</string>
+    <string name="front_photo_summary_by_rate_title">正面の写真のサマリー(体脂肪率)</string>
+    <string name="side_photo_summary_by_rate_title">側面の写真のサマリー(体脂肪率)</string>
+    <string name="other1_photo_summary_by_rate_title">その他1の写真のサマリー(体脂肪率)</string>
+    <string name="other2_photo_summary_by_rate_title">その他2の写真のサマリー(体脂肪率)</string>
+    <string name="other3_photo_summary_by_rate_title">その他3の写真のサマリー(体脂肪率)</string>
 
     <!-- Records Fragment -->
     <string name="empty_title">記録がありません。</string>

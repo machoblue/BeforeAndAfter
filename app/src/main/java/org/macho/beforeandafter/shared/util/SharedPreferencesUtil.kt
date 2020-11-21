@@ -28,6 +28,15 @@ object SharedPreferencesUtil {
         HIDE_WEIGHT_PROGRESS("hide_weight_progress"),
         HIDE_BMI("hide_bmi"),
         HIDE_FRONT_PHOTO_SUMMARY_BY_WEIGHT("hide_front_photo_summary_by_weight"),
+        HIDE_SIDE_PHOTO_SUMMARY_BY_WEIGHT("hide_side_photo_summary_by_weight"),
+        HIDE_OTHER1_PHOTO_SUMMARY_BY_WEIGHT("hide_other1_photo_summary_by_weight"),
+        HIDE_OTHER2_PHOTO_SUMMARY_BY_WEIGHT("hide_other2_photo_summary_by_weight"),
+        HIDE_OTHER3_PHOTO_SUMMARY_BY_WEIGHT("hide_other3_photo_summary_by_weight"),
+        HIDE_FRONT_PHOTO_SUMMARY_BY_BODY_FAT("hide_front_photo_summary_by_body_fat"),
+        HIDE_SIDE_PHOTO_SUMMARY_BY_BODY_FAT("hide_side_photo_summary_by_body_fat"),
+        HIDE_OTHER1_PHOTO_SUMMARY_BY_BODY_FAT("hide_other1_photo_summary_by_body_fat"),
+        HIDE_OTHER2_PHOTO_SUMMARY_BY_BODY_FAT("hide_other2_photo_summary_by_body_fat"),
+        HIDE_OTHER3_PHOTO_SUMMARY_BY_BODY_FAT("hide_other3_photo_summary_by_body_fat"),
 
         HEIGHT("height")
     }
@@ -52,8 +61,8 @@ object SharedPreferencesUtil {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putLong(key.string, value).commit()
     }
 
-    fun getBoolean(context: Context, key: Key): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(key.string, false)
+    fun getBoolean(context: Context, key: Key, default: Boolean = false): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(key.string, default)
     }
 
     fun setBoolean(context: Context, key: Key, value: Boolean) {
