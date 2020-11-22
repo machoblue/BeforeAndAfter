@@ -25,6 +25,17 @@
     <string name="elapsed_days_help_message">This is elapsed days from when you recorded weight for the first time.</string>
     <string name="archive_expect_days_help_message">This is calculated considering your weight loss speed so far. Please note this is only a guide.</string>
 
+    <string name="body_fat_progress_title">Progress to Body Fat Goal</string>
+
+    <string name="weight_tendency_title">Weight Tendency</string>
+    <string name="one_week_tendency">1 Week Tendency</string>
+    <string name="thirty_days_tendency">30 Days Tendency</string>
+    <string name="one_year_tendency">1 Year Tendency</string>
+    <string name="one_week_tendency_help">This is calculated by (2)-(1).\n  (1)Average of this week\n  (2)Average of the week before</string>
+    <string name="thirty_days_tendency_help">This is calculated by (2)-(1).\n  (1)Average of this 30 days\n  (2)Average of the 30 days before</string>
+    <string name="one_year_tendency_help">This is calculated by (2)-(1).\n  (1)Average of this year\n  (2)Average of the year before</string>
+    <string name="body_fat_tendency_title">Body Fat Tendency</string>
+
     <string name="bmi_title">BMI (Body Mass Index)</string>
     <string name="bmi_class_under_weight">Under Weight</string>
     <string name="bmi_class_normal">Normal</string>
@@ -32,8 +43,6 @@
     <string name="bmi_class_obese">Obese</string>
     <string name="ideal_weight_label">Your Ideal Weight:</string>
     <string name="set_height">Set Your Height</string>
-
-    <string name="body_fat_progress_title">Progress to Body Fat Goal</string>
 
     <string name="front_photo_summary_by_weight_title">Front Photo Summary by Weight</string>
     <string name="side_photo_summary_by_weight_title">Side Photo Summary by Weight</string>
