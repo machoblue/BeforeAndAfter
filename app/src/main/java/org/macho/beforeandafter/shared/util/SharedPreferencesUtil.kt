@@ -25,10 +25,8 @@ object SharedPreferencesUtil {
         GOAL_WEIGHT("GOAL_WEIGHT"),
         GOAL_RATE("GOAL_RATE"),
 
-        HIDE_WEIGHT_SUMMARY("hide_weight_summary"),
         HIDE_WEIGHT_PROGRESS("hide_weight_progress"),
         HIDE_BMI("hide_bmi"),
-        HIDE_BODY_FAT_SUMMARY("hide_body_fat_summary"),
         HIDE_BODY_FAT_PROGRESS("hide_body_fat_progress"),
         HIDE_FRONT_PHOTO_SUMMARY_BY_WEIGHT("hide_front_photo_summary_by_weight"),
         HIDE_SIDE_PHOTO_SUMMARY_BY_WEIGHT("hide_side_photo_summary_by_weight"),

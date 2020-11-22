@@ -47,9 +47,6 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
             val bestRecord = records.filterNot { it.weight == 0f }.minBy { it.weight }
             val goalWeight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.GOAL_WEIGHT)
 
-            val showWeightSummary = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_WEIGHT_SUMMARY)
-            view?.updateWeightSummary(showWeightSummary, firstRecord?.weight, bestRecord?.weight, latestRecord?.weight, goalWeight)
-
             val showWeightProgress = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_WEIGHT_PROGRESS)
             val elapsedDay: Int = if (firstRecord == null) {
                 1
@@ -82,9 +79,6 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
 
             val bestBodyFatRecord = records.filterNot { it.rate == 0f }.minBy { it.rate }
             val goalBodyFat = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.GOAL_RATE)
-
-            val showBodyFatSummary = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BODY_FAT_SUMMARY, true)
-            view?.updateBodyFatSummary(showBodyFatSummary, firstRecord?.rate, bestRecord?.rate, latestRecord?.rate, goalBodyFat)
 
             val showBodyFatProgress = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BODY_FAT_PROGRESS, true)
             view?.updateBodyFatProgress(showBodyFatProgress, elapsedDay, firstRecord?.rate, bestRecord?.rate, latestRecord?.rate, goalBodyFat)

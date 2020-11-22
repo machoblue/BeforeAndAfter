@@ -99,24 +99,6 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         emptyView.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
 
-    override fun updateWeightSummary(show: Boolean, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
-        if (!show) {
-            linearLayout.findViewById<CardView>(R.id.weight_summary_card_id)?.let {
-                linearLayout.removeView(it)
-            }
-            return
-        }
-
-        val weightSummaryView = linearLayout.findViewById<DashboardSummaryView>(R.id.weight_summary_view_id) ?: DashboardSummaryView(context!!).also {
-            addCardView(it, R.id.weight_summary_view_id, R.id.weight_summary_card_id)
-        }
-
-        weightSummaryView.update(getString(R.string.weight_summary_title), "kg", R.drawable.background_current_weight_label, latestWeight, firstWeight, bestWeight, goalWeight, (goalWeight ?: 0f) == 0f) {
-            val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
-            findNavController().navigate(action)
-        }
-    }
-
     override fun updateWeightProgress(show: Boolean, elapsedDay: Int, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
         if (!show) {
             linearLayout.findViewById<CardView>(R.id.weight_progress_card_id)?.let {
@@ -159,24 +141,6 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
 
         bmiView.update(showSetHeightButton, bmi, bmiClass, idealWeight) {
             val action = DashboardFragmentDirections.actionDashboardFragmentToEditHeightFragment()
-            findNavController().navigate(action)
-        }
-    }
-
-    override fun updateBodyFatSummary(show: Boolean, firstBodyFat: Float?, bestBodyFat: Float?, latestBodyFat: Float?, goalBodyFat: Float?) {
-        if (!show) {
-            linearLayout.findViewById<CardView>(R.id.body_fat_summary_card_id)?.let {
-                linearLayout.removeView(it)
-            }
-            return
-        }
-
-        val bodyFatSummaryView = linearLayout.findViewById<DashboardSummaryView>(R.id.body_fat_summary_view_id) ?: DashboardSummaryView(context!!).also {
-            addCardView(it, R.id.body_fat_summary_view_id, R.id.body_fat_summary_card_id)
-        }
-
-        bodyFatSummaryView.update(getString(R.string.body_fat_summary_title), "%%", R.drawable.background_current_body_fat_label, latestBodyFat, firstBodyFat, bestBodyFat, goalBodyFat, (goalBodyFat ?: 0f) == 0f) {
-            val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
             findNavController().navigate(action)
         }
     }

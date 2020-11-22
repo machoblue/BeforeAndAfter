@@ -10,14 +10,13 @@
     <string name="review_url">https://play.google.com/store/apps/details?id=org.macho.beforeandafter&amp;hl=ja</string>
 
     <!-- Dashboard Fragment -->
-    <string name="weight_summary_title">体重サマリー</string>
     <string name="current_weight_label">いま</string>
     <string name="first_weight_label">さいしょ</string>
     <string name="best_weight_label">ベスト</string>
     <string name="goal_label">目標</string>
     <string name="set_goal">目標を設定する</string>
 
-    <string name="progress_title">目標達成度(体重)</string>
+    <string name="progress_title">体重の目標達成度</string>
     <string name="progress_day_template">%d 日目</string>
     <string name="progress_template">%s %%達成</string>
     <string name="progress_achieve_expect">%s 日後達成見込み</string>
@@ -25,9 +24,7 @@
     <string name="elapsed_days_help_message">最初に記録した時からの経過日数です。</string>
     <string name="archive_expect_days_help_message">今のペースだと何日後に目標を達成できるかを表しています。あくまで目安です。</string>
 
-    <string name="body_fat_summary_title">体脂肪率サマリー</string>
-
-    <string name="body_fat_progress_title">目標達成度(体脂肪率)</string>
+    <string name="body_fat_progress_title">体脂肪率の目標達成度</string>
 
     <string name="bmi_title">BMI (ボディマス指数)</string>
     <string name="bmi_class_under_weight">やせ気味</string>
@@ -37,16 +34,16 @@
     <string name="ideal_weight_label">あなたの標準体重:</string>
     <string name="set_height">身長を設定する</string>
 
-    <string name="front_photo_summary_by_weight_title">正面の写真のサマリー(体重)</string>
-    <string name="side_photo_summary_by_weight_title">側面の写真のサマリー(体重)</string>
-    <string name="other1_photo_summary_by_weight_title">その他1の写真のサマリー(体重)</string>
-    <string name="other2_photo_summary_by_weight_title">その他2の写真のサマリー(体重)</string>
-    <string name="other3_photo_summary_by_weight_title">その他3の写真のサマリー(体重)</string>
-    <string name="front_photo_summary_by_rate_title">正面の写真のサマリー(体脂肪率)</string>
-    <string name="side_photo_summary_by_rate_title">側面の写真のサマリー(体脂肪率)</string>
-    <string name="other1_photo_summary_by_rate_title">その他1の写真のサマリー(体脂肪率)</string>
-    <string name="other2_photo_summary_by_rate_title">その他2の写真のサマリー(体脂肪率)</string>
-    <string name="other3_photo_summary_by_rate_title">その他3の写真のサマリー(体脂肪率)</string>
+    <string name="front_photo_summary_by_weight_title">正面の写真のまとめ(体重)</string>
+    <string name="side_photo_summary_by_weight_title">側面の写真のまとめ(体重)</string>
+    <string name="other1_photo_summary_by_weight_title">その他1の写真のまとめ(体重)</string>
+    <string name="other2_photo_summary_by_weight_title">その他2の写真のまとめ(体重)</string>
+    <string name="other3_photo_summary_by_weight_title">その他3の写真のまとめ(体重)</string>
+    <string name="front_photo_summary_by_rate_title">正面の写真のまとめ(体脂肪率)</string>
+    <string name="side_photo_summary_by_rate_title">側面の写真のまとめ(体脂肪率)</string>
+    <string name="other1_photo_summary_by_rate_title">その他1の写真のまとめ(体脂肪率)</string>
+    <string name="other2_photo_summary_by_rate_title">その他2の写真のまとめ(体脂肪率)</string>
+    <string name="other3_photo_summary_by_rate_title">その他3の写真のまとめ(体脂肪率)</string>
 
     <!-- Records Fragment -->
     <string name="empty_title">記録がありません。</string>
