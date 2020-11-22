@@ -129,7 +129,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             addCardView(it, R.id.weight_progress_view_id, R.id.weight_progress_card_id)
         }
 
-        weightProgressView.update(getString(R.string.progress_title), ContextCompat.getColor(context!!, R.color.colorPrimaryLight), elapsedDay, firstWeight, bestWeight, latestWeight, goalWeight, goalWeight == 0f, object: DashboardProgressViewListener {
+        weightProgressView.update(getString(R.string.progress_title), ContextCompat.getColor(context!!, R.color.colorPrimaryLight), "kg", R.drawable.background_current_weight_label, elapsedDay, firstWeight, bestWeight, latestWeight, goalWeight, goalWeight == 0f, object: DashboardProgressViewListener {
             override fun onSetGoalButtonClicked() {
                 val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
                 findNavController().navigate(action)
@@ -193,7 +193,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             addCardView(it, R.id.body_fat_progress_view_id, R.id.body_fat_progress_card_id)
         }
 
-        bodyFatProgressView.update(getString(R.string.body_fat_progress_title), ContextCompat.getColor(context!!, R.color.colorAccent), elapsedDay, firstBodyFat, bestBodyFat, latestBodyFat, goalBodyFat, goalBodyFat == 0f, object: DashboardProgressViewListener {
+        bodyFatProgressView.update(getString(R.string.body_fat_progress_title), ContextCompat.getColor(context!!, R.color.colorAccent), "%%", R.drawable.background_current_body_fat_label, elapsedDay, firstBodyFat, bestBodyFat, latestBodyFat, goalBodyFat, goalBodyFat == 0f, object: DashboardProgressViewListener {
             override fun onSetGoalButtonClicked() {
                 val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
                 findNavController().navigate(action)
