@@ -10,8 +10,8 @@
     <string name="review_url">https://play.google.com/store/apps/details?id=org.macho.beforeandafter&amp;hl=ja</string>
 
     <!-- Dashboard Fragment -->
-    <string name="current_weight_label">いま</string>
-    <string name="first_weight_label">さいしょ</string>
+    <string name="current_weight_label">現在</string>
+    <string name="first_weight_label">開始時</string>
     <string name="best_weight_label">ベスト</string>
     <string name="goal_label">目標</string>
     <string name="set_goal">目標を設定する</string>
