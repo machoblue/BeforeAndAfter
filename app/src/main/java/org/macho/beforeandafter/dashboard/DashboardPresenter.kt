@@ -215,7 +215,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
             thisYearRecords: List<Record>,
             theYearBeforeRecords: List<Record>
     ) {
-        val showWeightTendency = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BODY_FAT_TENDENCY)
+        val showWeightTendency = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BODY_FAT_TENDENCY, true)
         val theWeekBeforeWeightList: List<Float> = theWeekBeforeRecords.filter { it.rate != 0f }.map { it.rate }
         val thisWeekWeightList: List<Float> = thisWeekRecords.filter { it.rate != 0f }.map { it.rate }
         val thisWeekTendency: Float? = if (theWeekBeforeWeightList.isNotEmpty() && thisWeekWeightList.isNotEmpty()) -(theWeekBeforeWeightList.average() - thisWeekWeightList.average()).toFloat() else null
