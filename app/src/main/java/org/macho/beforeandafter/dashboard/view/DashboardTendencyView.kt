@@ -65,12 +65,12 @@ class DashboardTendencyView  @JvmOverloads constructor(
 
         val iconDrawableId: Int = tendency?.let {
             return@let when {
-                it < 0f -> R.drawable.ic_south_east_white_18dp
-                it < 0.5 -> R.drawable.ic_east_white_18dp
-                else -> R.drawable.ic_north_east_white_18dp
+                it < 0f -> R.drawable.ic_trending_down_white_18dp
+                it < 0.5 -> R.drawable.ic_trending_flat_white_18dp
+                else -> R.drawable.ic_trending_up_white_18dp
             }
         } ?: let {
-            return@let R.drawable.ic_east_white_18dp
+            return@let R.drawable.ic_remove_white_18dp
         }
         imageView.setImageDrawable(context.getDrawable(iconDrawableId))
     }

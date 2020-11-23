@@ -212,7 +212,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             addCardView(it, R.id.body_fat_tendency_view_id, R.id.body_fat_tendency_card_id)
         }
 
-        bodyFatTendencyView.update(getString(R.string.body_fat_tendency_title), "kg", oneWeekTendency, thirtyDaysTendency, oneYearTendency, object: DashboardTendencyView.DashboardTendencyViewListener {
+        bodyFatTendencyView.update(getString(R.string.body_fat_tendency_title), "%%", oneWeekTendency, thirtyDaysTendency, oneYearTendency, object: DashboardTendencyView.DashboardTendencyViewListener {
             override fun onOneWeekTendencyHelpButtonClicked() {
                 dialog.show(parentFragmentManager, 0, getString(R.string.one_week_tendency_help), getString(R.string.ok))
             }
