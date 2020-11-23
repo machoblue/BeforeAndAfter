@@ -4,6 +4,7 @@ import android.content.Context
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.dashboard.view.BMIClass
 import org.macho.beforeandafter.dashboard.view.PhotoData
+import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
@@ -62,6 +63,24 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
             }
             view?.updateWeightProgress(showWeightProgress, elapsedDay, firstRecord?.weight, bestRecord?.weight, latestRecord?.weight, goalWeight)
 
+            val day = 1000L * 60 * 60 * 24
+            val now = Date().time
+            val oneWeekAgo = now - 7 * day
+            val twoWeekAgo = now - 14 * day
+            val thirtyDaysAgo = now - 30 * day
+            val sixtyDaysAgo = now - 60 * day
+            val oneYearAgo = now - 365 * day
+            val twoYearAgo = now - 365 * 2 * day
+
+            val theYearBeforeRecords = records.filter { twoYearAgo <= it.date && it.date < oneYearAgo }
+            val thisYearRecords = records.filter { oneYearAgo <= it.date }
+            val theThirtyDaysBeforeRecords = thisYearRecords.filter { sixtyDaysAgo <= it.date && it.date < thirtyDaysAgo }
+            val thisThirtyDaysRecords = thisYearRecords.filter { thirtyDaysAgo <= it.date }
+            val theWeekBeforeRecords = thisThirtyDaysRecords.filter { twoWeekAgo <= it.date && it.date < oneWeekAgo }
+            val thisWeekRecords = thisThirtyDaysRecords.filter { oneWeekAgo <= it.date }
+
+            updateWeightTendency(thisWeekRecords, theWeekBeforeRecords, thisThirtyDaysRecords, theThirtyDaysBeforeRecords, thisYearRecords, theYearBeforeRecords)
+
             val showBMI = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BMI)
             val height = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.HEIGHT)
             val showSetHeightButton = height == 0f
@@ -82,6 +101,8 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
 
             val showBodyFatProgress = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BODY_FAT_PROGRESS, true)
             view?.updateBodyFatProgress(showBodyFatProgress, elapsedDay, firstRecord?.rate, bestRecord?.rate, latestRecord?.rate, goalBodyFat)
+
+            updateBodyFatTendency(thisWeekRecords, theWeekBeforeRecords, thisThirtyDaysRecords, theThirtyDaysBeforeRecords, thisYearRecords, theYearBeforeRecords)
 
             val photoSummaryList = listOf(
                     PhotoSummary(
@@ -160,5 +181,53 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
 
             view?.stopRefreshingIfNeeded()
         }
+    }
+
+    private fun updateWeightTendency(
+            thisWeekRecords: List<Record>,
+            theWeekBeforeRecords: List<Record>,
+            thisThirtyDaysRecords: List<Record>,
+            theThirtyDaysBeforeRecords: List<Record>,
+            thisYearRecords: List<Record>,
+            theYearBeforeRecords: List<Record>
+    ) {
+        val showBodyFatTendency = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_WEIGHT_TENDENCY)
+        val theWeekBeforeBodyFatList: List<Float> = theWeekBeforeRecords.filter { it.weight != 0f }.map { it.weight }
+        val thisWeekBodyFatList: List<Float> = thisWeekRecords.filter { it.weight != 0f }.map { it.weight }
+        val thisWeekTendency: Float? = if (theWeekBeforeBodyFatList.isNotEmpty() && thisWeekBodyFatList.isNotEmpty()) -(theWeekBeforeBodyFatList.average() - thisWeekBodyFatList.average()).toFloat() else null
+
+        val theThirtyDaysBeforeBodyFatList: List<Float> = theThirtyDaysBeforeRecords.filter { it.weight != 0f }.map { it.weight }
+        val thisThirtyDaysBodyFatList: List<Float> = thisThirtyDaysRecords.filter { it.weight != 0f }.map { it.weight }
+        val thisThirtyDaysTendency: Float? = if (theThirtyDaysBeforeBodyFatList.isNotEmpty() && thisThirtyDaysBodyFatList.isNotEmpty()) (theThirtyDaysBeforeBodyFatList.average() - thisThirtyDaysBodyFatList.average()).toFloat() else null
+
+        val theYearBeforeBodyFatList: List<Float> = theYearBeforeRecords.filter { it.weight != 0f }.map { it.weight }
+        val thisYearBodyFatList: List<Float> = thisYearRecords.filter { it.weight != 0f }.map { it.weight }
+        val thisYearTendency: Float? = if (theYearBeforeBodyFatList.isNotEmpty() && thisYearBodyFatList.isNotEmpty()) -(theYearBeforeBodyFatList.average() - thisYearBodyFatList.average()).toFloat() else null
+
+        view?.updateWeightTendency(showBodyFatTendency, thisWeekTendency, thisThirtyDaysTendency, thisYearTendency)
+    }
+
+    private fun updateBodyFatTendency(
+            thisWeekRecords: List<Record>,
+            theWeekBeforeRecords: List<Record>,
+            thisThirtyDaysRecords: List<Record>,
+            theThirtyDaysBeforeRecords: List<Record>,
+            thisYearRecords: List<Record>,
+            theYearBeforeRecords: List<Record>
+    ) {
+        val showWeightTendency = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BODY_FAT_TENDENCY)
+        val theWeekBeforeWeightList: List<Float> = theWeekBeforeRecords.filter { it.rate != 0f }.map { it.rate }
+        val thisWeekWeightList: List<Float> = thisWeekRecords.filter { it.rate != 0f }.map { it.rate }
+        val thisWeekTendency: Float? = if (theWeekBeforeWeightList.isNotEmpty() && thisWeekWeightList.isNotEmpty()) -(theWeekBeforeWeightList.average() - thisWeekWeightList.average()).toFloat() else null
+
+        val theThirtyDaysBeforeWeightList: List<Float> = theThirtyDaysBeforeRecords.filter { it.rate != 0f }.map { it.rate }
+        val thisThirtyDaysWeightList: List<Float> = thisThirtyDaysRecords.filter { it.rate != 0f }.map { it.rate }
+        val thisThirtyDaysTendency: Float? = if (theThirtyDaysBeforeWeightList.isNotEmpty() && thisThirtyDaysWeightList.isNotEmpty()) (theThirtyDaysBeforeWeightList.average() - thisThirtyDaysWeightList.average()).toFloat() else null
+
+        val theYearBeforeWeightList: List<Float> = theYearBeforeRecords.filter { it.rate != 0f }.map { it.rate }
+        val thisYearWeightList: List<Float> = thisYearRecords.filter { it.rate != 0f }.map { it.rate }
+        val thisYearTendency: Float? = if (theYearBeforeWeightList.isNotEmpty() && thisYearWeightList.isNotEmpty()) -(theYearBeforeWeightList.average() - thisYearWeightList.average()).toFloat() else null
+
+        view?.updateBodyFatTendency(showWeightTendency, thisWeekTendency, thisThirtyDaysTendency, thisYearTendency)
     }
 }

@@ -16,7 +16,7 @@ class DashboardTendencyView  @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.dashboard_tendency_view, this, false)
+        LayoutInflater.from(context).inflate(R.layout.dashboard_tendency_view, this, true)
     }
 
     interface DashboardTendencyViewListener {
@@ -32,15 +32,15 @@ class DashboardTendencyView  @JvmOverloads constructor(
         updateValue(unit, thirtyDaysTendency, thirtyDaysTendencyTextView, thirtyDaysTendencyImageView)
         updateValue(unit, oneYearTendency, oneYearTendencyTextView, oneYearTendencyImageView)
 
-        oneWeekTendencyImageView.setOnClickListener {
+        oneWeekTendencyHelpButton.setOnClickListener {
             listener.onOneWeekTendencyHelpButtonClicked()
         }
 
-        thirtyDaysTendencyImageView.setOnClickListener {
+        thirtyDaysTendencyHelpButton.setOnClickListener {
             listener.onThirtyDaysTendencyHelpButtonClicked()
         }
 
-        oneYearTendencyImageView.setOnClickListener {
+        oneYearTendencyHelpButton.setOnClickListener {
             listener.onOneYearTendencyHelpButtonClicked()
         }
 
@@ -48,7 +48,7 @@ class DashboardTendencyView  @JvmOverloads constructor(
 
     private fun updateValue(unit: String, tendency: Float?, textView: TextView, imageView: ImageView) {
         val template = "%s $unit"
-        textView.setText(template, tendency?.toString() ?: "--.--", 1.5f)
+        textView.setText(template, tendency?.let { (if (it > 0) "+ " else "") + String.format("%.2f", tendency) } ?: "--.--", 1.5f)
 
         val tintColorId: Int = tendency?.let {
             return@let when {

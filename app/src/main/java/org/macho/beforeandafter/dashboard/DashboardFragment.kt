@@ -127,6 +127,33 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         })
     }
 
+    override fun updateWeightTendency(show: Boolean, oneWeekTendency: Float?, thirtyDaysTendency: Float?, oneYearTendency: Float?) {
+        if (!show) {
+            linearLayout.findViewById<CardView>(R.id.weight_tendency_card_id)?.let {
+                linearLayout.removeView(it)
+            }
+            return
+        }
+
+        val weightTendencyView = linearLayout.findViewById<DashboardTendencyView>(R.id.weight_tendency_view_id) ?: DashboardTendencyView(context!!).also {
+            addCardView(it, R.id.weight_tendency_view_id, R.id.weight_tendency_card_id)
+        }
+
+        weightTendencyView.update(getString(R.string.weight_tendency_title), "kg", oneWeekTendency, thirtyDaysTendency, oneYearTendency, object: DashboardTendencyView.DashboardTendencyViewListener {
+            override fun onOneWeekTendencyHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.one_week_tendency_help), getString(R.string.ok))
+            }
+
+            override fun onThirtyDaysTendencyHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.thirty_days_tendency_help), getString(R.string.ok))
+            }
+
+            override fun onOneYearTendencyHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.one_year_tendency_help), getString(R.string.ok))
+            }
+        })
+    }
+
     override fun updateBMI(show: Boolean, showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?) {
         if (!show) {
             linearLayout.findViewById<CardView>(R.id.bmi_card_id)?.let {
@@ -169,6 +196,33 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
 
             override fun onAchieveExpectHelpButtonClicked() {
                 dialog.show(parentFragmentManager, 0, getString(R.string.archive_expect_days_help_message), getString(R.string.ok))
+            }
+        })
+    }
+
+    override fun updateBodyFatTendency(show: Boolean, oneWeekTendency: Float?, thirtyDaysTendency: Float?, oneYearTendency: Float?) {
+        if (!show) {
+            linearLayout.findViewById<CardView>(R.id.body_fat_tendency_card_id)?.let {
+                linearLayout.removeView(it)
+            }
+            return
+        }
+
+        val bodyFatTendencyView = linearLayout.findViewById<DashboardTendencyView>(R.id.body_fat_tendency_view_id) ?: DashboardTendencyView(context!!).also {
+            addCardView(it, R.id.body_fat_tendency_view_id, R.id.body_fat_tendency_card_id)
+        }
+
+        bodyFatTendencyView.update(getString(R.string.body_fat_tendency_title), "kg", oneWeekTendency, thirtyDaysTendency, oneYearTendency, object: DashboardTendencyView.DashboardTendencyViewListener {
+            override fun onOneWeekTendencyHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.one_week_tendency_help), getString(R.string.ok))
+            }
+
+            override fun onThirtyDaysTendencyHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.thirty_days_tendency_help), getString(R.string.ok))
+            }
+
+            override fun onOneYearTendencyHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.one_year_tendency_help), getString(R.string.ok))
             }
         })
     }
