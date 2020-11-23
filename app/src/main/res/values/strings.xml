@@ -27,9 +27,9 @@
     <string name="body_fat_progress_title">体脂肪率の目標達成度</string>
 
     <string name="weight_tendency_title">体重の傾向</string>
-    <string name="one_week_tendency">週の傾向</string>
-    <string name="thirty_days_tendency">30日の傾向</string>
-    <string name="one_year_tendency">1年の傾向</string>
+    <string name="one_week_tendency">1週間の傾向</string>
+    <string name="thirty_days_tendency">30日間の傾向</string>
+    <string name="one_year_tendency">1年間の傾向</string>
     <string name="one_week_tendency_help">(2)-(1)です。\n  (1)この1週間の平均\n  (2)その前の1週間の平均</string>
     <string name="thirty_days_tendency_help">(2)-(1)です。\n  (1)この30日間の平均\n  (2)その前の30日間の平均</string>
     <string name="one_year_tendency_help">(2)-(1)です。\n  (1)この1年間の平均\n  (2)その前の1年間の平均</string>
