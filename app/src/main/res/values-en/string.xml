@@ -22,7 +22,7 @@
     <string name="progress_template">%s %% Achieved</string>
     <string name="progress_achieve_expect">Expect: in %s days</string>
 
-    <string name="elapsed_days_help_message">This is elapsed days from when you recorded weight for the first time.</string>
+    <string name="elapsed_days_help_message">This is elapsed days from the start time. The start time is when you recorded weight at first. You can customize the start time at Settings > Target.</string>
     <string name="archive_expect_days_help_message">This is calculated considering your weight loss speed so far. Please note this is only a guide.</string>
 
     <string name="body_fat_progress_title">Progress to Body Fat Goal</string>
@@ -97,6 +97,8 @@
     <string name="goal_description">set target weight and target rate</string>
     <string name="goal_weight_label">target weight(kg)</string>
     <string name="goal_rate_label">target rate(%)</string>
+    <string name="customize_start_time">Customize Start Time</string>
+    <string name="start_time_label">Start Time</string>
 
     <string name="edit_height_title">Height</string>
     <string name="edit_height_description">Set height to calculate BMI.</string>

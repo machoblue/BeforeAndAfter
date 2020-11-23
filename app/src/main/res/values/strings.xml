@@ -21,7 +21,7 @@
     <string name="progress_template">%s %%達成</string>
     <string name="progress_achieve_expect">%s 日後達成見込み</string>
 
-    <string name="elapsed_days_help_message">最初に記録した時からの経過日数です。</string>
+    <string name="elapsed_days_help_message">開始時からの経過日数です。開始時は最初に記録した日です。開始時は設定＞目標でカスタマイズできます。</string>
     <string name="archive_expect_days_help_message">今のペースだと何日後に目標を達成できるかを表しています。あくまで目安です。</string>
 
     <string name="body_fat_progress_title">体脂肪率の目標達成度</string>
@@ -97,6 +97,8 @@
     <string name="goal_description">目標体重・目標体脂肪率を設定します。</string>
     <string name="goal_weight_label">目標体重(kg)</string>
     <string name="goal_rate_label">目標体脂肪率(%)</string>
+    <string name="customize_start_time">ダイエット開始時をカスタマイズする</string>
+    <string name="start_time_label">ダイエット開始時</string>
 
     <string name="edit_height_title">身長</string>
     <string name="edit_height_description">BMIを計算するため、身長を設定します。</string>
