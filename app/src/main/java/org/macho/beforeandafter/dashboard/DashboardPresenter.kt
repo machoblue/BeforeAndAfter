@@ -42,18 +42,23 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
         recordRepository.getRecords { records ->
             view?.toggleEmptyView(records.isEmpty())
 
-            val recordsSortedByDate = records.filterNot { it.weight == 0f }.sortedBy { it.date }
-            val firstRecord = recordsSortedByDate.firstOrNull()
-            val latestRecord = recordsSortedByDate.lastOrNull()
-            val bestRecord = records.filterNot { it.weight == 0f }.minBy { it.weight }
+            val isStartTimeCustomized = SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.CUSTOMIZE_START_TIME)
+            val startTime = if (isStartTimeCustomized) SharedPreferencesUtil.getLong(context, SharedPreferencesUtil.Key.START_TIME) else 0L
+
+            val recordsSortedByDate = records.filter { it.date >= startTime }.sortedBy { it.date }
+
+            val weightRecordsSortedByDate = recordsSortedByDate.filterNot { it.weight == 0f }
+            val weightFirstRecord = weightRecordsSortedByDate.firstOrNull()
+            val weightLatestRecord = weightRecordsSortedByDate.lastOrNull()
+            val weightBestRecord = records.filterNot { it.weight == 0f }.minBy { it.weight }
             val goalWeight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.GOAL_WEIGHT)
 
             val showWeightProgress = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_WEIGHT_PROGRESS)
-            val elapsedDay: Int = if (firstRecord == null) {
+            val elapsedDay: Int = if (weightFirstRecord == null) {
                 1
             } else {
                 val firstCalendar = Calendar.getInstance().also {
-                    it.time = Date(firstRecord.date)
+                    it.time = Date(weightFirstRecord.date)
                     it.set(Calendar.HOUR_OF_DAY, 0)
                     it.set(Calendar.MINUTE, 0)
                     it.set(Calendar.SECOND, 0)
@@ -61,7 +66,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 }
                 ((Date().time - firstCalendar.time.time) / (1000 * 60 * 60 * 24) + 1).toInt()
             }
-            view?.updateWeightProgress(showWeightProgress, elapsedDay, firstRecord?.weight, bestRecord?.weight, latestRecord?.weight, goalWeight)
+            view?.updateWeightProgress(showWeightProgress, elapsedDay, weightFirstRecord?.weight, weightBestRecord?.weight, weightLatestRecord?.weight, goalWeight)
 
             val day = 1000L * 60 * 60 * 24
             val now = Date().time
@@ -81,26 +86,16 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
 
             updateWeightTendency(thisWeekRecords, theWeekBeforeRecords, thisThirtyDaysRecords, theThirtyDaysBeforeRecords, thisYearRecords, theYearBeforeRecords)
 
-            val showBMI = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BMI)
-            val height = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.HEIGHT)
-            val showSetHeightButton = height == 0f
-            val isLatestWeightBlank = (latestRecord == null) || latestRecord.weight == 0f
+            updateBMI(weightLatestRecord?.weight ?: 0f)
 
-            if (showSetHeightButton || isLatestWeightBlank) {
-                view?.updateBMI(showBMI, showSetHeightButton, null, null, null)
-
-            } else {
-                val bmi = (latestRecord!!.weight / (height / 100.0).pow(2.0)).toFloat()
-                val bmiClass = context.getString(BMIClass.getBMIClass(bmi).labelRes)
-                val idealWeight = ((height / 100.0).pow(2.0) * 22).toFloat()
-                view?.updateBMI(showBMI, showSetHeightButton, bmi, bmiClass, idealWeight)
-            }
-
-            val bestBodyFatRecord = records.filterNot { it.rate == 0f }.minBy { it.rate }
+            val bodyFatRecordsSortedByDate = recordsSortedByDate.filterNot { it.rate == 0f }
+            val bodyFatFirstRecord = bodyFatRecordsSortedByDate.firstOrNull()
+            val bodyFatLatestRecord = bodyFatRecordsSortedByDate.lastOrNull()
+            val bodyFatBestRecord = records.filterNot { it.rate == 0f }.minBy { it.rate }
             val goalBodyFat = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.GOAL_RATE)
 
             val showBodyFatProgress = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BODY_FAT_PROGRESS, true)
-            view?.updateBodyFatProgress(showBodyFatProgress, elapsedDay, firstRecord?.rate, bestRecord?.rate, latestRecord?.rate, goalBodyFat)
+            view?.updateBodyFatProgress(showBodyFatProgress, elapsedDay, bodyFatFirstRecord?.rate, weightBestRecord?.rate, weightLatestRecord?.rate, goalBodyFat)
 
             updateBodyFatTendency(thisWeekRecords, theWeekBeforeRecords, thisThirtyDaysRecords, theThirtyDaysBeforeRecords, thisYearRecords, theYearBeforeRecords)
 
@@ -108,78 +103,95 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                     PhotoSummary(
                             !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_WEIGHT),
                             R.string.front_photo_summary_by_weight_title,
-                            firstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            bestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            latestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
+                            weightFirstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                            weightBestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                            weightLatestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
                     ),
                     PhotoSummary(
                             !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_SIDE_PHOTO_SUMMARY_BY_WEIGHT),
                             R.string.side_photo_summary_by_weight_title,
-                            firstRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            bestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            latestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }
+                            weightFirstRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                            weightBestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                            weightLatestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }
                     ),
                     PhotoSummary(
                             !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER1_PHOTO_SUMMARY_BY_WEIGHT, true),
                             R.string.other1_photo_summary_by_weight_title,
-                            firstRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
-                            bestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
-                            latestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }
+                            weightFirstRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
+                            weightBestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
+                            weightLatestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }
                     ),
                     PhotoSummary(
                             !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER2_PHOTO_SUMMARY_BY_WEIGHT, true),
                             R.string.other2_photo_summary_by_weight_title,
-                            firstRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
-                            bestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
-                            latestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }
+                            weightFirstRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
+                            weightBestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
+                            weightLatestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }
                     ),
                     PhotoSummary(
                             !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER3_PHOTO_SUMMARY_BY_WEIGHT, true),
                             R.string.other3_photo_summary_by_weight_title,
-                            firstRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
-                            bestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
-                            latestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }
+                            weightFirstRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
+                            weightBestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
+                            weightLatestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }
                     ),
                     PhotoSummary(
                             !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_BODY_FAT, true),
                             R.string.front_photo_summary_by_rate_title,
-                            firstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            bestBodyFatRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            latestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
+                            bodyFatFirstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                            bodyFatBestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                            bodyFatLatestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
                     ),
                     PhotoSummary(
                             !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_SIDE_PHOTO_SUMMARY_BY_BODY_FAT, true),
                             R.string.side_photo_summary_by_rate_title,
-                            firstRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            bestBodyFatRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            latestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }
+                            bodyFatFirstRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                            bodyFatBestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                            bodyFatLatestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }
                     ),
                     PhotoSummary(
                             !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER1_PHOTO_SUMMARY_BY_BODY_FAT, true),
                             R.string.other1_photo_summary_by_rate_title,
-                            firstRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
-                            bestBodyFatRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
-                            latestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }
+                            bodyFatFirstRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
+                            bodyFatBestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
+                            bodyFatLatestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }
                     ),
                     PhotoSummary(
                             !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER2_PHOTO_SUMMARY_BY_BODY_FAT, true),
                             R.string.other2_photo_summary_by_rate_title,
-                            firstRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
-                            bestBodyFatRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
-                            latestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }
+                            bodyFatFirstRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
+                            bodyFatBestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
+                            bodyFatLatestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }
                     ),
                     PhotoSummary(
                             !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER3_PHOTO_SUMMARY_BY_BODY_FAT, true),
                             R.string.other3_photo_summary_by_rate_title,
-                            firstRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
-                            bestBodyFatRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
-                            latestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }
+                            bodyFatFirstRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
+                            bodyFatBestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
+                            bodyFatLatestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }
                     )
             )
 
             view?.updatePhotoSummaries(photoSummaryList)
 
             view?.stopRefreshingIfNeeded()
+        }
+    }
+
+    private fun updateBMI(weight: Float) {
+        val showBMI = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BMI)
+        val height = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.HEIGHT)
+        val showSetHeightButton = height == 0f
+        val isLatestWeightBlank = weight == 0f
+
+        if (showSetHeightButton || isLatestWeightBlank) {
+            view?.updateBMI(showBMI, showSetHeightButton, null, null, null)
+
+        } else {
+            val bmi = (weight / (height / 100.0).pow(2.0)).toFloat()
+            val bmiClass = context.getString(BMIClass.getBMIClass(bmi).labelRes)
+            val idealWeight = ((height / 100.0).pow(2.0) * 22).toFloat()
+            view?.updateBMI(showBMI, showSetHeightButton, bmi, bmiClass, idealWeight)
         }
     }
 
