@@ -24,6 +24,8 @@ object SharedPreferencesUtil {
 
         GOAL_WEIGHT("GOAL_WEIGHT"),
         GOAL_RATE("GOAL_RATE"),
+        CUSTOMIZE_START_TIME("customize_start_time"),
+        START_TIME("start_time"),
 
         HIDE_WEIGHT_PROGRESS("hide_weight_progress"),
         HIDE_WEIGHT_TENDENCY("hide_weight_tendency"),

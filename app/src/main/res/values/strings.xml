@@ -21,7 +21,7 @@
     <string name="progress_template">%s %%達成</string>
     <string name="progress_achieve_expect">%s 日後達成見込み</string>
 
-    <string name="elapsed_days_help_message">開始時からの経過日数です。開始時は最初に記録した日です。開始時は設定＞目標でカスタマイズできます。</string>
+    <string name="elapsed_days_help_message">開始時からの経過日数です。開始時は、デフォルトで最初に記録した日になっています。設定＞目標でカスタマイズできます。</string>
     <string name="archive_expect_days_help_message">今のペースだと何日後に目標を達成できるかを表しています。あくまで目安です。</string>
 
     <string name="body_fat_progress_title">体脂肪率の目標達成度</string>
