@@ -16,6 +16,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/firstPhotoLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/first_weight_label"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/photoSummaryTitle"
+        app:layout_constraintStart_toStartOf="@id/firstPhoto"
+        app:layout_constraintEnd_toEndOf="@id/firstPhoto"
+        app:layout_constraintBottom_toTopOf="@id/firstPhoto"
+        />
+
+    <TextView
+        android:id="@+id/bestPhotoLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/best_weight_label"
+        app:layout_constraintTop_toTopOf="@id/firstPhotoLabel"
+        app:layout_constraintStart_toStartOf="@id/bestPhoto"
+        app:layout_constraintEnd_toEndOf="@id/bestPhoto"
+        app:layout_constraintBottom_toBottomOf="@id/firstPhotoLabel"
+        />
+
+    <TextView
+        android:id="@+id/latestPhotoLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/current_weight_label"
+        app:layout_constraintTop_toTopOf="@id/firstPhotoLabel"
+        app:layout_constraintStart_toStartOf="@id/latestPhoto"
+        app:layout_constraintEnd_toEndOf="@id/latestPhoto"
+        app:layout_constraintBottom_toBottomOf="@id/firstPhotoLabel"
+        />
+
     <ImageView
         android:id="@+id/firstPhoto"
         android:layout_width="0dp"
@@ -27,7 +61,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/photoSummaryTitle"
+        app:layout_constraintTop_toBottomOf="@+id/text"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:srcCompat="@drawable/ic_beforeandafter_blank_image"
         />
 
@@ -213,40 +248,6 @@
         app:layout_constraintBottom_toBottomOf="@id/latestPhoto"
         app:layout_constraintLeft_toLeftOf="@id/latestPhoto"
         app:layout_constraintRight_toRightOf="@id/latestPhoto"
-        />
-
-    <TextView
-        android:id="@+id/firstPhotoLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/first_weight_label"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintTop_toBottomOf="@id/firstPhoto"
-        app:layout_constraintStart_toStartOf="@id/firstPhoto"
-        app:layout_constraintEnd_toEndOf="@id/firstPhoto"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/bestPhotoLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/best_weight_label"
-        app:layout_constraintTop_toTopOf="@id/firstPhotoLabel"
-        app:layout_constraintStart_toStartOf="@id/bestPhoto"
-        app:layout_constraintEnd_toEndOf="@id/bestPhoto"
-        app:layout_constraintBottom_toBottomOf="@id/firstPhotoLabel"
-        />
-
-    <TextView
-        android:id="@+id/latestPhotoLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/current_weight_label"
-        app:layout_constraintTop_toTopOf="@id/firstPhotoLabel"
-        app:layout_constraintStart_toStartOf="@id/latestPhoto"
-        app:layout_constraintEnd_toEndOf="@id/latestPhoto"
-        app:layout_constraintBottom_toBottomOf="@id/firstPhotoLabel"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

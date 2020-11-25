@@ -4,12 +4,16 @@
     <item type="id" name="weight_summary_view_id" />
     <item type="id" name="weight_progress_card_id" />
     <item type="id" name="weight_progress_view_id" />
+    <item type="id" name="weight_tendency_card_id" />
+    <item type="id" name="weight_tendency_view_id" />
     <item type="id" name="bmi_card_id" />
     <item type="id" name="bmi_view_id" />
     <item type="id" name="body_fat_summary_card_id" />
     <item type="id" name="body_fat_summary_view_id" />
     <item type="id" name="body_fat_progress_card_id" />
     <item type="id" name="body_fat_progress_view_id" />
+    <item type="id" name="body_fat_tendency_card_id" />
+    <item type="id" name="body_fat_tendency_view_id" />
     <item type="id" name="front_photo_summary_by_weight_card" />
     <item type="id" name="front_photo_summary_by_weight_view" />
     <item type="id" name="side_photo_summary_by_weight_card" />

@@ -99,24 +99,6 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         emptyView.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
 
-    override fun updateWeightSummary(show: Boolean, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
-        if (!show) {
-            linearLayout.findViewById<CardView>(R.id.weight_summary_card_id)?.let {
-                linearLayout.removeView(it)
-            }
-            return
-        }
-
-        val weightSummaryView = linearLayout.findViewById<DashboardSummaryView>(R.id.weight_summary_view_id) ?: DashboardSummaryView(context!!).also {
-            addCardView(it, R.id.weight_summary_view_id, R.id.weight_summary_card_id)
-        }
-
-        weightSummaryView.update(getString(R.string.weight_summary_title), "kg", R.drawable.background_current_weight_label, latestWeight, firstWeight, bestWeight, goalWeight, (goalWeight ?: 0f) == 0f) {
-            val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
-            findNavController().navigate(action)
-        }
-    }
-
     override fun updateWeightProgress(show: Boolean, elapsedDay: Int, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
         if (!show) {
             linearLayout.findViewById<CardView>(R.id.weight_progress_card_id)?.let {
@@ -129,7 +111,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             addCardView(it, R.id.weight_progress_view_id, R.id.weight_progress_card_id)
         }
 
-        weightProgressView.update(getString(R.string.progress_title), ContextCompat.getColor(context!!, R.color.colorPrimaryLight), elapsedDay, firstWeight, bestWeight, latestWeight, goalWeight, goalWeight == 0f, object: DashboardProgressViewListener {
+        weightProgressView.update(getString(R.string.progress_title), ContextCompat.getColor(context!!, R.color.colorPrimaryLight), "kg", R.drawable.background_current_weight_label, elapsedDay, firstWeight, bestWeight, latestWeight, goalWeight, goalWeight == 0f, object: DashboardProgressViewListener {
             override fun onSetGoalButtonClicked() {
                 val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
                 findNavController().navigate(action)
@@ -141,6 +123,33 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
 
             override fun onAchieveExpectHelpButtonClicked() {
                 dialog.show(parentFragmentManager, 0, getString(R.string.archive_expect_days_help_message), getString(R.string.ok))
+            }
+        })
+    }
+
+    override fun updateWeightTendency(show: Boolean, oneWeekTendency: Float?, thirtyDaysTendency: Float?, oneYearTendency: Float?) {
+        if (!show) {
+            linearLayout.findViewById<CardView>(R.id.weight_tendency_card_id)?.let {
+                linearLayout.removeView(it)
+            }
+            return
+        }
+
+        val weightTendencyView = linearLayout.findViewById<DashboardTendencyView>(R.id.weight_tendency_view_id) ?: DashboardTendencyView(context!!).also {
+            addCardView(it, R.id.weight_tendency_view_id, R.id.weight_tendency_card_id)
+        }
+
+        weightTendencyView.update(getString(R.string.weight_tendency_title), "kg", oneWeekTendency, thirtyDaysTendency, oneYearTendency, object: DashboardTendencyView.DashboardTendencyViewListener {
+            override fun onOneWeekTendencyHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.one_week_tendency_help), getString(R.string.ok))
+            }
+
+            override fun onThirtyDaysTendencyHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.thirty_days_tendency_help), getString(R.string.ok))
+            }
+
+            override fun onOneYearTendencyHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.one_year_tendency_help), getString(R.string.ok))
             }
         })
     }
@@ -163,24 +172,6 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         }
     }
 
-    override fun updateBodyFatSummary(show: Boolean, firstBodyFat: Float?, bestBodyFat: Float?, latestBodyFat: Float?, goalBodyFat: Float?) {
-        if (!show) {
-            linearLayout.findViewById<CardView>(R.id.body_fat_summary_card_id)?.let {
-                linearLayout.removeView(it)
-            }
-            return
-        }
-
-        val bodyFatSummaryView = linearLayout.findViewById<DashboardSummaryView>(R.id.body_fat_summary_view_id) ?: DashboardSummaryView(context!!).also {
-            addCardView(it, R.id.body_fat_summary_view_id, R.id.body_fat_summary_card_id)
-        }
-
-        bodyFatSummaryView.update(getString(R.string.body_fat_summary_title), "%%", R.drawable.background_current_body_fat_label, latestBodyFat, firstBodyFat, bestBodyFat, goalBodyFat, (goalBodyFat ?: 0f) == 0f) {
-            val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
-            findNavController().navigate(action)
-        }
-    }
-
     override fun updateBodyFatProgress(show: Boolean, elapsedDay: Int, firstBodyFat: Float?, bestBodyFat: Float?, latestBodyFat: Float?, goalBodyFat: Float?) {
         if (!show) {
             linearLayout.findViewById<CardView>(R.id.body_fat_progress_card_id)?.let {
@@ -193,7 +184,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             addCardView(it, R.id.body_fat_progress_view_id, R.id.body_fat_progress_card_id)
         }
 
-        bodyFatProgressView.update(getString(R.string.body_fat_progress_title), ContextCompat.getColor(context!!, R.color.colorAccent), elapsedDay, firstBodyFat, bestBodyFat, latestBodyFat, goalBodyFat, goalBodyFat == 0f, object: DashboardProgressViewListener {
+        bodyFatProgressView.update(getString(R.string.body_fat_progress_title), ContextCompat.getColor(context!!, R.color.colorAccent), "%%", R.drawable.background_current_body_fat_label, elapsedDay, firstBodyFat, bestBodyFat, latestBodyFat, goalBodyFat, goalBodyFat == 0f, object: DashboardProgressViewListener {
             override fun onSetGoalButtonClicked() {
                 val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
                 findNavController().navigate(action)
@@ -205,6 +196,33 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
 
             override fun onAchieveExpectHelpButtonClicked() {
                 dialog.show(parentFragmentManager, 0, getString(R.string.archive_expect_days_help_message), getString(R.string.ok))
+            }
+        })
+    }
+
+    override fun updateBodyFatTendency(show: Boolean, oneWeekTendency: Float?, thirtyDaysTendency: Float?, oneYearTendency: Float?) {
+        if (!show) {
+            linearLayout.findViewById<CardView>(R.id.body_fat_tendency_card_id)?.let {
+                linearLayout.removeView(it)
+            }
+            return
+        }
+
+        val bodyFatTendencyView = linearLayout.findViewById<DashboardTendencyView>(R.id.body_fat_tendency_view_id) ?: DashboardTendencyView(context!!).also {
+            addCardView(it, R.id.body_fat_tendency_view_id, R.id.body_fat_tendency_card_id)
+        }
+
+        bodyFatTendencyView.update(getString(R.string.body_fat_tendency_title), "%%", oneWeekTendency, thirtyDaysTendency, oneYearTendency, object: DashboardTendencyView.DashboardTendencyViewListener {
+            override fun onOneWeekTendencyHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.one_week_tendency_help), getString(R.string.ok))
+            }
+
+            override fun onThirtyDaysTendencyHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.thirty_days_tendency_help), getString(R.string.ok))
+            }
+
+            override fun onOneYearTendencyHelpButtonClicked() {
+                dialog.show(parentFragmentManager, 0, getString(R.string.one_year_tendency_help), getString(R.string.ok))
             }
         })
     }

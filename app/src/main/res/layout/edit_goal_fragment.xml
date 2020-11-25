@@ -7,16 +7,24 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1.0">
-        <LinearLayout
-            android:layout_margin="30dp"
-            android:orientation="vertical"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            >
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/goalWeightTextInputLayout"
                 android:hint="@string/goal_weight_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
                 <EditText
                     android:inputType="numberDecimal"
                     android:id="@+id/goalWeight"
@@ -24,19 +32,76 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
-                android:hint="@string/goal_rate_label"
+                android:id="@+id/goalBodyFatTextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:hint="@string/goal_rate_label"
+                app:layout_constraintEnd_toEndOf="@id/goalWeightTextInputLayout"
+                app:layout_constraintStart_toStartOf="@id/goalWeightTextInputLayout"
+                app:layout_constraintTop_toBottomOf="@id/goalWeightTextInputLayout">
+
                 <EditText
-                    android:inputType="numberDecimal"
                     android:id="@+id/goalRate"
-                    android:imeOptions="actionDone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/startTimeSwitchLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/customize_start_time"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/startTimeSwitch"
+                app:layout_constraintEnd_toStartOf="@+id/startTimeSwitch"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="@id/goalWeightTextInputLayout"
+                app:layout_constraintTop_toTopOf="@+id/startTimeSwitch" />
+
+            <Switch
+                android:id="@+id/startTimeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                app:layout_constraintEnd_toEndOf="@id/goalWeightTextInputLayout"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/startTimeSwitchLabel"
+                app:layout_constraintTop_toBottomOf="@id/goalBodyFatTextInputLayout" />
+
+            <TextView
+                android:id="@+id/startTimeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_time_label"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/startTimeButton"
+                app:layout_constraintEnd_toStartOf="@+id/startTimeButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="@+id/startTimeSwitchLabel"
+                app:layout_constraintTop_toTopOf="@+id/startTimeButton" />
+
+            <Button
+                android:id="@+id/startTimeButton"
+                style="?android:attr/borderlessButtonStyle"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:text="yyyy/MM/dd hh:mm"
+                android:textColor="@color/light_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toEndOf="@+id/startTimeSwitch"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/startTimeLabel"
+                app:layout_constraintTop_toBottomOf="@+id/startTimeSwitch" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
     <LinearLayout
         android:background="@color/light_gray"

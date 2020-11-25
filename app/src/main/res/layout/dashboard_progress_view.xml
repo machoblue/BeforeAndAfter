@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -32,6 +31,9 @@
         android:id="@+id/elapsedDayHelpButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:tint="@color/light_blue"
         android:src="@drawable/ic_help_outline_black_24dp"
         app:layout_constraintBottom_toBottomOf="@id/elapsedDayTextView"
         app:layout_constraintDimensionRatio="1"
@@ -43,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:text="99%達成"
         android:textSize="30sp"
         app:layout_constraintStart_toEndOf="@id/elapsedDayHelpButton"
@@ -63,15 +65,12 @@
         android:textColor="@color/light_blue"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/progressTextView"
-        app:layout_constraintStart_toEndOf="@id/progressTextView"
-        />
+        app:layout_constraintStart_toEndOf="@id/progressTextView" />
 
     <TextView
         android:id="@+id/weightAchieveExpectTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="16dp"
         android:text="999日後達成見込み"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@id/elapsedDayTextView"
@@ -79,8 +78,11 @@
 
     <ImageView
         android:id="@+id/weightArchiveExpectHelpButton"
+        android:tint="@color/light_blue"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
         android:src="@drawable/ic_help_outline_black_24dp"
         app:layout_constraintBottom_toBottomOf="@id/weightAchieveExpectTextView"
         app:layout_constraintDimensionRatio="1"
@@ -91,10 +93,123 @@
         android:id="@+id/progressView"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_margin="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/weightAchieveExpectTextView" />
+
+
+    <TextView
+        android:id="@+id/firstWeightLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/first_weight_label"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@id/firstWeightTextView"
+        app:layout_constraintStart_toStartOf="@id/firstWeightTextView"
+        app:layout_constraintTop_toBottomOf="@id/progressView" />
+
+    <TextView
+        android:id="@+id/currentWeightLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_current_weight_label"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:text="@string/current_weight_label"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        app:layout_constraintTop_toTopOf="@+id/firstWeightLabel"
+        app:layout_constraintStart_toStartOf="@id/currentWeightTextView"
+        app:layout_constraintEnd_toEndOf="@id/currentWeightTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/firstWeightLabel"
+        />
+
+    <TextView
+        android:id="@+id/bestWeightLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_best_weight_label"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:text="@string/best_weight_label"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/firstWeightLabel"
+        app:layout_constraintStart_toStartOf="@id/bestWeightTextView"
+        app:layout_constraintEnd_toEndOf="@id/bestWeightTextView"
+        app:layout_constraintTop_toTopOf="@+id/firstWeightLabel"
+        />
+
+    <TextView
+        android:id="@+id/goalWeightLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/goal_label"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/firstWeightLabel"
+        app:layout_constraintStart_toStartOf="@id/goalWeightTextView"
+        app:layout_constraintEnd_toEndOf="@id/goalWeightTextView"
+        app:layout_constraintTop_toTopOf="@+id/firstWeightLabel"
+        />
+
+    <TextView
+        android:id="@+id/firstWeightTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="99.99\nkg"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/currentWeightTextView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/firstWeightLabel" />
+
+    <TextView
+        android:id="@+id/currentWeightTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="99.99\nkg"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/firstWeightTextView"
+        app:layout_constraintEnd_toStartOf="@+id/bestWeightTextView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/firstWeightTextView"
+        app:layout_constraintTop_toTopOf="@id/firstWeightTextView" />
+
+    <TextView
+        android:id="@+id/bestWeightTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="99.99\nkg"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/firstWeightTextView"
+        app:layout_constraintEnd_toStartOf="@+id/goalWeightTextView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/currentWeightTextView"
+        app:layout_constraintTop_toTopOf="@id/firstWeightTextView" />
+
+    <TextView
+        android:id="@+id/goalWeightTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="99.99\nkg"
+        android:textSize="20sp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintBottom_toBottomOf="@id/firstWeightTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/bestWeightTextView"
+        app:layout_constraintTop_toTopOf="@id/firstWeightTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tendencyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:text="体重の傾向"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/oneWeekTendencyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="@string/one_week_tendency"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/oneWeekTendencyTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/oneWeekTendencyTextView" />
+
+    <ImageView
+        android:id="@+id/oneWeekTendencyHelpButton"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/ic_help_outline_black_24dp"
+        android:tint="@color/light_blue"
+        app:layout_constraintBottom_toBottomOf="@id/oneWeekTendencyLabel"
+        app:layout_constraintStart_toEndOf="@id/oneWeekTendencyLabel"
+        app:layout_constraintTop_toTopOf="@id/oneWeekTendencyLabel" />
+
+    <TextView
+        android:id="@+id/thirtyDaysTendencyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/thirty_days_tendency"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/thirtyDaysTendencyTextView"
+        app:layout_constraintStart_toStartOf="@+id/oneWeekTendencyLabel"
+        app:layout_constraintTop_toTopOf="@+id/thirtyDaysTendencyTextView" />
+
+    <ImageView
+        android:id="@+id/thirtyDaysTendencyHelpButton"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_help_outline_black_24dp"
+        android:tint="@color/light_blue"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="@id/thirtyDaysTendencyLabel"
+        app:layout_constraintStart_toEndOf="@id/thirtyDaysTendencyLabel"
+        app:layout_constraintTop_toTopOf="@id/thirtyDaysTendencyLabel" />
+
+    <TextView
+        android:id="@+id/oneYearTendencyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/one_year_tendency"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/oneYearTendencyTextView"
+        app:layout_constraintStart_toStartOf="@+id/thirtyDaysTendencyLabel"
+        app:layout_constraintTop_toTopOf="@+id/oneYearTendencyTextView" />
+
+    <ImageView
+        android:id="@+id/oneYearTendencyHelpButton"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/ic_help_outline_black_24dp"
+        android:tint="@color/light_blue"
+        app:layout_constraintBottom_toBottomOf="@+id/oneYearTendencyLabel"
+        app:layout_constraintStart_toEndOf="@+id/oneYearTendencyLabel"
+        app:layout_constraintTop_toTopOf="@+id/oneYearTendencyLabel" />
+
+    <TextView
+        android:id="@+id/oneWeekTendencyTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:text="0kg"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/thirtyDaysTendencyTextView"
+        app:layout_constraintEnd_toStartOf="@+id/oneWeekTendencyImageView"
+        app:layout_constraintTop_toBottomOf="@+id/tendencyTitle"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/thirtyDaysTendencyTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="- 99.9kg"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/oneYearTendencyTextView"
+        app:layout_constraintEnd_toEndOf="@+id/oneWeekTendencyTextView"
+        app:layout_constraintTop_toBottomOf="@+id/oneWeekTendencyTextView" />
+
+    <TextView
+        android:id="@+id/oneYearTendencyTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="16dp"
+        android:text="- 99.9kg"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/oneWeekTendencyTextView"
+        app:layout_constraintTop_toBottomOf="@+id/thirtyDaysTendencyTextView" />
+
+    <ImageView
+        android:id="@+id/oneWeekTendencyImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="32dp"
+        android:src="@drawable/ic_remove_white_18dp"
+        android:tint="@color/colorGrayText"
+        app:layout_constraintBottom_toBottomOf="@+id/oneWeekTendencyTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/oneWeekTendencyTextView" />
+
+    <ImageView
+        android:id="@+id/thirtyDaysTendencyImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_remove_white_18dp"
+        android:tint="@color/colorGrayText"
+        app:layout_constraintBottom_toBottomOf="@+id/thirtyDaysTendencyTextView"
+        app:layout_constraintEnd_toEndOf="@+id/oneWeekTendencyImageView"
+        app:layout_constraintTop_toTopOf="@+id/thirtyDaysTendencyTextView"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/oneYearTendencyImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_remove_white_18dp"
+        android:tint="@color/colorGrayText"
+        app:layout_constraintBottom_toBottomOf="@+id/oneYearTendencyTextView"
+        app:layout_constraintEnd_toEndOf="@+id/oneWeekTendencyImageView"
+        app:layout_constraintTop_toTopOf="@+id/thirtyDaysTendencyTextView"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
