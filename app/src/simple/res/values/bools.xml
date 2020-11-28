@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="is_gallery_visible">false</bool>
+    <bool name="is_editaddrecord_photo_visible">false</bool>
+    <bool name="is_recordlist_photo_visible">false</bool>
+    <bool name="is_restore_backup_visible">false</bool>
+    <bool name="is_dashboard_photo_visible">false</bool>
+
+    <bool name="is_dashboard_body_fat_default_visible">false</bool>
+</resources>

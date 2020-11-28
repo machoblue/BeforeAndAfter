@@ -15,6 +15,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.alarmsettingdialog.AlarmSettingDialog
 import org.macho.beforeandafter.preference.PreferenceFragmentListener
 import org.macho.beforeandafter.record.editaddrecord.OnRecordSavedListener
+import org.macho.beforeandafter.shared.extensions.getBoolean
 import org.macho.beforeandafter.shared.extensions.setupWithNavController
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.Analytics
@@ -82,13 +83,16 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
     }
 
     private fun setUpBottomNavigationBar() {
-        val navGraphIds = listOf(
+        val navGraphIds = mutableListOf(
                 R.navigation.dashboard,
                 R.navigation.graphe,
-                R.navigation.gallery,
                 R.navigation.records,
                 R.navigation.settings
         )
+
+        if (getBoolean(R.bool.is_gallery_visible)) {
+            navGraphIds.add(2, R.navigation.gallery)
+        }
 
         // Setup the bottom navigation view with a list of navigation graphs
         val controller = bottom_nav.setupWithNavController(
