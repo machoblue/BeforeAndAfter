@@ -35,6 +35,10 @@ class BootReceiver : BroadcastReceiver() {
             timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, alarmHourOfDay)
             set(Calendar.MINUTE, alarmMinute)
+
+            if (timeInMillis < System.currentTimeMillis()) {
+                timeInMillis += 1000 * 60 * 60 * 24
+            }
         }
 
         alarmManager.setInexactRepeating(
