@@ -35,6 +35,19 @@ android {
             }
         }
     }
+
+    flavorDimensions "version"
+    productFlavors {
+        primary {
+            dimension "version"
+        }
+        simple {
+            dimension "version"
+            applicationIdSuffix ".simple"
+            versionNameSuffix "-simple"
+        }
+    }
+
     dexOptions {
         javaMaxHeapSize "4g"
     }
