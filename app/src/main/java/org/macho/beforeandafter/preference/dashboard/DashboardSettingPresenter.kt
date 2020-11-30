@@ -36,12 +36,15 @@ class DashboardSettingPresenter @Inject constructor(): DashboardSettingContract.
 
     private fun populateItems() {
         items.clear()
+
+        val isBodyFatDefaultHidden = context.getBoolean(R.bool.is_dashboard_body_fat_default_hidden)
+
         items.addAll(listOf(
             DashboardSettingItem(SharedPreferencesUtil.Key.HIDE_WEIGHT_PROGRESS, R.string.progress_title, false),
             DashboardSettingItem(SharedPreferencesUtil.Key.HIDE_WEIGHT_TENDENCY, R.string.weight_tendency_title, false),
             DashboardSettingItem(SharedPreferencesUtil.Key.HIDE_BMI, R.string.bmi_title, false),
-            DashboardSettingItem(SharedPreferencesUtil.Key.HIDE_BODY_FAT_PROGRESS, R.string.body_fat_progress_title, true),
-            DashboardSettingItem(SharedPreferencesUtil.Key.HIDE_BODY_FAT_TENDENCY, R.string.body_fat_tendency_title, true)
+            DashboardSettingItem(SharedPreferencesUtil.Key.HIDE_BODY_FAT_PROGRESS, R.string.body_fat_progress_title, isBodyFatDefaultHidden),
+            DashboardSettingItem(SharedPreferencesUtil.Key.HIDE_BODY_FAT_TENDENCY, R.string.body_fat_tendency_title, isBodyFatDefaultHidden)
         ))
 
         if (context.getBoolean(R.bool.is_dashboard_photo_visible)) {

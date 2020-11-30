@@ -95,7 +95,8 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
             val bodyFatBestRecord = bodyFatRecordsSortedByDate.minBy { it.rate }
             val goalBodyFat = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.GOAL_RATE)
 
-            val showBodyFatProgress = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BODY_FAT_PROGRESS, true)
+            val isBodyFatDefaultHidden = context.getBoolean(R.bool.is_dashboard_body_fat_default_hidden)
+            val showBodyFatProgress = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BODY_FAT_PROGRESS, isBodyFatDefaultHidden)
             view?.updateBodyFatProgress(showBodyFatProgress, elapsedDay, bodyFatFirstRecord?.rate, weightBestRecord?.rate, weightLatestRecord?.rate, goalBodyFat)
 
             updateBodyFatTendency(thisWeekRecords, theWeekBeforeRecords, thisThirtyDaysRecords, theThirtyDaysBeforeRecords, thisYearRecords, theYearBeforeRecords)
@@ -157,7 +158,8 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
             thisYearRecords: List<Record>,
             theYearBeforeRecords: List<Record>
     ) {
-        val showWeightTendency = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BODY_FAT_TENDENCY, true)
+        val isBodyFatDefaultHidden = context.getBoolean(R.bool.is_dashboard_body_fat_default_hidden)
+        val showWeightTendency = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BODY_FAT_TENDENCY, isBodyFatDefaultHidden)
         val theWeekBeforeWeightList: List<Float> = theWeekBeforeRecords.filter { it.rate != 0f }.map { it.rate }
         val thisWeekWeightList: List<Float> = thisWeekRecords.filter { it.rate != 0f }.map { it.rate }
         val thisWeekTendency: Float? = if (theWeekBeforeWeightList.isNotEmpty() && thisWeekWeightList.isNotEmpty()) -(theWeekBeforeWeightList.average() - thisWeekWeightList.average()).toFloat() else null

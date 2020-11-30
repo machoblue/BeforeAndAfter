@@ -10,5 +10,5 @@
     <bool name="is_restore_backup_visible">true</bool>
     <bool name="is_dashboard_photo_visible">true</bool>
 
-    <bool name="is_dashboard_body_fat_default_visible">false</bool>
+    <bool name="is_dashboard_body_fat_default_hidden">true</bool>
 </resources>
