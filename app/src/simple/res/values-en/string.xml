@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Simple Weight Loss Tracker</string>
+
+    <string name="review_url">https://play.google.com/store/apps/details?id=org.macho.beforeandafter.simple&amp;hl=en</string>
 </resources>
