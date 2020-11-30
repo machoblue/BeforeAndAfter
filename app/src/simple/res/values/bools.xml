@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- TODO: admob入れる -->
+    <bool name="hide_banner_ad">true</bool>
+    <bool name="hide_interstitial_ad">true</bool>
+    <bool name="hide_reward_ad">true</bool>
+    <bool name="hide_native_ad">true</bool>
+
     <bool name="is_gallery_visible">false</bool>
     <bool name="is_editaddrecord_photo_visible">false</bool>
     <bool name="is_recordlist_photo_visible">false</bool>

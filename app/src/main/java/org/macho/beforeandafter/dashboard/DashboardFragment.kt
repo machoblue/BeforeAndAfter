@@ -22,6 +22,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.dashboard.view.*
 import org.macho.beforeandafter.record.RecordFragmentDirections
 import org.macho.beforeandafter.shared.di.FragmentScoped
+import org.macho.beforeandafter.shared.extensions.getBoolean
 import org.macho.beforeandafter.shared.extensions.setText
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
@@ -291,6 +292,10 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
     }
 
     private fun refreshAd() {
+        if (context!!.getBoolean(R.bool.hide_native_ad)) {
+            return
+        }
+
         val builder = AdLoader.Builder(requireContext(), getString(R.string.admob_unit_id_native))
 
         builder.forUnifiedNativeAd { unifiedNativeAd ->
