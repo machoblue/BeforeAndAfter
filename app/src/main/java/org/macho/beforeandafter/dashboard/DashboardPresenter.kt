@@ -7,6 +7,7 @@ import org.macho.beforeandafter.dashboard.view.PhotoData
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
+import org.macho.beforeandafter.shared.extensions.getBoolean
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.util.*
 import javax.inject.Inject
@@ -99,80 +100,9 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
 
             updateBodyFatTendency(thisWeekRecords, theWeekBeforeRecords, thisThirtyDaysRecords, theThirtyDaysBeforeRecords, thisYearRecords, theYearBeforeRecords)
 
-            val photoSummaryList = listOf(
-                    PhotoSummary(
-                            !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_WEIGHT),
-                            R.string.front_photo_summary_by_weight_title,
-                            weightFirstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            weightBestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            weightLatestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
-                    ),
-                    PhotoSummary(
-                            !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_SIDE_PHOTO_SUMMARY_BY_WEIGHT),
-                            R.string.side_photo_summary_by_weight_title,
-                            weightFirstRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            weightBestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            weightLatestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }
-                    ),
-                    PhotoSummary(
-                            !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER1_PHOTO_SUMMARY_BY_WEIGHT, true),
-                            R.string.other1_photo_summary_by_weight_title,
-                            weightFirstRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
-                            weightBestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
-                            weightLatestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }
-                    ),
-                    PhotoSummary(
-                            !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER2_PHOTO_SUMMARY_BY_WEIGHT, true),
-                            R.string.other2_photo_summary_by_weight_title,
-                            weightFirstRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
-                            weightBestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
-                            weightLatestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }
-                    ),
-                    PhotoSummary(
-                            !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER3_PHOTO_SUMMARY_BY_WEIGHT, true),
-                            R.string.other3_photo_summary_by_weight_title,
-                            weightFirstRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
-                            weightBestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
-                            weightLatestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }
-                    ),
-                    PhotoSummary(
-                            !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_BODY_FAT, true),
-                            R.string.front_photo_summary_by_rate_title,
-                            bodyFatFirstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            bodyFatBestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            bodyFatLatestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
-                    ),
-                    PhotoSummary(
-                            !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_SIDE_PHOTO_SUMMARY_BY_BODY_FAT, true),
-                            R.string.side_photo_summary_by_rate_title,
-                            bodyFatFirstRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            bodyFatBestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                            bodyFatLatestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }
-                    ),
-                    PhotoSummary(
-                            !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER1_PHOTO_SUMMARY_BY_BODY_FAT, true),
-                            R.string.other1_photo_summary_by_rate_title,
-                            bodyFatFirstRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
-                            bodyFatBestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
-                            bodyFatLatestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }
-                    ),
-                    PhotoSummary(
-                            !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER2_PHOTO_SUMMARY_BY_BODY_FAT, true),
-                            R.string.other2_photo_summary_by_rate_title,
-                            bodyFatFirstRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
-                            bodyFatBestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
-                            bodyFatLatestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }
-                    ),
-                    PhotoSummary(
-                            !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER3_PHOTO_SUMMARY_BY_BODY_FAT, true),
-                            R.string.other3_photo_summary_by_rate_title,
-                            bodyFatFirstRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
-                            bodyFatBestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
-                            bodyFatLatestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }
-                    )
-            )
-
-            view?.updatePhotoSummaries(photoSummaryList)
+            if (context.getBoolean(R.bool.is_dashboard_photo_visible)) {
+                updatePhotos(weightFirstRecord, weightBestRecord, weightLatestRecord, bodyFatFirstRecord, bodyFatBestRecord, bodyFatLatestRecord)
+            }
 
             view?.stopRefreshingIfNeeded()
         }
@@ -241,5 +171,89 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
         val thisYearTendency: Float? = if (theYearBeforeWeightList.isNotEmpty() && thisYearWeightList.isNotEmpty()) -(theYearBeforeWeightList.average() - thisYearWeightList.average()).toFloat() else null
 
         view?.updateBodyFatTendency(showWeightTendency, thisWeekTendency, thisThirtyDaysTendency, thisYearTendency)
+    }
+
+    private fun updatePhotos(
+            weightFirstRecord: Record?,
+            weightBestRecord: Record?,
+            weightLatestRecord: Record?,
+            bodyFatFirstRecord: Record?,
+            bodyFatBestRecord: Record?,
+            bodyFatLatestRecord: Record?
+    ) {
+        val photoSummaryList = listOf(
+                PhotoSummary(
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_WEIGHT),
+                        R.string.front_photo_summary_by_weight_title,
+                        weightFirstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        weightBestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        weightLatestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
+                ),
+                PhotoSummary(
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_SIDE_PHOTO_SUMMARY_BY_WEIGHT),
+                        R.string.side_photo_summary_by_weight_title,
+                        weightFirstRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        weightBestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        weightLatestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }
+                ),
+                PhotoSummary(
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER1_PHOTO_SUMMARY_BY_WEIGHT, true),
+                        R.string.other1_photo_summary_by_weight_title,
+                        weightFirstRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
+                        weightBestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
+                        weightLatestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }
+                ),
+                PhotoSummary(
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER2_PHOTO_SUMMARY_BY_WEIGHT, true),
+                        R.string.other2_photo_summary_by_weight_title,
+                        weightFirstRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
+                        weightBestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
+                        weightLatestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }
+                ),
+                PhotoSummary(
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER3_PHOTO_SUMMARY_BY_WEIGHT, true),
+                        R.string.other3_photo_summary_by_weight_title,
+                        weightFirstRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
+                        weightBestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
+                        weightLatestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }
+                ),
+                PhotoSummary(
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_BODY_FAT, true),
+                        R.string.front_photo_summary_by_rate_title,
+                        bodyFatFirstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        bodyFatBestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        bodyFatLatestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
+                ),
+                PhotoSummary(
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_SIDE_PHOTO_SUMMARY_BY_BODY_FAT, true),
+                        R.string.side_photo_summary_by_rate_title,
+                        bodyFatFirstRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        bodyFatBestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        bodyFatLatestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }
+                ),
+                PhotoSummary(
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER1_PHOTO_SUMMARY_BY_BODY_FAT, true),
+                        R.string.other1_photo_summary_by_rate_title,
+                        bodyFatFirstRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
+                        bodyFatBestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
+                        bodyFatLatestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }
+                ),
+                PhotoSummary(
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER2_PHOTO_SUMMARY_BY_BODY_FAT, true),
+                        R.string.other2_photo_summary_by_rate_title,
+                        bodyFatFirstRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
+                        bodyFatBestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
+                        bodyFatLatestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }
+                ),
+                PhotoSummary(
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER3_PHOTO_SUMMARY_BY_BODY_FAT, true),
+                        R.string.other3_photo_summary_by_rate_title,
+                        bodyFatFirstRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
+                        bodyFatBestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
+                        bodyFatLatestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }
+                )
+        )
+
+        view?.updatePhotoSummaries(photoSummaryList)
     }
 }

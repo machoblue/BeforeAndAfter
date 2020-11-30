@@ -24,8 +24,26 @@ class DashboardSettingFragment @Inject constructor(): DaggerFragment(), Dashboar
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView.layoutManager = LinearLayoutManager(context!!)
+
+        AdUtil.initializeMobileAds(context!!)
+        AdUtil.loadBannerAd(adView, context!!)
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.takeView(this)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.dropView()
+    }
+
+    override fun populateItems(items: List<DashboardSettingItem>) {
+
         val adapter = DashboardItemAdapter(context!!).also {
-            it.list = DashboardCardType.values().toList()
+            it.list = items
         }
         recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
@@ -45,25 +63,10 @@ class DashboardSettingFragment @Inject constructor(): DaggerFragment(), Dashboar
                 }
             })
         }
-
-        AdUtil.initializeMobileAds(context!!)
-        AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
-    }
-
-    override fun onResume() {
-        super.onResume()
-        presenter.takeView(this)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        presenter.dropView()
     }
 
     override fun initializeSelection(selectedIndices: List<Int>) {
         for (index in selectedIndices) {
-            LogUtil.i(this, "selectedIndex: $index")
             (recyclerView.adapter as? DashboardItemAdapter)?.tracker?.select(index.toLong())
         }
     }

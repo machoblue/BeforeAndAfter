@@ -14,7 +14,7 @@ import org.macho.beforeandafter.shared.util.LogUtil
 
 class DashboardItemAdapter(private val context: Context): RecyclerView.Adapter<DashboardItemAdapter.ViewHolder>() {
 
-    var list: List<DashboardCardType> = arrayListOf()
+    var list: List<DashboardSettingItem> = arrayListOf()
     var tracker: SelectionTracker<Long>? = null
 
     init {
@@ -22,10 +22,9 @@ class DashboardItemAdapter(private val context: Context): RecyclerView.Adapter<D
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val number = list[position]
+        val item = list[position]
         tracker?.let {
-            LogUtil.i(this, "onBindViewHolder")
-            holder.bind(number, it.isSelected(position.toLong()))
+            holder.bind(item, it.isSelected(position.toLong()))
         }
     }
 
@@ -41,10 +40,9 @@ class DashboardItemAdapter(private val context: Context): RecyclerView.Adapter<D
     override fun getItemId(position: Int): Long = position.toLong()
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private var text: TextView
-                = view.findViewById(R.id.text)
+        private var text: TextView = view.findViewById(R.id.text)
 
-        fun bind(value: DashboardCardType, isActivated: Boolean = false) {
+        fun bind(value: DashboardSettingItem, isActivated: Boolean = false) {
             text.text = context.getString(value.labelStringKey)
             itemView.isActivated = isActivated
         }
