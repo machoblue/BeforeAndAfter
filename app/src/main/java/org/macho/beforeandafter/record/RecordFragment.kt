@@ -150,7 +150,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
             holder.binding.executePendingBindings()
         }
 
-        inner class RecordItemViewHolder(view: View): androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+        inner class RecordItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
             val binding = ListItemRecordBinding.bind(view)
 
             init {

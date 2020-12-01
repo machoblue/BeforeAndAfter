@@ -335,6 +335,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         addImagesCheckBox.isChecked = showOtherImages
         otherImagesGroup.visibility = if (showOtherImages) View.VISIBLE else View.GONE
 
+        photoGroup.visibility = if (requireContext().getBoolean(R.bool.is_editaddrecord_photo_visible)) View.VISIBLE else View.GONE
+
         rateUpButton.setOnClickListener {
             val rateText = rate.text.toString()
             var rateValue = if (rateText.isEmpty()) 0.0f else rateText.toFloat()

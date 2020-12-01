@@ -313,6 +313,14 @@
                 tools:layout_editor_absoluteX="20dp"
                 tools:layout_editor_absoluteY="30dp" />
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/photoGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="frontImageLabel,sideImage,otherImage1Label,otherImage2Label,otherImage1,frontImage,sideImageLabel,otherImage2,otherImage3,otherImage3Label,addImagesCheckBox"
+                tools:layout_editor_absoluteX="20dp"
+                tools:layout_editor_absoluteY="30dp" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
