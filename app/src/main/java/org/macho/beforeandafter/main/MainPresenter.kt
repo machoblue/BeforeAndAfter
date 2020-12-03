@@ -30,7 +30,7 @@ class MainPresenter @Inject constructor(): MainContract.Presenter {
         }
 
         val lastSurveyDialogDate = SharedPreferencesUtil.getLong(context, SharedPreferencesUtil.Key.LAST_SURVEY_DIALOG_TIME)
-        if (Date().time - lastSurveyDialogDate > 1000L * 60 * 60 * 24 * 90) {
+        if (Date().time - lastSurveyDialogDate > 1000L * 60 * 60 * 24 * 365) { // 1年に1回
             recordRepository.getRecords { records ->
                 val sortedRecords = records.sortedBy { - it.date }
                 if (records.size > 9 // 10記録以上

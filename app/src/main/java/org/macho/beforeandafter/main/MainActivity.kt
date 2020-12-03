@@ -209,6 +209,5 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
                 getString(R.string.confirm_store_review_message),
                 getString(R.string.mail_bug_report),
                 getString(R.string.store_review))
-        SharedPreferencesUtil.setLong(this, SharedPreferencesUtil.Key.LAST_SURVEY_DIALOG_TIME, Date().time)
     }
 }
