@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -41,5 +41,19 @@
         <item name="android:width">17dp</item>
         <item name="android:height">15dp</item>
     </style>
+
+
+    <!-- PhotoActivity Theme Start https://stackoverflow.com/a/51444244/8834586 -->
+    <style name="MainTheme" parent="AppTheme">
+        <item name="actionBarStyle">@style/MyTheme.ActionBar</item>
+        <item name="android:windowTranslucentStatus">true</item>
+<!--        <item name="android:windowTranslucentNavigation">true</item>-->
+    </style>
+
+    <style name="MyTheme.ActionBar" parent="Widget.AppCompat.ActionBar">
+        <item name="elevation" tools:targetApi="lollipop">0dp</item>
+        <item name="background">@color/semi_transparent</item>
+    </style>
+    <!-- PhotoActivity Theme End -->
 
 </resources>

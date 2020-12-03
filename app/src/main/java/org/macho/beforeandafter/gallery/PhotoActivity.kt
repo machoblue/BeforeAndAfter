@@ -4,13 +4,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
-import android.view.GestureDetector
-import android.view.MotionEvent
-import android.view.View
 import android.widget.SeekBar
+import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.activity_photo.*
 import org.macho.beforeandafter.R
+import org.macho.beforeandafter.dashboard.DashboardFragmentDirections
 import org.macho.beforeandafter.shared.GlideApp
 import java.io.File
 import java.text.DateFormat
@@ -33,7 +33,14 @@ class PhotoActivity: AppCompatActivity() {
 
     private val onGestureListener = object: GestureDetector.SimpleOnGestureListener() {
         override fun onSingleTapUp(e: MotionEvent?): Boolean {
-            group.visibility = if (group.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+            if (group.visibility == View.VISIBLE) {
+                group.visibility = View.GONE
+                supportActionBar?.hide()
+
+            } else {
+                group.visibility = View.VISIBLE
+                supportActionBar?.show()
+            }
             return false
         }
 
@@ -98,10 +105,6 @@ class PhotoActivity: AppCompatActivity() {
 
         updateView()
 
-        closeButton.setOnClickListener {
-            finish()
-        }
-
         previousButton.setOnClickListener {
             if (index == 0) {
                 return@setOnClickListener
@@ -115,8 +118,22 @@ class PhotoActivity: AppCompatActivity() {
             }
             seekBar.progress = ++index
         }
-
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.photo_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.close-> {
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return gestureDetector.onTouchEvent(event)
@@ -132,7 +149,7 @@ class PhotoActivity: AppCompatActivity() {
                 .error(ColorDrawable(Color.GRAY))
                 .into(imageView)
 
-        dateText.text = dateFormat.format(galleryPhoto.dateTime)
+        title = dateFormat.format(galleryPhoto.dateTime)
         weightAndRateText.text = "${galleryPhoto.weight ?: "-"}kg/${galleryPhoto.rate ?: "-"}%"
     }
 }
