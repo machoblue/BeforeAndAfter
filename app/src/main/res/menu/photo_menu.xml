@@ -5,6 +5,22 @@
     >
 
     <item
+        android:id="@+id/a"
+        android:title=""
+        android:icon="@drawable/ic_more_vert_white_36dp"
+        app:showAsAction="always"
+        >
+
+        <menu>
+            <item
+                android:id="@+id/save_to_shared_storage"
+                android:title="@string/save_to_shared_storage"
+                app:showAsAction="ifRoom"
+                />
+        </menu>
+    </item>
+
+    <item
         android:id="@+id/close"
         android:title=""
         android:icon="@drawable/ic_clear_white_36dp"

@@ -84,6 +84,7 @@
     <string name="other1">その他1</string>
     <string name="other2">その他2</string>
     <string name="other3">その他3</string>
+    <string name="save_to_shared_storage">端末のギャラリーに保存する</string>
 
     <!-- Graphe Fragment -->
     <string name="three_weeks">3週間</string>

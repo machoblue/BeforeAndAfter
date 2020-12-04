@@ -1,19 +1,26 @@
 package org.macho.beforeandafter.gallery
 
+import android.Manifest
+import android.content.ContentValues
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.SeekBar
-import androidx.navigation.fragment.findNavController
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_photo.*
 import org.macho.beforeandafter.R
-import org.macho.beforeandafter.dashboard.DashboardFragmentDirections
+import org.macho.beforeandafter.record.camera.PermissionUtils
+import org.macho.beforeandafter.record.editaddrecord.EditAddRecordFragment
 import org.macho.beforeandafter.shared.GlideApp
-import java.io.File
+import org.macho.beforeandafter.shared.util.LogUtil
+import java.io.*
 import java.text.DateFormat
+
 
 class PhotoActivity: AppCompatActivity() {
     companion object {
@@ -22,6 +29,9 @@ class PhotoActivity: AppCompatActivity() {
         private const val SWIPE_MIN_DISTANCE = 50  // X軸最低スワイプ距離
         private const val SWIPE_THRESHOLD_VELOCITY = 200 // X軸最低スワイプスピード
         private const val SWIPE_MAX_OFF_PATH = 250 // Y軸の移動距離　これ以上なら横移動を判定しない
+
+
+        private const val SAVE_TO_SHARED_STORAGE = 1001
     }
 
     private var items: MutableList<GalleryPhoto> = mutableListOf()
@@ -127,13 +137,30 @@ class PhotoActivity: AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.close-> {
+            R.id.close -> {
                 finish()
+            }
+            R.id.save_to_shared_storage -> {
+                saveToSharedStorage()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        LogUtil.i(this, "onRequestPermissionResult $requestCode ${grantResults[0]}")
+
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            SAVE_TO_SHARED_STORAGE -> {
+                if (PermissionUtils.permissionGranted(requestCode, SAVE_TO_SHARED_STORAGE, grantResults)) {
+                    saveToSharedStorage()
+                }
+            }
+        }
+    }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return gestureDetector.onTouchEvent(event)
@@ -151,5 +178,48 @@ class PhotoActivity: AppCompatActivity() {
 
         title = dateFormat.format(galleryPhoto.dateTime)
         weightAndRateText.text = "${galleryPhoto.weight ?: "-"}kg/${galleryPhoto.rate ?: "-"}%"
+    }
+
+    // MARK: - Private
+    private fun saveToSharedStorage() {
+        if (!PermissionUtils.requestPermission(this, SAVE_TO_SHARED_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            LogUtil.i(this, "Not Permitted")
+            return
+        }
+
+        if (Environment.MEDIA_MOUNTED != Environment.getExternalStorageState()) {
+            LogUtil.i(this, "MEDIA_MOUNTED false")
+            return
+        }
+
+        val photoFileName = items[index].fileName
+
+        val values = ContentValues().also {
+            it.put(MediaStore.Images.Media.DISPLAY_NAME, photoFileName)
+            it.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            it.put(MediaStore.Images.Media.IS_PENDING, 1)
+        }
+        val resolver = applicationContext.contentResolver
+        val collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL /*_PRIMARY*/) // TODO:
+        val item = resolver.insert(collection, values)
+        LogUtil.i(this, "*** $resolver, $item")
+        try {
+            BufferedInputStream(FileInputStream(File(filesDir, photoFileName))).use { inputStream ->
+                resolver.openOutputStream(item!!).use { outputStream ->
+                    while (inputStream.available() > 0) {
+                        outputStream!!.write(inputStream.read())
+                    }
+                }
+            }
+
+            Toast.makeText(this@PhotoActivity, R.string.toast_saved, Toast.LENGTH_LONG).show()
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        values.clear()
+        values.put(MediaStore.Images.Media.IS_PENDING, 0)
+        resolver.update(item!!, values, null, null)
     }
 }
