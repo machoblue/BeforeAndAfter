@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -15,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_photo.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.record.camera.PermissionUtils
-import org.macho.beforeandafter.record.editaddrecord.EditAddRecordFragment
 import org.macho.beforeandafter.shared.GlideApp
 import org.macho.beforeandafter.shared.util.LogUtil
 import java.io.*
@@ -148,9 +148,6 @@ class PhotoActivity: AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        LogUtil.i(this, "onRequestPermissionResult $requestCode ${grantResults[0]}")
-
-
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         when (requestCode) {
@@ -182,9 +179,10 @@ class PhotoActivity: AppCompatActivity() {
 
     // MARK: - Private
     private fun saveToSharedStorage() {
-        if (!PermissionUtils.requestPermission(this, SAVE_TO_SHARED_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            LogUtil.i(this, "Not Permitted")
-            return
+        if (Build.VERSION.SDK_INT < 29) {
+            if (!PermissionUtils.requestPermission(this, SAVE_TO_SHARED_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                return
+            }
         }
 
         if (Environment.MEDIA_MOUNTED != Environment.getExternalStorageState()) {
@@ -200,9 +198,9 @@ class PhotoActivity: AppCompatActivity() {
             it.put(MediaStore.Images.Media.IS_PENDING, 1)
         }
         val resolver = applicationContext.contentResolver
-        val collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL /*_PRIMARY*/) // TODO:
+        val volumeName = if (Build.VERSION.SDK_INT < 29) MediaStore.VOLUME_EXTERNAL else MediaStore.VOLUME_EXTERNAL_PRIMARY
+        val collection = MediaStore.Images.Media.getContentUri(volumeName)
         val item = resolver.insert(collection, values)
-        LogUtil.i(this, "*** $resolver, $item")
         try {
             BufferedInputStream(FileInputStream(File(filesDir, photoFileName))).use { inputStream ->
                 resolver.openOutputStream(item!!).use { outputStream ->
