@@ -31,6 +31,7 @@ import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.io.File
+import java.util.*
 
 class CameraActivity: AppCompatActivity() {
 
@@ -104,6 +105,8 @@ class CameraActivity: AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         startCamera()
+
+        scheduleToTakePhoto()
     }
 
     private fun startCamera() {
@@ -418,6 +421,21 @@ class CameraActivity: AppCompatActivity() {
 
         isBackCamera = !isBackCamera
         startCamera()
+    }
+
+    private var timer: Timer? = null
+
+    private fun scheduleToTakePhoto() {
+        timer = Timer()
+        var count = 0
+        timer?.schedule(object: TimerTask() {
+            override fun run() {
+                count++
+                if (count >= 5) {
+                    takePicture()
+                }
+            }
+        }, 0, 1000)
     }
 }
 
