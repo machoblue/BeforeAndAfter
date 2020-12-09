@@ -84,6 +84,7 @@
     <string name="other1">Opt1</string>
     <string name="other2">Opt2</string>
     <string name="other3">Opt3</string>
+    <string name="save_to_shared_storage">Save to Shared Storage</string>
 
     <!-- Graphe Fragment -->
     <string name="three_weeks">3weeks</string>
