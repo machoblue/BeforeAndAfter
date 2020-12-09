@@ -202,8 +202,8 @@ class PhotoActivity: AppCompatActivity() {
         val collection = MediaStore.Images.Media.getContentUri(volumeName)
         val item = resolver.insert(collection, values)
         try {
-            BufferedInputStream(FileInputStream(File(filesDir, photoFileName))).use { inputStream ->
-                resolver.openOutputStream(item!!).use { outputStream ->
+            FileInputStream(File(filesDir, photoFileName)).buffered().use { inputStream ->
+                resolver.openOutputStream(item!!)?.buffered().use { outputStream ->
                     while (inputStream.available() > 0) {
                         outputStream!!.write(inputStream.read())
                     }
