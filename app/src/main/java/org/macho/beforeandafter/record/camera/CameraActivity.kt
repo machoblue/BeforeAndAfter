@@ -11,19 +11,18 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Size
 import android.view.MotionEvent
 import android.view.Surface
 import android.view.TextureView
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_camera.*
-import kotlinx.android.synthetic.main.activity_camera.adLayout
-import kotlinx.android.synthetic.main.activity_camera.adView
 import org.macho.beforeandafter.BuildConfig
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.extensions.loadImage
@@ -31,6 +30,7 @@ import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.io.File
+import java.util.*
 
 class CameraActivity: AppCompatActivity() {
 
@@ -78,6 +78,10 @@ class CameraActivity: AppCompatActivity() {
         } ?: let {
             shadowImage.visibility = View.GONE
             showShadowButton.visibility = View.GONE
+        }
+
+        timerButton.setOnClickListener {
+            scheduleToTakePhotoIfNeeded()
         }
 
         mediaActionSound = MediaActionSound()
@@ -418,6 +422,46 @@ class CameraActivity: AppCompatActivity() {
 
         isBackCamera = !isBackCamera
         startCamera()
+    }
+
+    private var timer: Timer? = null
+    private val handler: Handler = Handler(Looper.getMainLooper())
+
+    private fun scheduleToTakePhotoIfNeeded() {
+        timer?.let { timer ->
+            stopTimer()
+
+        } ?: let {
+            var count = 5
+            timer = Timer()
+            timer?.schedule(object: TimerTask() {
+                override fun run() {
+                    count--
+                    handler.post {
+                        timerText.text = count.toString()
+                    }
+                    if (count == 0) {
+                        takePicture()
+                        stopTimer()
+                    }
+                }
+            }, 1000, 1000)
+
+            timerButton.setColorFilter(ContextCompat.getColor(this@CameraActivity, R.color.colorAccent))
+            timerText.visibility = View.VISIBLE
+            timerText.text = count.toString()
+        }
+    }
+
+    private fun stopTimer() {
+        timer?.let {
+            it.cancel()
+            this@CameraActivity.timer = null
+            handler.post {
+                timerButton.setColorFilter(Color.WHITE)
+                timerText.visibility = View.GONE
+            }
+        }
     }
 }
 
