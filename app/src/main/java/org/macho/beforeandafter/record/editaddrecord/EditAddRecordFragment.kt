@@ -173,11 +173,21 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val isRecordNew = args.date == 0L
+        menu.findItem(R.id.delete).isVisible = !isRecordNew
+
+        super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
                 presenter.saveRecord()
                 SharedPreferencesUtil.setLong(activity!!, SharedPreferencesUtil.Key.TIME_OF_LATEST_RECORD, Date().time)
+            }
+            R.id.delete -> {
+                presenter.deleteRecord()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -236,8 +246,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         record?.otherImageFile3(context!!)?.let {
             otherImage3.loadImage(this, Uri.fromFile(it))
         }
-
-        deleteButton.visibility = if (args.date == 0L) View.GONE else View.VISIBLE
     }
 
     override fun close() {
@@ -380,10 +388,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         memo.addTextChangedListener { newText -> presenter.modifyMemo(newText) }
 
         setHasOptionsMenu(true); // for save button on navBar
-
-        deleteButton.setOnClickListener {
-            presenter.deleteRecord()
-        }
 
         AdUtil.initializeMobileAds(context!!)
 
