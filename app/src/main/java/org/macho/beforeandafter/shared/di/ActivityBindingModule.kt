@@ -17,6 +17,7 @@ import org.macho.beforeandafter.preference.restore.RestoreModule
 import org.macho.beforeandafter.record.RecordModule
 import org.macho.beforeandafter.record.editaddrecord.EditAddRecordModule
 import org.macho.beforeandafter.shared.view.commondialog.CommonDialogModule
+import org.macho.beforeandafter.shared.view.commondialog.CommonDialogModule2
 
 @Module
 abstract class ActivityBindingModule {
@@ -36,6 +37,7 @@ abstract class ActivityBindingModule {
         AlarmModule::class,
         AlarmSettingModule::class,
         CommonDialogModule::class,
+        CommonDialogModule2::class,
         MainActivityModule::class,
         DashboardModule::class
     ])

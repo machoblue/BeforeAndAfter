@@ -52,7 +52,7 @@ class AlarmFragment @Inject constructor(): DaggerFragment(), AlarmContract.View 
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.editaddrecord_menu, menu) // TODO: refactor
+        inflater.inflate(R.menu.edit_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
