@@ -107,6 +107,12 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     override fun onResume() {
         super.onResume()
+
+        // Workaround: Group visibility not work in onViewCreated()
+        val showOtherImages = PreferenceManager.getDefaultSharedPreferences(context!!).getBoolean("SHOW_OTHER_IMAGES", false)
+        addImagesCheckBox.isChecked = showOtherImages
+        otherImagesGroup.visibility = if (showOtherImages) View.VISIBLE else View.GONE
+
         presenter.takeView(this)
     }
 
@@ -353,10 +359,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         }
 
         addImagesCheckBox.setOnClickListener { onCheckBoxClick(it as CheckBox) }
-
-        val showOtherImages = PreferenceManager.getDefaultSharedPreferences(context!!).getBoolean("SHOW_OTHER_IMAGES", false)
-        addImagesCheckBox.isChecked = showOtherImages
-        otherImagesGroup.visibility = if (showOtherImages) View.VISIBLE else View.GONE
 
         photoGroup.visibility = if (requireContext().getBoolean(R.bool.is_editaddrecord_photo_visible)) View.VISIBLE else View.GONE
 
