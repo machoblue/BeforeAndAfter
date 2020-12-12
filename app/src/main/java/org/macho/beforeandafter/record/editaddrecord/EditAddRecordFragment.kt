@@ -16,6 +16,7 @@ import android.view.*
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.ads.AdListener
@@ -30,6 +31,7 @@ import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.extensions.*
 import org.macho.beforeandafter.shared.util.*
+import org.macho.beforeandafter.shared.view.commondialog.CommonDialog2
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
@@ -53,12 +55,17 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         const val OS_CAMERA_RC = 4
         const val GALLERY_RC = 5
         const val FILE_NAME_TEMPLATE = "image-%1\$tF-%1\$tH-%1\$tM-%1\$tS-%1\$tL.jpg"
+
+        const val DELETE_RECORD_REQUEST_KEY = "DELETE_RECORD_REQUEST_KEY"
     }
 
     val dateFormat = SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
 
     @Inject
     override lateinit var presenter: EditAddRecordContract.Presenter
+
+    @Inject
+    lateinit var commonDialog: CommonDialog2
 
     private var interstitialAd: InterstitialAd? = null
 
@@ -83,6 +90,14 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         initViews()
 
         presenter.start(args.date)
+        childFragmentManager.setFragmentResultListener(DELETE_RECORD_REQUEST_KEY, viewLifecycleOwner) { key, bundle ->
+            when(bundle.getSerializable(CommonDialog2.BUTTON_TYPE) as CommonDialog2.ButtonType) {
+                CommonDialog2.ButtonType.POSITIVE -> {
+                    presenter.deleteRecord()
+                }
+                CommonDialog2.ButtonType.NEGATIVE -> { /* do nothing */ }
+            }
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -173,11 +188,21 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val isRecordNew = args.date == 0L
+        menu.findItem(R.id.delete).isVisible = !isRecordNew
+
+        super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
                 presenter.saveRecord()
                 SharedPreferencesUtil.setLong(activity!!, SharedPreferencesUtil.Key.TIME_OF_LATEST_RECORD, Date().time)
+            }
+            R.id.delete -> {
+                commonDialog.show(childFragmentManager, DELETE_RECORD_REQUEST_KEY, getString(R.string.delete_record_message), getString(R.string.ok), getString(R.string.cancel))
             }
         }
         return super.onOptionsItemSelected(item)
@@ -236,8 +261,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         record?.otherImageFile3(context!!)?.let {
             otherImage3.loadImage(this, Uri.fromFile(it))
         }
-
-        deleteButton.visibility = if (args.date == 0L) View.GONE else View.VISIBLE
     }
 
     override fun close() {
@@ -380,10 +403,6 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         memo.addTextChangedListener { newText -> presenter.modifyMemo(newText) }
 
         setHasOptionsMenu(true); // for save button on navBar
-
-        deleteButton.setOnClickListener {
-            presenter.deleteRecord()
-        }
 
         AdUtil.initializeMobileAds(context!!)
 

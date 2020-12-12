@@ -74,6 +74,7 @@
     <string name="other_image1">その他の写真1</string>
     <string name="other_image2">その他の写真2</string>
     <string name="other_image3">その他の写真3</string>
+    <string name="delete_record_message">削除すると元に戻せませんがよろしいですか？</string>
 
     <!-- Camera Activity -->
     <string name="camera_in_preparation">カメラは準備中です。</string>

@@ -74,6 +74,7 @@
     <string name="other_image1">Optional Image 1</string>
     <string name="other_image2">Optional Image 2</string>
     <string name="other_image3">Optional Image 3</string>
+    <string name="delete_record_message">Do you delete this record?</string>
 
     <!-- Camera Activity -->
     <string name="camera_in_preparation">The camera is in preparation.</string>
