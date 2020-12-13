@@ -180,7 +180,7 @@
                 android:layout_height="10dp"
                 android:src="@drawable/ic_description_24px"
                 android:id="@+id/memoIcon"
-                android:tint="@color/colorGrayText"
+                app:tint="@color/colorGrayText"
                 app:layout_constraintTop_toTopOf="@id/memo"
                 app:layout_constraintStart_toEndOf="@id/guideline1"
                 app:layout_constraintBottom_toBottomOf="@id/memo"

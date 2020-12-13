@@ -33,10 +33,10 @@
         android:layout_height="16dp"
         android:layout_marginStart="4dp"
         android:src="@drawable/ic_help_outline_black_24dp"
-        android:tint="@color/light_blue"
         app:layout_constraintBottom_toBottomOf="@id/oneWeekTendencyLabel"
         app:layout_constraintStart_toEndOf="@id/oneWeekTendencyLabel"
-        app:layout_constraintTop_toTopOf="@id/oneWeekTendencyLabel" />
+        app:layout_constraintTop_toTopOf="@id/oneWeekTendencyLabel"
+        app:tint="@color/light_blue" />
 
     <TextView
         android:id="@+id/thirtyDaysTendencyLabel"
@@ -55,11 +55,11 @@
         android:layout_marginStart="4dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_help_outline_black_24dp"
-        android:tint="@color/light_blue"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintBottom_toBottomOf="@id/thirtyDaysTendencyLabel"
         app:layout_constraintStart_toEndOf="@id/thirtyDaysTendencyLabel"
-        app:layout_constraintTop_toTopOf="@id/thirtyDaysTendencyLabel" />
+        app:layout_constraintTop_toTopOf="@id/thirtyDaysTendencyLabel"
+        app:tint="@color/light_blue" />
 
     <TextView
         android:id="@+id/oneYearTendencyLabel"
@@ -77,7 +77,7 @@
         android:layout_height="16dp"
         android:layout_marginStart="4dp"
         android:src="@drawable/ic_help_outline_black_24dp"
-        android:tint="@color/light_blue"
+        app:tint="@color/light_blue"
         app:layout_constraintBottom_toBottomOf="@+id/oneYearTendencyLabel"
         app:layout_constraintStart_toEndOf="@+id/oneYearTendencyLabel"
         app:layout_constraintTop_toTopOf="@+id/oneYearTendencyLabel" />
@@ -124,7 +124,7 @@
         android:layout_height="30dp"
         android:layout_marginEnd="32dp"
         android:src="@drawable/ic_remove_white_18dp"
-        android:tint="@color/colorGrayText"
+        app:tint="@color/colorGrayText"
         app:layout_constraintBottom_toBottomOf="@+id/oneWeekTendencyTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/oneWeekTendencyTextView" />
@@ -134,7 +134,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/ic_remove_white_18dp"
-        android:tint="@color/colorGrayText"
+        app:tint="@color/colorGrayText"
         app:layout_constraintBottom_toBottomOf="@+id/thirtyDaysTendencyTextView"
         app:layout_constraintEnd_toEndOf="@+id/oneWeekTendencyImageView"
         app:layout_constraintTop_toTopOf="@+id/thirtyDaysTendencyTextView"
@@ -145,7 +145,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/ic_remove_white_18dp"
-        android:tint="@color/colorGrayText"
+        app:tint="@color/colorGrayText"
         app:layout_constraintBottom_toBottomOf="@+id/oneYearTendencyTextView"
         app:layout_constraintEnd_toEndOf="@+id/oneWeekTendencyImageView"
         app:layout_constraintTop_toTopOf="@+id/thirtyDaysTendencyTextView"

@@ -33,12 +33,12 @@
         android:layout_height="0dp"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        android:tint="@color/light_blue"
         android:src="@drawable/ic_help_outline_black_24dp"
         app:layout_constraintBottom_toBottomOf="@id/elapsedDayTextView"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintStart_toEndOf="@id/elapsedDayTextView"
-        app:layout_constraintTop_toTopOf="@id/elapsedDayTextView" />
+        app:layout_constraintTop_toTopOf="@id/elapsedDayTextView"
+        app:tint="@color/light_blue" />
 
     <TextView
         android:id="@+id/progressTextView"
@@ -78,7 +78,6 @@
 
     <ImageView
         android:id="@+id/weightArchiveExpectHelpButton"
-        android:tint="@color/light_blue"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="1dp"
@@ -87,7 +86,8 @@
         app:layout_constraintBottom_toBottomOf="@id/weightAchieveExpectTextView"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintStart_toEndOf="@id/weightAchieveExpectTextView"
-        app:layout_constraintTop_toTopOf="@id/weightAchieveExpectTextView" />
+        app:layout_constraintTop_toTopOf="@id/weightAchieveExpectTextView"
+        app:tint="@color/light_blue" />
 
     <org.macho.beforeandafter.dashboard.view.ProgressView
         android:id="@+id/progressView"

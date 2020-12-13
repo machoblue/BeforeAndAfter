@@ -80,6 +80,6 @@
         android:id="@+id/group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="previousButton,dateText,weightAndRateBackground,weightAndRateText,nextButton,closeButton" />
+        app:constraint_referenced_ids="previousButton,weightAndRateBackground,weightAndRateText,nextButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
