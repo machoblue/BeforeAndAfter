@@ -45,6 +45,7 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
             }
 
         } else {
+            originalRecord = null
             tempRecord.weight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT)
             tempRecord.rate = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_RATE)
         }
