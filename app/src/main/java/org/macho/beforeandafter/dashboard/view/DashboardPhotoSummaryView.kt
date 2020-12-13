@@ -35,6 +35,8 @@ class DashboardPhotoSummaryView @JvmOverloads constructor(
         val dateTexts = listOf(dateText1, dateText2, dateText3)
         val weightAndRateTexts = listOf(weightAndRateText1, weightAndRateText2, weightAndRateText3)
 
+        imageViews[0].layoutParams.height = getPhotoHeight()
+
         for ((i, photoData) in photoDataList.withIndex()) {
             imageViews[i].loadImage(context, Uri.fromFile(File(context.filesDir, photoData?.fileName ?: "")))
             imageViews[i].setOnClickListener {
@@ -54,5 +56,17 @@ class DashboardPhotoSummaryView @JvmOverloads constructor(
         intent.putExtra(PhotoActivity.INDEX, index)
         intent.putExtra(PhotoActivity.PATHS, photoDataList.toTypedArray())
         context.startActivity(intent)
+    }
+
+    private fun getPhotoHeight(): Int {
+        val cardViewMarginInDp = 12
+        val photosSpanInDp = 1
+        val displayMetrics = context.resources.displayMetrics
+        val displayWidthInDp = displayMetrics.widthPixels / displayMetrics.density
+        val photoWidthInDp = (displayWidthInDp - (cardViewMarginInDp * 2 + photosSpanInDp * 2)) / 3
+        val photoHeightWidthRatio = 1.25f
+        val photoHeightInDp = photoWidthInDp * photoHeightWidthRatio
+        val photoHeightInPx = photoHeightInDp * displayMetrics.density
+        return photoHeightInPx.toInt()
     }
 }
