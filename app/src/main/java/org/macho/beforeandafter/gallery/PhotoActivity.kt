@@ -1,3 +1,4 @@
+
 package org.macho.beforeandafter.gallery
 
 import android.Manifest
@@ -195,7 +196,9 @@ class PhotoActivity: AppCompatActivity() {
         val values = ContentValues().also {
             it.put(MediaStore.Images.Media.DISPLAY_NAME, photoFileName)
             it.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-            it.put(MediaStore.Images.Media.IS_PENDING, 1)
+            if (Build.VERSION.SDK_INT >= 29) {
+                it.put(MediaStore.Images.Media.IS_PENDING, 1)
+            }
         }
         val resolver = applicationContext.contentResolver
         val volumeName = if (Build.VERSION.SDK_INT < 29) MediaStore.VOLUME_EXTERNAL else MediaStore.VOLUME_EXTERNAL_PRIMARY
@@ -217,7 +220,10 @@ class PhotoActivity: AppCompatActivity() {
         }
 
         values.clear()
-        values.put(MediaStore.Images.Media.IS_PENDING, 0)
-        resolver.update(item!!, values, null, null)
+
+        if (Build.VERSION.SDK_INT >= 29) {
+            values.put(MediaStore.Images.Media.IS_PENDING, 0)
+            resolver.update(item!!, values, null, null)
+        }
     }
 }
