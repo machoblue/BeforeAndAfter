@@ -15,6 +15,8 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.alarmsettingdialog.AlarmSettingDialog
 import org.macho.beforeandafter.preference.PreferenceFragmentListener
 import org.macho.beforeandafter.record.editaddrecord.OnRecordSavedListener
+import org.macho.beforeandafter.shared.data.record.Record
+import org.macho.beforeandafter.shared.data.record.RecordDaoImpl
 import org.macho.beforeandafter.shared.extensions.getBoolean
 import org.macho.beforeandafter.shared.extensions.setupWithNavController
 import org.macho.beforeandafter.shared.util.AdUtil
@@ -24,6 +26,7 @@ import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import org.macho.beforeandafter.shared.view.commondialog.CommonDialog
 import java.util.*
 import javax.inject.Inject
+import kotlin.random.Random
 
 class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSavedListener, CommonDialog.CommonDialogListener, MainContract.View, PreferenceFragmentListener {
 
@@ -60,6 +63,8 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
         configureAd()
 
         analytics = Analytics(this)
+
+        createRecords()
     }
 
     override fun onResume() {
@@ -209,5 +214,26 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
                 getString(R.string.confirm_store_review_message),
                 getString(R.string.mail_bug_report),
                 getString(R.string.store_review))
+    }
+
+    private fun createRecords() {
+        val recordDao = RecordDaoImpl()
+        recordDao.deleteAll()
+
+        val now = Date().time
+        val day = 1000L * 60 * 60 * 24
+        val first: Float = 60f
+        val last: Float = 50f
+        val firstRate: Float = 25f
+        val lastRate: Float = 15f
+        val count = 21
+        for (i in 0 until count) {
+            val weight = first - i * ((first - last) / count) + 3 * ((Random.nextInt(0, 100) - 50) / 100f)
+            val rate: Float = firstRate - i * ((firstRate - lastRate) / count) + 2 * ((Random.nextInt(0, 100) - 50) / 100f)
+            val time = now - count * day + i * day
+            recordDao.register(Record(time, weight, rate))
+
+        }
+        recordDao.register(Record())
     }
 }

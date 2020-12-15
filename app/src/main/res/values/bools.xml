@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="hide_banner_ad">false</bool>
+    <bool name="hide_banner_ad">true</bool>
     <bool name="hide_interstitial_ad">true</bool>
-    <bool name="hide_reward_ad">false</bool>
-    <bool name="hide_native_ad">false</bool>
+    <bool name="hide_reward_ad">true</bool>
+    <bool name="hide_native_ad">true</bool>
 
     <bool name="is_gallery_visible">true</bool>
     <bool name="is_editaddrecord_photo_visible">true</bool>
