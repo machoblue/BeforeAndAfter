@@ -1,3 +1,4 @@
+
 package org.macho.beforeandafter.preference.backup
 
 import android.accounts.Account
@@ -14,6 +15,7 @@ import org.macho.beforeandafter.shared.data.record.Record
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
 import java.lang.ref.WeakReference
+import java.net.SocketTimeoutException
 import java.util.*
 
 
@@ -79,6 +81,11 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
             Log.w(TAG, "doInBackground.catch UserRecoverableException:${e::class.java}", e)
             publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_ERROR_RECOVERABLE))
             cancel(true)
+            return
+
+
+        } catch (e: SocketTimeoutException) {
+            publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_ERROR_TIMEOUT))
             return
 
         } catch (e: Exception) {
@@ -164,6 +171,7 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
             const val BACKUP_STATUS_CODE_ERROR_DRIVE_CONNECTION_FAILED = 1002
             const val BACKUP_STATUS_CODE_ERROR_FILES_CREATE_FAILED = 1003
             const val BACKUP_STATUS_CODE_ERROR_RECOVERABLE = 1004
+            const val BACKUP_STATUS_CODE_ERROR_TIMEOUT = 1005
         }
     }
 

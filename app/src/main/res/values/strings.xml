@@ -148,6 +148,7 @@
     <string name="backup_error_description_no_records">バックアップする記録データがありません。</string>
     <string name="backup_error_drive_connection_error">GoogleDriveとの接続に失敗しました。</string>
     <string name="backup_error_files_create_failed">画像ファイルのアップロードに失敗しました。</string>
+    <string name="backup_error_network_timeout">ネットワークが安定しないため、タイムアウトエラーが発生しました。しばらくしてからもう一度お試しください。</string>
 
     <string name="restore_dialog_title">バックアップデータの復元</string>
     <string name="restore_dialog_message">バックアップしたデータを復元します。よろしいですか？\n<small>※注意点※\n・通信量が多くなるためWi-Fi環境で行うことを推奨します。\n・GoogleDriveに保存するためGoogleアカウントが必要です。</small></string>
