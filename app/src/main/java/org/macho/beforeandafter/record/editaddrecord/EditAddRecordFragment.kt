@@ -1,3 +1,4 @@
+
 package org.macho.beforeandafter.record.editaddrecord
 
 import android.Manifest

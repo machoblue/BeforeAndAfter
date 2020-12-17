@@ -96,8 +96,7 @@ class CameraActivity: AppCompatActivity() {
         super.onPause()
 
         // E/Camera3-Device: Camera 0: initialize: Could not open camera session: Too many users (-87)
-        cameraDevice?.close()
-        cameraDevice = null
+        closeCamera()
 
         stopTimer()
     }
@@ -165,13 +164,11 @@ class CameraActivity: AppCompatActivity() {
         }
 
         override fun onDisconnected(p0: CameraDevice) {
-            cameraDevice?.close()
-            this@CameraActivity.cameraDevice = null
+            closeCamera()
         }
 
         override fun onError(cameraDevice: CameraDevice, i: Int) {
-            cameraDevice?.close()
-            this@CameraActivity.cameraDevice = null
+            closeCamera()
             val activity = this@CameraActivity
             if (null != activity) {
                 LogUtil.w(this, "CameraDevice.StateCallback.onError: $i")
@@ -181,6 +178,10 @@ class CameraActivity: AppCompatActivity() {
     }
 
     private fun createCameraPreviewSession() {
+        if (this.cameraDevice == null) {
+            return // Workaround: フロントカメラとバックカメラの切り替え時に、IllegalStateException: CameraDevice was already closed
+        }
+
         val texture = textureView.surfaceTexture
         texture.setDefaultBufferSize(cameraInfo.previewSize.width, cameraInfo.previewSize.height)
         val surface = Surface(texture)
@@ -317,6 +318,12 @@ class CameraActivity: AppCompatActivity() {
         cameraCaptureSession.setRepeatingRequest(captureRequest, null, backgroundHandler) // previewにもどる
     }
 
+    private fun closeCamera() {
+        val cameraDevice = this.cameraDevice ?: return
+        this.cameraDevice = null
+        cameraDevice.close()
+    }
+
     // MARK: - Zoom
 
     private var currentFingerSpace = 0f
@@ -419,8 +426,7 @@ class CameraActivity: AppCompatActivity() {
         }
 
     private fun turnCamera() {
-        cameraDevice?.close()
-        cameraDevice = null
+        closeCamera()
 
         isBackCamera = !isBackCamera
         startCamera()
