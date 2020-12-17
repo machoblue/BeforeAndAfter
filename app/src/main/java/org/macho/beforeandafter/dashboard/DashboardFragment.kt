@@ -20,17 +20,13 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.dashboard_frag.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.dashboard.view.*
-import org.macho.beforeandafter.record.RecordFragmentDirections
 import org.macho.beforeandafter.shared.di.FragmentScoped
 import org.macho.beforeandafter.shared.extensions.getBoolean
-import org.macho.beforeandafter.shared.extensions.setText
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.view.commondialog.CommonDialog
 import javax.inject.Inject
-import kotlin.math.ceil
 import kotlin.math.max
-import kotlin.math.min
 
 @FragmentScoped
 class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContract.View {

@@ -152,13 +152,15 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
     override fun onPositiveButtonClick(requestCode: Int) {
         when (requestCode) {
             SURVEY_DIALOG_RC -> {
-                commonDialog.show(
-                        supportFragmentManager,
-                        STORE_REVIEW_DIALOG_RC,
-                        getString(R.string.store_review_dialog_message),
-                        getString(R.string.common_yes),
-                        getString(R.string.common_no))
                 analytics.logEvent(Analytics.Event.SURVEY_DIALOG_HELP)
+                Handler().postDelayed({ // Workaround: IllegalStateException: Fragment already added: CommonDialog. 本当はcommonDialogを使いまわさないほうがいいかも。
+                    commonDialog.show(
+                            supportFragmentManager,
+                            STORE_REVIEW_DIALOG_RC,
+                            getString(R.string.store_review_dialog_message),
+                            getString(R.string.common_yes),
+                            getString(R.string.common_no))
+                }, 500)
             }
             STORE_REVIEW_DIALOG_RC -> {
                 val intent = Intent(
@@ -181,13 +183,15 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
     override fun onNegativeButtonClick(requestCode: Int) {
         when (requestCode) {
             SURVEY_DIALOG_RC -> {
-                commonDialog.show(
-                        supportFragmentManager,
-                        BUG_REPORT_DIALOG_RC,
-                        getString(R.string.bug_report_dialog_message),
-                        getString(R.string.common_yes),
-                        getString(R.string.common_no))
                 analytics.logEvent(Analytics.Event.SURVEY_DIALOG_NOT_HELP)
+                Handler().postDelayed({ // Workaround: IllegalStateException: Fragment already added: CommonDialog. 本当はcommonDialogを使いまわさないほうがいいかも。
+                    commonDialog.show(
+                            supportFragmentManager,
+                            BUG_REPORT_DIALOG_RC,
+                            getString(R.string.bug_report_dialog_message),
+                            getString(R.string.common_yes),
+                            getString(R.string.common_no))
+                }, 500)
             }
             STORE_REVIEW_CONFIRM_DIALOG_RC -> {
                 val intent = Intent(
