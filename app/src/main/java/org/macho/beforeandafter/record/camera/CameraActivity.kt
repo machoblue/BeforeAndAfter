@@ -98,6 +98,8 @@ class CameraActivity: AppCompatActivity() {
         // E/Camera3-Device: Camera 0: initialize: Could not open camera session: Too many users (-87)
         cameraDevice?.close()
         cameraDevice = null
+
+        stopTimer()
     }
 
     override fun onDestroy() {
