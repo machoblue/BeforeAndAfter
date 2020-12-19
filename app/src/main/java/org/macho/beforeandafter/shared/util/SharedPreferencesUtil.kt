@@ -43,7 +43,9 @@ object SharedPreferencesUtil {
         HIDE_OTHER2_PHOTO_SUMMARY_BY_BODY_FAT("hide_other2_photo_summary_by_body_fat"),
         HIDE_OTHER3_PHOTO_SUMMARY_BY_BODY_FAT("hide_other3_photo_summary_by_body_fat"),
 
-        HEIGHT("height")
+        HEIGHT("height"),
+
+        GUIDE_PHOTO_STRATEGY("guide_photo_strategy")
     }
 
     fun getFloat(context: Context, key: Key): Float {
