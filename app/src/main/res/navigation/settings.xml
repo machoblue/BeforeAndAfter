@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_preferenceFragment_to_dashboardSettingFragment"
             app:destination="@id/dashboardSettingFragment" />
+        <action
+            android:id="@+id/action_preferenceFragment_to_guidePhotoModeSettingDialog"
+            app:destination="@id/guidePhotoModeSettingDialog" />
     </fragment>
     <fragment
         android:id="@+id/editGoalFragment"
@@ -88,4 +91,8 @@
         android:id="@+id/dashboardSettingFragment"
         android:name="org.macho.beforeandafter.preference.dashboard.DashboardSettingFragment"
         android:label="@string/dashboard_setting_title" />
+    <dialog
+        android:id="@+id/guidePhotoModeSettingDialog"
+        android:name="org.macho.beforeandafter.preference.guidephoto.GuidePhotoModeSettingDialog"
+        android:label="GuidePhotoModeSettingDialog" />
 </navigation>
