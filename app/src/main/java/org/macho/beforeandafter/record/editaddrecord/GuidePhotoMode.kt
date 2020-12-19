@@ -1,6 +1,6 @@
 package org.macho.beforeandafter.record.editaddrecord
 
-object GuidePhotoStrategy {
+object GuidePhotoMode {
     const val FIRST = 0
     const val LATEST = 1
 }

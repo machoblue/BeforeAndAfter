@@ -20,7 +20,7 @@ object SharedPreferencesUtil {
 
         NEVER_DISPLAY_ALARM_SETTING_DIALOG("never_display_alarm_setting_dialog"),
 
-        HIDE_SHADOW_PHOTO("hide_shadow_photo"),
+        HIDE_GUIDE_PHOTO("hide_guide_photo"),
 
         GOAL_WEIGHT("GOAL_WEIGHT"),
         GOAL_RATE("GOAL_RATE"),
@@ -45,7 +45,7 @@ object SharedPreferencesUtil {
 
         HEIGHT("height"),
 
-        GUIDE_PHOTO_STRATEGY("guide_photo_strategy")
+        GUIDE_PHOTO_MODE("guide_photo_mode")
     }
 
     fun getFloat(context: Context, key: Key): Float {

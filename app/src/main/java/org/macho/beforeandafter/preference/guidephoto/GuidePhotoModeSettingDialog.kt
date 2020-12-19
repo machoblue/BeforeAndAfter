@@ -16,7 +16,7 @@ class GuidePhotoModeSettingDialog: DialogFragment() {
                         requireContext().getString(R.string.guide_photo_mode_first),
                         requireContext().getString(R.string.guide_photo_mode_latest)
                 )) { _, i ->
-                    SharedPreferencesUtil.setInt(requireContext(), SharedPreferencesUtil.Key.GUIDE_PHOTO_STRATEGY, i)
+                    SharedPreferencesUtil.setInt(requireContext(), SharedPreferencesUtil.Key.GUIDE_PHOTO_MODE, i)
                     Toast.makeText(requireContext(), R.string.toast_saved, Toast.LENGTH_LONG).show()
                 }
                 .create()

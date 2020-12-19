@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/shadowImage"
+        android:id="@+id/guidePhoto"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:alpha="0.5"
@@ -50,7 +50,7 @@
         />
 
     <ImageButton
-        android:id="@+id/showShadowButton"
+        android:id="@+id/showGuidePhotoButton"
         android:src="@drawable/ic_people_alt_white_24dp"
         android:scaleType="fitCenter"
         android:background="#00000000"
@@ -69,7 +69,7 @@
         android:background="#00000000"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_timer_white_36dp"
-        app:layout_constraintRight_toLeftOf="@id/showShadowButton"
+        app:layout_constraintRight_toLeftOf="@id/showGuidePhotoButton"
         app:layout_constraintTop_toTopOf="@id/textureView"
         />
 

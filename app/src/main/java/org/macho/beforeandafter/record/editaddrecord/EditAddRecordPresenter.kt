@@ -96,9 +96,9 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
             4 -> { record -> record.otherImagePath3 }
             else -> { throw RuntimeException("index must not be greater than 4.") }
         }
-        val guidePhotoStrategy = SharedPreferencesUtil.getInt(context, SharedPreferencesUtil.Key.GUIDE_PHOTO_STRATEGY)
+        val guidePhotoMode = SharedPreferencesUtil.getInt(context, SharedPreferencesUtil.Key.GUIDE_PHOTO_MODE)
         val startTime = SharedPreferencesUtil.getLong(context, SharedPreferencesUtil.Key.START_TIME)
-        val multiplier = if (guidePhotoStrategy == GuidePhotoStrategy.FIRST) 1 else -1
+        val multiplier = if (guidePhotoMode == GuidePhotoMode.FIRST) 1 else -1
         recordRepository.getRecords { records ->
             val guidePhotoFileName = records.asSequence()
                     .filter { it.date > startTime }
