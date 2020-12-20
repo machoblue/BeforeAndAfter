@@ -315,15 +315,15 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         }
     }
 
-    override fun openCamera(shadowImageFileName: String?) {
+    override fun openCamera(guidePhotoFileName: String?) {
         if (PermissionUtils.requestPermission(this, CAMERA_PERMISSION_RC,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.CAMERA)) {
 
             val intent = Intent(context!!, CameraActivity::class.java).also {
-                val shadowImageFileName = shadowImageFileName ?: return@also
+                val guidePhotoFileName = guidePhotoFileName ?: return@also
                 it.putExtras(Bundle().also { bundle ->
-                    bundle.putString(CameraActivity.SHADOW_IMAGE_FILE_NAME, shadowImageFileName)
+                    bundle.putString(CameraActivity.GUIDE_PHOTO_FILE_NAME, guidePhotoFileName)
                 })
             }
 

@@ -115,6 +115,11 @@
     <string name="dashboard_setting_title">Home Contents Setting</string>
     <string name="dashboard_setting_description">Customize Home Contents.</string>
 
+    <string name="guide_photo_mode_setting_title">Guide Photo Mode Setting</string>
+    <string name="guide_photo_mode_setting_description">As a guide photo when taking picture, you can select the first photo or the latest photo.</string>
+    <string name="guide_photo_mode_first">The first photo</string>
+    <string name="guide_photo_mode_latest">The latest photo</string>
+
     <string name="delete_all_title">delete all data</string>
     <string name="delete_all_description">delete all data</string>
     <string name="delete_all_confirmation_message">You cannot recovery your data once you delete all data.Do you delete all data?</string>

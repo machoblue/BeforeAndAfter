@@ -37,7 +37,7 @@ class CameraActivity: AppCompatActivity() {
     companion object {
         private const val TAG = "CameraActivity"
         private const val REQUEST_CAMERA_PERMISSION = 1
-        const val SHADOW_IMAGE_FILE_NAME = "SHADOW_IMAGE_FILE_NAME"
+        const val GUIDE_PHOTO_FILE_NAME = "GUIDE_PHOTO_FILE_NAME"
     }
 
     private lateinit var backgroundThread: HandlerThread
@@ -50,11 +50,11 @@ class CameraActivity: AppCompatActivity() {
     private lateinit var captureRequest: CaptureRequest
     private lateinit var mediaActionSound: MediaActionSound
 
-    private var isShadowVisible = false
+    private var isGuidePhotoVisible = false
         set(value) {
             field = value
-            showShadowButton.colorFilter = if (value) PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.SRC_IN) else null
-            shadowImage.visibility = if (value) View.VISIBLE else View.INVISIBLE
+            showGuidePhotoButton.colorFilter = if (value) PorterDuffColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.SRC_IN) else null
+            guidePhoto.visibility = if (value) View.VISIBLE else View.INVISIBLE
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,17 +67,17 @@ class CameraActivity: AppCompatActivity() {
             turnCamera()
         }
 
-        isShadowVisible = !SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.HIDE_SHADOW_PHOTO)
+        isGuidePhotoVisible = !SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.Key.HIDE_GUIDE_PHOTO)
 
-        intent.extras?.getString(SHADOW_IMAGE_FILE_NAME)?.let {
-            shadowImage.loadImage(this, Uri.fromFile(File(this.filesDir, it)))
-            showShadowButton.setOnClickListener {
-                isShadowVisible = !isShadowVisible
-                SharedPreferencesUtil.setBoolean(this, SharedPreferencesUtil.Key.HIDE_SHADOW_PHOTO, !isShadowVisible)
+        intent.extras?.getString(GUIDE_PHOTO_FILE_NAME)?.let {
+            guidePhoto.loadImage(this, Uri.fromFile(File(this.filesDir, it)))
+            showGuidePhotoButton.setOnClickListener {
+                isGuidePhotoVisible = !isGuidePhotoVisible
+                SharedPreferencesUtil.setBoolean(this, SharedPreferencesUtil.Key.HIDE_GUIDE_PHOTO, !isGuidePhotoVisible)
             }
         } ?: let {
-            shadowImage.visibility = View.GONE
-            showShadowButton.visibility = View.GONE
+            guidePhoto.visibility = View.GONE
+            showGuidePhotoButton.visibility = View.GONE
         }
 
         timerButton.setOnClickListener {
@@ -422,7 +422,7 @@ class CameraActivity: AppCompatActivity() {
     private var isBackCamera = true
         set(value) {
             field = value
-            shadowImage.rotationY = if (value) 0f else 180f
+            guidePhoto.rotationY = if (value) 0f else 180f
         }
 
     private fun turnCamera() {

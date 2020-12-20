@@ -115,6 +115,11 @@
     <string name="dashboard_setting_title">ホームの表示内容の設定</string>
     <string name="dashboard_setting_description">ホームの表示内容の設定します。</string>
 
+    <string name="guide_photo_mode_setting_title">ガイドフォトの設定</string>
+    <string name="guide_photo_mode_setting_description">カメラで写真撮影時に表示するガイドフォトのモードを設定します。ダイエット開始時の写真を表示するか、最新の写真を表示するか選択できます。</string>
+    <string name="guide_photo_mode_first">ダイエット開始時の写真を表示</string>
+    <string name="guide_photo_mode_latest">最新の写真を表示</string>
+
     <string name="delete_all_title">全データ削除</string>
     <string name="delete_all_description">全データを削除します。</string>
     <string name="delete_all_confirmation_message">全データを削除します。削除すると元に戻せませんがよろしいですか？</string>
