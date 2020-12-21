@@ -22,15 +22,6 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     private var originalRecord: Record? = null
     private lateinit var tempRecord: Record
 
-    private var latestFrontImageFileName: String? = null
-    private var latestSideImageFileName: String? = null
-    private var latestOtherImageFileName1: String? = null
-    private var latestOtherImageFileName2: String? = null
-    private var latestOtherImageFileName3: String? = null
-
-    private var latestImageFileNames: List<String?> = listOf()
-        get() = listOf(latestFrontImageFileName, latestSideImageFileName, latestOtherImageFileName1, latestOtherImageFileName2, latestOtherImageFileName3)
-
     override fun start(date: Long) {
         tempRecord = Record()
         if (date != 0L) {
@@ -48,15 +39,6 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
             originalRecord = null
             tempRecord.weight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT)
             tempRecord.rate = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_RATE)
-        }
-
-        recordRepository.getRecords { records ->
-            val sortedRecords = records.filter { it.date != date }.sortedBy { -it.date }
-            latestFrontImageFileName = sortedRecords.firstOrNull { !it.frontImagePath.isNullOrEmpty() }?.frontImagePath
-            latestSideImageFileName = sortedRecords.firstOrNull { !it.sideImagePath.isNullOrEmpty() }?.sideImagePath
-            latestOtherImageFileName1 = sortedRecords.firstOrNull { !it.otherImagePath1.isNullOrEmpty() }?.otherImagePath1
-            latestOtherImageFileName2 = sortedRecords.firstOrNull { !it.otherImagePath2.isNullOrEmpty() }?.otherImagePath2
-            latestOtherImageFileName3 = sortedRecords.firstOrNull { !it.otherImagePath3.isNullOrEmpty() }?.otherImagePath3
         }
     }
 
@@ -106,8 +88,25 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     }
 
     override fun onCameraButtonClicked(index: Int) {
-        val latestImageFileName = latestImageFileNames[index]
-        view?.openCamera(latestImageFileName)
+        val mapper: ((Record) -> String?) = when (index) {
+            0 -> { record -> record.frontImagePath }
+            1 -> { record -> record.sideImagePath }
+            2 -> { record -> record.otherImagePath1 }
+            3 -> { record -> record.otherImagePath2 }
+            4 -> { record -> record.otherImagePath3 }
+            else -> { throw RuntimeException("index must not be greater than 4.") }
+        }
+        val guidePhotoMode = SharedPreferencesUtil.getInt(context, SharedPreferencesUtil.Key.GUIDE_PHOTO_MODE)
+        val startTime = SharedPreferencesUtil.getLong(context, SharedPreferencesUtil.Key.START_TIME)
+        val multiplier = if (guidePhotoMode == GuidePhotoMode.FIRST) 1 else -1
+        recordRepository.getRecords { records ->
+            val guidePhotoFileName = records.asSequence()
+                    .filter { it.date > startTime }
+                    .sortedBy { it.date * multiplier }
+                    .map(mapper)
+                    .firstOrNull{ it?.isNotEmpty() ?: false }
+            view?.openCamera(guidePhotoFileName)
+        }
     }
 
     override fun saveRecord() {
