@@ -18,7 +18,7 @@ class ProgressView @JvmOverloads constructor(
     companion object {
         const val progressBarMarginLeft = 36f
         const val progressBarMarginRight = 36f
-        const val labelFontSize = 36f
+        const val labelFontSizeInDp = 18f
     }
 
     private var progressBarBackgroundPaint = Paint().also {
@@ -46,7 +46,6 @@ class ProgressView @JvmOverloads constructor(
         it.color = Color.GRAY
         it.style = Paint.Style.FILL
         it.isAntiAlias = true
-        it.textSize = labelFontSize
     }
 
     private var firstValue: Float = 0f
@@ -82,6 +81,8 @@ class ProgressView @JvmOverloads constructor(
             canvas.drawLine(x, progressBarMinY, x, progressBarMaxY, scalePaint)
         }
 
+        val displayMetrics = context.resources.displayMetrics
+        labelPaint.textSize = labelFontSizeInDp * displayMetrics.density
         val textY = progressBarMaxY + labelPaint.textSize
         for (i in 0..4 step(2)) {
             val text = "${25 * i}%"
