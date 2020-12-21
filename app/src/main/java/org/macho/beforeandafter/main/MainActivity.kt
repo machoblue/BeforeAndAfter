@@ -193,6 +193,12 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
                             getString(R.string.common_no))
                 }, 500)
             }
+            STORE_REVIEW_DIALOG_RC -> {
+                analytics.logEvent(Analytics.Event.STORE_REVIEW_DIALOG_CANCEL)
+            }
+            BUG_REPORT_DIALOG_RC -> {
+                analytics.logEvent(Analytics.Event.BUG_REPORT_DIALOG_CANCEL)
+            }
             STORE_REVIEW_CONFIRM_DIALOG_RC -> {
                 val intent = Intent(
                         Intent.ACTION_VIEW,
