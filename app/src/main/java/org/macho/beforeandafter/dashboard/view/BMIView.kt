@@ -30,7 +30,7 @@ class BMIView @JvmOverloads constructor(
     companion object {
         const val bmiBarMarginLeft = 36f
         const val bmiBarMarginRight = 36f
-        const val classLabelFontSize = 30f
+        const val classLabelFontSizeInDp = 15f
         const val arrowWidth = 36f
         const val arrowHeightWidthRatio = 1.25f
     }
@@ -38,7 +38,6 @@ class BMIView @JvmOverloads constructor(
     private val classLabelPaint = TextPaint().also {
         it.color = Color.WHITE
         it.isAntiAlias = true
-        it.textSize = classLabelFontSize
     }
 
     private val arrowFillPaint = Paint().also {
@@ -68,6 +67,8 @@ class BMIView @JvmOverloads constructor(
 
         val bmiBarMinValue = BMIClass.values().first().from
         val bmiBarMaxValue = BMIClass.values().last().toExclusive
+        val displayMetrics = context.resources.displayMetrics
+        classLabelPaint.textSize = classLabelFontSizeInDp * displayMetrics.density
 
         var bmiClassMinX = bmiBarMinX
         for (bmiClass in BMIClass.values()) {
