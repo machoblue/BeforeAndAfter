@@ -62,7 +62,7 @@
 
     <!-- Edit Fragment -->
     <string name="date_label">Date Time</string>
-    <string name="weight_label">Weight(kg)</string>
+    <string name="weight_label">Weight(%s)</string>
     <string name="rate_label">Rate(%) (Optional)</string>
     <string name="save">save</string>
     <string name="cancel">cancel</string>
