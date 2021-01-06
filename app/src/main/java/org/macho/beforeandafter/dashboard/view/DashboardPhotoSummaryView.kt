@@ -27,7 +27,7 @@ class DashboardPhotoSummaryView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.dashboard_photo_summary_view, this, true)
     }
 
-    fun update(title: String, firstPhotoData: PhotoData?, bestPhotoData: PhotoData?, latestPhotoData: PhotoData?) {
+    fun update(title: String, weightUnit: String, firstPhotoData: PhotoData?, bestPhotoData: PhotoData?, latestPhotoData: PhotoData?) {
         photoSummaryTitle.text = title
 
         val photoDataList = listOf(firstPhotoData, bestPhotoData, latestPhotoData)
@@ -47,7 +47,7 @@ class DashboardPhotoSummaryView @JvmOverloads constructor(
                 dateFormat.format(it)
             } ?: "----/--/-- --:--"
 
-            weightAndRateTexts[i].text = "${photoData?.weight ?: "-"}kg/${photoData?.rate ?: "-"}%"
+            weightAndRateTexts[i].text = "${photoData?.weight?.let { String.format("%.2f", it) } ?: "-"}$weightUnit/${photoData?.rate?.let { String.format("%.2f", it) } ?: "-"}%"
         }
     }
 

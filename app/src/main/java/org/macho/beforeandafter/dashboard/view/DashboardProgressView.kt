@@ -72,6 +72,6 @@ class DashboardProgressView @JvmOverloads constructor(
 
     private fun valueToText(value: Float): String {
         val blankText = "--.--"
-        return if (value == 0f) blankText else value.toString()
+        return if (value == 0f) blankText else String.format("%.2f", value)
     }
 }

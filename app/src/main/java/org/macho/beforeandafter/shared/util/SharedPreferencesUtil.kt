@@ -45,7 +45,9 @@ object SharedPreferencesUtil {
 
         HEIGHT("height"),
 
-        GUIDE_PHOTO_MODE("guide_photo_mode")
+        GUIDE_PHOTO_MODE("guide_photo_mode"),
+
+        WEIGHT_UNIT("weight_unit"),
     }
 
     fun getFloat(context: Context, key: Key): Float {

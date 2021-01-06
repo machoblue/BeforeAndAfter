@@ -253,4 +253,7 @@
     <string name="confirm_store_review_message">不具合のご報告・改善のご要望は、直接メールしてください。メールだとより迅速に対応できます。</string>
     <string name="mail_bug_report">不具合・要望をメールする</string>
     <string name="store_review">ストアでレビューする</string>
+
+    <string name="weight_unit_kg" translatable="false">kg</string>
+    <string name="weight_unit_lb" translatable="false">lb</string>
 </resources>

@@ -9,6 +9,7 @@ import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.extensions.getBoolean
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import org.macho.beforeandafter.shared.util.WeightScale
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.pow
@@ -23,6 +24,8 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
     lateinit var recordRepository: RecordRepository
 
     private var view: DashboardContract.View? = null
+
+    private lateinit var weightScale: WeightScale
 
     override fun reloadDashboard() {
         reloadRecords()
@@ -42,6 +45,9 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
     private fun reloadRecords() {
         recordRepository.getRecords { records ->
             view?.toggleEmptyView(records.isEmpty())
+
+            this.weightScale = WeightScale(context)
+            val weightUnit = weightScale.weightUnitText
 
             val isStartTimeCustomized = SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.CUSTOMIZE_START_TIME)
             val startTime = if (isStartTimeCustomized) SharedPreferencesUtil.getLong(context, SharedPreferencesUtil.Key.START_TIME) else 0L
@@ -67,7 +73,15 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 }
                 ((Date().time - firstCalendar.time.time) / (1000 * 60 * 60 * 24) + 1).toInt()
             }
-            view?.updateWeightProgress(showWeightProgress, elapsedDay, weightFirstRecord?.weight, weightBestRecord?.weight, weightLatestRecord?.weight, goalWeight)
+            view?.updateWeightProgress(
+                    showWeightProgress,
+                    weightUnit,
+                    elapsedDay,
+                    weightFirstRecord?.weight?.let { weightScale.convertFromKg(it) },
+                    weightBestRecord?.weight?.let { weightScale.convertFromKg(it) },
+                    weightLatestRecord?.weight?.let { weightScale.convertFromKg(it) },
+                    weightScale.convertFromKg(goalWeight)
+            )
 
             val day = 1000L * 60 * 60 * 24
             val now = Date().time
@@ -85,9 +99,9 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
             val theWeekBeforeRecords = thisThirtyDaysRecords.filter { twoWeekAgo <= it.date && it.date < oneWeekAgo }
             val thisWeekRecords = thisThirtyDaysRecords.filter { oneWeekAgo <= it.date }
 
-            updateWeightTendency(thisWeekRecords, theWeekBeforeRecords, thisThirtyDaysRecords, theThirtyDaysBeforeRecords, thisYearRecords, theYearBeforeRecords)
+            updateWeightTendency(weightUnit, thisWeekRecords, theWeekBeforeRecords, thisThirtyDaysRecords, theThirtyDaysBeforeRecords, thisYearRecords, theYearBeforeRecords)
 
-            updateBMI(weightLatestRecord?.weight ?: 0f)
+            updateBMI(weightLatestRecord?.weight ?: 0f, weightUnit)
 
             val bodyFatRecordsSortedByDate = recordsSortedByDate.filterNot { it.rate == 0f }
             val bodyFatFirstRecord = bodyFatRecordsSortedByDate.firstOrNull()
@@ -102,31 +116,32 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
             updateBodyFatTendency(thisWeekRecords, theWeekBeforeRecords, thisThirtyDaysRecords, theThirtyDaysBeforeRecords, thisYearRecords, theYearBeforeRecords)
 
             if (context.getBoolean(R.bool.is_dashboard_photo_visible)) {
-                updatePhotos(weightFirstRecord, weightBestRecord, weightLatestRecord, bodyFatFirstRecord, bodyFatBestRecord, bodyFatLatestRecord)
+                updatePhotos(weightUnit, weightFirstRecord, weightBestRecord, weightLatestRecord, bodyFatFirstRecord, bodyFatBestRecord, bodyFatLatestRecord)
             }
 
             view?.stopRefreshingIfNeeded()
         }
     }
 
-    private fun updateBMI(weight: Float) {
+    private fun updateBMI(weight: Float, weightUnit: String) {
         val showBMI = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BMI)
         val height = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.HEIGHT)
         val showSetHeightButton = height == 0f
         val isLatestWeightBlank = weight == 0f
 
         if (showSetHeightButton || isLatestWeightBlank) {
-            view?.updateBMI(showBMI, showSetHeightButton, null, null, null)
+            view?.updateBMI(showBMI, showSetHeightButton, null, null, null, weightUnit)
 
         } else {
             val bmi = (weight / (height / 100.0).pow(2.0)).toFloat()
             val bmiClass = context.getString(BMIClass.getBMIClass(bmi).labelRes)
             val idealWeight = ((height / 100.0).pow(2.0) * 22).toFloat()
-            view?.updateBMI(showBMI, showSetHeightButton, bmi, bmiClass, idealWeight)
+            view?.updateBMI(showBMI, showSetHeightButton, bmi, bmiClass, weightScale.convertFromKg(idealWeight), weightUnit)
         }
     }
 
     private fun updateWeightTendency(
+            weightUnit: String,
             thisWeekRecords: List<Record>,
             theWeekBeforeRecords: List<Record>,
             thisThirtyDaysRecords: List<Record>,
@@ -147,7 +162,13 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
         val thisYearBodyFatList: List<Float> = thisYearRecords.filter { it.weight != 0f }.map { it.weight }
         val thisYearTendency: Float? = if (theYearBeforeBodyFatList.isNotEmpty() && thisYearBodyFatList.isNotEmpty()) (thisYearBodyFatList.average() - theYearBeforeBodyFatList.average()).toFloat() else null
 
-        view?.updateWeightTendency(showBodyFatTendency, thisWeekTendency, thisThirtyDaysTendency, thisYearTendency)
+        view?.updateWeightTendency(
+                showBodyFatTendency,
+                weightUnit,
+                thisWeekTendency?.let { weightScale.convertFromKg(it) },
+                thisThirtyDaysTendency?.let { weightScale.convertFromKg(it) },
+                thisYearTendency?.let { weightScale.convertFromKg(it) }
+        )
     }
 
     private fun updateBodyFatTendency(
@@ -176,6 +197,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
     }
 
     private fun updatePhotos(
+            weightUnit: String,
             weightFirstRecord: Record?,
             weightBestRecord: Record?,
             weightLatestRecord: Record?,
@@ -187,6 +209,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 PhotoSummary(
                         !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_WEIGHT),
                         R.string.front_photo_summary_by_weight_title,
+                        weightUnit,
                         weightFirstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
                         weightBestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
                         weightLatestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
@@ -194,6 +217,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 PhotoSummary(
                         !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_SIDE_PHOTO_SUMMARY_BY_WEIGHT),
                         R.string.side_photo_summary_by_weight_title,
+                        weightUnit,
                         weightFirstRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
                         weightBestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
                         weightLatestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }
@@ -201,6 +225,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 PhotoSummary(
                         !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER1_PHOTO_SUMMARY_BY_WEIGHT, true),
                         R.string.other1_photo_summary_by_weight_title,
+                        weightUnit,
                         weightFirstRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
                         weightBestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
                         weightLatestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }
@@ -208,6 +233,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 PhotoSummary(
                         !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER2_PHOTO_SUMMARY_BY_WEIGHT, true),
                         R.string.other2_photo_summary_by_weight_title,
+                        weightUnit,
                         weightFirstRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
                         weightBestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
                         weightLatestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }
@@ -215,6 +241,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 PhotoSummary(
                         !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER3_PHOTO_SUMMARY_BY_WEIGHT, true),
                         R.string.other3_photo_summary_by_weight_title,
+                        weightUnit,
                         weightFirstRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
                         weightBestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
                         weightLatestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }
@@ -222,6 +249,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 PhotoSummary(
                         !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_BODY_FAT, true),
                         R.string.front_photo_summary_by_rate_title,
+                        weightUnit,
                         bodyFatFirstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
                         bodyFatBestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
                         bodyFatLatestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
@@ -229,6 +257,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 PhotoSummary(
                         !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_SIDE_PHOTO_SUMMARY_BY_BODY_FAT, true),
                         R.string.side_photo_summary_by_rate_title,
+                        weightUnit,
                         bodyFatFirstRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
                         bodyFatBestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
                         bodyFatLatestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }
@@ -236,6 +265,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 PhotoSummary(
                         !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER1_PHOTO_SUMMARY_BY_BODY_FAT, true),
                         R.string.other1_photo_summary_by_rate_title,
+                        weightUnit,
                         bodyFatFirstRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
                         bodyFatBestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
                         bodyFatLatestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }
@@ -243,6 +273,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 PhotoSummary(
                         !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER2_PHOTO_SUMMARY_BY_BODY_FAT, true),
                         R.string.other2_photo_summary_by_rate_title,
+                        weightUnit,
                         bodyFatFirstRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
                         bodyFatBestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
                         bodyFatLatestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }
@@ -250,6 +281,7 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
                 PhotoSummary(
                         !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER3_PHOTO_SUMMARY_BY_BODY_FAT, true),
                         R.string.other3_photo_summary_by_rate_title,
+                        weightUnit,
                         bodyFatFirstRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
                         bodyFatBestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
                         bodyFatLatestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }

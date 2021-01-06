@@ -15,13 +15,13 @@ class DashboardBMIView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.dashboard_bmi_view, this, true)
     }
 
-    fun update(showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?, onSetHeightButtonClicked: () -> Unit) {
+    fun update(showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?, weightUnit: String, onSetHeightButtonClicked: () -> Unit) {
         setHeightButton.visibility = if (showSetHeightButton) View.VISIBLE else View.GONE
         bmiTextView.text = bmi?.let { String.format("%.1f", it) } ?: "--.-"
         bmiView.update(bmi ?: 0f)
         bmiClassTextView.text = String.format("( %s )", bmiClass ?: "--")
         val idealWeightString = idealWeight?.let { String.format("%.1f", it) } ?: "--.--"
-        idealWeightTextView.text = String.format("%s kg", idealWeightString)
+        idealWeightTextView.text = "$idealWeightString $weightUnit"
         setHeightButton.setOnClickListener {
             onSetHeightButtonClicked()
         }

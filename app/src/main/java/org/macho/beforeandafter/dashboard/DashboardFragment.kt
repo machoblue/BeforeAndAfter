@@ -96,7 +96,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         emptyView.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
 
-    override fun updateWeightProgress(show: Boolean, elapsedDay: Int, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
+    override fun updateWeightProgress(show: Boolean, weightUnit: String, elapsedDay: Int, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
         if (!show) {
             linearLayout.findViewById<CardView>(R.id.weight_progress_card_id)?.let {
                 linearLayout.removeView(it)
@@ -108,7 +108,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             addCardView(it, R.id.weight_progress_view_id, R.id.weight_progress_card_id)
         }
 
-        weightProgressView.update(getString(R.string.progress_title), ContextCompat.getColor(context!!, R.color.colorPrimaryLight), "kg", R.drawable.background_current_weight_label, elapsedDay, firstWeight, bestWeight, latestWeight, goalWeight, goalWeight == 0f, object: DashboardProgressViewListener {
+        weightProgressView.update(getString(R.string.progress_title), ContextCompat.getColor(context!!, R.color.colorPrimaryLight), weightUnit, R.drawable.background_current_weight_label, elapsedDay, firstWeight, bestWeight, latestWeight, goalWeight, goalWeight == 0f, object: DashboardProgressViewListener {
             override fun onSetGoalButtonClicked() {
                 val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
                 findNavController().navigate(action)
@@ -124,7 +124,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         })
     }
 
-    override fun updateWeightTendency(show: Boolean, oneWeekTendency: Float?, thirtyDaysTendency: Float?, oneYearTendency: Float?) {
+    override fun updateWeightTendency(show: Boolean, weightUnit: String, oneWeekTendency: Float?, thirtyDaysTendency: Float?, oneYearTendency: Float?) {
         if (!show) {
             linearLayout.findViewById<CardView>(R.id.weight_tendency_card_id)?.let {
                 linearLayout.removeView(it)
@@ -136,7 +136,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             addCardView(it, R.id.weight_tendency_view_id, R.id.weight_tendency_card_id)
         }
 
-        weightTendencyView.update(getString(R.string.weight_tendency_title), "kg", oneWeekTendency, thirtyDaysTendency, oneYearTendency, object: DashboardTendencyView.DashboardTendencyViewListener {
+        weightTendencyView.update(getString(R.string.weight_tendency_title), weightUnit, oneWeekTendency, thirtyDaysTendency, oneYearTendency, object: DashboardTendencyView.DashboardTendencyViewListener {
             override fun onOneWeekTendencyHelpButtonClicked() {
                 dialog.show(parentFragmentManager, 0, getString(R.string.one_week_tendency_help), getString(R.string.ok))
             }
@@ -151,7 +151,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         })
     }
 
-    override fun updateBMI(show: Boolean, showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?) {
+    override fun updateBMI(show: Boolean, showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?, weightUnit: String) {
         if (!show) {
             linearLayout.findViewById<CardView>(R.id.bmi_card_id)?.let {
                 linearLayout.removeView(it)
@@ -163,7 +163,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             addCardView(it, R.id.bmi_view_id, R.id.bmi_card_id)
         }
 
-        bmiView.update(showSetHeightButton, bmi, bmiClass, idealWeight) {
+        bmiView.update(showSetHeightButton, bmi, bmiClass, idealWeight, weightUnit) {
             val action = DashboardFragmentDirections.actionDashboardFragmentToEditHeightFragment()
             findNavController().navigate(action)
         }
@@ -253,7 +253,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
                 addCardView(it, viewId, cardId)
             }
 
-            photoSummaryView.update(getString(photoSummary.titleStringResource), photoSummary.firstPhotoData, photoSummary.bestPhotoData, photoSummary.latestPhotoData)
+            photoSummaryView.update(getString(photoSummary.titleStringResource), photoSummary.weightUnit, photoSummary.firstPhotoData, photoSummary.bestPhotoData, photoSummary.latestPhotoData)
         }
     }
 
