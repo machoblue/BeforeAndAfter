@@ -97,7 +97,7 @@
     <!-- Preference Fragment -->
     <string name="goal_title">target</string>
     <string name="goal_description">set target weight and target rate</string>
-    <string name="goal_weight_label">target weight(kg)</string>
+    <string name="goal_weight_label">target weight(%s)</string>
     <string name="goal_rate_label">target rate(%)</string>
     <string name="customize_start_time">Customize Start Time</string>
     <string name="start_time_label">Start Time</string>

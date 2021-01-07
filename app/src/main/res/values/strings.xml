@@ -97,7 +97,7 @@
     <!-- Preference Fragment -->
     <string name="goal_title">目標</string>
     <string name="goal_description">目標体重・目標体脂肪率を設定します。</string>
-    <string name="goal_weight_label">目標体重(kg)</string>
+    <string name="goal_weight_label">目標体重(%s)</string>
     <string name="goal_rate_label">目標体脂肪率(%)</string>
     <string name="customize_start_time">ダイエット開始時をカスタマイズする</string>
     <string name="start_time_label">ダイエット開始時</string>

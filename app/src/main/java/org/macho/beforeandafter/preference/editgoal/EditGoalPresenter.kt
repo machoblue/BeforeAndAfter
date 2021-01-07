@@ -8,6 +8,7 @@ import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import org.macho.beforeandafter.shared.util.WeightScale
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @ActivityScoped
 class EditGoalPresenter @Inject constructor(): EditGoalContract.Presenter {
@@ -28,15 +29,20 @@ class EditGoalPresenter @Inject constructor(): EditGoalContract.Presenter {
         preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         val goalWeightInKg = preferences.getFloat("GOAL_WEIGHT", 0f)
-        if (goalWeightInKg != 0f) {
+        val goalWeightText = if (goalWeightInKg != 0f) {
+
             val goalWeight = weightScale.convertFromKg(goalWeightInKg)
-            val goalWeightText = String.format("%.1f", goalWeight)
-            view.setWeightGoalText(goalWeightText)
+            val roundedGoalWeight = (goalWeight * 100).roundToInt() / 100f
+            String.format("%.2f", roundedGoalWeight)
+        } else {
+            ""
         }
+        view.setWeightGoalText(goalWeightText, weightScale.weightUnitText)
 
         val goalRate = preferences.getFloat("GOAL_RATE", 0f)
         if (goalRate != 0f) {
-            val goalRateText = String.format("%.1f", goalRate)
+            val roundedGoalRate = (goalRate * 100).roundToInt() / 100f
+            val goalRateText = String.format("%.2f", roundedGoalRate)
             view.setRateGoalText(goalRateText)
         }
 
