@@ -4,6 +4,7 @@
     <data>
         <import type="android.view.View" />
         <variable name="item" type="org.macho.beforeandafter.record.RecordItem" />
+        <variable name="weightUnit" type="java.lang.String" />
     </data>
 
     <FrameLayout
@@ -92,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="2.5dp"
-                android:text="kg"
+                android:text="@{weightUnit}"
                 android:textSize="12.5dp"
                 android:visibility="@{item.weight > 0f ? View.VISIBLE : View.INVISIBLE }"
                 app:layout_constraintBottom_toBottomOf="@id/weightText"
