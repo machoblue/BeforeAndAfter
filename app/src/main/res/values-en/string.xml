@@ -105,7 +105,7 @@
     <string name="edit_height_title">Height</string>
     <string name="edit_height_description">Set height to calculate BMI.</string>
     <string name="edit_height_message">To calculate BMI, Please set your height.(Optional)</string>
-    <string name="edit_height_label">Height(cm)</string>
+    <string name="edit_height_label">Height(%s)</string>
 
     <string name="alarm_title">Alarm</string>
     <string name="alarm_description">Schedule notification, and remind you to record.</string>

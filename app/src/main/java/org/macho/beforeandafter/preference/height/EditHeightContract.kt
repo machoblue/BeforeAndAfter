@@ -4,7 +4,7 @@ import org.macho.beforeandafter.shared.BaseContract
 
 interface EditHeightContract: BaseContract {
     interface View: BaseContract.View<Presenter> {
-        fun update(heightText: String)
+        fun update(heightText: String, heightUnit: String)
         fun finish()
     }
 

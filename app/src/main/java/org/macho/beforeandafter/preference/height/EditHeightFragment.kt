@@ -24,9 +24,9 @@ class EditHeightFragment @Inject constructor(): DaggerFragment(), EditHeightCont
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        AdUtil.initializeMobileAds(context!!)
-        AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
+        AdUtil.initializeMobileAds(requireContext())
+        AdUtil.loadBannerAd(adView, requireContext())
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(requireContext())) View.GONE else View.VISIBLE
 
         setHasOptionsMenu(true); // for save button on navBar
     }
@@ -62,8 +62,9 @@ class EditHeightFragment @Inject constructor(): DaggerFragment(), EditHeightCont
 
     // MARK: - EditHeightContract.View
 
-    override fun update(heightText: String) {
+    override fun update(heightText: String, heightUnit: String) {
         heightEditText.setText(heightText)
+        heightTextInputLayout.hint = String.format(requireContext().getString(R.string.edit_height_label), heightUnit)
     }
 
     override fun finish() {
