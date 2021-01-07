@@ -91,7 +91,7 @@
     <string name="three_weeks">3週間</string>
     <string name="three_month">3ヶ月</string>
     <string name="one_year">1年</string>
-    <string name="legend_weight">体重(kg)</string>
+    <string name="legend_weight">体重(%s)</string>
     <string name="legend_rate">体脂肪率(%)</string>
 
     <!-- Preference Fragment -->

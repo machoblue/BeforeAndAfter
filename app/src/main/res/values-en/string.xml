@@ -91,7 +91,7 @@
     <string name="three_weeks">3weeks</string>
     <string name="three_month">90days</string>
     <string name="one_year">1year</string>
-    <string name="legend_weight">Weight(kg)</string>
+    <string name="legend_weight">Weight(%s)</string>
     <string name="legend_rate">Rate(%)</string>
 
     <!-- Preference Fragment -->
