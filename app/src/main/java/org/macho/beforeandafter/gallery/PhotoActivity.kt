@@ -19,6 +19,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.record.camera.PermissionUtils
 import org.macho.beforeandafter.shared.GlideApp
 import org.macho.beforeandafter.shared.util.LogUtil
+import org.macho.beforeandafter.shared.util.WeightScale
 import java.io.*
 import java.text.DateFormat
 
@@ -41,6 +42,8 @@ class PhotoActivity: AppCompatActivity() {
     private lateinit var gestureDetector: GestureDetector
 
     private var dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
+
+    private lateinit var weightScale: WeightScale
 
     private val onGestureListener = object: GestureDetector.SimpleOnGestureListener() {
         override fun onSingleTapUp(e: MotionEvent?): Boolean {
@@ -104,6 +107,8 @@ class PhotoActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo)
+
+        this.weightScale = WeightScale(this)
 
         index = intent.getIntExtra(INDEX, 0)
         items = (intent.getSerializableExtra(PATHS) as Array<GalleryPhoto>).toMutableList()
@@ -175,7 +180,9 @@ class PhotoActivity: AppCompatActivity() {
                 .into(imageView)
 
         title = dateFormat.format(galleryPhoto.dateTime)
-        weightAndRateText.text = "${galleryPhoto.weight ?: "-"}kg/${galleryPhoto.rate ?: "-"}%"
+        val weightText = "${galleryPhoto.weight?.let { String.format("%.1f", it) } ?: "-"}${weightScale.weightUnitText}"
+        val rateText = "${galleryPhoto.rate?.let { String.format("%.1f", it) } ?: "-"}%"
+        weightAndRateText.text = "${weightText}/${rateText}"
     }
 
     // MARK: - Private

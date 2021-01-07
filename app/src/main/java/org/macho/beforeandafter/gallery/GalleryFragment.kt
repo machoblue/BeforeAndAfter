@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.gallery_frag.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.util.AdUtil
+import org.macho.beforeandafter.shared.util.WeightScale
 
 
 class GalleryFragment(): androidx.fragment.app.Fragment() {
 
     companion object {
-        val IMAGE_PATHS = "IMAGE_PATHS"
+        const val IMAGE_PATHS = "IMAGE_PATHS"
 
         fun newInstance(imagePaths: List<GalleryPhoto>): GalleryFragment {
             var galleryFragment = GalleryFragment()
@@ -49,11 +50,11 @@ class GalleryFragment(): androidx.fragment.app.Fragment() {
         recyclerView.layoutManager = GridLayoutManager(context, 3)
         recyclerView.setHasFixedSize(true)
 
-        this.adapter = GridAdapter(this)
+        this.adapter = GridAdapter(this, WeightScale(requireContext()))
         this.adapter?.items = imagePaths
         recyclerView.adapter = this.adapter
 
-        AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
+        AdUtil.loadBannerAd(adView, requireContext())
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(requireContext())) View.GONE else View.VISIBLE
     }
 }
