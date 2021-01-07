@@ -93,11 +93,11 @@ class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract
 
     // MARK: - EditGoalContract.View
 
-    override fun setWeightGoalText(weightGoalText: String) {
+    override fun setWeightGoalText(weightGoalText: String?) {
         goalWeight.setText(weightGoalText)
     }
 
-    override fun setRateGoalText(rateGoalText: String) {
+    override fun setRateGoalText(rateGoalText: String?) {
         goalRate.setText(rateGoalText)
     }
 

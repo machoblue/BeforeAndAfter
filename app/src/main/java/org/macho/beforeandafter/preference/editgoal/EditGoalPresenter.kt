@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import org.macho.beforeandafter.shared.util.WeightScale
 import java.util.*
 import javax.inject.Inject
 
@@ -17,13 +18,27 @@ class EditGoalPresenter @Inject constructor(): EditGoalContract.Presenter {
     @Inject
     lateinit var context: Context
 
+    private lateinit var weightScale: WeightScale
+
     override fun takeView(view: EditGoalContract.View) {
         this.view = view
 
+        this.weightScale = WeightScale(context)
+
         preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-        view.setWeightGoalText(preferences.getFloat("GOAL_WEIGHT", 50f).toString())
-        view.setRateGoalText(preferences.getFloat("GOAL_RATE", 20f).toString())
+        val goalWeightInKg = preferences.getFloat("GOAL_WEIGHT", 0f)
+        if (goalWeightInKg != 0f) {
+            val goalWeight = weightScale.convertFromKg(goalWeightInKg)
+            val goalWeightText = String.format("%.1f", goalWeight)
+            view.setWeightGoalText(goalWeightText)
+        }
+
+        val goalRate = preferences.getFloat("GOAL_RATE", 0f)
+        if (goalRate != 0f) {
+            val goalRateText = String.format("%.1f", goalRate)
+            view.setRateGoalText(goalRateText)
+        }
 
         val isCustom = SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.CUSTOMIZE_START_TIME)
         val startTime = SharedPreferencesUtil.getLong(context, SharedPreferencesUtil.Key.START_TIME)
@@ -35,8 +50,14 @@ class EditGoalPresenter @Inject constructor(): EditGoalContract.Presenter {
     }
 
     override fun saveGoal(weightGoalText: String, rateGoalText: String, isCustom: Boolean, startTime: Date) {
-        preferences.edit().putFloat("GOAL_WEIGHT", weightGoalText.toFloatOrNull() ?: 0f).apply()
-        preferences.edit().putFloat("GOAL_RATE", rateGoalText.toFloatOrNull() ?: 0f).apply()
+        val weightGoalInKg = weightGoalText.toFloatOrNull()?.let {
+            weightScale.convertToKg(it)
+        } ?: 0f
+        preferences.edit().putFloat("GOAL_WEIGHT", weightGoalInKg).apply()
+
+        val rateGoal = rateGoalText.toFloatOrNull() ?: 0f
+        preferences.edit().putFloat("GOAL_RATE", rateGoal).apply()
+
         SharedPreferencesUtil.setBoolean(context, SharedPreferencesUtil.Key.CUSTOMIZE_START_TIME, isCustom)
         SharedPreferencesUtil.setLong(context, SharedPreferencesUtil.Key.START_TIME, startTime.time)
     }

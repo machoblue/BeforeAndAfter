@@ -5,8 +5,8 @@ import java.util.*
 
 interface EditGoalContract {
     interface View: BaseContract.View<Presenter> {
-        fun setWeightGoalText(weightGoalText: String)
-        fun setRateGoalText(RateGoalText: String)
+        fun setWeightGoalText(weightGoalText: String?)
+        fun setRateGoalText(RateGoalText: String?)
         fun updateStartTime(isCustom: Boolean, startTime: Date)
         fun finish()
     }
