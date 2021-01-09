@@ -1,11 +1,16 @@
 package org.macho.beforeandafter.shared.util
 
 import android.content.Context
-import org.macho.beforeandafter.preference.unit.WeightUnitType
+import org.macho.beforeandafter.R
+
+enum class WeightUnitType(val stringResourceId: Int, val multiplier: Double) {
+    KG(R.string.weight_unit_kg, 1.0), // kgがベース。データはkgで保持する。
+    LB(R.string.weight_unit_lb, 2.20462)
+}
 
 class WeightScale(context: Context) {
 
-    private val weightUnitType: WeightUnitType
+    val weightUnitType: WeightUnitType
     val weightUnitText: String
 
     init {

@@ -5,11 +5,11 @@ import org.macho.beforeandafter.R
 
 enum class HeightUnitType(val stringResourceId: Int, val multiplier: Double) {
     CM(R.string.height_unit_cm, 1.0),
-    IN(R.string.height_unit_in, 2.54)
+    IN(R.string.height_unit_in, 0.393701)
 }
 
 class HeightScale(val context: Context) {
-    private val heightUnitType: HeightUnitType
+    val heightUnitType: HeightUnitType
     val heightUnitText: String
 
     init {

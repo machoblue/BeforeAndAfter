@@ -95,6 +95,10 @@
     <string name="legend_rate">Rate(%)</string>
 
     <!-- Preference Fragment -->
+    <string name="edit_unit_title">Setting Unit</string>
+    <string name="edit_unit_description">Set the units for weight and height</string>
+    <string name="weight_unit_label">The unit of weight</string>
+    <string name="height_unit_label">The unit of height</string>
     <string name="goal_title">target</string>
     <string name="goal_description">set target weight and target rate</string>
     <string name="goal_weight_label">target weight(%s)</string>
