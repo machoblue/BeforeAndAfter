@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_preferenceFragment_to_editScaleFragment"
             app:destination="@id/editScaleFragment" />
+        <action
+            android:id="@+id/action_preferenceFragment_to_cameraTimerSettingDialog"
+            app:destination="@id/cameraTimerSettingDialog" />
     </fragment>
     <fragment
         android:id="@+id/editGoalFragment"
@@ -102,4 +105,8 @@
         android:id="@+id/editScaleFragment"
         android:name="org.macho.beforeandafter.preference.editscale.EditScaleFragment"
         android:label="@string/edit_unit_title" />
+    <dialog
+        android:id="@+id/cameraTimerSettingDialog"
+        android:name="org.macho.beforeandafter.preference.cameratimer.CameraTimerSettingDialog"
+        android:label="CameraTimerSettingDialog" />
 </navigation>

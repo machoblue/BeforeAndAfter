@@ -108,8 +108,16 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             val action = PreferenceFragmentDirections.actionPreferenceFragmentToDashboardSettingFragment()
             findNavController().navigate(action)
         })
+
+        items.add(SectionHeader(R.string.preference_section_header_camera))
+
         items.add(PreferenceItem(R.string.guide_photo_mode_setting_title, R.string.guide_photo_mode_setting_description) {
             val action = PreferenceFragmentDirections.actionPreferenceFragmentToGuidePhotoModeSettingDialog()
+            findNavController().navigate(action)
+        })
+
+        items.add(PreferenceItem(R.string.camera_timer_title, R.string.camera_timer_description) {
+            val action = PreferenceFragmentDirections.actionPreferenceFragmentToCameraTimerSettingDialog()
             findNavController().navigate(action)
         })
 

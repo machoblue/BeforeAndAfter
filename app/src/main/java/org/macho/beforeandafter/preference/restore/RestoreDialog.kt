@@ -1,13 +1,11 @@
 package org.macho.beforeandafter.preference.restore
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.InterstitialAd
-import com.google.android.gms.ads.MobileAds
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.util.showIfNeeded

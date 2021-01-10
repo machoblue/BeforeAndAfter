@@ -432,6 +432,8 @@ class CameraActivity: AppCompatActivity() {
         startCamera()
     }
 
+    // MARK: - Timer
+
     private var timer: Timer? = null
     private val handler: Handler = Handler(Looper.getMainLooper())
 
@@ -440,7 +442,7 @@ class CameraActivity: AppCompatActivity() {
             stopTimer()
 
         } ?: let {
-            var count = 5
+            var count = SharedPreferencesUtil.getInt(this, SharedPreferencesUtil.Key.CAMERA_TIMER_SECONDS, 5)
             timer = Timer()
             timer?.schedule(object: TimerTask() {
                 override fun run() {
