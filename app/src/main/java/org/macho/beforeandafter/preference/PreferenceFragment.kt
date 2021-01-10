@@ -88,6 +88,10 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
 
         // MARK: - Basic Settings
         items.add(SectionHeader(R.string.preference_section_header_base_settings))
+        items.add(PreferenceItem(R.string.edit_unit_title, R.string.edit_unit_description) {
+            val action = PreferenceFragmentDirections.actionPreferenceFragmentToEditScaleFragment()
+            findNavController().navigate(action)
+        })
         items.add(PreferenceItem(R.string.goal_title, R.string.goal_description) {
             val action = PreferenceFragmentDirections.actionPreferenceFragmentToEditGoalFragment()
             findNavController().navigate(action)

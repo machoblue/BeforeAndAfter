@@ -22,11 +22,11 @@ import org.macho.beforeandafter.shared.GlideApp
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
-import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import org.macho.beforeandafter.shared.util.WeightScale
 import java.io.File
 import java.text.SimpleDateFormat
 import javax.inject.Inject
-import kotlin.math.round
+import kotlin.math.roundToInt
 
 @ActivityScoped
 class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.View {
@@ -35,7 +35,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
     private lateinit var recordAdapter: RecordAdapter
 
-//    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private lateinit var weightScale: WeightScale
 
     // MARK: - Lifecycle
     override fun onCreateView(layoutInflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,16 +48,16 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
             presenter.openAddRecord()
         }
 
-        AdUtil.initializeMobileAds(context!!)
-        AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
+        AdUtil.initializeMobileAds(requireContext())
+        AdUtil.loadBannerAd(adView, requireContext())
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(requireContext())) View.GONE else View.VISIBLE
     }
 
     override fun onResume() {
         super.onResume()
         presenter.takeView(this)
 
-//        firebaseAnalytics.setCurrentScreen(activity!!, "Records", null)
+        weightScale = WeightScale(requireContext())
     }
 
     override fun onDestroyView() {
@@ -72,7 +72,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
     override fun showItems(items: List<Record>) {
         val recordItems = convertToRecordItemList(items)
-        recordAdapter = RecordAdapter(this.context!!, recordItems, 100)
+        recordAdapter = RecordAdapter(requireContext(), recordItems, weightScale)
         listView.adapter = recordAdapter
     }
 
@@ -90,7 +90,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
                     yearFormatter.format(record.date),
                     dateFormatter.format(record.date),
                     timeFormatter.format(record.date),
-                    record.weight,
+                    record.weight.let { weightScale.convertFromKg(it) },
                     weightDiff,
                     record.rate,
                     rateDiff,
@@ -130,7 +130,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
         listView.visibility = View.GONE
     }
 
-    inner class RecordAdapter(val context: Context, val records: List<RecordItem>, val viewHeight: Int)
+    inner class RecordAdapter(val context: Context, val records: List<RecordItem>, val weightScale: WeightScale)
         : RecyclerView.Adapter<RecordAdapter.RecordItemViewHolder>() {
         private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -147,6 +147,7 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
         override fun onBindViewHolder(holder: RecordItemViewHolder, position: Int) {
             holder.binding.item = records.get(position)
+            holder.binding.weightUnit = weightScale.weightUnitText
             holder.binding.executePendingBindings()
         }
 
@@ -172,20 +173,23 @@ class RecordFragment @Inject constructor() : DaggerFragment(), RecordContract.Vi
 
 @BindingAdapter("floatValue")
 fun formatFloat(view: TextView, floatValue: Float) {
-    view.setText(((floatValue * 10).toInt() / 10f).toString(), null)
+    val roundedValue = (floatValue * 10).roundToInt() / 10f
+    val text = String.format("%.1f", roundedValue)
+    view.setText(text, null)
 }
 
 @BindingAdapter("floatValueWithSign")
 fun formatFloatWithSign(view: TextView, floatValue: Float) {
-    val roundedValue = round(floatValue * 10) / 10f
+    val roundedValue = (floatValue * 10).roundToInt() / 10f
+    val roundedValueText = String.format("%.1f", roundedValue)
     if (floatValue == 0f) {
-        view.setText("±$roundedValue", null)
+        view.setText("±$roundedValueText", null)
         view.setTextColor(Color.GRAY)
     } else if (floatValue < 0f) {
-        view.setText("$roundedValue", null)
+        view.setText("$roundedValueText", null)
         view.setTextColor(Color.GREEN)
     } else if (floatValue > 0f) {
-        view.setText("+$roundedValue", null)
+        view.setText("+$roundedValueText", null)
         view.setTextColor(Color.RED)
     }
 }

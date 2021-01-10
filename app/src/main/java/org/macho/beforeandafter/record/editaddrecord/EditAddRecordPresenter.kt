@@ -4,6 +4,7 @@ import android.content.Context
 import org.macho.beforeandafter.shared.data.record.Record
 import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import org.macho.beforeandafter.shared.util.WeightScale
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -22,6 +23,8 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     private var originalRecord: Record? = null
     private lateinit var tempRecord: Record
 
+    private lateinit var weightScale: WeightScale
+
     override fun start(date: Long) {
         tempRecord = Record()
         if (date != 0L) {
@@ -32,7 +35,7 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
 
                 this.originalRecord = record
                 this.tempRecord = record
-                view?.showRecord(this.tempRecord)
+                updateViews()
             }
 
         } else {
@@ -44,11 +47,11 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
 
     override fun modifyDate(date: Date) {
         tempRecord.date = date.time
-        view?.showRecord(tempRecord)
+        updateViews()
     }
 
     override fun modifyWeight(weight: String?) {
-        tempRecord.weight = max(weight?.toFloatOrNull() ?: 0f, 0f)
+        tempRecord.weight = weightScale.convertToKg(max(weight?.toFloatOrNull() ?: 0f, 0f))
         // 無限ループになるので、showRecordは呼ばない。
     }
 
@@ -64,27 +67,27 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
 
     override fun modifyFrontImage(frontImageFile: File?) {
         tempRecord.frontImagePath = persistFile(frontImageFile)?.name
-        view?.showRecord(tempRecord)
+        updateViews()
     }
 
     override fun modifySideImage(sideImageFile: File?) {
         tempRecord.sideImagePath = persistFile(sideImageFile)?.name
-        view?.showRecord(tempRecord)
+        updateViews()
     }
 
     override fun modifyOtherImage1(other1ImageFile: File?) {
         tempRecord.otherImagePath1 = persistFile(other1ImageFile)?.name
-        view?.showRecord(tempRecord)
+        updateViews()
     }
 
     override fun modifyOtherImage2(other2ImageFile: File?) {
         tempRecord.otherImagePath2 = persistFile(other2ImageFile)?.name
-        view?.showRecord(tempRecord)
+        updateViews()
     }
 
     override fun modifyOtherImage3(other3ImageFile: File?) {
         tempRecord.otherImagePath3 = persistFile(other3ImageFile)?.name
-        view?.showRecord(tempRecord)
+        updateViews()
     }
 
     override fun onCameraButtonClicked(index: Int) {
@@ -189,11 +192,27 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     // NOTE: this method will be called Fragment.onResume()
     override fun takeView(view: EditAddRecordContract.View) {
         this.view = view
-        view.showRecord(tempRecord)
+        this.weightScale = WeightScale(context)
+        updateViews()
     }
 
     // NOTE: this method will be called Fragment.onDestoryView()
     override fun dropView() {
         view = null
+    }
+
+    private fun updateViews() {
+        view?.updateViews(
+                weightScale.weightUnitText,
+                tempRecord.date,
+                weightScale.convertFromKg(tempRecord.weight),
+                tempRecord.rate,
+                tempRecord.memo,
+                tempRecord.frontImageFile(context),
+                tempRecord.sideImageFile(context),
+                tempRecord.otherImageFile1(context),
+                tempRecord.otherImageFile2(context),
+                tempRecord.otherImageFile3(context)
+        )
     }
 }

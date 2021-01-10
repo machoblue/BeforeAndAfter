@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.dashboard_tendency_view.view.*
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.extensions.setText
+import kotlin.math.roundToInt
 
 class DashboardTendencyView  @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -48,7 +49,12 @@ class DashboardTendencyView  @JvmOverloads constructor(
 
     private fun updateValue(unit: String, tendency: Float?, textView: TextView, imageView: ImageView) {
         val template = "%s $unit"
-        textView.setText(template, tendency?.let { (if (it > 0) "+ " else "") + String.format("%.2f", tendency) } ?: "--.--", 1.5f)
+        val tendencyText = tendency?.let {
+            val prefix = if (it > 0) "+ " else ""
+            val roundedValue = (it * 100).roundToInt() / 100f
+            "$prefix${String.format("%.2f", roundedValue)}"
+        } ?: "--.--"
+        textView.setText(template, tendencyText, 1.5f)
 
         val tintColorId: Int = tendency?.let {
             return@let when {

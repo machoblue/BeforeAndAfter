@@ -47,7 +47,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorPrimary))
+        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
         swipeRefreshLayout.setOnRefreshListener {
             presenter.reloadDashboard()
         }
@@ -60,9 +60,9 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
 
         refreshAd()
 
-        AdUtil.initializeMobileAds(context!!)
-        AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
+        AdUtil.initializeMobileAds(requireContext())
+        AdUtil.loadBannerAd(adView, requireContext())
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(requireContext())) View.GONE else View.VISIBLE
     }
 
     override fun onResume() {
@@ -96,7 +96,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         emptyView.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
 
-    override fun updateWeightProgress(show: Boolean, elapsedDay: Int, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
+    override fun updateWeightProgress(show: Boolean, weightUnit: String, elapsedDay: Int, firstWeight: Float?, bestWeight: Float?, latestWeight: Float?, goalWeight: Float?) {
         if (!show) {
             linearLayout.findViewById<CardView>(R.id.weight_progress_card_id)?.let {
                 linearLayout.removeView(it)
@@ -104,11 +104,11 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             return
         }
 
-        val weightProgressView = linearLayout.findViewById<DashboardProgressView>(R.id.weight_progress_view_id) ?: DashboardProgressView(context!!).also {
+        val weightProgressView = linearLayout.findViewById<DashboardProgressView>(R.id.weight_progress_view_id) ?: DashboardProgressView(requireContext()).also {
             addCardView(it, R.id.weight_progress_view_id, R.id.weight_progress_card_id)
         }
 
-        weightProgressView.update(getString(R.string.progress_title), ContextCompat.getColor(context!!, R.color.colorPrimaryLight), "kg", R.drawable.background_current_weight_label, elapsedDay, firstWeight, bestWeight, latestWeight, goalWeight, goalWeight == 0f, object: DashboardProgressViewListener {
+        weightProgressView.update(getString(R.string.progress_title), ContextCompat.getColor(requireContext(), R.color.colorPrimaryLight), weightUnit, R.drawable.background_current_weight_label, elapsedDay, firstWeight, bestWeight, latestWeight, goalWeight, goalWeight == 0f, object: DashboardProgressViewListener {
             override fun onSetGoalButtonClicked() {
                 val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
                 findNavController().navigate(action)
@@ -124,7 +124,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         })
     }
 
-    override fun updateWeightTendency(show: Boolean, oneWeekTendency: Float?, thirtyDaysTendency: Float?, oneYearTendency: Float?) {
+    override fun updateWeightTendency(show: Boolean, weightUnit: String, oneWeekTendency: Float?, thirtyDaysTendency: Float?, oneYearTendency: Float?) {
         if (!show) {
             linearLayout.findViewById<CardView>(R.id.weight_tendency_card_id)?.let {
                 linearLayout.removeView(it)
@@ -132,11 +132,11 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             return
         }
 
-        val weightTendencyView = linearLayout.findViewById<DashboardTendencyView>(R.id.weight_tendency_view_id) ?: DashboardTendencyView(context!!).also {
+        val weightTendencyView = linearLayout.findViewById<DashboardTendencyView>(R.id.weight_tendency_view_id) ?: DashboardTendencyView(requireContext()).also {
             addCardView(it, R.id.weight_tendency_view_id, R.id.weight_tendency_card_id)
         }
 
-        weightTendencyView.update(getString(R.string.weight_tendency_title), "kg", oneWeekTendency, thirtyDaysTendency, oneYearTendency, object: DashboardTendencyView.DashboardTendencyViewListener {
+        weightTendencyView.update(getString(R.string.weight_tendency_title), weightUnit, oneWeekTendency, thirtyDaysTendency, oneYearTendency, object: DashboardTendencyView.DashboardTendencyViewListener {
             override fun onOneWeekTendencyHelpButtonClicked() {
                 dialog.show(parentFragmentManager, 0, getString(R.string.one_week_tendency_help), getString(R.string.ok))
             }
@@ -151,7 +151,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
         })
     }
 
-    override fun updateBMI(show: Boolean, showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?) {
+    override fun updateBMI(show: Boolean, showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?, weightUnit: String) {
         if (!show) {
             linearLayout.findViewById<CardView>(R.id.bmi_card_id)?.let {
                 linearLayout.removeView(it)
@@ -159,11 +159,11 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             return
         }
 
-        val bmiView = linearLayout.findViewById<DashboardBMIView>(R.id.bmi_view_id) ?: DashboardBMIView(context!!).also {
+        val bmiView = linearLayout.findViewById<DashboardBMIView>(R.id.bmi_view_id) ?: DashboardBMIView(requireContext()).also {
             addCardView(it, R.id.bmi_view_id, R.id.bmi_card_id)
         }
 
-        bmiView.update(showSetHeightButton, bmi, bmiClass, idealWeight) {
+        bmiView.update(showSetHeightButton, bmi, bmiClass, idealWeight, weightUnit) {
             val action = DashboardFragmentDirections.actionDashboardFragmentToEditHeightFragment()
             findNavController().navigate(action)
         }
@@ -177,11 +177,11 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             return
         }
 
-        val bodyFatProgressView = linearLayout.findViewById<DashboardProgressView>(R.id.body_fat_progress_view_id) ?: DashboardProgressView(context!!).also {
+        val bodyFatProgressView = linearLayout.findViewById<DashboardProgressView>(R.id.body_fat_progress_view_id) ?: DashboardProgressView(requireContext()).also {
             addCardView(it, R.id.body_fat_progress_view_id, R.id.body_fat_progress_card_id)
         }
 
-        bodyFatProgressView.update(getString(R.string.body_fat_progress_title), ContextCompat.getColor(context!!, R.color.colorAccent), "%%", R.drawable.background_current_body_fat_label, elapsedDay, firstBodyFat, bestBodyFat, latestBodyFat, goalBodyFat, goalBodyFat == 0f, object: DashboardProgressViewListener {
+        bodyFatProgressView.update(getString(R.string.body_fat_progress_title), ContextCompat.getColor(requireContext(), R.color.colorAccent), "%%", R.drawable.background_current_body_fat_label, elapsedDay, firstBodyFat, bestBodyFat, latestBodyFat, goalBodyFat, goalBodyFat == 0f, object: DashboardProgressViewListener {
             override fun onSetGoalButtonClicked() {
                 val action = DashboardFragmentDirections.actionDashboardFragmentToEditGoalFragment2()
                 findNavController().navigate(action)
@@ -205,7 +205,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
             return
         }
 
-        val bodyFatTendencyView = linearLayout.findViewById<DashboardTendencyView>(R.id.body_fat_tendency_view_id) ?: DashboardTendencyView(context!!).also {
+        val bodyFatTendencyView = linearLayout.findViewById<DashboardTendencyView>(R.id.body_fat_tendency_view_id) ?: DashboardTendencyView(requireContext()).also {
             addCardView(it, R.id.body_fat_tendency_view_id, R.id.body_fat_tendency_card_id)
         }
 
@@ -249,11 +249,11 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
                 return
             }
 
-            val photoSummaryView = linearLayout.findViewById<DashboardPhotoSummaryView>(viewId) ?: DashboardPhotoSummaryView(context!!).also {
+            val photoSummaryView = linearLayout.findViewById<DashboardPhotoSummaryView>(viewId) ?: DashboardPhotoSummaryView(requireContext()).also {
                 addCardView(it, viewId, cardId)
             }
 
-            photoSummaryView.update(getString(photoSummary.titleStringResource), photoSummary.firstPhotoData, photoSummary.bestPhotoData, photoSummary.latestPhotoData)
+            photoSummaryView.update(getString(photoSummary.titleStringResource), photoSummary.weightUnit, photoSummary.firstPhotoData, photoSummary.bestPhotoData, photoSummary.latestPhotoData)
         }
     }
 
@@ -266,12 +266,12 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
 
     private fun addCardView(cardContentView: View, contentViewId: Int, cardId: Int) {
         cardContentView.id = contentViewId
-        val cardView = CardView(context!!)
+        val cardView = CardView(requireContext())
         cardView.id = cardId
         cardView.addView(cardContentView, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
         val childCount = linearLayout.childCount
         linearLayout.addView(cardView, max(0, childCount - 1), LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).also {
-            val marginInPx = convertDpToPx(context!!, 12)
+            val marginInPx = convertDpToPx(requireContext(), 12)
             it.setMargins(marginInPx, marginInPx, marginInPx, 0)
         })
     }
@@ -288,7 +288,7 @@ class DashboardFragment @Inject constructor(): DaggerFragment(), DashboardContra
     }
 
     private fun refreshAd() {
-        if (context!!.getBoolean(R.bool.hide_native_ad)) {
+        if (requireContext().getBoolean(R.bool.hide_native_ad)) {
             return
         }
 

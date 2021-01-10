@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">写真記録ダイエット日記</string>
+
+    <!-- initial settings -->
+    <string name="initial_settings_title">初期設定</string>
+    <string name="initial_settings_message">アプリをインストールいただき、ありがとうございます。まず、初期設定をお願いします。</string>
+
     <!-- main activity -->
     <string name="home">ホーム</string>
     <string name="record">記録</string>
@@ -62,7 +67,7 @@
 
     <!-- Edit Fragment -->
     <string name="date_label">日時</string>
-    <string name="weight_label">体重(kg)</string>
+    <string name="weight_label">体重(%s)</string>
     <string name="rate_label">体脂肪率(%)(任意)</string>
     <string name="save">保存</string>
     <string name="cancel">キャンセル</string>
@@ -91,13 +96,17 @@
     <string name="three_weeks">3週間</string>
     <string name="three_month">3ヶ月</string>
     <string name="one_year">1年</string>
-    <string name="legend_weight">体重(kg)</string>
+    <string name="legend_weight">体重(%s)</string>
     <string name="legend_rate">体脂肪率(%)</string>
 
     <!-- Preference Fragment -->
+    <string name="edit_unit_title">単位の設定</string>
+    <string name="edit_unit_description">体重の単位、身長の単位を設定します。</string>
+    <string name="weight_unit_label">体重の単位</string>
+    <string name="height_unit_label">体重の単位</string>
     <string name="goal_title">目標</string>
     <string name="goal_description">目標体重・目標体脂肪率を設定します。</string>
-    <string name="goal_weight_label">目標体重(kg)</string>
+    <string name="goal_weight_label">目標体重(%s)</string>
     <string name="goal_rate_label">目標体脂肪率(%)</string>
     <string name="customize_start_time">ダイエット開始時をカスタマイズする</string>
     <string name="start_time_label">ダイエット開始時</string>
@@ -106,6 +115,8 @@
     <string name="edit_height_description">BMIを計算するため、身長を設定します。</string>
     <string name="edit_height_message">BMIの計算のため、身長を入力してください。(任意)</string>
     <string name="edit_height_label">身長(cm)</string>
+    <string name="edit_feet_label">フィート</string>
+    <string name="edit_inch_label">インチ</string>
 
     <string name="alarm_title">アラーム</string>
     <string name="alarm_description">決まった時間に通知して、記録し忘れを防ぎます。</string>
@@ -253,4 +264,9 @@
     <string name="confirm_store_review_message">不具合のご報告・改善のご要望は、直接メールしてください。メールだとより迅速に対応できます。</string>
     <string name="mail_bug_report">不具合・要望をメールする</string>
     <string name="store_review">ストアでレビューする</string>
+
+    <string name="weight_unit_kg" translatable="false">kg</string>
+    <string name="weight_unit_lb" translatable="false">lb</string>
+    <string name="height_unit_cm" translatable="false">cm</string>
+    <string name="height_unit_in" translatable="false">in</string>
 </resources>

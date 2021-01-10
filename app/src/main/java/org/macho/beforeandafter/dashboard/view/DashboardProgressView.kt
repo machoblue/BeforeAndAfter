@@ -17,6 +17,7 @@ import org.macho.beforeandafter.shared.extensions.setText
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 interface DashboardProgressViewListener {
     fun onSetGoalButtonClicked()
@@ -72,6 +73,12 @@ class DashboardProgressView @JvmOverloads constructor(
 
     private fun valueToText(value: Float): String {
         val blankText = "--.--"
-        return if (value == 0f) blankText else value.toString()
+        return if (value == 0f) {
+            blankText
+
+        } else {
+            val roundedValue = (value * 10).roundToInt() / 10f
+            String.format("%.1f", roundedValue)
+        }
     }
 }

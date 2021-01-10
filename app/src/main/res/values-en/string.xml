@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Weight Loss Tracker</string>
+
+    <!-- initial settings -->
+    <string name="initial_settings_title">Initial Settings</string>
+    <string name="initial_settings_message">Thank you for installing this app. \nAt first, Please complete initial settings.</string>
+
     <!-- main activity -->
     <string name="home">Home</string>
     <string name="record">record</string>
@@ -62,7 +67,7 @@
 
     <!-- Edit Fragment -->
     <string name="date_label">Date Time</string>
-    <string name="weight_label">Weight(kg)</string>
+    <string name="weight_label">Weight(%s)</string>
     <string name="rate_label">Rate(%) (Optional)</string>
     <string name="save">save</string>
     <string name="cancel">cancel</string>
@@ -91,13 +96,17 @@
     <string name="three_weeks">3weeks</string>
     <string name="three_month">90days</string>
     <string name="one_year">1year</string>
-    <string name="legend_weight">Weight(kg)</string>
+    <string name="legend_weight">Weight(%s)</string>
     <string name="legend_rate">Rate(%)</string>
 
     <!-- Preference Fragment -->
+    <string name="edit_unit_title">Setting Unit</string>
+    <string name="edit_unit_description">Set the units for weight and height</string>
+    <string name="weight_unit_label">The unit of weight</string>
+    <string name="height_unit_label">The unit of height</string>
     <string name="goal_title">target</string>
     <string name="goal_description">set target weight and target rate</string>
-    <string name="goal_weight_label">target weight(kg)</string>
+    <string name="goal_weight_label">target weight(%s)</string>
     <string name="goal_rate_label">target rate(%)</string>
     <string name="customize_start_time">Customize Start Time</string>
     <string name="start_time_label">Start Time</string>
@@ -106,6 +115,8 @@
     <string name="edit_height_description">Set height to calculate BMI.</string>
     <string name="edit_height_message">To calculate BMI, Please set your height.(Optional)</string>
     <string name="edit_height_label">Height(cm)</string>
+    <string name="edit_feet_label">Feet</string>
+    <string name="edit_inch_label">Inches</string>
 
     <string name="alarm_title">Alarm</string>
     <string name="alarm_description">Schedule notification, and remind you to record.</string>

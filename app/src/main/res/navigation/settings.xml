@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_preferenceFragment_to_guidePhotoModeSettingDialog"
             app:destination="@id/guidePhotoModeSettingDialog" />
+        <action
+            android:id="@+id/action_preferenceFragment_to_editScaleFragment"
+            app:destination="@id/editScaleFragment" />
     </fragment>
     <fragment
         android:id="@+id/editGoalFragment"
@@ -95,4 +98,8 @@
         android:id="@+id/guidePhotoModeSettingDialog"
         android:name="org.macho.beforeandafter.preference.guidephoto.GuidePhotoModeSettingDialog"
         android:label="GuidePhotoModeSettingDialog" />
+    <fragment
+        android:id="@+id/editScaleFragment"
+        android:name="org.macho.beforeandafter.preference.editscale.EditScaleFragment"
+        android:label="@string/edit_unit_title" />
 </navigation>
