@@ -31,12 +31,12 @@ class EditScaleFragment @Inject constructor(): DaggerFragment(), EditScaleContra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item).also {
+        ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item).also {
             it.addAll(WeightUnitType.values().map { requireContext().getString(it.stringResourceId) })
             weightUnitSpinner.adapter = it
         }
 
-        ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item).also {
+        ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item).also {
             it.addAll(HeightUnitType.values().map { requireContext().getString(it.stringResourceId) })
             heightUnitSpinner.adapter = it
         }

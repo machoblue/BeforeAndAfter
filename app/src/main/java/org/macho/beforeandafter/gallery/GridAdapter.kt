@@ -40,7 +40,7 @@ class GridAdapter(val fragment: androidx.fragment.app.Fragment, val weightScale:
                 .into(holder.imageView)
 
         holder.dateText.text = dateFormat.format(item.dateTime)
-        val weightText = "${item.weight?.let { String.format("%.1f", it) } ?: "-"}${weightScale.weightUnitText}"
+        val weightText = "${item.weight?.let { String.format("%.1f", weightScale.convertFromKg(it)) } ?: "-"}${weightScale.weightUnitText}"
         val rateText = "${item.rate?.let { String.format("%.1f", it) } ?: "-"}%"
         holder.weightAndRateText.text = "${weightText}/${rateText}"
     }

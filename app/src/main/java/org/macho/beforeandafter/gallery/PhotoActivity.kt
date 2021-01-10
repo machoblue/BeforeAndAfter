@@ -180,7 +180,7 @@ class PhotoActivity: AppCompatActivity() {
                 .into(imageView)
 
         title = dateFormat.format(galleryPhoto.dateTime)
-        val weightText = "${galleryPhoto.weight?.let { String.format("%.1f", it) } ?: "-"}${weightScale.weightUnitText}"
+        val weightText = "${galleryPhoto.weight?.let { String.format("%.1f", weightScale.convertFromKg(it)) } ?: "-"}${weightScale.weightUnitText}"
         val rateText = "${galleryPhoto.rate?.let { String.format("%.1f", it) } ?: "-"}%"
         weightAndRateText.text = "${weightText}/${rateText}"
     }
