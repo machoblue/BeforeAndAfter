@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Weight Loss Tracker</string>
+
+    <!-- initial settings -->
+    <string name="initial_settings_title">Initial Settings</string>
+    <string name="initial_settings_message">Thank you for installing this app. \nAt first, Please complete initial settings.</string>
+
     <!-- main activity -->
     <string name="home">Home</string>
     <string name="record">record</string>

@@ -18,12 +18,12 @@
 
     <Spinner
         android:id="@+id/heightUnitSpinner"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="@+id/weightUnitSpinner"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/weightUnitSpinner"
+        app:layout_constraintStart_toEndOf="@+id/heightUnitLabel"
         app:layout_constraintTop_toBottomOf="@+id/weightUnitSpinner" />
 
     <TextView
@@ -51,4 +51,12 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/weightUnitLabel"
         app:layout_constraintTop_toTopOf="@+id/heightUnitSpinner" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="left"
+        app:constraint_referenced_ids="heightUnitSpinner,weightUnitSpinner"
+        tools:layout_editor_absoluteX="411dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
