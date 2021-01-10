@@ -14,6 +14,7 @@ import org.macho.beforeandafter.shared.extensions.loadImage
 import java.io.File
 import java.text.DateFormat
 import java.util.*
+import kotlin.math.roundToInt
 
 typealias PhotoData = GalleryPhoto
 
@@ -47,7 +48,7 @@ class DashboardPhotoSummaryView @JvmOverloads constructor(
                 dateFormat.format(it)
             } ?: "----/--/-- --:--"
 
-            weightAndRateTexts[i].text = "${photoData?.weight?.let { String.format("%.2f", it) } ?: "-"}$weightUnit/${photoData?.rate?.let { String.format("%.2f", it) } ?: "-"}%"
+            weightAndRateTexts[i].text = "${format(photoData?.weight)}$weightUnit/${format(photoData?.rate)}%"
         }
     }
 
@@ -68,5 +69,12 @@ class DashboardPhotoSummaryView @JvmOverloads constructor(
         val photoHeightInDp = photoWidthInDp * photoHeightWidthRatio
         val photoHeightInPx = photoHeightInDp * displayMetrics.density
         return photoHeightInPx.toInt()
+    }
+
+    private fun format(value: Float?): String {
+        return value?.let {
+            val roundedValue = (it * 10).roundToInt() / 10f
+            String.format("%.1f", roundedValue)
+        } ?: "-"
     }
 }
