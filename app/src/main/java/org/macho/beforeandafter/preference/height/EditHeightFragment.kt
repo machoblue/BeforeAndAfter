@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.edit_height_fragment.adView
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.extensions.hideKeyboardIfNeeded
 import org.macho.beforeandafter.shared.util.AdUtil
+import java.lang.RuntimeException
 import javax.inject.Inject
 
 class EditHeightFragment @Inject constructor(): DaggerFragment(), EditHeightContract.View {
@@ -54,7 +55,14 @@ class EditHeightFragment @Inject constructor(): DaggerFragment(), EditHeightCont
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save -> {
-                presenter.save(heightEditText.text.toString())
+                val heightForm = if (heightTextInputLayout.visibility == View.VISIBLE) {
+                    CentimeterForm(heightEditText.text.toString())
+                } else if (feetLinearLayout.visibility == View.VISIBLE) {
+                    FeetForm(feetEditText.text.toString(), inchEditText.text.toString())
+                } else {
+                    throw  RuntimeException("This line shouldn't be reached.")
+                }
+                presenter.save(heightForm)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -62,9 +70,25 @@ class EditHeightFragment @Inject constructor(): DaggerFragment(), EditHeightCont
 
     // MARK: - EditHeightContract.View
 
-    override fun update(heightText: String, heightUnit: String) {
-        heightEditText.setText(heightText)
-        heightTextInputLayout.hint = String.format(requireContext().getString(R.string.edit_height_label), heightUnit)
+    override fun update(heightForm: HeightForm) {
+        when (heightForm) {
+            is CentimeterForm -> {
+                heightTextInputLayout.visibility = View.VISIBLE
+                feetLinearLayout.visibility = View.GONE
+                heightEditText.setText(heightForm.centimeterText)
+            }
+
+            is FeetForm -> {
+                heightTextInputLayout.visibility = View.GONE
+                feetLinearLayout.visibility = View.VISIBLE
+                feetEditText.setText(heightForm.feetText)
+                inchEditText.setText(heightForm.inchText)
+            }
+
+            else -> {
+                throw RuntimeException("This line shouldn't be reached.")
+            }
+        }
     }
 
     override fun finish() {

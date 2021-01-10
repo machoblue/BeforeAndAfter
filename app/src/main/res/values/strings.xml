@@ -114,7 +114,9 @@
     <string name="edit_height_title">身長</string>
     <string name="edit_height_description">BMIを計算するため、身長を設定します。</string>
     <string name="edit_height_message">BMIの計算のため、身長を入力してください。(任意)</string>
-    <string name="edit_height_label">身長(%s)</string>
+    <string name="edit_height_label">身長(cm)</string>
+    <string name="edit_feet_label">フィート</string>
+    <string name="edit_inch_label">インチ</string>
 
     <string name="alarm_title">アラーム</string>
     <string name="alarm_description">決まった時間に通知して、記録し忘れを防ぎます。</string>
