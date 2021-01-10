@@ -2,6 +2,7 @@ package org.macho.beforeandafter.shared.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import org.macho.beforeandafter.InitialSettingsActivity
 import org.macho.beforeandafter.main.MainActivity
 import org.macho.beforeandafter.alarmsettingdialog.AlarmSettingModule
 import org.macho.beforeandafter.dashboard.DashboardModule
@@ -12,6 +13,7 @@ import org.macho.beforeandafter.preference.alarm.AlarmModule
 import org.macho.beforeandafter.preference.backup.BackupModule
 import org.macho.beforeandafter.preference.dashboard.DashboardSettingModule
 import org.macho.beforeandafter.preference.editgoal.EditGoalModule
+import org.macho.beforeandafter.preference.editscale.EditScaleModule
 import org.macho.beforeandafter.preference.height.EditHeightModule
 import org.macho.beforeandafter.preference.restore.RestoreModule
 import org.macho.beforeandafter.record.RecordModule
@@ -39,7 +41,14 @@ abstract class ActivityBindingModule {
         CommonDialogModule::class,
         CommonDialogModule2::class,
         MainActivityModule::class,
-        DashboardModule::class
+        DashboardModule::class,
+        EditScaleModule::class
     ])
     abstract fun mainActivity(): MainActivity
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = [
+        EditScaleModule::class
+    ])
+    abstract fun initialSettingsActivity(): InitialSettingsActivity
 }

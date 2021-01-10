@@ -49,14 +49,13 @@
                 android:id="@+id/weightTextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/weight_label"
                 app:layout_constraintEnd_toStartOf="@+id/weightUpButton"
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/dateButton">
 
                 <EditText
-                    android:id="@+id/weight"
+                    android:id="@+id/weightEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
@@ -101,7 +100,7 @@
                 app:layout_constraintTop_toBottomOf="@id/weightTextInputLayout">
 
                 <EditText
-                    android:id="@+id/rate"
+                    android:id="@+id/rateEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
@@ -145,7 +144,7 @@
                 app:layout_constraintTop_toBottomOf="@id/rateTextInputLayout">
 
                 <EditText
-                    android:id="@+id/memo"
+                    android:id="@+id/memoEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"

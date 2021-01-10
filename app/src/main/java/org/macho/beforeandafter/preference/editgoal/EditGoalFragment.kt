@@ -43,16 +43,16 @@ class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract
         startTimeButton.setOnClickListener {
             val startTimeButton = it as? Button ?: return@setOnClickListener
             val time = dateFormat.parse(startTimeButton.text.toString()) ?: return@setOnClickListener
-            showDatePickerDialog(context!!, time) { date ->
+            showDatePickerDialog(requireContext(), time) { date ->
                 startTimeButton.text = dateFormat.format(date)
             }
         }
 
-        AdUtil.initializeMobileAds(context!!)
-        AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
+        AdUtil.initializeMobileAds(requireContext())
+        AdUtil.loadBannerAd(adView, requireContext())
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(requireContext())) View.GONE else View.VISIBLE
 
-        interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)
+        interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(requireContext())
 
         setHasOptionsMenu(true); // for save button on navBar
     }
@@ -93,11 +93,12 @@ class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract
 
     // MARK: - EditGoalContract.View
 
-    override fun setWeightGoalText(weightGoalText: String) {
+    override fun setWeightGoalText(weightGoalText: String?, weightUnit: String) {
         goalWeight.setText(weightGoalText)
+        goalWeightTextInputLayout.hint = String.format(requireContext().getString(R.string.goal_weight_label), weightUnit)
     }
 
-    override fun setRateGoalText(rateGoalText: String) {
+    override fun setRateGoalText(rateGoalText: String?) {
         goalRate.setText(rateGoalText)
     }
 
@@ -108,13 +109,13 @@ class EditGoalFragment @Inject constructor(): DaggerFragment(), EditGoalContract
     }
 
     override fun finish() {
-        interstitialAd?.showIfNeeded(context!!)
+        interstitialAd?.showIfNeeded(requireContext())
         findNavController().popBackStack()
     }
 
     // MARK: - Private
     private fun updateStartTimeButton(isCustom: Boolean) {
         startTimeButton.isEnabled = isCustom
-        startTimeButton.setTextColor(context!!, if (isCustom) R.color.light_blue else R.color.light_gray_text)
+        startTimeButton.setTextColor(requireContext(), if (isCustom) R.color.light_blue else R.color.light_gray_text)
     }
 }

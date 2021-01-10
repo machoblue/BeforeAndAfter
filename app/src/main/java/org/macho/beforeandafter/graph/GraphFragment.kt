@@ -14,6 +14,7 @@ import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
 import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import org.macho.beforeandafter.shared.util.WeightScale
 import java.text.DateFormat
 import java.util.Date
 import javax.inject.Inject
@@ -64,47 +65,22 @@ class GraphFragment: DaggerFragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         LogUtil.d(this, "onViewCreated")
 
-        /*
-        val records = mutableListOf<Record>()
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 21, 78f, 35f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 20, 78.5f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 19, 78f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 18, 76f, 22f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 17, 77f, 28f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 16, 78f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 15, 79f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 14, 75f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 13, 74f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 12, 75f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 11, 75f, 22f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 10, 76f, 21f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 9, 74f, 23f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 8, 76f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 7, 75f, 24f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 6, 76f, 22f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 5, 76f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 4, 75f, 23f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 3, 75f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 2, 74f, 21f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 1, 74f, 20f))
-        records.add(Record(Date().time - 1000L * 60 * 60 * 24 * 0, 73f, 22.2f))
-         */
-
+        val weightScale = WeightScale(requireContext())
         repository.getRecords { records ->
             val list = mutableListOf<DataSet>()
-            list.add(DataSet(DataType.LEFT, records.filter { it.weight != 0f }.map { Data(it.date, it.weight) }, ContextCompat.getColor(context!!, R.color.colorWeight)))
-            list.add(DataSet(DataType.RIGHT, records.filter {it.rate != 0f}.map { Data(it.date, it.rate) }, ContextCompat.getColor(context!!, R.color.colorRate)))
+            list.add(DataSet(DataType.LEFT, records.filter { it.weight != 0f }.map { Data(it.date, weightScale.convertFromKg(it.weight)) }, ContextCompat.getColor(requireContext(), R.color.colorWeight)))
+            list.add(DataSet(DataType.RIGHT, records.filter {it.rate != 0f}.map { Data(it.date, it.rate) }, ContextCompat.getColor(requireContext(), R.color.colorRate)))
             graphView.dataSetList = list
 
             graphView.invalidate()
         }
 
-        val index = SharedPreferencesUtil.getInt(context!!, SharedPreferencesUtil.Key.GRAPH_SELECTION)
+        val index = SharedPreferencesUtil.getInt(requireContext(), SharedPreferencesUtil.Key.GRAPH_SELECTION)
         this.range = GraphRange.values()[index]
 
         val legends = mutableListOf<Legend>().also {
-            it.add(Legend(getString(R.string.legend_weight), ContextCompat.getColor(context!!, R.color.colorWeight)))
-            it.add(Legend(getString(R.string.legend_rate), ContextCompat.getColor(context!!, R.color.colorRate)))
+            it.add(Legend(String.format(getString(R.string.legend_weight), weightScale.weightUnitText), ContextCompat.getColor(requireContext(), R.color.colorWeight)))
+            it.add(Legend(getString(R.string.legend_rate), ContextCompat.getColor(requireContext(), R.color.colorRate)))
         }
         graphView.legends = legends
 
@@ -128,9 +104,9 @@ class GraphFragment: DaggerFragment(), View.OnClickListener {
             this.to = Date()
         }
 
-        AdUtil.initializeMobileAds(context!!)
-        AdUtil.loadBannerAd(adView, context!!)
-        adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
+        AdUtil.initializeMobileAds(requireContext())
+        AdUtil.loadBannerAd(adView, requireContext())
+        adLayout.visibility = if (AdUtil.isBannerAdHidden(requireContext())) View.GONE else View.VISIBLE
     }
 
     private fun updateRangeLabel() {

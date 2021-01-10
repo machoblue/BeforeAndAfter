@@ -22,6 +22,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".InitialSettingsActivity" />
+
         <activity android:name=".main.MainActivity" />
         <activity android:name=".record.camera.CameraActivity" android:theme="@style/AppThemeNoTitle"/>
         <activity android:name=".gallery.PhotoActivity" android:theme="@style/MainTheme"/>

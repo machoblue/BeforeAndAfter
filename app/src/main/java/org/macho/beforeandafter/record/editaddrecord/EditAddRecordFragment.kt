@@ -79,6 +79,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     private var onRecordSavedListener: OnRecordSavedListener? = null
 
+
     // MARK: Lifecycle
 
     override fun onCreateView(layoutInflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -239,35 +240,37 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     }
 
     // MARK: EditAddRecordContract.View
-    override fun showRecord(record: Record?) {
+    override fun updateViews(weightUnit: String?, date: Long?, weight: Float?, rate: Float?, memo: String?, frontImageFile: File?, sideImageFile: File?, other1ImageFile: File?, other2ImageFile: File?, other3ImageFile: File?) {
         if (!isAdded) {
             return // Workaround: IllegalStateException dateButton must not be null https://www.vvzixun.com/index.php/code/35ff970b286785750654dd580d0d491a
         }
 
-        record?.date?.let {
+        date?.let {
             dateButton.text = dateFormat.format(Date(it))
             dateButton.tag = Date(it)
         }
 
-        weight.setText(record?.weight.toString())
-        rate.setText(record?.rate.toString())
-        memo.setText(record?.memo)
+        weightEditText.setText(weight?.let { String.format("%.2f", it) })
+        rateEditText.setText(rate?.let { String.format("%.2f", it) })
+        memoEditText.setText(memo)
 
-        record?.frontImageFile(context!!)?.let {
+        frontImageFile?.let {
             frontImage.loadImage(this, Uri.fromFile(it))
         }
-        record?.sideImageFile(context!!)?.let {
+        sideImageFile?.let {
             sideImage.loadImage(this, Uri.fromFile(it))
         }
-        record?.otherImageFile1(context!!)?.let {
+        other1ImageFile?.let {
             otherImage1.loadImage(this, Uri.fromFile(it))
         }
-        record?.otherImageFile2(context!!)?.let {
+        other2ImageFile?.let {
             otherImage2.loadImage(this, Uri.fromFile(it))
         }
-        record?.otherImageFile3(context!!)?.let {
+        other3ImageFile?.let {
             otherImage3.loadImage(this, Uri.fromFile(it))
         }
+
+        weightTextInputLayout.hint = String.format(context!!.getString(R.string.weight_label), weightUnit)
     }
 
     override fun close() {
@@ -364,31 +367,31 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         photoGroup.visibility = if (requireContext().getBoolean(R.bool.is_editaddrecord_photo_visible)) View.VISIBLE else View.GONE
 
         rateUpButton.setOnClickListener {
-            val rateText = rate.text.toString()
+            val rateText = rateEditText.text.toString()
             var rateValue = if (rateText.isEmpty()) 0.0f else rateText.toFloat()
             rateValue += 0.1f
-            rate.setText("%.2f".format(rateValue))
+            rateEditText.setText("%.2f".format(rateValue))
         }
         rateDownButton.setOnClickListener {
-            val rateText = rate.text.toString()
+            val rateText = rateEditText.text.toString()
             var rateValue = if (rateText.isEmpty()) 0.0f else rateText.toFloat()
             rateValue -= 0.1f
             if (rateValue >= 0) {
-                rate.setText("%.2f".format(rateValue))
+                rateEditText.setText("%.2f".format(rateValue))
             }
         }
         weightUpButton.setOnClickListener {
-            val weightText = weight.text.toString()
+            val weightText = weightEditText.text.toString()
             var weightValue = if (weightText.isEmpty()) 0.0f else weightText.toFloat()
             weightValue = (weightValue * 10 + 1) / 10
-            weight.setText("%.2f".format(weightValue))
+            weightEditText.setText("%.2f".format(weightValue))
         }
         weightDownButton.setOnClickListener {
-            val weightText = weight.text.toString()
+            val weightText = weightEditText.text.toString()
             var weightValue = if (weightText.isEmpty()) 0.0f else weightText.toFloat()
             weightValue = (weightValue * 10 - 1) / 10
             if (weightValue >= 0) {
-                weight.setText("%.2f".format(weightValue))
+                weightEditText.setText("%.2f".format(weightValue))
             }
         }
 
@@ -397,13 +400,13 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             showDatePickerDialog(date)
         }
 
-        weight.setupClearButtonWithAction()
-        weight.addTextChangedListener { newText -> presenter.modifyWeight(newText) }
+        weightEditText.setupClearButtonWithAction()
+        weightEditText.addTextChangedListener { newText -> presenter.modifyWeight(newText) }
 
-        rate.setupClearButtonWithAction()
-        rate.addTextChangedListener { newText -> presenter.modifyRate(newText) }
+        rateEditText.setupClearButtonWithAction()
+        rateEditText.addTextChangedListener { newText -> presenter.modifyRate(newText) }
 
-        memo.addTextChangedListener { newText -> presenter.modifyMemo(newText) }
+        memoEditText.addTextChangedListener { newText -> presenter.modifyMemo(newText) }
 
         setHasOptionsMenu(true); // for save button on navBar
 

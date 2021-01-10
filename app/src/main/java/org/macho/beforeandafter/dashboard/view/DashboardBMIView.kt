@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.dashboard_bmi_view.view.*
 import org.macho.beforeandafter.R
+import kotlin.math.roundToInt
 
 class DashboardBMIView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -15,13 +16,19 @@ class DashboardBMIView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.dashboard_bmi_view, this, true)
     }
 
-    fun update(showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?, onSetHeightButtonClicked: () -> Unit) {
+    fun update(showSetHeightButton: Boolean, bmi: Float?, bmiClass: String?, idealWeight: Float?, weightUnit: String, onSetHeightButtonClicked: () -> Unit) {
         setHeightButton.visibility = if (showSetHeightButton) View.VISIBLE else View.GONE
-        bmiTextView.text = bmi?.let { String.format("%.1f", it) } ?: "--.-"
+        bmiTextView.text = bmi?.let {
+            val roundedValue =  (it * 10).roundToInt() / 10f
+            String.format("%.1f", roundedValue)
+        } ?: "--.-"
         bmiView.update(bmi ?: 0f)
         bmiClassTextView.text = String.format("( %s )", bmiClass ?: "--")
-        val idealWeightString = idealWeight?.let { String.format("%.1f", it) } ?: "--.--"
-        idealWeightTextView.text = String.format("%s kg", idealWeightString)
+        val idealWeightString = idealWeight?.let {
+            val roundedValue = (it * 10).roundToInt() / 10f
+            String.format("%.1f", roundedValue)
+        } ?: "--.--"
+        idealWeightTextView.text = "$idealWeightString $weightUnit"
         setHeightButton.setOnClickListener {
             onSetHeightButtonClicked()
         }

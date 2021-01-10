@@ -1,16 +1,13 @@
 package org.macho.beforeandafter.record.editaddrecord
 
-import android.content.Intent
-import android.graphics.Bitmap
 import org.macho.beforeandafter.shared.BaseContract
-import org.macho.beforeandafter.shared.data.record.Record
 import java.io.File
 import java.util.*
 
 interface EditAddRecordContract {
     // notify event, display
     interface View: BaseContract.View<Presenter> {
-        fun showRecord(record: Record?)
+        fun updateViews(weightUnit: String?, date: Long?, weight: Float?, rate: Float?, memo: String?, frontImageFile: File?, sideImageFile: File?, other1ImageFile: File?, other2ImageFile: File?, other3ImageFile: File?)
         fun close()
         fun openCamera(guidePhotoFileName: String?)
     }

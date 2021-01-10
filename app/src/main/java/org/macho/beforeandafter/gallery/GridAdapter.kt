@@ -11,10 +11,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.GlideApp
+import org.macho.beforeandafter.shared.util.WeightScale
 import java.io.File
 import java.text.DateFormat
 
-class GridAdapter(val fragment: androidx.fragment.app.Fragment): androidx.recyclerview.widget.RecyclerView.Adapter<GridAdapter.ViewHolder>() {
+class GridAdapter(val fragment: androidx.fragment.app.Fragment, val weightScale: WeightScale): androidx.recyclerview.widget.RecyclerView.Adapter<GridAdapter.ViewHolder>() {
     private val layoutInflater = LayoutInflater.from(fragment.context)
     private val context = fragment.context!!
     var items: List<GalleryPhoto> = mutableListOf()
@@ -39,7 +40,9 @@ class GridAdapter(val fragment: androidx.fragment.app.Fragment): androidx.recycl
                 .into(holder.imageView)
 
         holder.dateText.text = dateFormat.format(item.dateTime)
-        holder.weightAndRateText.text = "${item.weight ?: "-"}kg/${item.rate ?: "-"}%"
+        val weightText = "${item.weight?.let { String.format("%.1f", it) } ?: "-"}${weightScale.weightUnitText}"
+        val rateText = "${item.rate?.let { String.format("%.1f", it) } ?: "-"}%"
+        holder.weightAndRateText.text = "${weightText}/${rateText}"
     }
 
     override fun getItemCount(): Int {
