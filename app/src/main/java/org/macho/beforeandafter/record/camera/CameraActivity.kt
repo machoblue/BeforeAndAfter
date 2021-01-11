@@ -257,6 +257,11 @@ class CameraActivity: AppCompatActivity() {
             Toast.makeText(this, getString(R.string.camera_in_preparation), Toast.LENGTH_SHORT).show()
             return
         }
+        
+        if (cameraDevice == null) {
+            Toast.makeText(this, getString(R.string.camera_in_preparation), Toast.LENGTH_SHORT).show()
+            return
+        }
 
         captureRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_START)
 
