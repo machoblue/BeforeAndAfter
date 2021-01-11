@@ -82,7 +82,7 @@
     <string name="delete_record_message">削除すると元に戻せませんがよろしいですか？</string>
 
     <!-- Camera Activity -->
-    <string name="camera_in_preparation">カメラは準備中です。</string>
+    <string name="camera_in_preparation">カメラは準備中です。少々お待ちください。</string>
 
     <!-- Gallery Fragment -->
     <string name="front">正面</string>
@@ -103,7 +103,7 @@
     <string name="edit_unit_title">単位の設定</string>
     <string name="edit_unit_description">体重の単位、身長の単位を設定します。</string>
     <string name="weight_unit_label">体重の単位</string>
-    <string name="height_unit_label">体重の単位</string>
+    <string name="height_unit_label">身長の単位</string>
     <string name="goal_title">目標</string>
     <string name="goal_description">目標体重・目標体脂肪率を設定します。</string>
     <string name="goal_weight_label">目標体重(%s)</string>
@@ -126,10 +126,16 @@
     <string name="dashboard_setting_title">ホームの表示内容の設定</string>
     <string name="dashboard_setting_description">ホームの表示内容の設定します。</string>
 
+    <string name="preference_section_header_camera">カメラ</string>
+
     <string name="guide_photo_mode_setting_title">ガイドフォトの設定</string>
     <string name="guide_photo_mode_setting_description">カメラで写真撮影時に表示するガイドフォトのモードを設定します。ダイエット開始時の写真を表示するか、最新の写真を表示するか選択できます。</string>
     <string name="guide_photo_mode_first">ダイエット開始時の写真を表示</string>
     <string name="guide_photo_mode_latest">最新の写真を表示</string>
+
+    <string name="camera_timer_title">カメラのタイマーの設定</string>
+    <string name="camera_timer_description">カメラのタイマーの時間を設定します。</string>
+    <string name="seconds">秒</string>
 
     <string name="delete_all_title">全データ削除</string>
     <string name="delete_all_description">全データを削除します。</string>

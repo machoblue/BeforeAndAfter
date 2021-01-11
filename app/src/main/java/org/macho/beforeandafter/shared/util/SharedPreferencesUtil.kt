@@ -46,6 +46,7 @@ object SharedPreferencesUtil {
         HEIGHT("height"),
 
         GUIDE_PHOTO_MODE("guide_photo_mode"),
+        CAMERA_TIMER_SECONDS("camera_timer_seconds"),
 
         WEIGHT_UNIT("weight_unit"),
         HEIGHT_UNIT("height_unit"),
@@ -89,8 +90,8 @@ object SharedPreferencesUtil {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(key.string, value).apply()
     }
 
-    fun getInt(context: Context, key: Key): Int {
-        return PreferenceManager.getDefaultSharedPreferences(context).getInt(key.string, 0)
+    fun getInt(context: Context, key: Key, default: Int = 0): Int {
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(key.string, default)
     }
 
     fun setInt(context: Context, key: Key, value: Int) {

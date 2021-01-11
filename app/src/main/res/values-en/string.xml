@@ -126,10 +126,16 @@
     <string name="dashboard_setting_title">Home Contents Setting</string>
     <string name="dashboard_setting_description">Customize Home Contents.</string>
 
+    <string name="preference_section_header_camera">Camera</string>
+
     <string name="guide_photo_mode_setting_title">Guide Photo Mode Setting</string>
     <string name="guide_photo_mode_setting_description">As a guide photo when taking picture, you can select the first photo or the latest photo.</string>
     <string name="guide_photo_mode_first">The first photo</string>
     <string name="guide_photo_mode_latest">The latest photo</string>
+
+    <string name="camera_timer_title">Camera Timer Setting</string>
+    <string name="camera_timer_description">Set the number of seconds for the camera timer.</string>
+    <string name="seconds">Seconds</string>
 
     <string name="delete_all_title">delete all data</string>
     <string name="delete_all_description">delete all data</string>
