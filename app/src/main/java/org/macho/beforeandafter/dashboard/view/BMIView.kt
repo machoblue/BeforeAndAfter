@@ -30,7 +30,7 @@ class BMIView @JvmOverloads constructor(
     companion object {
         const val bmiBarMarginLeft = 36f
         const val bmiBarMarginRight = 36f
-        const val classLabelFontSizeInDp = 15f
+        const val classLabelFontSizeInDp = 10f
         const val arrowWidth = 36f
         const val arrowHeightWidthRatio = 1.25f
     }

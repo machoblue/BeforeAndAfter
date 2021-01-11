@@ -18,7 +18,7 @@ class ProgressView @JvmOverloads constructor(
     companion object {
         const val progressBarMarginLeft = 36f
         const val progressBarMarginRight = 36f
-        const val labelFontSizeInDp = 18f
+        const val labelFontSizeInDp = 12f
     }
 
     private var progressBarBackgroundPaint = Paint().also {
