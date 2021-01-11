@@ -11,6 +11,7 @@
     <bool name="is_recordlist_photo_visible">false</bool>
     <bool name="is_restore_backup_visible">false</bool>
     <bool name="is_dashboard_photo_visible">false</bool>
+    <bool name="is_camera_settings_visible">false</bool>
 
     <bool name="is_dashboard_body_fat_default_hidden">false</bool>
 </resources>
