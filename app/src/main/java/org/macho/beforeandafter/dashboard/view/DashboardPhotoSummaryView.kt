@@ -11,6 +11,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.gallery.GalleryPhoto
 import org.macho.beforeandafter.gallery.PhotoActivity
 import org.macho.beforeandafter.shared.extensions.loadImage
+import org.macho.beforeandafter.shared.util.WeightScale
 import java.io.File
 import java.text.DateFormat
 import java.util.*
@@ -38,6 +39,8 @@ class DashboardPhotoSummaryView @JvmOverloads constructor(
 
         imageViews[0].layoutParams.height = getPhotoHeight()
 
+        val weightScale = WeightScale(context)
+
         for ((i, photoData) in photoDataList.withIndex()) {
             imageViews[i].loadImage(context, Uri.fromFile(File(context.filesDir, photoData?.fileName ?: "")))
             imageViews[i].setOnClickListener {
@@ -48,7 +51,7 @@ class DashboardPhotoSummaryView @JvmOverloads constructor(
                 dateFormat.format(it)
             } ?: "----/--/-- --:--"
 
-            weightAndRateTexts[i].text = "${format(photoData?.weight)}$weightUnit/${format(photoData?.rate)}%"
+            weightAndRateTexts[i].text = "${format(photoData?.weight?.let { weightScale.convertFromKg(it) })}$weightUnit/${format(photoData?.rate)}%"
         }
     }
 
