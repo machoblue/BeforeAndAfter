@@ -19,6 +19,7 @@ import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.preference.pin.PinDisableActivity
 import org.macho.beforeandafter.shared.data.restoreimage.RestoreImage
 import org.macho.beforeandafter.shared.data.restoreimage.RestoreImageRepository
+import org.macho.beforeandafter.shared.extensions.getBoolean
 import org.macho.beforeandafter.shared.util.MailAppLauncher
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.util.*
@@ -109,17 +110,20 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
             findNavController().navigate(action)
         })
 
-        items.add(SectionHeader(R.string.preference_section_header_camera))
+        val isCameraSettingsVisible = requireContext().getBoolean(R.bool.is_camera_settings_visible)
+        if (isCameraSettingsVisible) {
+            items.add(SectionHeader(R.string.preference_section_header_camera))
 
-        items.add(PreferenceItem(R.string.guide_photo_mode_setting_title, R.string.guide_photo_mode_setting_description) {
-            val action = PreferenceFragmentDirections.actionPreferenceFragmentToGuidePhotoModeSettingDialog()
-            findNavController().navigate(action)
-        })
+            items.add(PreferenceItem(R.string.guide_photo_mode_setting_title, R.string.guide_photo_mode_setting_description) {
+                val action = PreferenceFragmentDirections.actionPreferenceFragmentToGuidePhotoModeSettingDialog()
+                findNavController().navigate(action)
+            })
 
-        items.add(PreferenceItem(R.string.camera_timer_title, R.string.camera_timer_description) {
-            val action = PreferenceFragmentDirections.actionPreferenceFragmentToCameraTimerSettingDialog()
-            findNavController().navigate(action)
-        })
+            items.add(PreferenceItem(R.string.camera_timer_title, R.string.camera_timer_description) {
+                val action = PreferenceFragmentDirections.actionPreferenceFragmentToCameraTimerSettingDialog()
+                findNavController().navigate(action)
+            })
+        }
 
         // MARK: - Privacy Settings
         items.add(SectionHeader(R.string.preference_section_header_privacy))

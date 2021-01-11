@@ -16,6 +16,7 @@ class CameraTimerSettingDialog: DialogFragment() {
         val cameraTimerSecondsPicker = view.findViewById<NumberPicker>(R.id.cameraTimerSecondsPicker).also {
             it.maxValue = 60
             it.minValue = 1
+            it.value = SharedPreferencesUtil.getInt(requireContext(), SharedPreferencesUtil.Key.CAMERA_TIMER_SECONDS, 5)
         }
         return AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.camera_timer_title)
