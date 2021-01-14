@@ -26,6 +26,8 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     private lateinit var weightScale: WeightScale
 
     override fun start(date: Long) {
+        weightScale = WeightScale(context)
+
         tempRecord = Record()
         if (date != 0L) {
             recordRepository.getRecord(date) { record ->
