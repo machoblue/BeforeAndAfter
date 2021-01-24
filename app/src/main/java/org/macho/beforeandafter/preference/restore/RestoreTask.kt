@@ -57,7 +57,7 @@ class RestoreTask(context: Context, val account: Account, listener: RestoreTaskL
             }
 
             backupData.records.forEach {
-                RecordDaoImpl().update(it)
+                RecordDaoImpl().createOrUpdate(it)
             }
 
             val existingRestoreImages = RestoreImageDaoImpl().findAll()

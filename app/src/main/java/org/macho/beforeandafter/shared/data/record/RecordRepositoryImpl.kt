@@ -24,7 +24,7 @@ class RecordRepositoryImpl @Inject constructor(val recordDao: RecordDao, val app
 
     override fun register(record: Record, onComplete: (() -> Unit)?) {
         appExecutors.diskIO.execute {
-            recordDao.register(record)
+            recordDao.createOrUpdate(record)
             appExecutors.mainThread.execute {
                 if (onComplete == null) {
                     return@execute
@@ -36,7 +36,7 @@ class RecordRepositoryImpl @Inject constructor(val recordDao: RecordDao, val app
 
     override fun update(record: Record, onComplete: (() -> Unit)?) {
         appExecutors.diskIO.execute {
-            recordDao.update(record)
+            recordDao.createOrUpdate(record)
             appExecutors.mainThread.execute {
                 if (onComplete == null) {
                     return@execute

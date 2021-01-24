@@ -45,23 +45,7 @@ class RecordDaoImpl: RecordDao {
         }
     }
 
-    override fun register(record: Record) {
-        Realm.getDefaultInstance().use {
-            it.executeTransaction { realm ->
-                var registered = realm.createObject(RecordDto::class.java, record.date)
-                registered.weight = record.weight
-                registered.rate = record.rate
-                registered.frontImagePath = record.frontImagePath
-                registered.sideImagePath = record.sideImagePath
-                registered.otherImagePath1 = record.otherImagePath1
-                registered.otherImagePath2 = record.otherImagePath2
-                registered.otherImagePath3 = record.otherImagePath3
-                registered.memo = record.memo
-            }
-        }
-    }
-
-    override fun update(record: Record) {
+    override fun createOrUpdate(record: Record) {
         Realm.getDefaultInstance().use {
             it.executeTransaction { realm ->
                 realm.copyToRealmOrUpdate(RecordDto(
