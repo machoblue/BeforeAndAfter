@@ -170,6 +170,7 @@
     <string name="backup_error_description_no_records">There is no records to backup.</string>
     <string name="backup_error_drive_connection_error">We cannot connect to Google Drive.</string>
     <string name="backup_error_files_create_failed">Failed to upload image files.</string>
+    <string name="backup_error_no_enough_space">There is not enough free space in Google Drive of this Google account.</string>
     <string name="backup_error_network_timeout">Network timeout occurred. try again later.</string>
 
     <string name="restore_dialog_title">Restore</string>
