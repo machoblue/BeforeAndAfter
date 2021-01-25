@@ -170,6 +170,7 @@
     <string name="backup_error_description_no_records">バックアップする記録データがありません。</string>
     <string name="backup_error_drive_connection_error">GoogleDriveとの接続に失敗しました。</string>
     <string name="backup_error_files_create_failed">画像ファイルのアップロードに失敗しました。</string>
+    <string name="backup_error_no_enough_space">このGoogleアカウントのGoogle Driveには十分な空き容量がありません。</string>
     <string name="backup_error_network_timeout">ネットワークが安定しないため、タイムアウトエラーが発生しました。しばらくしてからもう一度お試しください。</string>
 
     <string name="restore_dialog_title">バックアップデータの復元</string>

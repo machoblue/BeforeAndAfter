@@ -164,6 +164,9 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
             BackupTask.BackupStatus.BACKUP_STATUS_CODE_ERROR_TIMEOUT -> {
                 view?.showAlert(context.getString(R.string.backup_error_title), context.getString(R.string.backup_error_files_create_failed))
             }
+            BackupTask.BackupStatus.BACKUP_STATUS_CODE_ERROR_NO_ENOUGH_SPACE -> {
+                view?.showAlert(context.getString(R.string.backup_error_title), context.getString(R.string.backup_error_no_enough_space))
+            }
             BackupTask.BackupStatus.BACKUP_STATUS_CODE_ERROR_RECOVERABLE -> {
                 val intent = backupTask?.recoverableAuthIOException?.intent ?: return
                 view?.startActivityForResult(intent, RC_RECOVERABLE)

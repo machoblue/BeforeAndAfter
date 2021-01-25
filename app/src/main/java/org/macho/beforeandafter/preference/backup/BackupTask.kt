@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import com.google.api.client.http.FileContent
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
@@ -87,6 +88,17 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
         } catch (e: SocketTimeoutException) {
             publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_ERROR_TIMEOUT))
             return
+
+        } catch (e: GoogleJsonResponseException) {
+            if (e.details.errors.any { errorInfo -> errorInfo.message.contains("The user's Drive storage quota has been exceeded.") }) {
+                publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_ERROR_NO_ENOUGH_SPACE))
+                return
+
+            } else {
+                Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
+                FirebaseCrashlytics.getInstance().recordException(e)
+                throw e
+            }
 
         } catch (e: Exception) {
             Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
@@ -172,6 +184,7 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
             const val BACKUP_STATUS_CODE_ERROR_FILES_CREATE_FAILED = 1003
             const val BACKUP_STATUS_CODE_ERROR_RECOVERABLE = 1004
             const val BACKUP_STATUS_CODE_ERROR_TIMEOUT = 1005
+            const val BACKUP_STATUS_CODE_ERROR_NO_ENOUGH_SPACE = 1006
         }
     }
 

@@ -5,9 +5,7 @@ interface RecordDao {
 
     fun find(date: Long): Record?
 
-    fun register(record: Record)
-
-    fun update(record: Record)
+    fun createOrUpdate(record: Record)
 
     fun delete(date: Long)
 
