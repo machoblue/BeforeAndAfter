@@ -42,8 +42,12 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
 
         } else {
             originalRecord = null
-            tempRecord.weight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT)
-            tempRecord.rate = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_RATE)
+
+            val isDefaultWeightAndBodyFatEnabled = SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.IS_DEFAULT_WEIGHT_AND_BODY_FAT_ENABLED, true)
+            if (isDefaultWeightAndBodyFatEnabled) {
+                tempRecord.weight = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_WEIGHT)
+                tempRecord.rate = SharedPreferencesUtil.getFloat(context, SharedPreferencesUtil.Key.LATEST_RATE)
+            }
         }
     }
 
@@ -141,6 +145,12 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
         SharedPreferencesUtil.setFloat(context, SharedPreferencesUtil.Key.LATEST_RATE, tempRecord.rate)
     }
 
+    override fun deleteRecord() {
+        originalRecord?.let {
+            deleteAndClose(it)
+        }
+    }
+
     private fun persistFile(file: File?): File? {
 //        if (file == null || !file.exists()) {
         if (file == null) {
@@ -171,12 +181,6 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
         }
 
         file.delete()
-    }
-
-    override fun deleteRecord() {
-        originalRecord?.let {
-            deleteAndClose(it)
-        }
     }
 
     private fun deleteAndClose(record: Record) {

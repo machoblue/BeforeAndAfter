@@ -126,6 +126,9 @@
     <string name="dashboard_setting_title">Home Contents Setting</string>
     <string name="dashboard_setting_description">Customize Home Contents.</string>
 
+    <string name="default_weight_title">Default Weight and Body Fat Rate</string>
+    <string name="default_weight_description">If enable this, your latest weight and body fat are filled automatically as default values. This is convenient for recording your weight and body fat by + button or - button.</string>
+
     <string name="preference_section_header_camera">Camera</string>
 
     <string name="guide_photo_mode_setting_title">Guide Photo Mode Setting</string>

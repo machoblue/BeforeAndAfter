@@ -126,6 +126,9 @@
     <string name="dashboard_setting_title">ホームの表示内容の設定</string>
     <string name="dashboard_setting_description">ホームの表示内容の設定します。</string>
 
+    <string name="default_weight_title">体重と体脂肪率のデフォルト入力</string>
+    <string name="default_weight_description">体重と体脂肪率のデフォルト入力を有効にすると、記録時に前回の体重と体脂肪率がはじめから入力された状態になります。体重と体脂肪率を+ボタン/-ボタンの長押しで入力したいときに便利です。</string>
+
     <string name="preference_section_header_camera">カメラ</string>
 
     <string name="guide_photo_mode_setting_title">ガイドフォトの設定</string>
