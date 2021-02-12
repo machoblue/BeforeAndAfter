@@ -250,8 +250,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             dateButton.tag = Date(it)
         }
 
-        weightEditText.setText(weight?.let { String.format("%.2f", it) })
-        rateEditText.setText(rate?.let { String.format("%.2f", it) })
+        weightEditText.setText(if (weight == 0f) null else weight?.let { String.format("%.2f", it) })
+        rateEditText.setText(if (rate == 0f) null else rate?.let { String.format("%.2f", it) })
         memoEditText.setText(memo)
 
         frontImageFile?.let {

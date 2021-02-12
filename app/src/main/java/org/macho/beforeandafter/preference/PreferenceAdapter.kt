@@ -58,7 +58,6 @@ class PreferenceAdapter(val context: Context, private val items: List<Preference
                 switch.isChecked = item.isOn
                 switch.setOnCheckedChangeListener { checkbox, isChecked ->
                     item.action(isChecked)
-                    checkbox.isChecked = !isChecked // 切り替えをキャンセル。ここでは切り替えず、暗証番号設定の変更が完了した時に切り替える。
                 }
                 return view
             }

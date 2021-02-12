@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_preference.*
@@ -60,7 +61,6 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        this.items = createItems()
         listView.setOnItemClickListener { adapterView, view, i, l ->
             val item = items.get(i)
             when (item) {
@@ -81,6 +81,13 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
         super.onStart()
         adapter = PreferenceAdapter(context!!, items)
         listView.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        items.clear()
+        items.addAll(createItems())
+        adapter.notifyDataSetChanged() // PINの有効化・無効化を反映
     }
 
     private fun createItems(): MutableList<PreferenceElement> {
@@ -108,6 +115,12 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
         items.add(PreferenceItem(R.string.dashboard_setting_title, R.string.dashboard_setting_description) {
             val action = PreferenceFragmentDirections.actionPreferenceFragmentToDashboardSettingFragment()
             findNavController().navigate(action)
+        })
+
+        val isDefaultWeightAndBodyFatEnabled = SharedPreferencesUtil.getBoolean(requireContext(), SharedPreferencesUtil.Key.IS_DEFAULT_WEIGHT_AND_BODY_FAT_ENABLED, true)
+        items.add(CheckboxPreferenceItem(R.string.default_weight_title, R.string.default_weight_description, isDefaultWeightAndBodyFatEnabled) { isDefaultWeightAndBodyFatEnabled ->
+            SharedPreferencesUtil.setBoolean(requireContext(), SharedPreferencesUtil.Key.IS_DEFAULT_WEIGHT_AND_BODY_FAT_ENABLED, isDefaultWeightAndBodyFatEnabled)
+            Toast.makeText(requireContext(), R.string.toast_saved, Toast.LENGTH_SHORT).show()
         })
 
         val isCameraSettingsVisible = requireContext().getBoolean(R.bool.is_camera_settings_visible)
@@ -191,16 +204,14 @@ class PreferenceFragment @Inject constructor(): DaggerFragment() {
         if (resultCode != Activity.RESULT_OK) {
             return
         }
-
+        
         when (requestCode) {
             RC_ENABLE_PIN -> {
-                pinItem?.isOn = true
-                adapter.notifyDataSetChanged()
+                // do nothing
             }
 
             RC_DISABLE_PIN -> {
-                pinItem?.isOn = false
-                adapter.notifyDataSetChanged()
+                // do nothing
             }
         }
     }

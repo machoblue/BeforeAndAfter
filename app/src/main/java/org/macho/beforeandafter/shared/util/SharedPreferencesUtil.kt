@@ -52,6 +52,8 @@ object SharedPreferencesUtil {
         HEIGHT_UNIT("height_unit"),
 
         IS_INITIAL_SETTINGS_COMPLETE("is_initial_settings_complete"),
+
+        IS_DEFAULT_WEIGHT_AND_BODY_FAT_ENABLED("is_default_weight_and_body_fat_enabled"),
     }
 
     fun getFloat(context: Context, key: Key): Float {
