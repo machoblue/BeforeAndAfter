@@ -278,6 +278,11 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     }
 
     override fun close() {
+        // Workaround: IllegalStateException: Fragment EditAddRecordFragment ... not associated with a fragment manager.
+        if (!isAdded) {
+            return
+        }
+
         if (shouldShowInterstitialAd) {
             interstitialAd?.showIfNeeded(context!!)
         }
