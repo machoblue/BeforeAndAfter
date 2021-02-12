@@ -90,7 +90,7 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
             return
 
         } catch (e: GoogleJsonResponseException) {
-            if (e.details.errors.any { errorInfo -> errorInfo.message.contains("The user's Drive storage quota has been exceeded.") }) {
+            if (e.details?.errors?.any { errorInfo -> errorInfo.message.contains("The user's Drive storage quota has been exceeded.") } == true) {
                 publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_ERROR_NO_ENOUGH_SPACE))
                 return
 
