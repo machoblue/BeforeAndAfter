@@ -245,6 +245,10 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             return // Workaround: IllegalStateException dateButton must not be null https://www.vvzixun.com/index.php/code/35ff970b286785750654dd580d0d491a
         }
 
+        if (view == null) {
+            return // Workaround: IllegalStateException dateButton must not be null. https://stackoverflow.com/a/19690491/8834586
+        }
+
         date?.let {
             dateButton.text = dateFormat.format(Date(it))
             dateButton.tag = Date(it)
@@ -274,6 +278,11 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
     }
 
     override fun close() {
+        // Workaround: IllegalStateException: Fragment EditAddRecordFragment ... not associated with a fragment manager.
+        if (!isAdded) {
+            return
+        }
+
         if (shouldShowInterstitialAd) {
             interstitialAd?.showIfNeeded(context!!)
         }
