@@ -53,20 +53,27 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
             val imageFileNames = extractImageFileNames(records)
             val size = imageFileNames.size
             val imageFileNameToDriveFileId: MutableMap<String, String> = hashMapOf()
-            imageFileNames.forEachIndexed { index, fileName ->
+
+            for ((index, fileName) in imageFileNames.withIndex()) {
                 if (isCancelled) return
                 publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_SAVING_IMAGES, index + 1, size))
 
-                val imageFilePathStr = fileNameToFilePath(fileName) ?: let { return } // contextが開放されていたら、何もせず終了
+                val imageFilePathStr = fileNameToFilePath(fileName) ?: return // contextが開放されていたら、何もせず終了
                 val imageFile = java.io.File(imageFilePathStr)
-                if (imageFile.exists() && imageFile.length() > 0) {
-                    val fileId = saveImage(imageFile) ?: let { return }
-                    imageFileNameToDriveFileId[fileName] = fileId
 
-                } else {
+                val existsImageFile = imageFile.exists() && imageFile.length() > 0
+                if (!existsImageFile) {
                     Log.w(TAG, "Image isn't exists or is empty.: $imageFilePathStr")
-                    // do nothing
+                    continue
                 }
+
+                val fileId = saveImage(imageFile)
+                if (fileId == null) {
+                    FirebaseCrashlytics.getInstance().recordException(RuntimeException("Unexpectedly Drive API 3 Files: create return null."))
+                    continue
+                }
+
+                imageFileNameToDriveFileId[fileName] = fileId
             }
 
             // save records
@@ -92,6 +99,7 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
         } catch (e: GoogleJsonResponseException) {
             if (e.details?.errors?.any { errorInfo -> errorInfo.message.contains("The user's Drive storage quota has been exceeded.") } == true) {
                 publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_ERROR_NO_ENOUGH_SPACE))
+                FirebaseCrashlytics.getInstance().recordException(e)
                 return
 
             } else {
