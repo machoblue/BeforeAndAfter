@@ -187,9 +187,17 @@ class CameraActivity: AppCompatActivity() {
         val texture = textureView.surfaceTexture
         texture.setDefaultBufferSize(cameraInfo.previewSize.width, cameraInfo.previewSize.height)
         val surface = Surface(texture)
-        captureRequestBuilder = cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-        captureRequestBuilder.addTarget(surface)
-        cameraDevice!!.createCaptureSession(listOf(surface, imageReader.surface), sessionStateCallback, null)
+
+        cameraDevice?.let { // Workaround: KotlinNullPointerException
+            captureRequestBuilder = it.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            captureRequestBuilder.addTarget(surface)
+            it.createCaptureSession(listOf(surface, imageReader.surface), sessionStateCallback, null)
+
+        } ?: let {
+            // ここにくるのは、カメラの準備中にフロントカメラとバックカメラの切り替えが起きた時のみ。
+            // (切り替え前の)カメラの準備は中止してOKなので、何もせず抜ける。
+            return
+        }
     }
 
     private val sessionStateCallback = object: CameraCaptureSession.StateCallback() {
