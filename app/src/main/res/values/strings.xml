@@ -263,7 +263,7 @@
 
     <string name="developer_mail_address" translatable="false">macho.macho.dev@gmail.com</string>
     <string name="bug_report_mail_title">不具合報告・改善要望</string>
-    <string name="bug_report_mail_template">開発者(%s)宛\n\n\n\n以下の情報はサポートに利用するため、消さないでください。\nAndroid Version: %s\nApp Version: %s\nModel: %sx</string>
+    <string name="bug_report_mail_template">開発者(%s)宛\n\n\n\n以下の情報はサポートに利用するため、消さないでください。\nAndroid Version: %s\nApp Version: %s\nModel: %s</string>
 
     <string name="survey_dialog_message">当アプリをご利用いただきありがとうございます。このアプリはあなたのお役に立てていますか？</string>
     <string name="common_yes">はい</string>
