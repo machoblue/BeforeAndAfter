@@ -57,6 +57,8 @@ class CameraActivity: AppCompatActivity() {
             guidePhoto.visibility = if (value) View.VISIBLE else View.INVISIBLE
         }
 
+    private val mainThreadHandler = Handler(Looper.getMainLooper())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
@@ -254,12 +256,16 @@ class CameraActivity: AppCompatActivity() {
 
     private fun takePicture() {
         if (captureRequestBuilder == null) {
-            Toast.makeText(this, getString(R.string.camera_in_preparation), Toast.LENGTH_SHORT).show()
+            mainThreadHandler.post {
+                Toast.makeText(this, getString(R.string.camera_in_preparation), Toast.LENGTH_SHORT).show()
+            }
             return
         }
         
         if (cameraDevice == null) {
-            Toast.makeText(this, getString(R.string.camera_in_preparation), Toast.LENGTH_SHORT).show()
+            mainThreadHandler.post {
+                Toast.makeText(this, getString(R.string.camera_in_preparation), Toast.LENGTH_SHORT).show()
+            }
             return
         }
 
