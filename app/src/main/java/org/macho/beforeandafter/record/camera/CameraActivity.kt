@@ -57,10 +57,13 @@ class CameraActivity: AppCompatActivity() {
             guidePhoto.visibility = if (value) View.VISIBLE else View.INVISIBLE
         }
 
+    private val mainThreadHandler = Handler(Looper.getMainLooper())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
+        shutterButton.isEnabled = false
         shutterButton.setOnClickListener { _ -> takePicture() }
         textureView.setOnTouchListener(onTouchListener)
         turnCameraButton.setOnClickListener {
@@ -185,9 +188,17 @@ class CameraActivity: AppCompatActivity() {
         val texture = textureView.surfaceTexture
         texture.setDefaultBufferSize(cameraInfo.previewSize.width, cameraInfo.previewSize.height)
         val surface = Surface(texture)
-        captureRequestBuilder = cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-        captureRequestBuilder.addTarget(surface)
-        cameraDevice!!.createCaptureSession(listOf(surface, imageReader.surface), sessionStateCallback, null)
+
+        cameraDevice?.let { // Workaround: KotlinNullPointerException
+            captureRequestBuilder = it.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            captureRequestBuilder.addTarget(surface)
+            it.createCaptureSession(listOf(surface, imageReader.surface), sessionStateCallback, null)
+
+        } ?: let {
+            // ここにくるのは、カメラの準備中にフロントカメラとバックカメラの切り替えが起きた時のみ。
+            // (切り替え前の)カメラの準備は中止してOKなので、何もせず抜ける。
+            return
+        }
     }
 
     private val sessionStateCallback = object: CameraCaptureSession.StateCallback() {
@@ -201,6 +212,10 @@ class CameraActivity: AppCompatActivity() {
             captureRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
             captureRequest = captureRequestBuilder.build()
             this@CameraActivity.cameraCaptureSession.setRepeatingRequest(captureRequest, null, backgroundHandler)
+
+            mainThreadHandler.post {
+                shutterButton.isEnabled = true
+            }
         }
 
         override fun onConfigureFailed(cameraCaptureSession: CameraCaptureSession) {
@@ -253,16 +268,6 @@ class CameraActivity: AppCompatActivity() {
     }
 
     private fun takePicture() {
-        if (captureRequestBuilder == null) {
-            Toast.makeText(this, getString(R.string.camera_in_preparation), Toast.LENGTH_SHORT).show()
-            return
-        }
-        
-        if (cameraDevice == null) {
-            Toast.makeText(this, getString(R.string.camera_in_preparation), Toast.LENGTH_SHORT).show()
-            return
-        }
-
         captureRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_START)
 
         cameraCaptureSession.capture(captureRequestBuilder.build(), object: CameraCaptureSession.CaptureCallback() {
@@ -324,6 +329,10 @@ class CameraActivity: AppCompatActivity() {
     }
 
     private fun closeCamera() {
+        mainThreadHandler.post {
+            shutterButton.isEnabled = false
+        }
+
         val cameraDevice = this.cameraDevice ?: return
         this.cameraDevice = null
         cameraDevice.close()
