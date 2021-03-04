@@ -48,6 +48,7 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
         val account: Account? = GoogleSignIn.getLastSignedInAccount(context)?.account;
         if (account != null) {
             this.account = account
+            analytics.logEvent(Analytics.Event.BACKUP_ALREADY_SIGNED_IN)
             backupRecords()
             return
         }
@@ -90,6 +91,8 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
             // Asynchronously access the People API for the account
             Log.d(TAG, "handleSignInResult")
 
+            analytics.logEvent(Analytics.Event.BACKUP_SIGN_IN_SUCCESS)
+
             backupRecords()
 
         } catch (e: ApiException) {
@@ -129,6 +132,12 @@ class BackupPresenter @Inject constructor(val recordRepository: RecordRepository
         var progress = 0
         when (status.statusCode) {
             BackupTask.BackupStatus.BACKUP_STATUS_CODE_SAVING_IMAGES -> {
+                when (status.finishFilesCount) {
+                    1 -> analytics.logEvent(Analytics.Event.BACKUP_SAVE_FIRST_PHOTO_START)
+                    1 -> analytics.logEvent(Analytics.Event.BACKUP_SAVE_FIRST_PHOTO_FINISH)
+                    else -> {}
+                }
+
                 title = context.getString(R.string.backup_status_message_title_format).format(context.getString(R.string.backup_status_message_title_saving_images), 1, 2)
                 description = context.getString(R.string.backup_status_message_description_format).format(status.finishFilesCount, status.allFilesCount)
                 progress = ((status.finishFilesCount.toFloat() / status.allFilesCount) * 80).toInt()

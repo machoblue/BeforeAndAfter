@@ -7,6 +7,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 class Analytics(val context: Context) {
     enum class Event {
         BACKUP_START,
+        BACKUP_SIGN_IN_SUCCESS,
+        BACKUP_ALREADY_SIGNED_IN,
+        BACKUP_SAVE_FIRST_PHOTO_START,
+        BACKUP_SAVE_FIRST_PHOTO_FINISH,
         BACKUP_RECOVERABLE_ERROR,
         BACKUP_FINISH,
 
