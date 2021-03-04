@@ -175,6 +175,7 @@
     <string name="backup_error_files_create_failed">Failed to upload image files.</string>
     <string name="backup_error_no_enough_space">There is not enough free space in Google Drive of this Google account.</string>
     <string name="backup_error_network_timeout">Network timeout occurred. try again later.</string>
+    <string name="backup_error_ssl_connection_failed">Failed to make SSL connection with Google Drive. Please reboot app and try again later.</string>
 
     <string name="restore_dialog_title">Restore</string>
     <string name="restore_dialog_message">Do you restore data you backup in advance?\n<small>※Note:※\n・Please use Wi-Fi.\n・Restoring needs Google Account.</small></string>

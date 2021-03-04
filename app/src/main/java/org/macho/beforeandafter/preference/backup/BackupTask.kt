@@ -18,6 +18,7 @@ import java.io.PrintWriter
 import java.lang.ref.WeakReference
 import java.net.SocketTimeoutException
 import java.util.*
+import javax.net.ssl.SSLException
 
 
 class BackupTask(context: Context, val account: Account, listener: BackupTaskListener): AsyncTask<List<Record>, BackupTask.BackupStatus, Unit>() {
@@ -108,6 +109,11 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
                 throw e
             }
 
+        } catch (e: SSLException) {
+            publishProgress(BackupStatus(BackupStatus.BACKUP_STATUS_CODE_ERROR_SSL_CONNECTION_FAILED))
+            FirebaseCrashlytics.getInstance().recordException(e)
+            return
+
         } catch (e: Exception) {
             Log.e(TAG, "doInBackground.catch Exception:${e::class.java}", e)
             FirebaseCrashlytics.getInstance().recordException(e)
@@ -193,6 +199,7 @@ class BackupTask(context: Context, val account: Account, listener: BackupTaskLis
             const val BACKUP_STATUS_CODE_ERROR_RECOVERABLE = 1004
             const val BACKUP_STATUS_CODE_ERROR_TIMEOUT = 1005
             const val BACKUP_STATUS_CODE_ERROR_NO_ENOUGH_SPACE = 1006
+            const val BACKUP_STATUS_CODE_ERROR_SSL_CONNECTION_FAILED = 1007
         }
     }
 
