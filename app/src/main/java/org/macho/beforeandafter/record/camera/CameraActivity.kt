@@ -63,6 +63,7 @@ class CameraActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
+        shutterButton.isEnabled = false
         shutterButton.setOnClickListener { _ -> takePicture() }
         textureView.setOnTouchListener(onTouchListener)
         turnCameraButton.setOnClickListener {
@@ -211,6 +212,10 @@ class CameraActivity: AppCompatActivity() {
             captureRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
             captureRequest = captureRequestBuilder.build()
             this@CameraActivity.cameraCaptureSession.setRepeatingRequest(captureRequest, null, backgroundHandler)
+
+            mainThreadHandler.post {
+                shutterButton.isEnabled = true
+            }
         }
 
         override fun onConfigureFailed(cameraCaptureSession: CameraCaptureSession) {
@@ -263,20 +268,6 @@ class CameraActivity: AppCompatActivity() {
     }
 
     private fun takePicture() {
-        if (captureRequestBuilder == null) {
-            mainThreadHandler.post {
-                Toast.makeText(this, getString(R.string.camera_in_preparation), Toast.LENGTH_SHORT).show()
-            }
-            return
-        }
-        
-        if (cameraDevice == null) {
-            mainThreadHandler.post {
-                Toast.makeText(this, getString(R.string.camera_in_preparation), Toast.LENGTH_SHORT).show()
-            }
-            return
-        }
-
         captureRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_START)
 
         cameraCaptureSession.capture(captureRequestBuilder.build(), object: CameraCaptureSession.CaptureCallback() {
@@ -338,6 +329,10 @@ class CameraActivity: AppCompatActivity() {
     }
 
     private fun closeCamera() {
+        mainThreadHandler.post {
+            shutterButton.isEnabled = false
+        }
+
         val cameraDevice = this.cameraDevice ?: return
         this.cameraDevice = null
         cameraDevice.close()
