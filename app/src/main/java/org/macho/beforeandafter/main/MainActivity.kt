@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -198,27 +199,40 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
 
     override fun onRated(rate: Int) {
         LogUtil.d(this, "onRated: $rate")
-        if (rate >= 5) {
-            analytics.logEvent(Analytics.Event.SURVEY_DIALOG_HELP)
-            Handler().postDelayed({ // Workaround: IllegalStateException: Fragment already added: CommonDialog. 本当はcommonDialogを使いまわさないほうがいいかも。
-                commonDialog.show(
-                        supportFragmentManager,
-                        STORE_REVIEW_DIALOG_RC,
-                        getString(R.string.store_review_dialog_message),
-                        getString(R.string.common_yes),
-                        getString(R.string.common_no))
-            }, 500)
-
-        } else {
-            analytics.logEvent(Analytics.Event.SURVEY_DIALOG_NOT_HELP)
-            Handler().postDelayed({ // Workaround: IllegalStateException: Fragment already added: CommonDialog. 本当はcommonDialogを使いまわさないほうがいいかも。
-                commonDialog.show(
-                        supportFragmentManager,
-                        BUG_REPORT_DIALOG_RC,
-                        getString(R.string.bug_report_dialog_message),
-                        getString(R.string.common_yes),
-                        getString(R.string.common_no))
-            }, 500)
+        when (rate) {
+            5 -> {
+                analytics.logEvent(Analytics.Event.SURVEY_DIALOG_HELP, bundleOf("rating" to rate))
+                Handler().postDelayed({ // Workaround: IllegalStateException: Fragment already added: CommonDialog. 本当はcommonDialogを使いまわさないほうがいいかも。
+                    commonDialog.show(
+                            supportFragmentManager,
+                            STORE_REVIEW_DIALOG_RC,
+                            getString(R.string.store_review_dialog_message),
+                            getString(R.string.common_yes),
+                            getString(R.string.common_no))
+                }, 500)
+            }
+            4 -> {
+                analytics.logEvent(Analytics.Event.SURVEY_DIALOG_HELP, bundleOf("rating" to rate))
+                Handler().postDelayed({ // Workaround: IllegalStateException: Fragment already added: CommonDialog. 本当はcommonDialogを使いまわさないほうがいいかも。
+                    commonDialog.show(
+                            supportFragmentManager,
+                            BUG_REPORT_DIALOG_RC,
+                            getString(R.string.bug_report_dialog_message2),
+                            getString(R.string.common_yes),
+                            getString(R.string.common_no))
+                }, 500)
+            }
+            else -> {
+                analytics.logEvent(Analytics.Event.SURVEY_DIALOG_NOT_HELP)
+                Handler().postDelayed({ // Workaround: IllegalStateException: Fragment already added: CommonDialog. 本当はcommonDialogを使いまわさないほうがいいかも。
+                    commonDialog.show(
+                            supportFragmentManager,
+                            BUG_REPORT_DIALOG_RC,
+                            getString(R.string.bug_report_dialog_message),
+                            getString(R.string.common_yes),
+                            getString(R.string.common_no))
+                }, 500)
+            }
         }
     }
 

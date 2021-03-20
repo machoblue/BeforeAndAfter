@@ -256,8 +256,9 @@
     <string name="survey_dialog_message">Thank you for using this app. Did this app help you?</string>
     <string name="common_yes">Yes.</string>
     <string name="common_no">No.</string>
-    <string name="bug_report_dialog_message">Sorry for the inconvenience. Could you give us feedback mail?</string>
-    <string name="store_review_dialog_message">Thank you. Could you rate this app in store?</string>
+    <string name="bug_report_dialog_message">Sorry for the inconvenience. Would you please email us feedback?</string>
+    <string name="bug_report_dialog_message2">Thank you. Would you please email us feedback?</string>
+    <string name="store_review_dialog_message">Thank you. Would you please rate this app in store?</string>
 
     <string name="confirm_store_review_message">If you want to report bug or request improvement, Please send mail.</string>
     <string name="mail_bug_report">Send Mail</string>

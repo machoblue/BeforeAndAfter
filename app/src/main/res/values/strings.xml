@@ -270,6 +270,7 @@
     <string name="common_yes">はい</string>
     <string name="common_no">いいえ</string>
     <string name="bug_report_dialog_message">お役に立てず申し訳ございません。よろしければ、メールで不具合のご報告または改善のご要望をいただけませんか？</string>
+    <string name="bug_report_dialog_message2">ありがとうございます。改善のご要望がございましたらメールをいただけないでしょうか？</string>
     <string name="store_review_dialog_message">ありがとうございます。よろしければストアでも評価していただけないでしょうか？私たち開発者の励みとなります！</string>
 
     <string name="confirm_store_review_message">不具合のご報告・改善のご要望は、直接メールしてください。メールだとより迅速に対応できます。</string>
