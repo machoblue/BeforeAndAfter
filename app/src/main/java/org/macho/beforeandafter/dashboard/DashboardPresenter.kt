@@ -111,12 +111,12 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
 
             val isBodyFatDefaultHidden = context.getBoolean(R.bool.is_dashboard_body_fat_default_hidden)
             val showBodyFatProgress = !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_BODY_FAT_PROGRESS, isBodyFatDefaultHidden)
-            view?.updateBodyFatProgress(showBodyFatProgress, elapsedDay, bodyFatFirstRecord?.rate, weightBestRecord?.rate, weightLatestRecord?.rate, goalBodyFat)
+            view?.updateBodyFatProgress(showBodyFatProgress, elapsedDay, bodyFatFirstRecord?.rate, bodyFatBestRecord?.rate, bodyFatLatestRecord?.rate, goalBodyFat)
 
             updateBodyFatTendency(thisWeekRecords, theWeekBeforeRecords, thisThirtyDaysRecords, theThirtyDaysBeforeRecords, thisYearRecords, theYearBeforeRecords)
 
             if (context.getBoolean(R.bool.is_dashboard_photo_visible)) {
-                updatePhotos(weightUnit, weightFirstRecord, weightBestRecord, weightLatestRecord, bodyFatFirstRecord, bodyFatBestRecord, bodyFatLatestRecord)
+                updatePhotos(weightUnit, recordsSortedByDate)
             }
 
             view?.stopRefreshingIfNeeded()
@@ -196,95 +196,93 @@ class DashboardPresenter @Inject constructor(): DashboardContract.Presenter {
         view?.updateBodyFatTendency(showWeightTendency, thisWeekTendency, thisThirtyDaysTendency, thisYearTendency)
     }
 
-    private fun updatePhotos(
-            weightUnit: String,
-            weightFirstRecord: Record?,
-            weightBestRecord: Record?,
-            weightLatestRecord: Record?,
-            bodyFatFirstRecord: Record?,
-            bodyFatBestRecord: Record?,
-            bodyFatLatestRecord: Record?
-    ) {
+    private fun updatePhotos(weightUnit: String, recordsSortedByDate: List<Record>) {
+        val recordsWithWeightSortedByDate = recordsSortedByDate.filter { it.weight != 0f }
+        val recordsSortedByWeight = recordsSortedByDate.filter { it.weight != 0f }.sortedBy { it.weight }
+
+        val recordsWithBodyFatSortedByDate = recordsSortedByDate.filter { it.rate != 0f }
+        val recordsSortedByBodyFat = recordsSortedByDate.filter { it.rate != 0f }.sortedBy { it.rate }
+
         val photoSummaryList = listOf(
                 PhotoSummary(
                         !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_WEIGHT),
                         R.string.front_photo_summary_by_weight_title,
                         weightUnit,
-                        weightFirstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                        weightBestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                        weightLatestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
+                        recordsWithWeightSortedByDate.firstOrNull { !it.frontImagePath.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsSortedByWeight.firstOrNull { !it.frontImagePath.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsWithWeightSortedByDate.lastOrNull { !it.frontImagePath.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
                 ),
                 PhotoSummary(
                         !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_SIDE_PHOTO_SUMMARY_BY_WEIGHT),
                         R.string.side_photo_summary_by_weight_title,
                         weightUnit,
-                        weightFirstRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                        weightBestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                        weightLatestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }
+                        recordsWithWeightSortedByDate.firstOrNull { !it.sideImagePath.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsSortedByWeight.firstOrNull { !it.sideImagePath.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsWithWeightSortedByDate.lastOrNull { !it.sideImagePath.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
                 ),
                 PhotoSummary(
-                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER1_PHOTO_SUMMARY_BY_WEIGHT, true),
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER1_PHOTO_SUMMARY_BY_WEIGHT),
                         R.string.other1_photo_summary_by_weight_title,
                         weightUnit,
-                        weightFirstRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
-                        weightBestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
-                        weightLatestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }
+                        recordsWithWeightSortedByDate.firstOrNull { !it.otherImagePath1.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsSortedByWeight.firstOrNull { !it.otherImagePath1.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsWithWeightSortedByDate.lastOrNull { !it.otherImagePath1.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
                 ),
                 PhotoSummary(
-                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER2_PHOTO_SUMMARY_BY_WEIGHT, true),
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER2_PHOTO_SUMMARY_BY_WEIGHT),
                         R.string.other2_photo_summary_by_weight_title,
                         weightUnit,
-                        weightFirstRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
-                        weightBestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
-                        weightLatestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }
+                        recordsWithWeightSortedByDate.firstOrNull { !it.otherImagePath2.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsSortedByWeight.firstOrNull { !it.otherImagePath2.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsWithWeightSortedByDate.lastOrNull { !it.otherImagePath2.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
                 ),
                 PhotoSummary(
-                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER3_PHOTO_SUMMARY_BY_WEIGHT, true),
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER3_PHOTO_SUMMARY_BY_WEIGHT),
                         R.string.other3_photo_summary_by_weight_title,
                         weightUnit,
-                        weightFirstRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
-                        weightBestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
-                        weightLatestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }
+                        recordsWithWeightSortedByDate.firstOrNull { !it.otherImagePath3.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsSortedByWeight.firstOrNull { !it.otherImagePath3.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsWithWeightSortedByDate.lastOrNull { !it.otherImagePath3.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
                 ),
                 PhotoSummary(
-                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_BODY_FAT, true),
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_FRONT_PHOTO_SUMMARY_BY_BODY_FAT),
                         R.string.front_photo_summary_by_rate_title,
                         weightUnit,
-                        bodyFatFirstRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                        bodyFatBestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                        bodyFatLatestRecord?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
+                        recordsWithBodyFatSortedByDate.firstOrNull { !it.frontImagePath.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsSortedByBodyFat.firstOrNull { !it.frontImagePath.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsWithBodyFatSortedByDate.lastOrNull { !it.frontImagePath.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
                 ),
                 PhotoSummary(
-                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_SIDE_PHOTO_SUMMARY_BY_BODY_FAT, true),
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_SIDE_PHOTO_SUMMARY_BY_BODY_FAT),
                         R.string.side_photo_summary_by_rate_title,
                         weightUnit,
-                        bodyFatFirstRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                        bodyFatBestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) },
-                        bodyFatLatestRecord?.let { PhotoData(it.sideImagePath ?: "", Date(it.date), it.weight, it.rate) }
+                        recordsWithBodyFatSortedByDate.firstOrNull { !it.sideImagePath.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsSortedByBodyFat.firstOrNull { !it.sideImagePath.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsWithBodyFatSortedByDate.lastOrNull { !it.sideImagePath.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
                 ),
                 PhotoSummary(
-                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER1_PHOTO_SUMMARY_BY_BODY_FAT, true),
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER1_PHOTO_SUMMARY_BY_BODY_FAT),
                         R.string.other1_photo_summary_by_rate_title,
                         weightUnit,
-                        bodyFatFirstRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
-                        bodyFatBestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) },
-                        bodyFatLatestRecord?.let { PhotoData(it.otherImagePath1 ?: "", Date(it.date), it.weight, it.rate) }
+                        recordsWithBodyFatSortedByDate.firstOrNull { !it.otherImagePath1.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsSortedByBodyFat.firstOrNull { !it.otherImagePath1.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsWithBodyFatSortedByDate.lastOrNull { !it.otherImagePath1.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
                 ),
                 PhotoSummary(
-                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER2_PHOTO_SUMMARY_BY_BODY_FAT, true),
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER2_PHOTO_SUMMARY_BY_BODY_FAT),
                         R.string.other2_photo_summary_by_rate_title,
                         weightUnit,
-                        bodyFatFirstRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
-                        bodyFatBestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) },
-                        bodyFatLatestRecord?.let { PhotoData(it.otherImagePath2 ?: "", Date(it.date), it.weight, it.rate) }
+                        recordsWithBodyFatSortedByDate.firstOrNull { !it.otherImagePath2.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsSortedByBodyFat.firstOrNull { !it.otherImagePath2.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsWithBodyFatSortedByDate.lastOrNull { !it.otherImagePath2.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
                 ),
                 PhotoSummary(
-                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER3_PHOTO_SUMMARY_BY_BODY_FAT, true),
+                        !SharedPreferencesUtil.getBoolean(context, SharedPreferencesUtil.Key.HIDE_OTHER3_PHOTO_SUMMARY_BY_BODY_FAT),
                         R.string.other3_photo_summary_by_rate_title,
                         weightUnit,
-                        bodyFatFirstRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
-                        bodyFatBestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) },
-                        bodyFatLatestRecord?.let { PhotoData(it.otherImagePath3 ?: "", Date(it.date), it.weight, it.rate) }
+                        recordsWithBodyFatSortedByDate.firstOrNull { !it.otherImagePath3.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsSortedByBodyFat.firstOrNull { !it.otherImagePath3.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) },
+                        recordsWithBodyFatSortedByDate.lastOrNull { !it.otherImagePath3.isNullOrEmpty() }?.let { PhotoData(it.frontImagePath ?: "", Date(it.date), it.weight, it.rate) }
                 )
         )
 
