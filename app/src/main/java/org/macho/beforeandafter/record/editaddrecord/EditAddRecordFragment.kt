@@ -17,6 +17,7 @@ import android.view.*
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -79,6 +80,7 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
 
     private var onRecordSavedListener: OnRecordSavedListener? = null
 
+    private lateinit var analytics: Analytics
 
     // MARK: Lifecycle
 
@@ -100,6 +102,8 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                 CommonDialog2.ButtonType.NEGATIVE -> { /* do nothing */ }
             }
         }
+
+        analytics = Analytics(requireContext())
     }
 
     override fun onAttach(context: Context) {
@@ -146,6 +150,18 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
             }
             else -> null
         }
+
+        val event: Analytics.Event = when (requestCode) {
+            CUSTOM_CAMERA_RC -> Analytics.Event.RECEIVE_CUSTOME_CAMERA_PHOTO
+            OS_CAMERA_RC -> Analytics.Event.RECEIVE_OTHER_APP_PHOTO
+            GALLERY_RC -> Analytics.Event.RECEIVE_GALLERY_PHOTO
+            else -> throw java.lang.RuntimeException("Unreachable")
+        }
+
+        analytics.logEvent(event, bundleOf(
+            "size" to (newImageFile?.length() ?: 0L),
+            "path" to (newImageFile?.path ?: "no path")
+        ))
 
         LogUtil.i(this, "newImageFile: $newImageFile")
 
@@ -223,12 +239,15 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
                 .setMessage(R.string.dialog_select_prompt)
                 .setPositiveButton(R.string.dialog_select_gallery) { dialog, which ->
                     startGalleryChooser()
+                    analytics.logEvent(Analytics.Event.SELECT_GALLERY)
                 }
                 .setNeutralButton(R.string.dialog_select_other_camera_app) { dialog, which ->
                     startOtherCameraApp()
+                    analytics.logEvent(Analytics.Event.SELECT_OTHER_APP_CAMERA)
                 }
                 .setNegativeButton(R.string.dialog_select_camera) { dialog, which ->
                     presenter.onCameraButtonClicked(currentImageIndex ?: throw RuntimeException("currentImageIndex must not be null."))
+                    analytics.logEvent(Analytics.Event.SELECT_CUSTOME_CAMERA)
                 }
                 .create()
                 .show()

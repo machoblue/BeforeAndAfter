@@ -3,6 +3,8 @@ package org.macho.beforeandafter.record.camera
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.core.os.bundleOf
+import org.macho.beforeandafter.shared.util.Analytics
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -22,6 +24,7 @@ class PictureSaver(val context: Context, val data: ByteArray): Runnable {
             it.write(data)
             val intent = Intent()
             intent.putExtra("PATH", outputFile.toString())
+            Analytics(context).logEvent(Analytics.Event.PICTURE_SAVE_COMPLETE, bundleOf("size" to data.size))
             (context as Activity).setResult(Activity.RESULT_OK, intent)
             context.finish()
         }

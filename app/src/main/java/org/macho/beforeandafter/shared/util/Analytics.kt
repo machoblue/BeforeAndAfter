@@ -31,11 +31,24 @@ class Analytics(val context: Context) {
         ALARM_ENABLE,
         ALARM_FIRED,
         ALARM_DIALOG_APPEAR,
+
+        SELECT_CUSTOME_CAMERA,
+        SELECT_OTHER_APP_CAMERA,
+        SELECT_GALLERY,
+
+        TAKE_PICTURE,
+        PICTURE_SAVE_COMPLETE,
+        RECEIVE_CUSTOME_CAMERA_PHOTO,
+
+        RECEIVE_OTHER_APP_PHOTO,
+
+        RECEIVE_GALLERY_PHOTO,
     }
 
     val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     fun logEvent(event: Event, bundle: Bundle? = null) {
+        LogUtil.d("Analytics", "${event.name.toLowerCase()} ${bundle}")
         firebaseAnalytics.logEvent(event.name.toLowerCase(), bundle)
     }
 }
