@@ -20,6 +20,7 @@ import org.macho.beforeandafter.record.RecordModule
 import org.macho.beforeandafter.record.editaddrecord.EditAddRecordModule
 import org.macho.beforeandafter.shared.view.commondialog.CommonDialogModule
 import org.macho.beforeandafter.shared.view.commondialog.CommonDialogModule2
+import org.macho.beforeandafter.shared.view.ratingdialog.RatingDialogModule
 
 @Module
 abstract class ActivityBindingModule {
@@ -42,7 +43,8 @@ abstract class ActivityBindingModule {
         CommonDialogModule2::class,
         MainActivityModule::class,
         DashboardModule::class,
-        EditScaleModule::class
+        EditScaleModule::class,
+        RatingDialogModule::class
     ])
     abstract fun mainActivity(): MainActivity
 

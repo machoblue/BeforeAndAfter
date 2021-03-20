@@ -17,18 +17,15 @@ import org.macho.beforeandafter.preference.PreferenceFragmentListener
 import org.macho.beforeandafter.record.editaddrecord.OnRecordSavedListener
 import org.macho.beforeandafter.shared.extensions.getBoolean
 import org.macho.beforeandafter.shared.extensions.setupWithNavController
-import org.macho.beforeandafter.shared.util.AdUtil
-import org.macho.beforeandafter.shared.util.Analytics
-import org.macho.beforeandafter.shared.util.MailAppLauncher
-import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
+import org.macho.beforeandafter.shared.util.*
 import org.macho.beforeandafter.shared.view.commondialog.CommonDialog
+import org.macho.beforeandafter.shared.view.ratingdialog.RatingDialog
 import java.util.*
 import javax.inject.Inject
 
-class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSavedListener, CommonDialog.CommonDialogListener, MainContract.View, PreferenceFragmentListener {
+class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSavedListener, CommonDialog.CommonDialogListener, RatingDialog.RatingDialogListener, MainContract.View, PreferenceFragmentListener {
 
     companion object {
-        const val SURVEY_DIALOG_RC = 1000
         const val STORE_REVIEW_DIALOG_RC = 1001
         const val BUG_REPORT_DIALOG_RC = 1002
         const val STORE_REVIEW_CONFIRM_DIALOG_RC = 1003
@@ -41,6 +38,9 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
 
     @Inject
     lateinit var commonDialog: CommonDialog
+
+    @Inject
+    lateinit var ratingDialog: RatingDialog
 
     lateinit var analytics: Analytics
 
@@ -138,12 +138,7 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
     override fun showSurveyDialog() {
         Handler().postDelayed({
             if (isPause) return@postDelayed
-            commonDialog.show(
-                    supportFragmentManager,
-                    SURVEY_DIALOG_RC,
-                    getString(R.string.survey_dialog_message),
-                    getString(R.string.common_yes),
-                    getString(R.string.common_no))
+            ratingDialog.show(supportFragmentManager)
             SharedPreferencesUtil.setLong(this, SharedPreferencesUtil.Key.LAST_SURVEY_DIALOG_TIME, Date().time)
         }, 750)
     }
@@ -151,17 +146,6 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
     // MAKR: - CommonDialogListener
     override fun onPositiveButtonClick(requestCode: Int) {
         when (requestCode) {
-            SURVEY_DIALOG_RC -> {
-                analytics.logEvent(Analytics.Event.SURVEY_DIALOG_HELP)
-                Handler().postDelayed({ // Workaround: IllegalStateException: Fragment already added: CommonDialog. 本当はcommonDialogを使いまわさないほうがいいかも。
-                    commonDialog.show(
-                            supportFragmentManager,
-                            STORE_REVIEW_DIALOG_RC,
-                            getString(R.string.store_review_dialog_message),
-                            getString(R.string.common_yes),
-                            getString(R.string.common_no))
-                }, 500)
-            }
             STORE_REVIEW_DIALOG_RC -> {
                 val intent = Intent(
                         Intent.ACTION_VIEW,
@@ -182,17 +166,6 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
 
     override fun onNegativeButtonClick(requestCode: Int) {
         when (requestCode) {
-            SURVEY_DIALOG_RC -> {
-                analytics.logEvent(Analytics.Event.SURVEY_DIALOG_NOT_HELP)
-                Handler().postDelayed({ // Workaround: IllegalStateException: Fragment already added: CommonDialog. 本当はcommonDialogを使いまわさないほうがいいかも。
-                    commonDialog.show(
-                            supportFragmentManager,
-                            BUG_REPORT_DIALOG_RC,
-                            getString(R.string.bug_report_dialog_message),
-                            getString(R.string.common_yes),
-                            getString(R.string.common_no))
-                }, 500)
-            }
             STORE_REVIEW_DIALOG_RC -> {
                 analytics.logEvent(Analytics.Event.STORE_REVIEW_DIALOG_CANCEL)
             }
@@ -219,5 +192,37 @@ class MainActivity @Inject constructor(): DaggerAppCompatActivity(), OnRecordSav
                 getString(R.string.confirm_store_review_message),
                 getString(R.string.mail_bug_report),
                 getString(R.string.store_review))
+    }
+
+    // MARK: - RatingDialogListener
+
+    override fun onRated(rate: Int) {
+        LogUtil.d(this, "onRated: $rate")
+        if (rate >= 5) {
+            analytics.logEvent(Analytics.Event.SURVEY_DIALOG_HELP)
+            Handler().postDelayed({ // Workaround: IllegalStateException: Fragment already added: CommonDialog. 本当はcommonDialogを使いまわさないほうがいいかも。
+                commonDialog.show(
+                        supportFragmentManager,
+                        STORE_REVIEW_DIALOG_RC,
+                        getString(R.string.store_review_dialog_message),
+                        getString(R.string.common_yes),
+                        getString(R.string.common_no))
+            }, 500)
+
+        } else {
+            analytics.logEvent(Analytics.Event.SURVEY_DIALOG_NOT_HELP)
+            Handler().postDelayed({ // Workaround: IllegalStateException: Fragment already added: CommonDialog. 本当はcommonDialogを使いまわさないほうがいいかも。
+                commonDialog.show(
+                        supportFragmentManager,
+                        BUG_REPORT_DIALOG_RC,
+                        getString(R.string.bug_report_dialog_message),
+                        getString(R.string.common_yes),
+                        getString(R.string.common_no))
+            }, 500)
+        }
+    }
+
+    override fun onClose() {
+        LogUtil.d(this, "onClosed")
     }
 }
