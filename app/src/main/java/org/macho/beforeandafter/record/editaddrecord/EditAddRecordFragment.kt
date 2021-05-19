@@ -278,19 +278,19 @@ class EditAddRecordFragment @Inject constructor() : DaggerFragment(), EditAddRec
         memoEditText.setText(memo)
 
         frontImageFile?.let {
-            frontImage.loadImage(this, Uri.fromFile(it))
+            frontImage.loadImage(this, Uri.fromFile(it), false)
         }
         sideImageFile?.let {
-            sideImage.loadImage(this, Uri.fromFile(it))
+            sideImage.loadImage(this, Uri.fromFile(it), false)
         }
         other1ImageFile?.let {
-            otherImage1.loadImage(this, Uri.fromFile(it))
+            otherImage1.loadImage(this, Uri.fromFile(it), false)
         }
         other2ImageFile?.let {
-            otherImage2.loadImage(this, Uri.fromFile(it))
+            otherImage2.loadImage(this, Uri.fromFile(it), false)
         }
         other3ImageFile?.let {
-            otherImage3.loadImage(this, Uri.fromFile(it))
+            otherImage3.loadImage(this, Uri.fromFile(it), false)
         }
 
         weightTextInputLayout.hint = String.format(context!!.getString(R.string.weight_label), weightUnit)

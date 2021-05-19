@@ -36,7 +36,7 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
                 }
 
                 this.originalRecord = record
-                this.tempRecord = record
+                this.tempRecord = record.copy()
                 updateViews()
             }
 
@@ -127,7 +127,14 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
 
         } else if (originalRecord.date != tempRecord.date) {
             recordRepository.register(tempRecord) {
-                deleteAndClose(originalRecord)
+                recordRepository.delete(originalRecord.date) {
+                    deleteOldFileIfNeed(originalRecord.frontImagePath, tempRecord.frontImagePath)
+                    deleteOldFileIfNeed(originalRecord.sideImagePath, tempRecord.sideImagePath)
+                    deleteOldFileIfNeed(originalRecord.otherImagePath1, tempRecord.otherImagePath1)
+                    deleteOldFileIfNeed(originalRecord.otherImagePath2, tempRecord.otherImagePath2)
+                    deleteOldFileIfNeed(originalRecord.otherImagePath3, tempRecord.otherImagePath3)
+                    view?.close()
+                }
             }
 
         } else {
@@ -163,7 +170,7 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
     }
 
     private fun deleteOldFileIfNeed(oldFileName: String?, newFileName: String?) {
-        if (oldFileName == null || oldFileName.equals(newFileName)) {
+        if (oldFileName == null || oldFileName == newFileName) {
             return
         }
 
