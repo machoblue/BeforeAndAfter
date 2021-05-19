@@ -113,7 +113,7 @@ class EditAddRecordPresenter @Inject constructor(val recordRepository: RecordRep
                     .filter { it.date > startTime }
                     .sortedBy { it.date * multiplier }
                     .map(mapper)
-                    .firstOrNull{ it?.isNotEmpty() ?: false }
+                    .firstOrNull{ !it.isNullOrEmpty() && File(context.filesDir, it).exists() }
             view?.openCamera(guidePhotoFileName)
         }
     }
