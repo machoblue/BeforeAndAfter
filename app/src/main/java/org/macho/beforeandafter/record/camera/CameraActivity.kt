@@ -31,6 +31,8 @@ import org.macho.beforeandafter.shared.util.LogUtil
 import org.macho.beforeandafter.shared.util.SharedPreferencesUtil
 import java.io.File
 import java.util.*
+import kotlin.math.max
+import kotlin.math.min
 
 class CameraActivity: AppCompatActivity() {
 
@@ -192,6 +194,7 @@ class CameraActivity: AppCompatActivity() {
         cameraDevice?.let { // Workaround: KotlinNullPointerException
             captureRequestBuilder = it.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
             captureRequestBuilder.addTarget(surface)
+
             it.createCaptureSession(listOf(surface, imageReader.surface), sessionStateCallback, null)
 
         } ?: let {
@@ -242,26 +245,26 @@ class CameraActivity: AppCompatActivity() {
             return
         }
 
-        val rotation = activity.windowManager.defaultDisplay.rotation
+        // 端末の回転は考慮していない。CameraActivityはportrait固定のため。
 
-        val viewSize = Size(viewWidth, viewHeight)
+        fitPreviewToTextureView(viewWidth, viewHeight)
+    }
+
+    private fun fitPreviewToTextureView(viewWidth: Int, viewHeight: Int) {
         val matrix = Matrix()
-        val viewRect = RectF(0f, 0f, viewSize.width.toFloat(), viewSize.height.toFloat())
-        // NOTE: height -> widthの順番
-        val bufferRect = RectF(0f, 0f, cameraInfo.pictureSize.height.toFloat(), cameraInfo.pictureSize.width.toFloat())
+        val viewAspectRatio: Float = viewWidth / viewHeight.toFloat()
 
-        val centerX = viewRect.centerX()
-        val centerY = viewRect.centerY()
+        // 短い方をwidthとして長い方をheightとして使う。なぜかpreviewSizeが、widthが長い方の辺heightが短い方の辺で取れるため。
+        val pictureWidth = min(cameraInfo.previewSize.width, cameraInfo.previewSize.height)
+        val pictureHeight = max(cameraInfo.previewSize.width, cameraInfo.previewSize.height)
 
-        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
-            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY())
-            matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL)
-            val scale = Math.max(viewSize.height.toFloat() / cameraInfo.pictureSize.height.toFloat(),
-                    viewSize.width.toFloat() / cameraInfo.pictureSize.width.toFloat())
-            matrix.postScale(scale, scale, centerX, centerY)
+        val pictureAspectRatio: Float = pictureWidth / pictureHeight.toFloat()
 
-        } else if (rotation == Surface.ROTATION_180) {
-            matrix.postRotate(180f, centerX, centerY)
+        if (viewAspectRatio > pictureAspectRatio) {
+            matrix.postScale(1f, 1f * viewAspectRatio / pictureAspectRatio, viewWidth / 2f, viewHeight / 2f)
+
+        } else {
+            matrix.postScale(1f / viewAspectRatio * pictureAspectRatio, 1f, viewWidth / 2f, viewHeight / 2f)
         }
 
         textureView.setTransform(matrix)

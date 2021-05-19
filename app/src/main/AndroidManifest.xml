@@ -25,7 +25,7 @@
         <activity android:name=".InitialSettingsActivity" />
 
         <activity android:name=".main.MainActivity" />
-        <activity android:name=".record.camera.CameraActivity" android:theme="@style/AppThemeNoTitle"/>
+        <activity android:name=".record.camera.CameraActivity" android:theme="@style/AppThemeNoTitle" android:screenOrientation="portrait"/>
         <activity android:name=".gallery.PhotoActivity" android:theme="@style/MainTheme"/>
         <activity android:name=".PinAuthActivity" android:theme="@style/AppThemeNoTitle"/>
         <activity android:name=".preference.pin.PinEnableActivity" android:theme="@style/AppThemeNoTitle"/>
