@@ -113,11 +113,11 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Dagger2
-    implementation 'com.google.dagger:dagger:2.16'
-    implementation 'com.google.dagger:dagger-android:2.16'
-    implementation 'com.google.dagger:dagger-android-support:2.16'
-    kapt "com.google.dagger:dagger-compiler:2.16"
-    kapt "com.google.dagger:dagger-android-processor:2.16"
+    implementation 'com.google.dagger:dagger:2.37'
+    implementation 'com.google.dagger:dagger-android:2.37'
+    implementation 'com.google.dagger:dagger-android-support:2.37'
+    kapt "com.google.dagger:dagger-compiler:2.37"
+    kapt "com.google.dagger:dagger-android-processor:2.37"
 
     // Drive API
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
