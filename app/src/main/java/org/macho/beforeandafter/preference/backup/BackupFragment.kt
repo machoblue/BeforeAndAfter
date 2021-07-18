@@ -12,7 +12,7 @@ import org.macho.beforeandafter.R
 import org.macho.beforeandafter.shared.data.record.RecordRepository
 import org.macho.beforeandafter.shared.di.ActivityScoped
 import org.macho.beforeandafter.shared.util.AdUtil
-import org.macho.beforeandafter.shared.util.showIfNeeded
+import org.macho.beforeandafter.shared.util.FragmentTransactionQueue
 import org.macho.beforeandafter.shared.view.AlertDialog
 import javax.inject.Inject
 
@@ -24,6 +24,8 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
 
     @Inject
     lateinit var recordRepository: RecordRepository
+
+    private val fragmentTransactionQueue = FragmentTransactionQueue()
 
     private var interstitialAd: InterstitialAd? = null
 
@@ -49,6 +51,7 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
         AdUtil.loadBannerAd(adView, context!!)
         adLayout.visibility = if (AdUtil.isBannerAdHidden(context!!)) View.GONE else View.VISIBLE
 
+        lifecycle.addObserver(fragmentTransactionQueue)
 
         interstitialAd = AdUtil.instantiateAndLoadInterstitialAd(context!!)
     }
@@ -66,7 +69,6 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
     }
 
     override fun finish() {
-        interstitialAd?.showIfNeeded(context!!)
         findNavController().popBackStack()
     }
 
@@ -90,10 +92,12 @@ class BackupFragment @Inject constructor(): DaggerFragment(), BackupContract.Vie
     }
 
     override fun showAlert(title: String, message: String) {
-        activity?.runOnUiThread {
-            AlertDialog.newInstance(activity!!, title, message) {
-                finish()
-            } .show(fragmentManager!!, null)
+        fragmentTransactionQueue.post {
+            activity?.runOnUiThread {
+                AlertDialog.newInstance(activity!!, title, message) {
+                    finish()
+                } .show(fragmentManager!!, null)
+            }
         }
     }
 
